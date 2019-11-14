@@ -1,0 +1,13 @@
+# Compiled python modules
+*.pyc
+*__pycache__
+
+
+
+# Editor backup files 
+*~
+*.swp
+
+# Data files
+*.dat
+
