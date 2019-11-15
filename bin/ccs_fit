@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import logging
+import argparse
+from ccs.main import twp_fit
+
+
+logging.basicConfig(filename='ccs.log',format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+FILENAME ='input.json'
+
+def main():
+    logging.info('Started')
+    parser = argparse.ArgumentParser(
+            description = " A tool to fit two body potentials using constrained cubic splines"
+            )
+    parser.add_argument('input', nargs='?',default=FILENAME, help=' Json file containing pairwise distances and energies')
+    args = parser.parse_args()
+    twp_fit(args.input)
+    logging.info('ended')
+
+
+if __name__ == '__main__':
+    main()
+
