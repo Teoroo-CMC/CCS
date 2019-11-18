@@ -1,5 +1,7 @@
 import numpy as np
+import logging
 
+logger= logging.getLogger(__name__)
 def spline_construction(rows,cols,dx):
        """ Form Spline coefficient matrices 
        
@@ -78,11 +80,10 @@ def spline_eval012(a,b,c,d,r, Rcut, Rmin, dx, x):
     else:
         raise ValueError(' r < Rmin')
 
-def spline_energy_model(Rcut,Rmin,df,cols,dx,size):
+def spline_energy_model(Rcut,Rmin,df,cols,dx,size,x):
     C,D,B,A = spline_construction(cols-1,cols,dx)
-
-    v = np.zeros((size, cols))
-    
+    logger.debug(" Number of configuration for v matrix: %s",size)
+    v = np.zeros((size, cols)) 
     indices=[]
     for config in range(size):
         distances = [ i for i in df[config, :] if i <= Rcut and i >= Rmin ]
