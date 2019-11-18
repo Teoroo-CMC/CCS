@@ -1,4 +1,5 @@
 import json
+import numpy as np
 import ccs.spline_functions as sf
 
 
@@ -43,24 +44,22 @@ class Twobody(Constraints):
 
     '''
 
-    def __init__(self, name, Rcut=None, Rmin=None, Nknots=None, Dismat=None, Cons=None):
+    def __init__(self, name, Dismat,Nconfigs, Rcut=None, Rmin=None, Nknots=None, Cons=None):
         super().__init__(**Cons)
         self.name = name
         self.Rcut = Rcut
         self.Rmin = Rmin
         self.Nknots = Nknots
         self.Dismat = Dismat
-        try:
-            self.config_size = sum(1 for line in open(self.Dismat))
-        except FileNotFoundError:
-            self.config_size= 1
+        self.Nconfigs = Nconfigs
         self.dx = (self.Rcut - self.Rmin)/self.Nknots
         self.cols = self.Nknots + 1
-#        self.v = self.get_V()
+        self.interval = np.linspace(self.Rmin,self.Rcut,self.cols,dtype=float)
+        self.v = self.get_V()
 
 
     def get_V(self):
-        return sf.spline_energy_model(self.Rcut,self.Rmin,self.Dismat,self.cols,self.dx,self.config_size)
+        return sf.spline_energy_model(self.Rcut,self.Rmin,self.Dismat,self.cols,self.dx,self.Nconfigs,self.interval)
 
 
 class Objective():
