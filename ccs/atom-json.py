@@ -11,7 +11,7 @@ from ase.calculators.neighborlist  import *  # This should be changed
 def pair_dist(atoms,R_c, ch1, ch2):
     ''' This function returns pairwise distances between two types of atoms within a certain cuttoff
     Args:
-        R_c (float): Cut off distance(3.5 Å)
+        R_c (float): Cut off distance(6. Å)
         ch1 (str): Atom species 1
         ch2 (str): Atoms species 2
 
@@ -43,25 +43,29 @@ def pair_dist(atoms,R_c, ch1, ch2):
     return r_distances
 
 def main(R_c,*args):
-    c = OrderedDict()
-    d = OrderedDict()
     species= []
-    for counter,filename in enumerate(args):
-        struct = io.read(filename)        
-        dict_species = defaultdict(int)
-        for elem in struct.get_chemical_symbols():
-            dict_species[elem]+=1    
-        atom_pair=it.combinations_with_replacement(dict_species.keys(),2)
-        c['Atoms']= dict_species
-        for (x,y) in atom_pair:
-            pair_distances = pair_dist(struct,R_c,x,y)
-            c[str(x)+str(y)]= pair_distances
-        d['Structure '+str(counter+1)] = c
     with open('structures.json','w') as f:
-        json.dump(d,f,indent=8)
+       for counter,filename in enumerate(args):
+           struct=[]
+           c = OrderedDict()
+           d = OrderedDict()
+           struct = io.read(filename)
+           E=struct.get_potential_energy() 
+           dict_species = defaultdict(int)
+           for elem in struct.get_chemical_symbols():
+               dict_species[elem]+=1    
+           atom_pair=it.combinations_with_replacement(dict_species.keys(),2)
+           c['Energy']= E
+           c['Atoms']= dict_species
+           for (x,y) in atom_pair:
+               pair_distances = pair_dist(struct,R_c,x,y)
+               c[str(x)+str(y)]= pair_distances
+           d['Structure '+str(counter+1)] = c
+           json.dump(d,f,indent=8)
                     
                 
             
 
     
-main(3.5,*sys.argv[1:])
+main(6.0,*sys.argv[1:])
+
