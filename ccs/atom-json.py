@@ -33,7 +33,7 @@ def pair_dist(atoms,R_c, ch1, ch2):
         if (atoms.get_chemical_symbols()[j] == ch1):
             indices, offsets = nl.get_neighbors(j)
             for i, offset in zip(indices, offsets):
-                if(atoms.get_chemical_symbols()[i] == ch2):  # ONLY TO OXYGEN
+                if(atoms.get_chemical_symbols()[i] == ch2): 
                     distances.append((np.linalg.norm(
                         atoms.positions[i] + np.dot(offset, atoms.get_cell()) - atoms.positions[j])))
     
@@ -44,28 +44,29 @@ def pair_dist(atoms,R_c, ch1, ch2):
 
 def main(R_c,*args):
     species= []
+    c = OrderedDict()
+    d = OrderedDict()
+    for counter,filename in enumerate(args):
+        struct=[]
+        struct = io.read(filename)
+        c=OrderedDict()
+        E=struct.get_potential_energy() 
+        dict_species = defaultdict(int)
+        for elem in struct.get_chemical_symbols():
+            dict_species[elem]+=1    
+        atom_pair=it.combinations_with_replacement(dict_species.keys(),2)
+        c['Energy']= E
+        c['Atoms']= dict_species
+        for (x,y) in atom_pair:
+            pair_distances = pair_dist(struct,R_c,x,y)
+            c[str(x)+'-'+str(y)]= pair_distances
+        d['Structure '+str(counter+1)] = c
     with open('structures.json','w') as f:
-       for counter,filename in enumerate(args):
-           struct=[]
-           c = OrderedDict()
-           d = OrderedDict()
-           struct = io.read(filename)
-           E=struct.get_potential_energy() 
-           dict_species = defaultdict(int)
-           for elem in struct.get_chemical_symbols():
-               dict_species[elem]+=1    
-           atom_pair=it.combinations_with_replacement(dict_species.keys(),2)
-           c['Energy']= E
-           c['Atoms']= dict_species
-           for (x,y) in atom_pair:
-               pair_distances = pair_dist(struct,R_c,x,y)
-               c[str(x)+str(y)]= pair_distances
-           d['Structure '+str(counter+1)] = c
-           json.dump(d,f,indent=8)
+        json.dump(d,f,indent=8)
                     
                 
             
 
     
-main(6.0,*sys.argv[1:])
+main(3.0,*sys.argv[1:])
 

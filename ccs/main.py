@@ -43,6 +43,8 @@ def twp_fit(filename):
         dist_mat=dist_mat.values
         logger.debug(" Distance matrix for %s is \n %s " %(key,dist_mat))
         atom_pairs.append(Twobody(key,dist_mat,len(struct_data),**values))
+
+     
     
         
     
