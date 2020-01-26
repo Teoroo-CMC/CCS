@@ -99,7 +99,7 @@ def spline_energy_model(Rcut,Rmin,df,cols,dx,size,x):
             u = u + a + b + c_d + d
 
         v[config, :] = u
-        
+    logger.debug("\n V matrix :%s",v)    
     return v
 
 def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut):
@@ -169,3 +169,45 @@ def append_spline (fin, fspl, fout):
         f.writelines(newskf)
         f.write('\n')         # do we need this line?
         f.writelines(spline)  # assuming fspl already has SPLINETAG
+
+class Twobody(object):
+    ''' Class representing two body 
+     Attributes:
+    Name -- str 
+        The name of the atomic pair (eg: Zn,O,ZnO).
+    Rcut -- float   
+        The cutoff distance for splines.
+    Rmin --  float
+        The distance were splines begin.
+    dx   -- float
+        The gridsize for the splines.
+    dismat -- numpy matrix
+        The pairwise distances.
+    V    -- Numpy Matrix
+        The spline energy model matrix( refer to paper)
+    c    -- numpy array
+        The curvatures for the splines
+
+
+    '''
+
+    def __init__(self, name, Dismat,Nconfigs, Rcut=None, Rmin=None, Nknots=None,Nswitch=None):
+        self.name = name
+        self.Rcut = Rcut
+        self.Rmin = Rmin
+        self.Nknots = Nknots
+        self.Nswitch = Nswitch
+        self.Dismat = Dismat
+        self.Nconfigs = Nconfigs
+        self.dx = (self.Rcut - self.Rmin)/self.Nknots
+        self.cols = self.Nknots + 1
+        self.interval = np.linspace(self.Rmin,self.Rcut,self.cols,dtype=float)
+        self.v = self.get_V()
+
+
+    def get_V(self):
+        return spline_energy_model(self.Rcut,self.Rmin,self.Dismat,self.cols,self.dx,self.Nconfigs,self.interval)
+
+
+
+
