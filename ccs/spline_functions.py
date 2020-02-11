@@ -83,6 +83,7 @@ def spline_eval012(a,b,c,d,r, Rcut, Rmin, dx, x):
 def spline_energy_model(Rcut,Rmin,df,cols,dx,size,x):
     C,D,B,A = spline_construction(cols-1,cols,dx)
     logger.debug(" Number of configuration for v matrix: %s",size)
+    logger.debug("\n A matrix is: \n %s \n Spline interval = %s",A,x)
     v = np.zeros((size, cols)) 
     indices=[]
     for config in range(size):
@@ -90,8 +91,9 @@ def spline_energy_model(Rcut,Rmin,df,cols,dx,size,x):
         u = 0
         for r in distances:
             index = int(np.ceil(np.around(((r-Rmin) / dx),decimals=5)))
-            indices.append(index)
+            indices.append(index)            
             delta = r - x[index]
+            logger.debug("\n In config %s\t distance r = %s\tindex=%s\tbin=%s",config,r,index,x[index])
             a = A[index - 1]
             b = B[index - 1] * delta
             d = D[index - 1] * np.power(delta, 3) / 6.0
@@ -202,6 +204,7 @@ class Twobody(object):
         self.dx = (self.Rcut - self.Rmin)/self.Nknots
         self.cols = self.Nknots + 1
         self.interval = np.linspace(self.Rmin,self.Rcut,self.cols,dtype=float)
+        self.A,self.B,self.C,self.D = spline_construction(self.cols-1,self.cols,self.dx) 
         self.v = self.get_V()
 
 
