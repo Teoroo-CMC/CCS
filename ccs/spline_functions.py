@@ -123,6 +123,13 @@ def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut):
     print_io_log(fname, 'Repulsive in Spline format')
 
 
+def write_error(mdl_eng,ref_eng,mse,fname='error.txt'):
+    header = "{:<15}{:<15}{:<15}".format("Reference","Predicted", "Error")
+    error = abs(ref_eng - mdl_eng)
+    maxerror = max(abs(error))
+    footer = "MSE={:2.5E}\nMaxerror = {:2.5E}".format(mse,maxerror)
+    np.savetxt(fname,np.transpose([ref_eng,mdl_eng,error]),header = header,footer = footer,fmt="%-15.5f")
+
 
 
 def get_spline_coeffs(xx, yy, deriv0, deriv1):
