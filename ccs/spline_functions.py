@@ -211,7 +211,7 @@ class Twobody(object):
         self.dx = (self.Rcut - self.Rmin)/self.Nknots
         self.cols = self.Nknots + 1
         self.interval = np.linspace(self.Rmin,self.Rcut,self.cols,dtype=float)
-        self.A,self.B,self.C,self.D = spline_construction(self.cols-1,self.cols,self.dx) 
+        self.C,self.D,self.B,self.A = spline_construction(self.cols-1,self.cols,self.dx) 
         self.v = self.get_V()
 
 
