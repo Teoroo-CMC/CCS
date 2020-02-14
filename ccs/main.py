@@ -60,7 +60,6 @@ def twp_fit(filename):
 
     sto = np.zeros((len(struct_data), len(data['Onebody'])))
     for i, key in enumerate(data['Onebody']):
-        list_atoms = []
         count = 0
         for k, v in struct_data.items():
             sto[count][i] = v['Atoms'][key]
