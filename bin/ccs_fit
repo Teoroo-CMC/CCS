@@ -4,17 +4,21 @@ import argparse
 from ccs.main import twp_fit
 
 
-FILENAME ='input.json'
+FILENAME = 'input.json'
+
 
 def main():
     parser = argparse.ArgumentParser(
-            description = " A tool to fit two body potentials using constrained cubic splines"
-            )
-    parser.add_argument('input', nargs='?',default=FILENAME, help=' Json file containing pairwise distances and energies')
-    parser.add_argument("-d", "--debug",dest="loglvl",default=logging.INFO,const=logging.DEBUG,help ="Set log level to debug",action='store_const')
+        description=" A tool to fit two body potentials using constrained cubic splines"
+    )
+    parser.add_argument('input', nargs='?', default=FILENAME,
+                        help=' Json file containing pairwise distances and energies')
+    parser.add_argument("-d", "--debug", dest="loglvl", default=logging.INFO,
+                        const=logging.DEBUG, help="Set log level to debug", action='store_const')
     args = parser.parse_args()
-    
-    logging.basicConfig(filename='ccs.log',format='%(asctime)s - %(name)s - %(levelname)s -       %(message)s',level=args.loglvl)
+
+    logging.basicConfig(
+        filename='ccs.log', format='%(asctime)s - %(name)s - %(levelname)s -       %(message)s', level=args.loglvl)
     logging.info('Started')
     twp_fit(args.input)
     logging.info('ended')
@@ -22,4 +26,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
