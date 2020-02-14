@@ -26,9 +26,7 @@ class Objective():
         self.NP = len(l_twb)
         self.cparams = self.l_twb[0].cols
         self.ns = len(ref_E)
-        logger.info(" The reference energy : \n %s", self.ref_E)
-#        M = self.get_M()
-#        self.P = np.transpose(self.M).dot(self.M)
+        logger.debug(" The reference energy : \n %s", self.ref_E)
 
     @staticmethod
     def solver(P, q, G, h, MAXITER=300, tol=(1e-10, 1e-10, 1e-10)):
@@ -44,30 +42,35 @@ class Objective():
         return np.format_float_scientific(np.sum((self.ref_E - (np.ravel(self.M.dot(x))))**2)/self.ns, precision=4)
 
     def plot(self, E_model, s_interval, s_a, x):
-        ax1 = plt.subplot(4, 1, 1)
-        plt.plot(E_model, self.ref_E, 'b*')
-#        plt.text(max(E_model)-0.01,max(-b)-0.02,str(min_err),fontsize=8)
-        plt.xlabel('E_model')
-        plt.ylabel('E_train')
+
+        fig = plt.figure()
+
+        ax1 = fig.add_subplot(2, 2, 1)
+        ax1.plot(E_model, self.ref_E, 'bo')
+        ax1.set_xlabel('Predicted energies')
+        ax1.set_ylabel('Ref. energies')
         z = np.polyfit(E_model, self.ref_E, 1)
         p = np.poly1d(z)
-        plt.plot(E_model, p(E_model), 'r--')
+        ax1.plot(E_model, p(E_model), 'r--')
 
-        ax2 = plt.subplot(4, 1, 2)
-        plt.scatter(s_interval[1:], s_a, c=[i < 0 for i in s_a])
-        plt.xlabel('r')
-        plt.ylabel('a coefficients')
-#        plt.text(max(s_interval)-2,max(s_a)-5,str(min_eps),fontsize=8)
+        ax2 = fig.add_subplot(2, 2, 2)
+        ax2.scatter(s_interval[1:], s_a, c=[i < 0 for i in s_a])
+        ax2.set_xlabel('Distance')
+        ax2.set_ylabel('a coefficients')
 
-        ax3 = plt.subplot(4, 1, 3)
+        ax3 = fig.add_subplot(2, 2, 3)
         c = [i < 0 for i in x]
-        plt.scatter(s_interval[1:], x, c=c)
-        plt.xlabel('r')
-        plt.ylabel('c')
+        ax3.scatter(s_interval[1:], x, c=c)
+        ax3.set_ylabel('c coefficients')
+        ax3.set_xlabel('Distance')
 
-        ax4 = plt.subplot(4, 1, 4)
+        ax4 = fig.add_subplot(2, 2, 4)
         n, bins, patches = plt.hist(x=np.ravel(
             self.l_twb[0].Dismat), bins=self.l_twb[0].interval, color='g', rwidth=0.85)
+        ax4.set_ylabel('Frequency of a distance')
+        ax4.set_xlabel('Spline interval')
+        plt.tight_layout()
+        plt.savefig('output.png')
         plt.show()
 
     def solution(self):
@@ -77,7 +80,7 @@ class Objective():
         N_switch_id = 0
         obj = np.zeros(self.l_twb[0].cols)
         sol_list = []
-        if not self.switch:
+        if self.l_twb[0].Nswitch == None:
             for count, N_switch_id in enumerate(range(self.l_twb[0].Nknots+1)):
                 G = self.get_G(N_switch_id)
                 logger.debug(
@@ -89,13 +92,15 @@ class Objective():
 
             mse = np.min(obj)
             opt_sol_index = np.ravel(np.argwhere(obj == mse))
+            logger.info("\n The best switch is : %d", opt_sol_index)
             opt_sol = sol_list[opt_sol_index[0]]
 
         else:
-            N_switch_id = self.l_twb[0].Nknots+1
+            N_switch_id = self.l_twb[0].Nswitch
             G = self.get_G(N_switch_id)
             h = np.zeros(G.shape[1])
-            opt_sol = self.solver(P, q, G, h)
+            opt_sol = self.solver(P, q, matrix(G), matrix(h))
+            mse = float(self.eval_obj(opt_sol['x']))
 
         x = np.array(opt_sol['x'])
         model_eng = np.ravel(self.M.dot(x))
