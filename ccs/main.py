@@ -3,6 +3,7 @@ import logging
 from collections import OrderedDict
 
 import numpy as np
+
 import pandas as pd
 
 from ccs.objective import Objective
@@ -36,7 +37,9 @@ def twp_fit(filename):
     atom_pairs = []
     ref_energies = []
     # Loop over different species
+    counter1=0
     for atmpair, values in data['Twobody'].items():
+        counter1=counter1+1
         logger.debug("\n The atom pair is : %s" % (atmpair))
         list_dist = []
         for snum, v in struct_data.items():  # loop over structures
@@ -46,11 +49,12 @@ def twp_fit(filename):
                 logger.critical(
                     " Name mismatch in input.json and structures.json")
                 raise
-            try:
-                ref_energies.append(v['Energy'])
-            except KeyError:
-                logger.critical(" Check Energy key in structure file")
-                raise
+            if(counter1 == 1):
+                try:
+                      ref_energies.append(v['Energy'])
+                except KeyError:
+                    logger.critical(" Check Energy key in structure file")
+                    raise
 
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.values
