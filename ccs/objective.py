@@ -70,7 +70,7 @@ class Objective():
         ax4.set_ylabel('Frequency of a distance')
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
-        plt.savefig('output.png')
+        plt.savefig('summary.png')
         plt.show()
 
     def solution(self):

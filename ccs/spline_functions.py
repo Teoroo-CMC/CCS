@@ -123,7 +123,7 @@ def write_error(mdl_eng, ref_eng, mse, fname='error.out'):
     header = "{:<15}{:<15}{:<15}".format("Reference", "Predicted", "Error")
     error = abs(ref_eng - mdl_eng)
     maxerror = max(abs(error))
-    footer = "MSE={:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
+    footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
     np.savetxt(fname,
                np.transpose([ref_eng, mdl_eng, error]),
                header=header,
