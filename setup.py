@@ -15,7 +15,7 @@ setup(
         author_email="akshay.kandy@kemi.uu.se",
         install_requires=[
             "cvxopt==1.2.4",
-            "matplotlib>=3.0.3",
+            "matplotlib==3.0.3",
             "numpy>=1.18.1",
             "pandas==0.24.2",
             "scipy",
