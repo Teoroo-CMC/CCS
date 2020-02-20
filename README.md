@@ -15,14 +15,21 @@ pip install ase
 pip install cvxopt
 ```
 
-### Installing
+### Installing from source
 
-
+#### Git clone
 
 ```
-pip install ccs
+git clone git@github.com:aksam432/CCS.git
+cd CCS
+python setup.py install
 ```
-
+### Environment Variables
+Set the following enivronment variables:
+```
+$ export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
+$ export PATH=<path-to-CCS-bin>:$PATH
+```
 
 
 ## Tutorials
@@ -112,7 +119,7 @@ splines.out error.out ccs.log summary.png
 
 ## License
 
-This project is licensed under the GPLv3 License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgement
 We thank all the members of  [TEOROO-group](http://www.teoroo.kemi.uu.se/) at Uppsala University, Sweden.
