@@ -24,7 +24,7 @@ class Objective():
         self.switch = switch
         self.cols_sto = sto.shape[1]
         self.NP = len(l_twb)
-        self.cparams = self.l_twb[0].cols
+        self.cparams = [self.l_twb[i].cols for i in range(self.NP)]
         self.ns = len(ref_E)
         logger.debug(" The reference energy : \n %s", self.ref_E)
 
@@ -71,7 +71,7 @@ class Objective():
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
         plt.savefig('output.png')
-        plt.show()
+#        plt.show()
 
     def solution(self):
         self.M = self.get_M()
@@ -98,31 +98,37 @@ class Objective():
         else:
             N_switch_id = self.l_twb[0].Nswitch
             G = self.get_G(N_switch_id)
+            logger.debug(
+                    "\n Nswitch_id : %d and G matrix:\n %s", N_switch_id, G)
             h = np.zeros(G.shape[1])
             opt_sol = self.solver(P, q, matrix(G), matrix(h))
             mse = float(self.eval_obj(opt_sol['x']))
+            logger.debug(
+                    "\n mse: %s \n",mse)
 
         x = np.array(opt_sol['x'])
-        model_eng = np.ravel(self.M.dot(x))
-        curvatures = x[0:self.cparams]
+        E_model=np.ravel(self.M.dot(x))
+        curvatures = x[0:self.cparams[0]]
         epsilon = x[-self.cols_sto:]
         logger.info("\n The optimal solution is : \n %s", x)
         logger.info("\n The optimal curvatures are:\n%s\nepsilon:%s",
                     curvatures, epsilon)
-
+#
         s_a = np.dot(self.l_twb[0].A, curvatures)
         s_b = np.dot(self.l_twb[0].B, curvatures)
         s_c = np.dot(self.l_twb[0].C, curvatures)
         s_d = np.dot(self.l_twb[0].D, curvatures)
-
-        sf.write_error(model_eng, self.ref_E, mse)
+#
+        sf.write_error(E_model, self.ref_E, mse)
         splcoeffs = np.hstack((s_a, s_b, s_c, s_d))
-   #     splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[0].Rmin,self.l_twb[0].Rcut,self.l_twb[0].Rmin,self.l_twb[0].dx,self.l_twb[0].interval)
-   #     s_a = np.insert(s_a,0,splderivs[0])
-   #     splcoeffs = sf.get_spline_coeffs(self.l_twb[0].interval,s_a,splderivs[1],0)
-   #     print (type(splcoeffs))
+#   #     splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[0].Rmin,self.l_twb[0].Rcut,self.l_twb[0].Rmin,self.l_twb[0].dx,self.l_twb[0].interval)
+#   #     s_a = np.insert(s_a,0,splderivs[0])
+#   #     splcoeffs = sf.get_spline_coeffs(self.l_twb[0].interval,s_a,splderivs[1],0)
+#   #     print (type(splcoeffs))
         sf.write_splinecoeffs(self.l_twb[0], splcoeffs)
-        self.plot(model_eng, self.l_twb[0].interval, s_a, s_c)
+        self.plot(E_model, self.l_twb[0].interval, s_a, s_c)
+
+
 
     def get_M(self):
         v = self.l_twb[0].v
@@ -152,6 +158,7 @@ class Objective():
             return G
         else:
             for elem in range(1, self.NP):
-                tmp_G = block_diag(g, np.identity(self.l_twb[elem].cols))
+                tmp_G = block_diag(g, -1*np.identity(self.l_twb[elem].cols))
                 g = tmp_G
         G = block_diag(g, self.cols_sto)
+        return G
