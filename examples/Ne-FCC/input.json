@@ -1,0 +1,16 @@
+{
+"Twobody":{
+	"Ne-Ne":{
+		"Rmin":3.2,   
+		"Rcut":10,
+		"Nknots":50
+	}
+	},
+
+"Onebody":["Ne"],
+
+"Reference":"structures.json"
+			
+
+
+}
