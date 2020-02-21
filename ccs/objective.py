@@ -71,7 +71,6 @@ class Objective():
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
         plt.savefig('summary.png')
-        plt.show()
 
     def solution(self):
         self.M = self.get_M()
@@ -117,10 +116,6 @@ class Objective():
 
         sf.write_error(model_eng, self.ref_E, mse)
         splcoeffs = np.hstack((s_a, s_b, s_c, s_d))
-   #     splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[0].Rmin,self.l_twb[0].Rcut,self.l_twb[0].Rmin,self.l_twb[0].dx,self.l_twb[0].interval)
-   #     s_a = np.insert(s_a,0,splderivs[0])
-   #     splcoeffs = sf.get_spline_coeffs(self.l_twb[0].interval,s_a,splderivs[1],0)
-   #     print (type(splcoeffs))
         sf.write_splinecoeffs(self.l_twb[0], splcoeffs)
         self.plot(model_eng, self.l_twb[0].interval, s_a, s_c)
 

@@ -131,34 +131,6 @@ def write_error(mdl_eng, ref_eng, mse, fname='error.out'):
                fmt="%-15.5f")
 
 
-def get_spline_coeffs(xx, yy, deriv0, deriv1):
-    'Spline coefficients for a spline with given 1st derivatives at its ends.'
-
-    nn = len(xx)
-    kk = xx[1:] - xx[:-1]
-    mu = kk[:-1] / (kk[:-1] + kk[1:])
-    mun = 1.0
-    alpha = 1.0 - mu
-    alpha0 = 1.0
-    mu = np.hstack((mu, [mun]))
-    alpha = np.hstack(([alpha0], alpha))
-    dd = 6.0 / (kk[:-1] + kk[1:]) * ((yy[2:] - yy[1:-1]) / kk[1:] -
-                                     (yy[1:-1] - yy[0:-2]) / kk[:-1])
-    d0 = 6.0 / kk[0] * ((yy[1] - yy[0]) / kk[0] - deriv0)
-    dn = 6.0 / kk[-1] * (deriv1 - (yy[-1] - yy[-2]) / kk[-1])
-    dd = np.hstack((d0, dd, dn))
-    mtx = 2.0 * np.identity(nn, dtype=float)
-    for ii in range(nn - 1):
-        mtx[ii, ii + 1] = alpha[ii]
-        mtx[ii + 1, ii] = mu[ii]
-    mm = linalg.solve(mtx, dd)
-    c0 = yy[:-1]
-    c1 = (yy[1:] - yy[:-1]) / kk - (2.0 * mm[:-1] + mm[1:]) / 6.0 * kk
-    c2 = mm[:-1] / 2.0
-    c3 = (mm[1:] - mm[:-1]) / (6.0 * kk)
-    mtx = np.array([c0, c1, c2, c3])
-    return np.transpose(mtx)
-
 class Twobody():
     ''' Class representing two body 
      Attributes:
