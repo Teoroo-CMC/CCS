@@ -1,9 +1,35 @@
-# CCS - Curvature Constrained Splines
+# CCS - Curvature Constrained Splines  
+<div style="text-align:center"><img src="https://raw.githubusercontent.com/aksam432/CCS/master/logo.png" width=400/></div>
 
-The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.  
-
+The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
-
+### Package Layout
+```
+ccs-0.1.0
+├── bin
+│   ├── atom-json               
+│   └── ccs_fit                 
+├── ccs
+│   ├── __init__.py                     
+│   ├── main.py                 
+│   ├── objective.py            
+│   └── spline_functions.py     
+├── examples
+│   ├── Ne-FCC
+│   │   ├── input.json          
+│   │   └── structures.json     
+│   └── O2
+│       ├── input.json
+│       └── structures.json
+├── LICENSE
+├── README.md
+└── setup.py
+```
+* `atom-json`-A tool to convert OUTCAR (VASP output) files to structures.json
+* `ccs_fit`             - The executable file for ccs package.
+* `main.py`             - A module to parse input files.
+* `objective.py`        - A module which contains the objective function and solver.
+* `spline_functions.py` - A module for spline construction/evaluation/output. 
 ### Prerequisites
 
 You need to install the following softwares
@@ -25,9 +51,9 @@ cd CCS
 python setup.py install
 ```
 ### Environment Variables
-Set the following enivronment variables:
+Set the following environment variables:
 ```
-$ export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
+$pip export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
 $ export PATH=<path-to-CCS-bin>:$PATH
 ```
 
@@ -95,7 +121,7 @@ The format for `structure.json` is shown below :
         }
 }
 ```
-The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stochiometry of each configuration is given under the atoms label (" Atoms") as a key-value pair ("O" : 2 ). 
+The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stoichiometry of each configuration is given under the atoms label (" Atoms") as a key-value pair ("O" : 2 ). 
 
 
 To perform the fit : 
@@ -108,7 +134,7 @@ splines.out error.out ccs.log summary.png
 ```
 * splines.out  - Contains the spline coefficients  for two body potential.
 * error.out    - Contains target energies, predicted energies and absolute error for each configuration.
-* ccs.log       - Constains debug information
+* ccs.log       - Contains debug information
 * summary.png   -  Plot showing fit quality, selected spline coefficients, and distance histogram.
 ## Authors
 
