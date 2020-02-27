@@ -1,5 +1,5 @@
 # CCS - Curvature Constrained Splines  
-<div style="text-align:center"><img src="https://raw.githubusercontent.com/aksam432/CCS/master/logo.png" width=400/></div>
+<div style="text-align:center"><img src="https://raw.githubusercontent.com/aksam432/CCS/master/logo.png" width=600/></div>
 
 The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
