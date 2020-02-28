@@ -1,4 +1,6 @@
-''' This module contains functions for spline construction, evaluation and output.'''
+"""
+This module contains functions for spline construction, evaluation and output.
+"""
 import logging
 
 import numpy as np
@@ -8,22 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 def spline_construction(rows, cols, dx):
-    """ Form Spline coefficient matrices 
-
+    """ This function constructs the matrices A, B, C, D.
     Args:
-        rows -- int
-        The number of rows of the matrix
-        cols -- int 
-        The number of columns of the matrix 
-        dx   -- int
-        The size of the interval
-
+        rows (int): The row dimension for matrix
+        cols (int): The column dimension of the matrix
+        dx (list): grid space((Rcut-Rmin)/N)
+    
     Returns:
-        A   -- Matrix with a coefficients for spline
-        B   -- Matrix with b coefficients for spline
-        C   -- Matrix with c coefficients for spline
-        D   -- Matrix with d coefficients for spline
-
+        A,B,C,D matrices
     """
 
     C = np.zeros((rows, cols), dtype=float)
@@ -64,7 +58,24 @@ def spline_construction(rows, cols, dx):
 
 
 def spline_eval012(a, b, c, d, r, Rcut, Rmin, dx, x):
-    ''' This function returns cubic spline value given certain distances '''
+    """Returns cubic spline value, first and second derivative at a point r. 
+    Args:
+        a (ndarray): a coefficients of the spline.
+        b (ndarray): b coefficients of the spline.
+        c (ndarray): c coefficients of the spline.
+        d (ndarray): d coefficients of the spline.
+        r (float):   Point to evaluate the spline function.
+        Rcut (float): The max value cut off for spline interval.
+        Rmin (float): The min value cut off for spline interval.
+        dx (float):  Grid space.
+        x (interval): Spline interval.
+    
+    Raises:
+        ValueError: If the point to be evaluated is below cut-off
+    
+    Returns:
+        float: The values for spline function value, first and second derivative
+    """
 
     if r == Rmin:
         index = 1
@@ -84,6 +95,20 @@ def spline_eval012(a, b, c, d, r, Rcut, Rmin, dx, x):
 
 
 def spline_energy_model(Rcut, Rmin, df, cols, dx, size, x):
+    """ Constructs the v matrix 
+    
+    Args:
+        Rcut (float): The max value cut off for spline interval.
+        Rmin (float): The min value cut off for spline interval.
+        df (ndarray): The paiwise distance matrix.
+        cols (int):  Number of unknown parameters.
+        dx (float): Grid size.
+        size (int): Number of configuration.
+        x (list): Spline interval.
+    
+    Returns:
+        ndarray: The v matrix for a pair.
+    """
     C, D, B, A = spline_construction(cols - 1, cols, dx)
     logger.debug(" Number of configuration for v matrix: %s", size)
     logger.debug("\n A matrix is: \n %s \n Spline interval = %s", A, x)
@@ -110,6 +135,14 @@ def spline_energy_model(Rcut, Rmin, df, cols, dx, size, x):
 
 
 def write_splinecoeffs(twb, coeffs, fname='splines.out', exp_head=False):
+    """This function writes the spline output
+    
+    Args:
+        twb (Twobody): Twobody class object.
+        coeffs (ndarray): Array containing spline coefficients.
+        fname (str, optional): Filename to output the spline coefficients. Defaults to 'splines.out'.
+        exp_head (bool, optional): To fit an exponential function at shorter atomic distances. Defaults to False.
+    """
     coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
     with open(fname, 'w') as fout:
         fout.write('Spline table\n')
@@ -120,6 +153,14 @@ def write_splinecoeffs(twb, coeffs, fname='splines.out', exp_head=False):
 
 
 def write_error(mdl_eng, ref_eng, mse, fname='error.out'):
+    """ Prints the errors in a file
+    
+    Args:
+        mdl_eng (ndarray): Energy prediction values from splines.
+        ref_eng (ndarray): Reference energy values.
+        mse (float): Mean square error.
+        fname (str, optional): Output filename.. Defaults to 'error.out'.
+    """
     header = "{:<15}{:<15}{:<15}".format("Reference", "Predicted", "Error")
     error = abs(ref_eng - mdl_eng)
     maxerror = max(abs(error))
@@ -132,34 +173,27 @@ def write_error(mdl_eng, ref_eng, mse, fname='error.out'):
 
 
 class Twobody():
-    ''' Class representing two body 
-     Attributes:
-    Name -- str 
-        The name of the atomic pair (eg: Zn,O,ZnO).
-    Rcut -- float   
-        The cutoff distance for splines.
-    Rmin --  float
-        The distance were splines begin.
-    dx   -- float
-        The gridsize for the splines.
-    dismat -- numpy matrix
-        The pairwise distances.
-    V    -- Numpy Matrix
-        The spline energy model matrix( refer to paper)
-    c    -- numpy array
-        The curvatures for the splines
-
-
-    '''
-
+    """ Twobody class describes properties of an Atom pair"""
+    
     def __init__(self,
                  name,
                  Dismat,
                  Nconfigs,
-                 Rcut=None,
-                 Rmin=None,
-                 Nknots=None,
+                 Rcut,
+                 Nknots,
+                 Rmin=None,                 
                  Nswitch=None):
+        """ Constructs an Two body object
+       
+        Args:
+            name (str): Name of the atom pair.
+            Dismat (dataframe): Pairwise  distance matrix.
+            Nconfigs (int): Number of configurations
+            Rcut (float): Maximum cut off value for spline interval
+            Nknots (int): Number of knots in the spline interval
+            Rmin (float, optional): Minimum value of the spline interval. Defaults to None.
+            Nswitch (int, optional): The switching point for the spline. Defaults to None.
+        """
         self.name = name
         self.Rcut = Rcut
         self.Rmin = Rmin
@@ -178,6 +212,11 @@ class Twobody():
         self.v = self.get_v()
 
     def get_v(self):
+        """ Function for spline matrix
+        
+        Returns:
+            ndarray: v matrix
+        """
         return spline_energy_model(self.Rcut, self.Rmin, self.Dismat,
                                    self.cols, self.dx, self.Nconfigs,
                                    self.interval)

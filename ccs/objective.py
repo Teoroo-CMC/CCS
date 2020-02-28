@@ -1,4 +1,4 @@
-
+""" This module constructs and solves the spline objective"""
 import logging
 
 import numpy as np
@@ -12,9 +12,21 @@ logger = logging.getLogger(__name__)
 
 
 class Objective():
-    ''' Class for constructing the objective'''
+    """  Objective function for ccs method """
 
     def __init__(self, l_twb, sto, ref_E, c='C', RT=None, RF=1e-6, switch=False, ST=None):
+        """ Generates Objective class object
+        
+        Args:
+            l_twb (list): list of Twobody class objects.
+            sto (ndarray): An array containing number of atoms of each type.
+            ref_E (ndarray): Reference energies.
+            c (str, optional): Type of solver. Defaults to 'C'.
+            RT ([type], optional): Regularization Type. Defaults to None.
+            RF ([type], optional): Regularization factor. Defaults to 1e-6.
+            switch (bool, optional): switch condition. Defaults to False.
+            ST ([type], optional): switch search where there is data. Defaults to None.
+        """
         self.l_twb = l_twb
         self.sto = sto
         self.ref_E = np.asarray(ref_E)
@@ -30,6 +42,19 @@ class Objective():
 
     @staticmethod
     def solver(P, q, G, h, MAXITER=300, tol=(1e-10, 1e-10, 1e-10)):
+        """ The solver for the objective
+        
+        Args:
+            P (matrix): P matrix as per standard Quadratic Programming(QP) notation.
+            q (matrix): q matrix as per standard QP notation.
+            G (matrix): G matrix as per standard QP notation.
+            h (matrix): h matrix as per standard QP notation
+            MAXITER (int, optional): Maximum iteration steps. Defaults to 300.
+            tol (tuple, optional): Tolerance value of the solution. Defaults to (1e-10, 1e-10, 1e-10).
+        
+        Returns:
+            dictionary: The solution details are present in this dictionary
+        """
 
         solvers.options['maxiters'] = MAXITER
         solvers.options['feastol'] = tol[0]
@@ -39,9 +64,25 @@ class Objective():
         return sol
 
     def eval_obj(self, x):
+        """ mean square error function
+        
+        Args:
+            x (ndarray): The solution for the objective.
+        
+        Returns:
+            float: mean square error.
+        """
         return np.format_float_scientific(np.sum((self.ref_E - (np.ravel(self.M.dot(x))))**2)/self.ns, precision=4)
 
     def plot(self, E_model, s_interval, s_a, x):
+        """ function to plot the results
+        
+        Args:
+            E_model (ndarray): Predicted energies via spline.
+            s_interval (list): Spline interval.
+            s_a (ndarray): Spline a coeffcients.
+            x (ndarrray): The solution array.
+        """
 
         fig = plt.figure()
 
@@ -73,13 +114,15 @@ class Objective():
         plt.savefig('summary.png')
 
     def solution(self):
+        """ Function to solve the objective with constraints
+        """
         self.M = self.get_M()
         P = matrix(np.transpose(self.M).dot(self.M))
         q = -1*matrix(np.transpose(self.M).dot(self.ref_E))
         N_switch_id = 0
         obj = np.zeros(self.l_twb[0].cols)
         sol_list = []
-        if self.l_twb[0].Nswitch == None:
+        if self.l_twb[0].Nswitch is None:
             for count, N_switch_id in enumerate(range(self.l_twb[0].Nknots+1)):
                 G = self.get_G(N_switch_id)
                 logger.debug(
@@ -120,6 +163,11 @@ class Objective():
         self.plot(model_eng, self.l_twb[0].interval, s_a, s_c)
 
     def get_M(self):
+        """ Returns the M matrix 
+        
+        Returns:
+            ndarray: The M matrix
+        """
         v = self.l_twb[0].v
         logger.debug("\n The first v matrix is:\n %s", v)
         logger.debug("\n Shape of the first v matrix is:\t%s", v.shape)
@@ -139,6 +187,14 @@ class Objective():
             return m
 
     def get_G(self, n_switch):
+        """ returns constraints matrix
+        
+        Args:
+            n_switch (int): switching point to cahnge signs of curvatures.
+        
+        Returns:
+            ndarray: returns G matrix
+        """
         g = block_diag(-1*np.identity(n_switch),
                        np.identity(self.l_twb[0].cols-n_switch))
         logger.debug("\n g matrix:\n%s", g)

@@ -1,3 +1,4 @@
+""" The  module to parse the inputs"""
 import json
 import logging
 from collections import OrderedDict
@@ -12,6 +13,11 @@ logger = logging.getLogger(__name__)
 
 
 def twp_fit(filename):
+    """ The function parses the input files and fits the reference data.
+    
+    Args:
+        filename (str): The input file (input.json).
+    """
 
     try:
         with open(filename) as json_file:
