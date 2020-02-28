@@ -53,7 +53,7 @@ python setup.py install
 ### Environment Variables
 Set the following environment variables:
 ```
-$pip export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
+$export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
 $ export PATH=<path-to-CCS-bin>:$PATH
 ```
 
