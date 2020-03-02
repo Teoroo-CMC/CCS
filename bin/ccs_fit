@@ -8,6 +8,7 @@ FILENAME = 'input.json'
 
 
 def main():
+    """ parser for ccs"""
     parser = argparse.ArgumentParser(
         description=" A tool to fit two body potentials using constrained cubic splines")
     parser.add_argument(
