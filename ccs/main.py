@@ -9,6 +9,7 @@ import pandas as pd
 
 from ccs.objective import Objective
 from ccs.spline_functions import Twobody
+from ccs.spline_functions import write_as_nxy
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +20,7 @@ def twp_fit(filename):
     Args:
         filename (str): The input file (input.json).
     """
+    gen_params = {'interface':None,'spline':None,'ctype':None}
 
     try:
         with open(filename) as json_file:
@@ -39,9 +41,18 @@ def twp_fit(filename):
         logger.critical("Reference file not in json format")
         raise
 
+    try:
+        print(data['General'])
+        gen_params.update(data['General'])
+        print(gen_params)
+    except KeyError:
+        raise
+     
+
 # Reading the input.json file and structure file to see the keys are matching
     atom_pairs = []
     ref_energies = []
+    dftb_energies = []
     # Loop over different species
     counter1=0
     for atmpair, values in data['Twobody'].items():
@@ -61,6 +72,20 @@ def twp_fit(filename):
                 except KeyError:
                     logger.critical(" Check Energy key in structure file")
                     raise
+                if(gen_params['interface'] == "DFTB"):
+                    try:
+                        dftb_energies.append(v["DFTB_energy"]["Elec"])
+                    except KeyError:
+                        logger.debug("Structure with no key Elec at %s",snum)
+                        raise
+
+        if dftb_energies is not None:
+            assert len(ref_energies) == len(dftb_energies)
+            columns=["DFT(eV)","DFTB(eV)","delta(hatree)"]
+            energies = np.vstack((np.asarray(ref_energies),np.asarray(dftb_energies)))
+            ref_energies = (energies[0]-energies[1])*0.03674 #Energy in hatree
+            write_as_nxy("Train_energy.dat","The input energies",np.vstack((energies,ref_energies)),columns)
+            
 
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.values
@@ -74,5 +99,8 @@ def twp_fit(filename):
         for k, v in struct_data.items():
             sto[count][i] = v['Atoms'][key]
             count = count+1
+       
     n = Objective(atom_pairs, sto, ref_energies)
-    n.solution()
+    E_predicted = n.solution()
+    header= ["DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
+    write_as_nxy("Energy.dat","Full energies",np.vstack((energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
