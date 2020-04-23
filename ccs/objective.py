@@ -29,7 +29,7 @@ class Objective():
         """
         self.l_twb = l_twb
         self.sto = sto
-        self.ref_E = np.asarray(ref_E)
+        self.ref_E = ref_E
         self.c = c
         self.RT = RT
         self.RF = RF
@@ -95,7 +95,7 @@ class Objective():
         ax1.plot(E_model, p(E_model), 'r--')
 
         ax2 = fig.add_subplot(2, 2, 2)
-        ax2.scatter(s_interval[1:], s_a, c=[i < 0 for i in s_a])
+        ax2.scatter(s_interval, s_a, c=[i < 0 for i in s_a])
         ax2.set_xlabel('Distance')
         ax2.set_ylabel('a coefficients')
 
@@ -112,18 +112,24 @@ class Objective():
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
         plt.savefig('summary.png')
+        plt.show()
 
     def solution(self):
         """ Function to solve the objective with constraints
         """
         self.M = self.get_M()
         P = matrix(np.transpose(self.M).dot(self.M))
+        eigvals = np.linalg.eigvals(P)
+        logger.debug("Eigenvalues:%s",eigvals)
+        logger.info('positive definite:%s',np.all((eigvals >0)))
+        print(eigvals)
+        print(np.all((eigvals >0)))
         q = -1*matrix(np.transpose(self.M).dot(self.ref_E))
         N_switch_id = 0
-        obj = np.zeros(self.l_twb[0].cols)
+        obj = np.zeros(self.l_twb[0].cols+1)
         sol_list = []
         if self.l_twb[0].Nswitch is None:
-            for count, N_switch_id in enumerate(range(self.l_twb[0].Nknots+1)):
+            for count, N_switch_id in enumerate(range(self.l_twb[0].Nknots+2)):
                 G = self.get_G(N_switch_id)
                 logger.debug(
                     "\n Nswitch_id : %d and G matrix:\n %s", N_switch_id, G)
@@ -152,6 +158,7 @@ class Objective():
         E_model=np.ravel(self.M.dot(x))
         curvatures = x[0:self.cparams[0]]
         epsilon = x[-self.cols_sto:]
+        print(epsilon)
         logger.info("\n The optimal solution is : \n %s", x)
         logger.info("\n The optimal curvatures are:\n%s\nepsilon:%s",
                     curvatures, epsilon)
@@ -160,15 +167,24 @@ class Objective():
         s_b = np.dot(self.l_twb[0].B, curvatures)
         s_c = np.dot(self.l_twb[0].C, curvatures)
         s_d = np.dot(self.l_twb[0].D, curvatures)
-#
+
         sf.write_error(E_model, self.ref_E, mse)
-        splcoeffs = np.hstack((s_a, s_b, s_c, s_d))
-#   #     splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[0].Rmin,self.l_twb[0].Rcut,self.l_twb[0].Rmin,self.l_twb[0].dx,self.l_twb[0].interval)
-#   #     s_a = np.insert(s_a,0,splderivs[0])
-#   #     splcoeffs = sf.get_spline_coeffs(self.l_twb[0].interval,s_a,splderivs[1],0)
+#        splcoeffs = np.hstack((s_a, s_b, s_c, s_d))
+        splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[0].Rmin,self.l_twb[0].Rcut,self.l_twb[0].Rmin,self.l_twb[0].dx,self.l_twb[0].interval)
+        expcoeffs= sf.get_expcoeffs(*splderivs,self.l_twb[0].Rmin)
+        print (expcoeffs)
+        print (type(expcoeffs))
+        expbuf=0.5
+        rexp = np.linspace( self.l_twb[0].Rmin -expbuf, self.l_twb[0].Rmin, int(expbuf/self.l_twb[0].dx)+1)
+        expvals = sf.get_exp_values(expcoeffs,rexp)
+        sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals), ('rr', 'exponential head'))
+        s_a = np.insert(s_a,0,splderivs[0])
+        splcoeffs = sf.get_spline_coeffs(self.l_twb[0].interval,s_a,splderivs[1],0)
+        sf.write_splinerep("repulsive.dat", np.array(expcoeffs).tolist(), splcoeffs, self.l_twb[0].interval,self.l_twb[0].Rcut)
 #   #     print (type(splcoeffs))
-        sf.write_splinecoeffs(self.l_twb[0], splcoeffs)
+    #    sf.write_splinecoeffs(self.l_twb[0], splcoeffs)
         self.plot(E_model, self.l_twb[0].interval, s_a, s_c)
+        return E_model
 
 
 
@@ -209,7 +225,7 @@ class Objective():
                        np.identity(self.l_twb[0].cols-n_switch))
         logger.debug("\n g matrix:\n%s", g)
         if self.NP == 1:
-            G = block_diag(g, np.identity(self.cols_sto))
+            G = block_diag(g, np.zeros(self.cols_sto))
             return G
         else:
             for elem in range(1, self.NP):
