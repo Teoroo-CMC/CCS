@@ -53,11 +53,12 @@ def twp_fit(filename):
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
+    NN=[]
     # Loop over different species
     counter1=0
     for atmpair, values in data['Twobody'].items():
         counter1=counter1+1
-        logger.debug("\n The atom pair is : %s" % (atmpair))
+        logger.info("\n The atom pair is : %s" % (atmpair))
         list_dist = []
         for snum, v in struct_data.items():  # loop over structures
             try:
@@ -66,9 +67,11 @@ def twp_fit(filename):
                 logger.critical(
                     " Name mismatch in input.json and structures.json")
                 raise
+                
             if(counter1 == 1):
                 try:
                       ref_energies.append(v['Energy'])
+                      NN.append(min(v[atmpair]))
                 except KeyError:
                     logger.critical(" Check Energy key in structure file")
                     raise
@@ -78,15 +81,16 @@ def twp_fit(filename):
                     except KeyError:
                         logger.debug("Structure with no key Elec at %s",snum)
                         raise
-
-        if dftb_energies is not None:
-            assert len(ref_energies) == len(dftb_energies)
-            columns=["DFT(eV)","DFTB(eV)","delta(hatree)"]
-            energies = np.vstack((np.asarray(ref_energies),np.asarray(dftb_energies)))
-            ref_energies = (energies[0]-energies[1])*0.03674 #Energy in hatree
-            write_as_nxy("Train_energy.dat","The input energies",np.vstack((energies,ref_energies)),columns)
+        if(counter1 == 1):                
+            if dftb_energies is not None:
+                assert len(ref_energies) == len(dftb_energies)
+                columns=["DFT(eV)","DFTB(eV)","delta(hatree)"]
+                energies = np.vstack((np.asarray(ref_energies),np.asarray(dftb_energies)))
+                ref_energies = (energies[0]-energies[1])*0.03674 #Energy in hatree
+                write_as_nxy("Train_energy.dat","The input energies",np.vstack((energies,ref_energies)),columns)
             
 
+        logger.info("\n The minimum distance is %s ",min(list_dist))
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.values
         logger.debug(" Distance matrix for %s is \n %s " % (atmpair, dist_mat))
@@ -102,5 +106,5 @@ def twp_fit(filename):
        
     n = Objective(atom_pairs, sto, ref_energies)
     E_predicted = n.solution()
-    header= ["DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
-    write_as_nxy("Energy.dat","Full energies",np.vstack((energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+    header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
+    write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
