@@ -134,7 +134,7 @@ class Objective():
             rexp = np.linspace( self.l_twb[i].Rmin -expbuf, self.l_twb[i].Rmin, int(expbuf/self.l_twb[i].dx)+1)
             expvals = sf.get_exp_values(expcoeffs,rexp)
             sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals), ('rr', 'exponential head'))
-            s_a = np.insert(s_a,0,splderivs[i])
+            s_a = np.insert(s_a,0,splderivs[1])
             splcoeffs = sf.get_spline_coeffs(self.l_twb[i].interval,s_a,splderivs[1],0)
             sf.write_splinerep(self.l_twb[i].name+"repulsive.dat", np.array(expcoeffs).tolist(), splcoeffs, self.l_twb[i].interval,self.l_twb[i].Rcut)
     #   #     print (type(splcoeffs))

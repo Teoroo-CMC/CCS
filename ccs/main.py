@@ -90,7 +90,7 @@ def twp_fit(filename):
                 write_as_nxy("Train_energy.dat","The input energies",np.vstack((energies,ref_energies)),columns)
             
 
-        logger.info("\n The minimum distance is %s ",min(list_dist))
+        logger.info("\n The minimum distance for atom pair %s is %s "%(atmpair,min(list_dist)))
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.values
         logger.debug(" Distance matrix for %s is \n %s " % (atmpair, dist_mat))
