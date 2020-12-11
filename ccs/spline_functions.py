@@ -86,7 +86,7 @@ def spline_eval012(a, b, c, d, r, Rcut, Rmin, dx, x):
     if index >= 1:
         dr = r - x[index]
         f0 = a[index-1] + dr * \
-            (b[index-1] + dr*(0.5*c[index-1] + (d[index-1]*dr/3.0)))
+            (b[index-1] + dr*(0.5*c[index-1] + (d[index-1]*dr/6.0))) # changed 3.0 to 6.0
         f1 = b[index - 1] + dr * (c[index - 1] + (0.5 * d[index - 1] * dr))
         f2 = c[index - 1] + d[index - 1] * dr
 #        print( type(f0))

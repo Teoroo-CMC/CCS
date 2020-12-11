@@ -134,7 +134,7 @@ class Objective():
             rexp = np.linspace( self.l_twb[i].Rmin -expbuf, self.l_twb[i].Rmin, int(expbuf/self.l_twb[i].dx)+1)
             expvals = sf.get_exp_values(expcoeffs,rexp)
             sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals), ('rr', 'exponential head'))
-            s_a = np.insert(s_a,0,splderivs[1])
+            s_a = np.insert(s_a,0,splderivs[0])
             splcoeffs = sf.get_spline_coeffs(self.l_twb[i].interval,s_a,splderivs[1],0)
             sf.write_splinerep(self.l_twb[i].name+"repulsive.dat", np.array(expcoeffs).tolist(), splcoeffs, self.l_twb[i].interval,self.l_twb[i].Rcut)
     #   #     print (type(splcoeffs))
@@ -211,7 +211,7 @@ class Objective():
         self.get_coeffs(list(x),E_model)
 #
         sf.write_error(E_model, self.ref_E, mse)
-        return E_model
+        return E_model,mse
 
 
 
@@ -252,12 +252,14 @@ class Objective():
                        np.identity(self.l_twb[0].cols-n_switch[0]))
         logger.debug("\n g matrix:\n%s", g)
         if self.NP == 1:
-            G = block_diag(g, np.zeros(self.cols_sto))
+            G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
             return G
         else:
             for elem in range(1, self.NP):
                 tmp_G = block_diag(g, -1*np.identity(n_switch[elem]),
                        np.identity(self.l_twb[elem].cols-n_switch[elem]))
                 g = tmp_G
-        G = block_diag(g, np.zeros(self.cols_sto))
+        print(self.sto)
+        G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
+        print(G.shape)
         return G

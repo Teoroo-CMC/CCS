@@ -20,7 +20,7 @@ def twp_fit(filename):
     Args:
         filename (str): The input file (input.json).
     """
-    gen_params = {'interface':None,'spline':None,'ctype':None}
+    gen_params = {'interface':None,'spline':None,'ctype':None,'scan':False}
 
     try:
         with open(filename) as json_file:
@@ -66,12 +66,12 @@ def twp_fit(filename):
             except KeyError:
                 logger.critical(
                     " Name mismatch in input.json and structures.json")
-                raise
+                list_dist.append([0])
                 
             if(counter1 == 1):
                 try:
                       ref_energies.append(v['Energy'])
-                      NN.append(min(v[atmpair]))
+                      NN.append(min(v[atmpair]))   # ALEEEEEEEEEEERRRRRRRRRRTT WONT WORK FOR MULTIPLE
                 except KeyError:
                     logger.critical(" Check Energy key in structure file")
                     raise
@@ -89,9 +89,12 @@ def twp_fit(filename):
                 ref_energies = (energies[0]-energies[1])*0.03674 #Energy in hatree
                 write_as_nxy("Train_energy.dat","The input energies",np.vstack((energies,ref_energies)),columns)
             
-
+  #      print(list_dist)
         logger.info("\n The minimum distance for atom pair %s is %s "%(atmpair,min(list_dist)))
         dist_mat = pd.DataFrame(list_dist)
+        dist_mat= dist_mat.fillna(0)
+        print(dist_mat)
+        dist_mat.to_csv(atmpair+".dat",sep=" ",index=False)
         dist_mat = dist_mat.values
         logger.debug(" Distance matrix for %s is \n %s " % (atmpair, dist_mat))
         atom_pairs.append(
@@ -101,10 +104,39 @@ def twp_fit(filename):
     for i, key in enumerate(data['Onebody']):
         count = 0
         for k, v in struct_data.items():
-            sto[count][i] = v['Atoms'][key]
+            try:
+                sto[count][i] = v['Atoms'][key]
+            except KeyError:
+                sto[count][i]=0                
             count = count+1
-       
-    n = Objective(atom_pairs, sto, ref_energies)
-    E_predicted = n.solution()
-    header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
-    write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+    np.savetxt("sto.dat",sto,fmt="%i")
+    assert sto.shape[1]== np.linalg.matrix_rank(sto),"Linear dependence in stochiometry matrix"
+    if gen_params["scan"]:
+        mse_list = []
+        min_Rcut = values["Rcut"]
+        max_Rcut = 2*min_Rcut
+        grid_size = (values["Rcut"] -values["Rmin"])/values["Nknots"] 
+        rcuts = np.linspace(min_Rcut,max_Rcut,2,endpoint=True)
+        for rcut in rcuts:
+            pair=[]
+            values["Rcut"] = rcut
+            print(values)
+            mod_pair = pair.append(Twobody(atmpair,dist_mat,len(struct_data),**values)) 
+            n = Objective(pair, sto, ref_energies)
+            E_predicted,mse = n.solution()
+            mse_list.append(mse)
+            header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
+            write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+        mse_arr = np.array(mse_list)
+        rcuts_arr = np.array(rcuts)
+        print(rcuts_arr)
+        print(mse_arr)
+        np.savetxt("RcutvsMse.dat",np.c_[rcuts_arr,mse_arr],newline="\n")
+        
+    else:
+            n = Objective(atom_pairs, sto, ref_energies)
+            E_predicted,mse = n.solution()
+            header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
+            write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+
+
