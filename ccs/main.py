@@ -113,25 +113,28 @@ def twp_fit(filename):
     assert sto.shape[1]== np.linalg.matrix_rank(sto),"Linear dependence in stochiometry matrix"
     if gen_params["scan"]:
         mse_list = []
+        mse_atom=[]
         min_Rcut = values["Rcut"]
-        max_Rcut = 2*min_Rcut
+        max_Rcut = 2.7*min_Rcut
         grid_size = (values["Rcut"] -values["Rmin"])/values["Nknots"] 
-        rcuts = np.linspace(min_Rcut,max_Rcut,2,endpoint=True)
+        rcuts = np.linspace(min_Rcut,max_Rcut,20,endpoint=True)
         for rcut in rcuts:
             pair=[]
             values["Rcut"] = rcut
-            print(values)
+     #       values["Nknots"]= int(round((rcut - values["Rmin"])/grid_size))
             mod_pair = pair.append(Twobody(atmpair,dist_mat,len(struct_data),**values)) 
             n = Objective(pair, sto, ref_energies)
             E_predicted,mse = n.solution()
             mse_list.append(mse)
             header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
             write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+            err_atom = (ref_energies - E_predicted)/np.ravel(sto)
+            mse_atom.append(np.sum(np.square(err_atom))/len(ref_energies))
         mse_arr = np.array(mse_list)
         rcuts_arr = np.array(rcuts)
         print(rcuts_arr)
         print(mse_arr)
-        np.savetxt("RcutvsMse.dat",np.c_[rcuts_arr,mse_arr],newline="\n")
+        np.savetxt("new_RcutvsMse.dat",np.c_[rcuts_arr,mse_arr,np.array(mse_atom)],newline="\n")
         
     else:
             n = Objective(atom_pairs, sto, ref_energies)
