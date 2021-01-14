@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class Objective():
     """  Objective function for ccs method """
 
-    def __init__(self, l_twb, sto, ref_E, c='C', RT=None, RF=1e-6, switch=False, ST=None):
+    def __init__(self, l_twb, sto, ref_E, c='C', RT="None", RF=1e-6, switch=False, ST=None):
         """ Generates Objective class object
         
         Args:
@@ -112,7 +112,7 @@ class Objective():
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
         plt.savefig(name+'-summary.png')
-        plt.show()
+        #plt.show()
         
     def get_coeffs(self,x,E_model):
         temp=0
@@ -168,10 +168,11 @@ class Objective():
         if self.l_twb[0].Nswitch is None:
             for N_switch_id in Nswitch_list:
                 G = self.get_G(N_switch_id)
-                print(N_switch_id)
+                print(G.shape)
+                print(q.size)
                 logger.debug(
                     "\n Nswitch_id : %s and G matrix:\n %s", N_switch_id, G)
-                h = np.zeros(G.shape[1])
+                h = np.zeros(G.shape[0])
                 sol = self.solver(P, q, matrix(G), matrix(h))
                 obj[N_switch_id] = self.eval_obj(sol['x'])
                 print(obj[N_switch_id])
@@ -253,6 +254,16 @@ class Objective():
         logger.debug("\n g matrix:\n%s", g)
         if self.NP == 1:
             G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
+            if self.RT == "Smooth":
+                G_mono = -1*np.identity(self.l_twb[0].cols)
+                i,j = np.indices(G_mono.shape)
+                G_mono [i==j-1] = 1
+                G_mono [self.l_twb[0].cols-1][self.l_twb[0].cols-1] = 0
+                G_mono = block_diag(G_mono,0)
+                G_new = np.vstack((G,G_mono))
+                G=G_new
+                print(G)
+
             return G
         else:
             for elem in range(1, self.NP):
