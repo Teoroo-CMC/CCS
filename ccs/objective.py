@@ -15,13 +15,14 @@ logger = logging.getLogger(__name__)
 class Objective():
     """  Objective function for ccs method """
 
-    def __init__(self, l_twb, sto, ref_E, c='C', RT="None", RF=1e-6, switch=False, ST=None):
+    def __init__(self, l_twb, sto, ref_E, gen_params, ewald=[]):
         """ Generates Objective class object
         
         Args:
             l_twb (list): list of Twobody class objects.
             sto (ndarray): An array containing number of atoms of each type.
             ref_E (ndarray): Reference energies.
+            ewald (list, optional) : ewald energy values for CCS+Q
             c (str, optional): Type of solver. Defaults to 'C'.
             RT ([type], optional): Regularization Type. Defaults to None.
             RF ([type], optional): Regularization factor. Defaults to 1e-6.
@@ -31,10 +32,9 @@ class Objective():
         self.l_twb = l_twb
         self.sto = sto
         self.ref_E = ref_E
-        self.c = c
-        self.RT = RT
-        self.RF = RF
-        self.switch = switch
+        self.ewald = np.array(ewald).reshape(-1,1)
+        for k,v in gen_params.items():
+            setattr(self,k,v)
         self.cols_sto = sto.shape[1]
         self.NP = len(l_twb)
         self.cparams = [self.l_twb[i].cols for i in range(self.NP)]
@@ -143,7 +143,6 @@ class Objective():
     
     def list_iterator(self):
         tmp = [range(i+1) for i in self.cparams]
-       
         N_list = list(itertools.product(*tmp))
         return N_list
         
@@ -157,9 +156,9 @@ class Objective():
         eigvals = np.linalg.eigvals(P)
         logger.debug("Eigenvalues:%s",eigvals)
         logger.info('positive definite:%s',np.all((eigvals >0)))
-        print(eigvals)
-        print(np.all((eigvals >0)))
-        q = -1*matrix(np.transpose(self.M).dot(self.ref_E))
+        #print(eigvals)
+        #print(np.all((eigvals >0)))
+        q = -1*matrix(np.transpose(self.M).dot(self.ref_E))    
         N_switch_id = 0
         Nswitch_list = self.list_iterator()
        # print(Nswitch_list)
@@ -181,14 +180,12 @@ class Objective():
                 
 
             mse = np.min(obj)
-            print (obj)
             opt_sol_index = np.ravel(np.argwhere(obj == mse))
-            logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
+#            logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
             
             G_opt = self.get_G(opt_sol_index)
             opt_sol = self.solver(P, q, matrix(G_opt), matrix(h))
-            print(opt_sol['x'])
-            print(self.eval_obj(opt_sol['x']))
+            
 
 
         else:
@@ -203,12 +200,12 @@ class Objective():
         x = np.array(opt_sol['x'])
         print(x)
         E_model=np.ravel(self.M.dot(x))
-        curvatures = x[0:self.cparams[0]]
-        epsilon = x[-self.cols_sto:]
-        print(epsilon)
+#        curvatures = x[0:self.cparams[0]]
+#        epsilon = x[-self.cols_sto:]
+#        print(epsilon)
         logger.info("\n The optimal solution is : \n %s", x)
-        logger.info("\n The optimal curvatures are:\n%s\nepsilon:%s",
-                    curvatures, epsilon)
+#        logger.info("\n The optimal curvatures are:\n%s\nepsilon:%s",
+#                    curvatures, epsilon)
         self.get_coeffs(list(x),E_model)
 #
         sf.write_error(E_model, self.ref_E, mse)
@@ -216,45 +213,43 @@ class Objective():
 
 
 
+    
+        
     def get_M(self):
         """ Returns the M matrix 
         
         Returns:
             ndarray: The M matrix
         """
-        v = self.l_twb[0].v
-        logger.debug("\n The first v matrix is:\n %s", v)
-        logger.debug("\n Shape of the first v matrix is:\t%s", v.shape)
-        logger.debug("\n The stochiometry matrix is:\n%s", self.sto)
-        if self.NP == 1:
-            m = np.hstack((v, self.sto))
-            logger.debug("\n The m  matrix is:\n %s \n shape:%s", m, m.shape)
-            return m
-        else:
-            for i in range(1, self.NP):
-                logger.debug("\n The %d pair v matrix is :\n %s",
-                             i+1, self.l_twb[i].v)
-                v = np.hstack((v, self.l_twb[i].v))
-                logger.debug(
-                    "\n The v  matrix shape after stacking :\t %s", v.shape)
-            m = np.hstack((v, self.sto))
-            return m
+        tmp =[]
+        for i in range(self.NP):
+            tmp.append(self.l_twb[i].v)
+            logger.debug("\n The %d pair v matrix is :\n %s",
+                             i, self.l_twb[i].v)
+        v = np.hstack([*tmp])
+        logger.debug("\n The v  matrix shape after stacking :\t %s", v.shape)
+        m = np.hstack((v, self.sto))
+        print(self.sto.shape,self.ewald.shape)
 
+        if self.interface== "CCS+Q":
+            m = np.hstack((m,self.ewald))
+        return m
+    """
     def get_G(self, n_switch):
-        """ returns constraints matrix
+         returns constraints matrix
         
         Args:
             n_switch (int): switching point to cahnge signs of curvatures.
         
         Returns:
             ndarray: returns G matrix
-        """
+        
         g = block_diag(-1*np.identity(n_switch[0]),
                        np.identity(self.l_twb[0].cols-n_switch[0]))
         logger.debug("\n g matrix:\n%s", g)
         if self.NP == 1:
             G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
-            if self.RT == "Smooth":
+            if self.ctype == "Smooth":
                 G_mono = -1*np.identity(self.l_twb[0].cols)
                 i,j = np.indices(G_mono.shape)
                 G_mono [i==j-1] = 1
@@ -270,7 +265,66 @@ class Objective():
                 tmp_G = block_diag(g, -1*np.identity(n_switch[elem]),
                        np.identity(self.l_twb[elem].cols-n_switch[elem]))
                 g = tmp_G
+            if self.ctype == "New":
+                G_mono = -1*np.identity(self.l_twb[0].cols)
+                i,j = np.indices(G_mono.shape)
+                G_mono [i==j-1] = 1
+                G_mono [self.l_twb[0].cols-1][self.l_twb[0].cols-1] = 0
+                G_mono = block_diag(G_mono,0)
+                g = G_mono*g
+                
+
         print(self.sto)
         G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
+
+        if self.interface =="CCS+Q":
+            G=block_diag(G,1)
+
+
         print(G.shape)
+        return G
+        """
+    def get_G(self, n_switch):
+        """ returns constraints matrix
+        
+        Args:
+            n_switch (int): switching point to cahnge signs of curvatures.
+        
+        Returns:
+            ndarray: returns G matrix
+        """
+        tmp_G = []
+        for i in range(self.NP):
+            tmp_G.append(block_diag(-1*np.identity(n_switch[i]),
+                       np.identity(self.l_twb[i].cols-n_switch[i])))
+        g = block_diag(*tmp_G)
+        # Place to add custom constraints on G matrix
+        if self.ctype == "mono":
+            tmp=[]
+            for elem in range (self.NP):
+                g_mono = -1*np.identity(self.l_twb[elem].cols)
+                i,j = np.indices(g_mono.shape)
+                g_mono [i==j-1] = 1
+                g_mono [self.l_twb[elem].cols-1][self.l_twb[elem].cols-1] = 0
+                tmp.append(g_mono)
+            g = block_diag(*tmp)
+        elif self.ctype== "smooth":
+            g_smooth = np.zeros(0)
+            for elem in range(self.NP):
+                g = -1*np.identity(self.l_twb[elem].cols)  # should this be the initial ize of the matrix
+                for i in range(1,self.l_twb[elem]):
+                    g[i][i] = 2
+                    g[i][i-1] = -1
+                    g[i][i+1] = -1
+                for i in range(n_switch[elem],self.l_twb[elem].cols):
+                    g[i][i] = -g[i][i]
+                    g[i][i-1] = -g[i][i-1]
+                    g[i][i+1] = -g[i][i+1]
+                g_smooth = block_diag(g_smooth,g)
+            g=g_smooth
+                
+                       
+        G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
+        if self.interface=="CCS+Q":
+            G = block_diag(G,0)
         return G
