@@ -1,0 +1,20 @@
+{
+"Twobody":{
+	"Zn-O":{
+		"Rmin":3.1,
+		"Rcut":5.0,
+		"Nknots":6
+	}
+
+	},
+
+"Onebody":["O"],
+
+"Reference":"structures.json",
+
+"General":{
+	"interface":"CCS+Q",
+	"ctype":"mono"
+}
+
+}
