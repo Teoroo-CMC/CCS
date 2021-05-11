@@ -53,6 +53,7 @@ def twp_fit(filename):
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
+    ewald_energies=[]
     NN=[]
     # Loop over different species
     counter1=0
@@ -81,8 +82,14 @@ def twp_fit(filename):
                     except KeyError:
                         logger.debug("Structure with no key Elec at %s",snum)
                         raise
+                elif(gen_params['interface']=="CCS+Q"):
+                    try:
+                        ewald_energies.append(v["Ewald"])
+                    except KeyError:
+                        logger.debug("Struture with no ewald key at %s",snum)
+                        raise
         if(counter1 == 1):                
-            if dftb_energies is not None:
+            if gen_params['interface'] == "DFTB":
                 assert len(ref_energies) == len(dftb_energies)
                 columns=["DFT(eV)","DFTB(eV)","delta(hatree)"]
                 energies = np.vstack((np.asarray(ref_energies),np.asarray(dftb_energies)))
@@ -111,6 +118,7 @@ def twp_fit(filename):
             count = count+1
     np.savetxt("sto.dat",sto,fmt="%i")
     assert sto.shape[1]== np.linalg.matrix_rank(sto),"Linear dependence in stochiometry matrix"
+
     if gen_params["scan"]:
         mse_list = []
         mse_atom=[]
@@ -137,9 +145,9 @@ def twp_fit(filename):
         np.savetxt("new_RcutvsMse.dat",np.c_[rcuts_arr,mse_arr,np.array(mse_atom)],newline="\n")
         
     else:
-            n = Objective(atom_pairs, sto, ref_energies)
+            n = Objective(atom_pairs, sto, ref_energies,gen_params, ewald= ewald_energies)
             E_predicted,mse = n.solution()
-            header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
-            write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
+#            header= ["NN","DFT(H)","DFTB_elec(H)","delta","DFTB(H)"]
+ #           write_as_nxy("Energy.dat","Full energies",np.vstack((np.asarray(NN)*0.52977,energies[0]*0.03674,energies[1]*0.03674,ref_energies,energies[1]*0.03674+E_predicted)),header)
 
 
