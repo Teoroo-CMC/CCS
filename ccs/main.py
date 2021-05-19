@@ -140,8 +140,8 @@ def twp_fit(filename):
             mse_atom.append(np.sum(np.square(err_atom))/len(ref_energies))
         mse_arr = np.array(mse_list)
         rcuts_arr = np.array(rcuts)
-        print(rcuts_arr)
-        print(mse_arr)
+        #print(rcuts_arr)
+        #print(mse_arr)
         np.savetxt("new_RcutvsMse.dat",np.c_[rcuts_arr,mse_arr,np.array(mse_atom)],newline="\n")
         
     else:

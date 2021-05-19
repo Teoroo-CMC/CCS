@@ -42,7 +42,7 @@ class Objective():
         logger.debug(" The reference energy : \n %s \n Number of pairs:%s", self.ref_E,self.NP)
 
     @staticmethod
-    def solver(P, q, G, h, MAXITER=300, tol=(1e-10, 1e-10, 1e-10)):
+    def solver(P, q, G, h,A,b, MAXITER=300, tol=(1e-10, 1e-10, 1e-10)):
         """ The solver for the objective
         
         Args:
@@ -50,6 +50,8 @@ class Objective():
             q (matrix): q matrix as per standard QP notation.
             G (matrix): G matrix as per standard QP notation.
             h (matrix): h matrix as per standard QP notation
+            A (matrix): A matrix as per standard QP notation.
+            b (matrix): b matrix as per standard QP notation
             MAXITER (int, optional): Maximum iteration steps. Defaults to 300.
             tol (tuple, optional): Tolerance value of the solution. Defaults to (1e-10, 1e-10, 1e-10).
         
@@ -57,11 +59,15 @@ class Objective():
             dictionary: The solution details are present in this dictionary
         """
 
+        solvers.options['show_progress'] = False
         solvers.options['maxiters'] = MAXITER
         solvers.options['feastol'] = tol[0]
         solvers.options['abstol'] = tol[1]
         solvers.options['reltol'] = tol[2]
-        sol = solvers.qp(P, q, G, h)
+        if( A ):
+          sol = solvers.qp(P, q, G, h,A,b)
+        else:
+          sol = solvers.qp(P, q, G, h)
         return sol
 
     def eval_obj(self, x):
@@ -112,7 +118,6 @@ class Objective():
         ax4.set_xlabel('Spline interval')
         plt.tight_layout()
         plt.savefig(name+'-summary.png')
-        #plt.show()
         
     def get_coeffs(self,x,E_model):
         temp=0
@@ -125,7 +130,6 @@ class Objective():
             s_d = np.dot(self.l_twb[i].D, curvatures)
 
             
-    #        splcoeffs = np.hstack((s_a, s_b, s_c, s_d))
             splderivs = sf.spline_eval012(s_a,s_b,s_c,s_d,self.l_twb[i].Rmin,self.l_twb[i].Rcut,self.l_twb[i].Rmin,self.l_twb[i].dx,self.l_twb[i].interval)
             expcoeffs= sf.get_expcoeffs(*splderivs,self.l_twb[i].Rmin)
             print (expcoeffs)
@@ -137,8 +141,6 @@ class Objective():
             s_a = np.insert(s_a,0,splderivs[0])
             splcoeffs = sf.get_spline_coeffs(self.l_twb[i].interval,s_a,splderivs[1],0)
             sf.write_splinerep(self.l_twb[i].name+"repulsive.dat", np.array(expcoeffs).tolist(), splcoeffs, self.l_twb[i].interval,self.l_twb[i].Rcut)
-    #   #     print (type(splcoeffs))
-        #    sf.write_splinecoeffs(self.l_twb[0], splcoeffs)
             self.plot(self.l_twb[i].name, E_model, self.l_twb[i].interval,self.l_twb[i].Dismat, s_a, s_c)
     
     def list_iterator(self):
@@ -156,35 +158,29 @@ class Objective():
         eigvals = np.linalg.eigvals(P)
         logger.debug("Eigenvalues:%s",eigvals)
         logger.info('positive definite:%s',np.all((eigvals >0)))
-        #print(eigvals)
-        #print(np.all((eigvals >0)))
         q = -1*matrix(np.transpose(self.M).dot(self.ref_E))    
         N_switch_id = 0
         Nswitch_list = self.list_iterator()
-       # print(Nswitch_list)
         obj = np.zeros(([x+1 for x in self.cparams]))
         sol_list = []
         if self.l_twb[0].Nswitch is None:
             for N_switch_id in Nswitch_list:
-                G = self.get_G(N_switch_id)
-                print(G.shape)
-                print(q.size)
-                logger.debug(
-                    "\n Nswitch_id : %s and G matrix:\n %s", N_switch_id, G)
+                [G,A] = self.get_G(N_switch_id)
                 h = np.zeros(G.shape[0])
-                sol = self.solver(P, q, matrix(G), matrix(h))
+                b = np.zeros(A.shape[0])
+                sol = self.solver(P, q, matrix(G), matrix(h),matrix(A),matrix(b))
                 obj[N_switch_id] = self.eval_obj(sol['x'])
-                print(obj[N_switch_id])
-                print(sol['x'])
+                #print(obj[N_switch_id])
+                #print(sol['x'])
                 sol_list.append(sol)
                 
 
             mse = np.min(obj)
             opt_sol_index = np.ravel(np.argwhere(obj == mse))
-#            logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
+            logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
             
-            G_opt = self.get_G(opt_sol_index)
-            opt_sol = self.solver(P, q, matrix(G_opt), matrix(h))
+            [G_opt,A] = self.get_G(opt_sol_index)
+            opt_sol = self.solver(P, q, matrix(G_opt), matrix(h),matrix(A),matrix(b))
             
 
 
@@ -197,21 +193,17 @@ class Objective():
             opt_sol = self.solver(P, q, matrix(G), matrix(h))
             mse = float(self.eval_obj(opt_sol['x']))
             logger.info("\n Nknots: %s and mse : %s", N_switch_id,mse)
+
         x = np.array(opt_sol['x'])
         print(x)
         E_model=np.ravel(self.M.dot(x))
-#        curvatures = x[0:self.cparams[0]]
-#        epsilon = x[-self.cols_sto:]
-#        print(epsilon)
-        logger.info("\n The optimal solution is : \n %s", x)
-#        logger.info("\n The optimal curvatures are:\n%s\nepsilon:%s",
-#                    curvatures, epsilon)
         self.get_coeffs(list(x),E_model)
-#
         sf.write_error(E_model, self.ref_E, mse)
         return E_model,mse
-
-
+        print("XXXXXXXXXXX")  
+        print( N_switch_id  ) 
+        print("XXXXXXXXXXX")  
+        #print(G_opt)
 
     
         
@@ -229,61 +221,12 @@ class Objective():
         v = np.hstack([*tmp])
         logger.debug("\n The v  matrix shape after stacking :\t %s", v.shape)
         m = np.hstack((v, self.sto))
-        print(self.sto.shape,self.ewald.shape)
+        #print(self.sto.shape,self.ewald.shape)
 
         if self.interface== "CCS+Q":
             m = np.hstack((m,self.ewald))
         return m
-    """
-    def get_G(self, n_switch):
-         returns constraints matrix
-        
-        Args:
-            n_switch (int): switching point to cahnge signs of curvatures.
-        
-        Returns:
-            ndarray: returns G matrix
-        
-        g = block_diag(-1*np.identity(n_switch[0]),
-                       np.identity(self.l_twb[0].cols-n_switch[0]))
-        logger.debug("\n g matrix:\n%s", g)
-        if self.NP == 1:
-            G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
-            if self.ctype == "Smooth":
-                G_mono = -1*np.identity(self.l_twb[0].cols)
-                i,j = np.indices(G_mono.shape)
-                G_mono [i==j-1] = 1
-                G_mono [self.l_twb[0].cols-1][self.l_twb[0].cols-1] = 0
-                G_mono = block_diag(G_mono,0)
-                G_new = np.vstack((G,G_mono))
-                G=G_new
-                print(G)
 
-            return G
-        else:
-            for elem in range(1, self.NP):
-                tmp_G = block_diag(g, -1*np.identity(n_switch[elem]),
-                       np.identity(self.l_twb[elem].cols-n_switch[elem]))
-                g = tmp_G
-            if self.ctype == "New":
-                G_mono = -1*np.identity(self.l_twb[0].cols)
-                i,j = np.indices(G_mono.shape)
-                G_mono [i==j-1] = 1
-                G_mono [self.l_twb[0].cols-1][self.l_twb[0].cols-1] = 0
-                G_mono = block_diag(G_mono,0)
-                g = G_mono*g
-                
-
-        print(self.sto)
-        G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
-
-        if self.interface =="CCS+Q":
-            G=block_diag(G,1)
-
-
-        print(G.shape)
-        return G
-        """
     def get_G(self, n_switch):
         """ returns constraints matrix
         
@@ -291,40 +234,30 @@ class Objective():
             n_switch (int): switching point to cahnge signs of curvatures.
         
         Returns:
-            ndarray: returns G matrix
+            ndarray: returns G and A matrix
         """
-        tmp_G = []
-        for i in range(self.NP):
-            tmp_G.append(block_diag(-1*np.identity(n_switch[i]),
-                       np.identity(self.l_twb[i].cols-n_switch[i])))
-        g = block_diag(*tmp_G)
+        A=np.zeros(0)
+        if self.ctype == None:
+            tmp_G = []
+            for i in range(self.NP):
+                 tmp_G.append(block_diag(-1*np.identity(n_switch[i]),
+                            np.identity(self.l_twb[i].cols-n_switch[i])))
+            g = block_diag(*tmp_G)
         # Place to add custom constraints on G matrix
+
         if self.ctype == "mono":
             tmp=[]
             for elem in range (self.NP):
                 g_mono = -1*np.identity(self.l_twb[elem].cols)
                 i,j = np.indices(g_mono.shape)
-                g_mono [i==j-1] = 1
-                g_mono [self.l_twb[elem].cols-1][self.l_twb[elem].cols-1] = 0
+                g_mono [i==j-1 ] = 1
+                g_mono [ i >   n_switch[elem] ] =  - g_mono [ i >   n_switch[elem] ]
                 tmp.append(g_mono)
             g = block_diag(*tmp)
-        elif self.ctype== "smooth":
-            g_smooth = np.zeros(0)
-            for elem in range(self.NP):
-                g = -1*np.identity(self.l_twb[elem].cols)  # should this be the initial ize of the matrix
-                for i in range(1,self.l_twb[elem]):
-                    g[i][i] = 2
-                    g[i][i-1] = -1
-                    g[i][i+1] = -1
-                for i in range(n_switch[elem],self.l_twb[elem].cols):
-                    g[i][i] = -g[i][i]
-                    g[i][i-1] = -g[i][i-1]
-                    g[i][i+1] = -g[i][i+1]
-                g_smooth = block_diag(g_smooth,g)
-            g=g_smooth
-                
+        if self.ctype== "smooth":
+           A=np.zeros(0)
                        
         G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface=="CCS+Q":
             G = block_diag(G,0)
-        return G
+        return G,A
