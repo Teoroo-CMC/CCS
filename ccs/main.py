@@ -20,7 +20,7 @@ def twp_fit(filename):
     Args:
         filename (str): The input file (input.json).
     """
-    gen_params = {'interface':None,'spline':None,'ctype':None,'scan':False}
+    gen_params = {'interface':None,'spline':None,'ctype':None,'scan':False,'smooth':False}
 
     try:
         with open(filename) as json_file:

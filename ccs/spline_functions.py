@@ -258,6 +258,29 @@ def append_spline (fin, fspl, fout):
         f.write('\n')         # do we need this line?
         f.writelines(spline)  # assuming fspl already has SPLINETAG
 
+def spline_mask(Rcut, Rmin, df, cols, dx, size, x):
+    """ Constructs the mask matrix
+
+    Args:
+        Rcut (float): The max value cut off for spline interval.
+        Rmin (float): The min value cut off for spline interval.
+        df (ndarray): The paiwise distance matrix.
+        cols (int):  Number of unknown parameters.
+        dx (float): Grid size.
+        size (int): Number of configuration.
+        x (list): Spline interval.
+
+    Returns:
+        ndarray: The mask matrix for a pair.
+    """
+    mask = np.zeros([cols,1])
+    for config in range(size):
+        distances = [i for i in df[config, :] if i <= Rcut and i >= Rmin]
+        for r in distances:
+            index = int(np.ceil(np.around(((r - Rmin) / dx), decimals=5)))-1
+            mask[index]=1
+    return mask
+
 class Twobody():
     """ Twobody class describes properties of an Atom pair"""
     
@@ -296,6 +319,7 @@ class Twobody():
         self.C, self.D, self.B, self.A = spline_construction(
             self.cols - 1, self.cols, self.dx)
         self.v = self.get_v()
+        self.mask = self.get_mask()
 
     def get_v(self):
         """ Function for spline matrix
@@ -306,3 +330,14 @@ class Twobody():
         return spline_energy_model(self.Rcut, self.Rmin, self.Dismat,
                                    self.cols, self.dx, self.Nconfigs,
                                    self.interval)
+
+    def get_mask(self):
+        """ Function for mask
+        
+        Returns:
+            ndarray: mask vector
+        """
+        return spline_mask(self.Rcut, self.Rmin, self.Dismat,
+                                   self.cols, self.dx, self.Nconfigs,
+                                   self.interval)
+

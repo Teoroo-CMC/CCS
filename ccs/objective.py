@@ -254,7 +254,10 @@ class Objective():
                 g_mono [ i >   n_switch[elem] ] =  - g_mono [ i >   n_switch[elem] ]
                 tmp.append(g_mono)
             g = block_diag(*tmp)
-        if self.ctype== "smooth":
+        if self.smooth== "True":
+           for elem in range (self.NP):
+             for i in range(self.l_twb[elem].cols):
+               print(self.l_twb[elem].mask[i])
            A=np.zeros(0)
                        
         G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
