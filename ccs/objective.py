@@ -255,11 +255,31 @@ class Objective():
                 tmp.append(g_mono)
             g = block_diag(*tmp)
         if self.smooth== "True":
-           for elem in range (self.NP):
-             for i in range(self.l_twb[elem].cols):
-               print(self.l_twb[elem].mask[i])
-           A=np.zeros(0)
-                       
+           n_gaps=0
+           wid=1
+           for elem in range (self.NP):  # "ALLOCATE" A
+               n_gaps=n_gaps + self.l_twb[elem].cols - 2 - sum( self.l_twb[elem].mask[1:self.l_twb[elem].cols-1])
+               wid=wid+self.l_twb[elem].cols
+           if self.interface=="CCS+Q":
+               wid=wid+1   
+           if n_gaps > 0:
+               A=np.zeros([np.int(n_gaps),wid])
+               cnt1=-1
+               cnt2=0    
+               for elem in range (self.NP):  #FILL IN A
+                   for i in range(1,self.l_twb[elem].cols-1):
+                       if self.l_twb[elem].mask[i] == 0:
+                           cnt1=cnt1+1   
+                           A[cnt1][cnt2+i-1]= 1        
+                           A[cnt1][cnt2+i  ]=-2       
+                           A[cnt1][cnt2+i+1]= 1       
+                   cnt2=cnt2+self.l_twb[elem].cols
+               print("-D-")
+               print(self.l_twb[1].mask)
+               print("-D-")
+           else:
+               A=np.zeros(0)
+
         G = block_diag(g, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface=="CCS+Q":
             G = block_diag(G,0)
