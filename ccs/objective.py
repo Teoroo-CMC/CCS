@@ -180,6 +180,7 @@ class Objective():
             logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
             
             [G_opt,A] = self.get_G(opt_sol_index)
+            b = np.zeros(A.shape[0])
             opt_sol = self.solver(P, q, matrix(G_opt), matrix(h),matrix(A),matrix(b))
             
 
@@ -268,15 +269,13 @@ class Objective():
                cnt2=0    
                for elem in range (self.NP):  #FILL IN A
                    for i in range(1,self.l_twb[elem].cols-1):
-                       if self.l_twb[elem].mask[i] == 0:
+                       if self.l_twb[elem].mask[i] == 0 and i != n_switch[elem]:
                            cnt1=cnt1+1   
                            A[cnt1][cnt2+i-1]= 1        
                            A[cnt1][cnt2+i  ]=-2       
                            A[cnt1][cnt2+i+1]= 1       
                    cnt2=cnt2+self.l_twb[elem].cols
-               print("-D-")
-               print(self.l_twb[1].mask)
-               print("-D-")
+               A=A[~np.all(A == 0, axis=1)]
            else:
                A=np.zeros(0)
 
