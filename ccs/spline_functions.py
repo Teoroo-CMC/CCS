@@ -159,7 +159,7 @@ def spline_energy_model(Rcut, Rmin, df, cols, dx, size, x):
 
         v[config, :] = u
     logger.debug("\n V matrix :%s", v)
-    return v
+    return v, set(indices)
 
 
 def write_splinecoeffs(twb, coeffs, fname='splines.out', exp_head=False):
@@ -290,6 +290,7 @@ class Twobody():
                  Nconfigs,
                  Rcut,
                  Nknots,
+                 Swtype='rep',
                  Rmin=None,                 
                  Nswitch=None):
         """ Constructs an Two body object
@@ -308,6 +309,7 @@ class Twobody():
         self.Rmin = Rmin
         self.Nknots = Nknots
         self.Nswitch = Nswitch
+        self.Swtype = Swtype
         self.Dismat = Dismat
         self.Nconfigs = Nconfigs
         self.dx = (self.Rcut - self.Rmin) / self.Nknots
@@ -318,7 +320,7 @@ class Twobody():
                                     dtype=float)
         self.C, self.D, self.B, self.A = spline_construction(
             self.cols - 1, self.cols, self.dx)
-        self.v = self.get_v()
+        self.v, self.indices = self.get_v()
         self.mask = self.get_mask()
 
     def get_v(self):

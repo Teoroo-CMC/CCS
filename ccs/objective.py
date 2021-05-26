@@ -144,10 +144,18 @@ class Objective():
             self.plot(self.l_twb[i].name, E_model, self.l_twb[i].interval,self.l_twb[i].Dismat, s_a, s_c)
     
     def list_iterator(self):
-        tmp = [range(i+1) for i in self.cparams]
-        N_list = list(itertools.product(*tmp))
+        tmp=[]
+        for elem in range(self.NP):
+           if self.l_twb[elem].Swtype == "rep":
+              tmp.append([self.l_twb[elem].cols ])
+           if self.l_twb[elem].Swtype == "att":
+              tmp.append([0])
+           if self.l_twb[elem].Swtype == "sw":
+              tmp.append( self.l_twb[elem].indices )
+
+        N_list=list(itertools.product(*tmp))
         return N_list
-        
+
 
     def solution(self):
         """ Function to solve the objective with constraints
@@ -159,52 +167,33 @@ class Objective():
         logger.debug("Eigenvalues:%s",eigvals)
         logger.info('positive definite:%s',np.all((eigvals >0)))
         q = -1*matrix(np.transpose(self.M).dot(self.ref_E))    
-        N_switch_id = 0
         Nswitch_list = self.list_iterator()
-        obj = np.zeros(([x+1 for x in self.cparams]))
+        obj  = [] 
         sol_list = []
-        if self.l_twb[0].Nswitch is None:
-            for N_switch_id in Nswitch_list:
-                [G,A] = self.get_G(N_switch_id)
-                h = np.zeros(G.shape[0])
-                b = np.zeros(A.shape[0])
-                sol = self.solver(P, q, matrix(G), matrix(h),matrix(A),matrix(b))
-                obj[N_switch_id] = self.eval_obj(sol['x'])
-                #print(obj[N_switch_id])
-                #print(sol['x'])
-                sol_list.append(sol)
-                
-
-            mse = np.min(obj)
-            opt_sol_index = np.ravel(np.argwhere(obj == mse))
-            logger.info("\n The best switch is : %s and mse : %s", opt_sol_index,mse)
-            
-            [G_opt,A] = self.get_G(opt_sol_index)
+        print("DDD", Nswitch_list )
+        for N_switch_id in Nswitch_list:
+            [G,A] = self.get_G(N_switch_id)
+            h = np.zeros(G.shape[0])
             b = np.zeros(A.shape[0])
-            opt_sol = self.solver(P, q, matrix(G_opt), matrix(h),matrix(A),matrix(b))
+            sol = self.solver(P, q, matrix(G), matrix(h),matrix(A),matrix(b))
+            obj.append(  float( self.eval_obj(sol['x']) ))
+            sol_list.append(sol)
             
-
-
-        else:
-            N_switch_id = [self.l_twb[i].Nswitch for i in range(self.NP)]
-            G = self.get_G(N_switch_id)
-            logger.debug(
-                    "\n Nswitch_id : %d and G matrix:\n %s", N_switch_id, G)
-            h = np.zeros(G.shape[1])
-            opt_sol = self.solver(P, q, matrix(G), matrix(h))
-            mse = float(self.eval_obj(opt_sol['x']))
-            logger.info("\n Nknots: %s and mse : %s", N_switch_id,mse)
+        obj=np.asarray(obj)
+        mse = np.min(obj)
+        opt_sol_index = int ( np.ravel(np.argwhere(obj == mse)) )
+        print(opt_sol_index)
+        logger.info("\n The best switch is : %s and mse : %s", Nswitch_list[opt_sol_index],mse)
+        
+        [G_opt,A] = self.get_G( Nswitch_list[opt_sol_index] )
+        b = np.zeros(A.shape[0])
+        opt_sol = self.solver(P, q, matrix(G_opt), matrix(h),matrix(A),matrix(b))
 
         x = np.array(opt_sol['x'])
-        print(x)
         E_model=np.ravel(self.M.dot(x))
         self.get_coeffs(list(x),E_model)
         sf.write_error(E_model, self.ref_E, mse)
         return E_model,mse
-        print("XXXXXXXXXXX")  
-        print( N_switch_id  ) 
-        print("XXXXXXXXXXX")  
-        #print(G_opt)
 
     
         
