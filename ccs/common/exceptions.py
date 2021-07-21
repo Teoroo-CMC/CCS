@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
@@ -6,16 +5,8 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
 
-'''Command line wrapper for the ccs_fit script.'''
+'''Common exceptions needed by the CCS project.'''
 
 
-import sys
-from ccs.common.exceptions import ScriptError
-import ccs.scripts.ccs_fit as ccs_fit
-
-
-try:
-    ccs_fit.main()
-except ScriptError as exc:
-    sys.stderr.write('ScriptError: ' + str(exc) + '\n')
-    sys.exit(1)
+class ScriptError(Exception):
+    '''Exception thrown by the command line scripts.'''
