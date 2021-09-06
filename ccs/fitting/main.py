@@ -94,7 +94,7 @@ def twp_fit(filename):
                     raise
                 if gen_params['interface'] == 'DFTB':
                     try:
-                        dftb_energies.append(vv['energy_dftb']['Elec'])
+                        dftb_energies.append(vv['energy_dftb'])
                     except KeyError:
                         logger.debug('Structure with no key Elec at %s', snum)
                         raise
@@ -112,13 +112,14 @@ def twp_fit(filename):
                     (np.asarray(ref_energies), np.asarray(dftb_energies))
                 )
                 # convert energies from eV to Hartree
-                ref_energies = (energies[0] - energies[1]) * eV__Hartree
+                ref_energies = (energies[0] - energies[1])  * eV__Hartree
                 write_as_nxy(
                     'Train_energy.dat',
                     'The input energies',
                     np.vstack((energies, ref_energies)),
                     columns,
                 )
+                list_dist=[[element /Bohr__AA  for element in elements ] for elements in list_dist] 
 
         logger.info('\nThe minimum distance for atom pair %s is %s '
                     %(atmpair, min(list_dist)))
@@ -134,6 +135,7 @@ def twp_fit(filename):
     for i, key in enumerate(data['Onebody']):
         count = 0
         for _, vv in struct_data.items():
+            print(vv['atoms'][key] )
             try:
                 sto[count][i] = vv['atoms'][key]
             except KeyError:
@@ -142,6 +144,7 @@ def twp_fit(filename):
     np.savetxt('sto.dat', sto, fmt='%i')
     assert sto.shape[1] == np.linalg.matrix_rank(sto), \
         'Linear dependence in stochiometry matrix'
+
 
     if gen_params['scan']:
         mse_list = []

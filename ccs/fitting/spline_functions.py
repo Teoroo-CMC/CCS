@@ -14,6 +14,7 @@ This module contains functions for spline construction, evaluation and output.
 import logging
 import numpy as np
 import scipy.linalg as linalg
+from ccs.data.conversion import Bohr__AA, eV__Hartree
 
 logger = logging.getLogger(__name__)
 
@@ -213,6 +214,7 @@ def write_splinecoeffs(twb, coeffs, fname='splines.out'):
             (default: 'splines.out').
 
     '''
+
 
     coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
 
