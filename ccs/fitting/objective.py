@@ -171,7 +171,7 @@ class Objective:
 
         for ii in range(self.np):
             curvatures = xx[ind : ind + self.cparams[ii]]
-            ind = self.cparams[ii]
+            ind = ind+ self.cparams[ii] #DEBUGING HERE
             s_a = np.dot(self.l_twb[ii].aa, curvatures)
             s_b = np.dot(self.l_twb[ii].bb, curvatures)
             s_c = np.dot(self.l_twb[ii].cc, curvatures)
@@ -198,11 +198,12 @@ class Objective:
             
 
             sf.write_splinerep(
-                self.l_twb[ii].name + 'repulsive.dat',
+                self.l_twb[ii].name + '.spl',
                 np.array(expcoeffs).tolist(),
                 splcoeffs,
                 self.l_twb[ii].interval,
-                self.l_twb[ii].Rcut)
+                self.l_twb[ii].Rcut,
+                self.l_twb[ii].dx)
 
             self.plot(
                 self.l_twb[ii].name,
@@ -273,6 +274,18 @@ class Objective:
         self.get_coeffs(list(xx), model_energies)
         sf.write_error(model_energies, self.energy_ref, mse)
 
+        
+        if(self.interface == "CCS+Q"):
+          print("Charge scaling : " + str(xx[-1]**0.5))
+          print(" -- Epsilons (reverse order) -- ")  
+          for i in range(self.cols_sto):
+              print("   " +  str(xx[-2-i ])) 
+  
+        if(self.interface == "CCS"):
+          print(" -- Epsilons (reverse order) -- ")  
+          for i in range(self.cols_sto):
+              print("   " +  str(xx[-1-i ])) 
+
         return model_energies, mse
 
 
@@ -296,9 +309,13 @@ class Objective:
 
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
+        print("DEBUG")
+        np.savetxt("DEBUG.vv",vv,fmt='%.5f')
+        np.savetxt("DEBUG.mm",mm,fmt='%.5f')
+        print("DEBUG")
 
         return mm
-
+       
 
     def get_g(self, n_switch):
         '''Returns constraints matrix.
@@ -362,4 +379,9 @@ class Objective:
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface == 'CCS+Q':
             gg = block_diag(gg, 0)
+     
+     
+        print("DEBUG")
+        np.savetxt("DEBUG.gg",gg,fmt='%.5f')
+        print("DEBUG")
         return gg, aa

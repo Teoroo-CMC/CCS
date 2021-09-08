@@ -221,8 +221,8 @@ def write_splinecoeffs(twb, coeffs, fname='splines.out'):
     with open(fname, 'w') as fout:
         fout.write('Spline table\n')
         for index in range(len(twb.interval) - 1):
-            r_start = twb.interval[index]
-            r_stop = twb.interval[index + 1]
+            r_start = twb.interval[index] -0.2  
+            r_stop = twb.interval[index + 1]  -0.2
             fout.write(coeffs_format.format(r_start, r_stop, *coeffs[index]))
 
 
@@ -325,7 +325,7 @@ def print_io_log(fname, fcontent):
     print("{} -> '{}'".format(fcontent, fname))
 
 
-def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut):
+def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut,dx):
     '''Calculates coefficients of exponential function.
 
     Args:
@@ -335,6 +335,7 @@ def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut):
         splcoeffs ():
         rr ():
         rcut ():
+        dx:
 
     '''
 
@@ -347,9 +348,12 @@ def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut):
 
         splcoeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
         for ir in range(len(rr) - 1):
-            rcur = rr[ir]
-            rnext = rr[ir + 1]
-            fp.write(splcoeffs_format.format(rcur, rnext, *splcoeffs[ir]))
+            rcur = rr[ir]           
+            rnext = rr[ir + 1] 
+            tmp_splcoeffs= splcoeffs[ir]
+            tmp_splcoeffs[2]=tmp_splcoeffs[2]
+            tmp_splcoeffs[3]=tmp_splcoeffs[3]
+            fp.write(splcoeffs_format.format(rcur, rnext, *tmp_splcoeffs))
         poly5coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 6) + '\n'
         fp.write(poly5coeffs_format.
                  format(rr[-1], rr[-1] + delta, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
