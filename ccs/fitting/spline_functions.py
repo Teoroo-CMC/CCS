@@ -354,9 +354,9 @@ def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut,dx):
             tmp_splcoeffs[2]=tmp_splcoeffs[2]
             tmp_splcoeffs[3]=tmp_splcoeffs[3]
             fp.write(splcoeffs_format.format(rcur, rnext, *tmp_splcoeffs))
-        poly5coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 6) + '\n'
+        poly5coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
         fp.write(poly5coeffs_format.
-                 format(rr[-1], rr[-1] + delta, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+                 format(rr[-1], rr[-1] + delta, 0.0, 0.0, 0.0, 0.0))
 
     print_io_log(fname, 'Repulsive in Spline format')
 

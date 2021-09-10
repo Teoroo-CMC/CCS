@@ -309,10 +309,10 @@ class Objective:
 
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
-        print("DEBUG")
+        # print("DEBUG")
         np.savetxt("DEBUG.vv",vv,fmt='%.5f')
         np.savetxt("DEBUG.mm",mm,fmt='%.5f')
-        print("DEBUG")
+        # print("DEBUG")
 
         return mm
        
@@ -351,7 +351,7 @@ class Objective:
             gg = block_diag(*tmp)
         if self.smooth == 'True':
             n_gaps = 0
-            wid = 1
+            wid = self.cols_sto
             for elem in range(self.np):
                 n_gaps = (
                     n_gaps + self.l_twb[elem].cols - 2 - sum(
@@ -381,7 +381,7 @@ class Objective:
             gg = block_diag(gg, 0)
      
      
-        print("DEBUG")
+        # print("DEBUG")
         np.savetxt("DEBUG.gg",gg,fmt='%.5f')
-        print("DEBUG")
+        # print("DEBUG")
         return gg, aa

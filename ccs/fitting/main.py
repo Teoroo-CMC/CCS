@@ -68,11 +68,12 @@ def twp_fit(filename):
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
-    nn = []
+    # nn = [] # DEBUG
     # Loop over different species
     counter1 = 0
     for atmpair, values in data['Twobody'].items():
         counter1 = counter1 + 1
+        print(counter1)
         logger.info('\n The atom pair is : %s' % (atmpair))
         list_dist = []
         for snum, vv in struct_data.items():
@@ -86,9 +87,9 @@ def twp_fit(filename):
             if counter1 == 1:
                 try:
                     ref_energies.append(vv['energy_dft'])
-                    nn.append(
-                        min(vv[atmpair])
-                    )
+                    # nn.append( DEBUG
+                    #     min(vv[atmpair])
+                    # )
                 except KeyError:
                     logger.critical(' Check Energy key in structure file')
                     raise
@@ -135,46 +136,17 @@ def twp_fit(filename):
     for i, key in enumerate(data['Onebody']):
         count = 0
         for _, vv in struct_data.items():
-            print(vv['atoms'][key] )
+            # print(vv['atoms'][key] )
             try:
                 sto[count][i] = vv['atoms'][key]
             except KeyError:
                 sto[count][i] = 0
             count = count + 1
     np.savetxt('sto.dat', sto, fmt='%i')
+    print(sto.shape, np.linalg.matrix_rank(sto))
     assert sto.shape[1] == np.linalg.matrix_rank(sto), \
         'Linear dependence in stochiometry matrix'
 
-
-    if gen_params['scan']:
-        mse_list = []
-        mse_atom = []
-        min_rcut = values['rcut']
-        max_rcut = 2.7 * min_rcut
-        rcuts = np.linspace(min_rcut, max_rcut, 20, endpoint=True)
-        for rcut in rcuts:
-            pair = []
-            values['rcut'] = rcut
-            nn = Objective(pair, sto, ref_energies)
-            predicted_energies, mse = nn.solution()
-            mse_list.append(mse)
-            header = ['NN', 'DFT(H)', 'DFTB_elec(H)', 'delta', 'DFTB(H)']
-            write_as_nxy('Energy.dat', 'Full energies',
-                         np.vstack((
-                             np.asarray(nn) * Bohr__AA,
-                             energies[0] * eV__Hartree,
-                             energies[1] * eV__Hartree,
-                             ref_energies,
-                             energies[1] * eV__Hartree + predicted_energies)),
-                         header)
-            err_atom = (ref_energies - predicted_energies) / np.ravel(sto)
-            mse_atom.append(np.sum(np.square(err_atom)) / len(ref_energies))
-        mse_arr = np.array(mse_list)
-        rcuts_arr = np.array(rcuts)
-        np.savetxt('new_RcutvsMse.dat',
-                   np.c_[rcuts_arr, mse_arr, np.array(mse_atom)], newline='\n')
-
-    else:
-        nn = Objective(atom_pairs, sto, ref_energies, gen_params,
+    nn = Objective(atom_pairs, sto, ref_energies, gen_params,
                        ewald=ewald_energies)
-        predicted_energies, mse = nn.solution()
+    predicted_energies, mse = nn.solution()
