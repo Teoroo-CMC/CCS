@@ -37,7 +37,9 @@ def twp_fit(filename):
                   'spline': None,
                   'ctype': None,
                   'scan': False,
-                  'smooth': False}
+                  'smooth': False,
+                  'ewald_scaling' : 1.0
+                 }   
 
     try:
         with open(filename) as json_file:
@@ -68,12 +70,9 @@ def twp_fit(filename):
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
-    # nn = [] # DEBUG
-    # Loop over different species
     counter1 = 0
     for atmpair, values in data['Twobody'].items():
         counter1 = counter1 + 1
-        print(counter1)
         logger.info('\n The atom pair is : %s' % (atmpair))
         list_dist = []
         for snum, vv in struct_data.items():
@@ -87,9 +86,6 @@ def twp_fit(filename):
             if counter1 == 1:
                 try:
                     ref_energies.append(vv['energy_dft'])
-                    # nn.append( DEBUG
-                    #     min(vv[atmpair])
-                    # )
                 except KeyError:
                     logger.critical(' Check Energy key in structure file')
                     raise
@@ -99,12 +95,13 @@ def twp_fit(filename):
                     except KeyError:
                         logger.debug('Structure with no key Elec at %s', snum)
                         raise
-                elif gen_params['interface'] == 'CCS+Q':
+                if gen_params['interface'] == 'CCS+Q' or gen_params['interface'] == 'CCS2Q' or gen_params['interface'] == 'CCS+fQ':
                     try:
                         ewald_energies.append(vv['ewald'])
                     except KeyError:
                         logger.debug('Struture with no ewald key at %s', snum)
                         raise
+    
         if counter1 == 1:
             if gen_params['interface'] == 'DFTB':
                 assert len(ref_energies) == len(dftb_energies)
@@ -121,6 +118,24 @@ def twp_fit(filename):
                     columns,
                 )
                 list_dist=[[element /Bohr__AA  for element in elements ] for elements in list_dist] 
+
+            if gen_params['interface'] == 'CCS2Q':
+                assert len(ref_energies) == len(ewald_energies)
+                columns = ['DFT(eV)', 'Ewald(eV)', 'delta(eV)']
+                energies = np.vstack(
+                    (np.asarray(ref_energies), np.asarray(ewald_energies))
+                )
+                ref_energies = (energies[1])  
+
+            if gen_params['interface'] == 'CCS+fQ':
+                assert len(ref_energies) == len(ewald_energies)
+                columns = ['DFT(eV)', 'Ewald(eV)', 'delta(eV)']
+                energies = np.vstack(
+                    (np.asarray(ref_energies), np.asarray(ewald_energies))
+                )
+                ref_energies = (energies[0] - gen_params['ewald_scaling']*energies[1] )  
+
+
 
         logger.info('\nThe minimum distance for atom pair %s is %s '
                     %(atmpair, min(list_dist)))
@@ -142,8 +157,6 @@ def twp_fit(filename):
             except KeyError:
                 sto[count][i] = 0
             count = count + 1
-    np.savetxt('sto.dat', sto, fmt='%i')
-    print(sto.shape, np.linalg.matrix_rank(sto))
     assert sto.shape[1] == np.linalg.matrix_rank(sto), \
         'Linear dependence in stochiometry matrix'
 

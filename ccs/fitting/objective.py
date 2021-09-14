@@ -11,6 +11,7 @@
 
 import logging
 import itertools
+import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -171,7 +172,7 @@ class Objective:
 
         for ii in range(self.np):
             curvatures = xx[ind : ind + self.cparams[ii]]
-            ind = ind+ self.cparams[ii] #DEBUGING HERE
+            ind = ind+ self.cparams[ii] 
             s_a = np.dot(self.l_twb[ii].aa, curvatures)
             s_b = np.dot(self.l_twb[ii].bb, curvatures)
             s_c = np.dot(self.l_twb[ii].cc, curvatures)
@@ -277,14 +278,31 @@ class Objective:
         
         if(self.interface == "CCS+Q"):
           print("Charge scaling : " + str(xx[-1]**0.5))
-          print(" -- Epsilons (reverse order) -- ")  
+          print(" -- Epsilons (reverse order) -- ")
           for i in range(self.cols_sto):
               print("   " +  str(xx[-2-i ])) 
-  
+          CCS_param_dict = {'q': xx[-1]**0.5, 'eps': [xx[-2-i] for i in range(self.cols_sto)]}
+          with open('CCS_param_dict.pkl', 'wb') as f:
+              pickle.dump(CCS_param_dict, f)
+          with open('CCS_param.txt', 'w') as f:
+              f.write("Charge scaling : " + str(xx[-1]**0.5) + "\n")
+              f.write(" -- Epsilons (reverse order) -- \n")
+              for i in range(self.cols_sto):
+                  f.write("   " +  str(xx[-2-i ]) + "\n")
+              f.close()
+
         if(self.interface == "CCS"):
           print(" -- Epsilons (reverse order) -- ")  
           for i in range(self.cols_sto):
               print("   " +  str(xx[-1-i ])) 
+          CCS_param_dict = {'eps': list([xx[-2-i ] for i in range(self.cols_sto)])}
+          with open('CCS_param_dict.pkl', 'wb') as f:
+              pickle.dump(CCS_param_dict, f)
+          with open('CCS_param.txt', 'w') as f:
+              f.write(" -- Epsilons (reverse order) -- \n")
+              for i in range(self.cols_sto):
+                  f.write("   " +  str(xx[-2-i ]) + "\n")
+              f.close()
 
         return model_energies, mse
 
@@ -304,15 +322,12 @@ class Objective:
             logger.debug('\n The %d pair v matrix is :\n %s', ii,
                          self.l_twb[ii].vv)
         vv = np.hstack([*tmp])
-        logger.debug('\n The v  matrix shape after stacking :\t %s', vv.shape)
+        logger.debug('\n The V-matrix shape after stacking :\t %s', vv.shape)
         mm = np.hstack((vv, self.sto))
 
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
-        # print("DEBUG")
-        np.savetxt("DEBUG.vv",vv,fmt='%.5f')
-        np.savetxt("DEBUG.mm",mm,fmt='%.5f')
-        # print("DEBUG")
+ 
 
         return mm
        
@@ -381,7 +396,4 @@ class Objective:
             gg = block_diag(gg, 0)
      
      
-        # print("DEBUG")
-        np.savetxt("DEBUG.gg",gg,fmt='%.5f')
-        # print("DEBUG")
         return gg, aa
