@@ -18,6 +18,7 @@ import pandas as pd
 
 from ccs.fitting.objective import Objective
 from ccs.fitting.spline_functions import Twobody
+from ccs.fitting.spline_functions import Onebody
 from ccs.fitting.spline_functions import write_as_nxy
 from ccs.data.conversion import Bohr__AA, eV__Hartree
 
@@ -147,8 +148,11 @@ def twp_fit(filename):
         atom_pairs.append(
             Twobody(atmpair, dist_mat, len(struct_data), **values))
 
+
+    atom_onebodies=[]
     sto = np.zeros((len(struct_data), len(data['Onebody'])))
     for i, key in enumerate(data['Onebody']):
+        atom_onebodies.append( Onebody( key )  )
         count = 0
         for _, vv in struct_data.items():
             # print(vv['atoms'][key] )
@@ -157,9 +161,31 @@ def twp_fit(filename):
             except KeyError:
                 sto[count][i] = 0
             count = count + 1
+    #REDUCE STO-MATRIX IF RANK IS TOO LOW
+    reduce=True
+    n_redundant=0
+    while(reduce):
+        check=0
+        for ci in range(np.shape(sto)[1]):
+           for cj in range(ci):
+              if(check == 1):
+                 break
+              if( np.linalg.matrix_rank(sto[:,[ci,cj] ]) < 2  ):
+                 print('There is linear dependence in stochiometry matrix!')
+                 print('    removing onebody term: ' + atom_onebodies[ci+n_redundant].name)
+                 sto=np.delete(sto,ci,1)
+                 atom_onebodies[ci+n_redundant].epsilon_supported=False
+                 check=1
+                 n_redundant+=1
+                 break
+        if (check == 0):
+           reduce=False
+
     assert sto.shape[1] == np.linalg.matrix_rank(sto), \
         'Linear dependence in stochiometry matrix'
+   
 
-    nn = Objective(atom_pairs, sto, ref_energies, gen_params,
+
+    nn = Objective(atom_pairs,atom_onebodies, sto, ref_energies, gen_params,
                        ewald=ewald_energies)
     predicted_energies, mse = nn.solution()

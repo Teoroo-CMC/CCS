@@ -483,4 +483,25 @@ class Twobody:
         '''
 
         return spline_mask(self.Rcut, self.Rmin, self.dismat, self.cols,
-                           self.dx, self.nconfigs)
+                           self.dx, self.nconfigs) 
+
+
+class Onebody:
+    '''Onebody class that describes properties of an atom.'''
+
+
+    def __init__(self, name, epsilon_supported=True ,epsilon=0.0):
+        '''Constructs a Onebody object.
+
+        Args:
+
+            name (str): name of the atom type.
+            epsilon_supported  (bool): flag to tell if epsilon can be determined from the data
+            epsilon (float): onebody energy term
+
+        '''
+        self.name=name
+        self.epsilon_supported=True
+        self.epsilon=0.0
+
+

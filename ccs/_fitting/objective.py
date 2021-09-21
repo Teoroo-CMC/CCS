@@ -1,4 +1,4 @@
-
+#------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
@@ -12,8 +12,7 @@
 import logging
 import itertools
 import pickle
-import json
-from collections import OrderedDict
+
 import numpy as np
 import matplotlib.pyplot as plt
 from cvxopt import matrix, solvers
@@ -28,13 +27,12 @@ class Objective:
     '''Objective function for the ccs method.'''
 
 
-    def __init__(self, l_twb,l_one, sto, energy_ref, gen_params, ewald=[]):
+    def __init__(self, l_twb, sto, energy_ref, gen_params, ewald=[]):
         '''Generates Objective class object.
 
         Args:
 
             l_twb (list): list of Twobody class objects
-            l_one (list): list of Onebody class objects
             sto (ndarray): array containing number of atoms of each type
             energy_ref (ndarray): reference energies
             ewald (list, optional) : ewald energy values for CCS+Q
@@ -48,7 +46,6 @@ class Objective:
         '''
 
         self.l_twb = l_twb
-        self.l_one = l_one
         self.sto = sto
         self.energy_ref = energy_ref
         self.ewald = np.array(ewald).reshape(-1, 1)
@@ -58,7 +55,6 @@ class Objective:
 
         self.cols_sto = sto.shape[1]
         self.np = len(l_twb)
-        self.no = len(l_one)
         self.cparams = [self.l_twb[i].cols for i in range(self.np)]
         self.ns = len(energy_ref)
 
@@ -264,7 +260,10 @@ class Objective:
 
         obj = np.asarray(obj)
         mse = np.min(obj)
-        opt_sol_index = int(np.ravel(np.argwhere(obj == mse)))
+        try:
+            opt_sol_index = int(np.ravel(np.argwhere(obj == mse)))
+        except TypeError:
+            opt_sol_index = int(np.ravel(np.argwhere(obj == mse))[0])
 
         logger.info('\n The best switch is : %s and mse : %s',
                     nswitch_list[opt_sol_index], mse)
@@ -278,36 +277,36 @@ class Objective:
         model_energies = np.ravel(self.mm.dot(xx))
         self.get_coeffs(list(xx), model_energies)
         sf.write_error(model_energies, self.energy_ref, mse)
+
         
-
-        #PRINT CCS_params.json FILE
-        counter=-1
-        CCS_params=OrderedDict()
         if(self.interface == "CCS+Q"):
-          counter=0
-          CCS_params['Charge scaling factor'] = str( float( xx[-1]**0.5 ))
+          print("Charge scaling : " + str(xx[-1]**0.5))
+          print(" -- Epsilons (reverse order) -- ")
+          for i in range(self.cols_sto):
+              print("   " +  str(xx[-2-i ])) 
+          CCS_param_dict = {'q': xx[-1]**0.5, 'eps': [xx[-2-i] for i in range(self.cols_sto)]}
+          with open('CCS_param_dict.pkl', 'wb') as f:
+              pickle.dump(CCS_param_dict, f)
+          with open('CCS_param.txt', 'w') as f:
+              f.write("Charge scaling : " + str(xx[-1]**0.5) + "\n")
+              f.write(" -- Epsilons (reverse order) -- \n")
+              for i in range(self.cols_sto):
+                  f.write("   " +  str(xx[-2-i ]) + "\n")
+              f.close()
 
-        eps_params=OrderedDict()
-        for i  in range(self.no):
-            if(self.l_one[i].epsilon_supported):
-               counter+=1
-               self.l_one[i].epsilon=float( xx[-1-counter] )
-            eps_params[ self.l_one[i].name   ]=str(self.l_one[i].epsilon)
-        CCS_params['eps']=eps_params
-        with open('CCS_params.json', 'w') as f:
-            json.dump(CCS_params, f, indent=8)
-        #/PRINT CCS_params.json FILE
-
-
-        #PERFORM SENSITIVITY TEST
-        #  J Obective
-        #  dJ/dc_i    =  0    ?
-        #  d2J/dc_i2  =  V_i* (V_i*) T  ? 
-        #  Harmonic approximation...  
-        for i in range(np.shape(self.mm)[1]):
-           logger.info(str(np.dot(self.mm[:,i],self.mm[:,i] )) + " " + str( np.dot(self.mm[:,i],self.mm[:,i]*xx[i])) )
-
-        #/PERFORM SENSI...
+        # if(self.interface == "CCS"): DEBUG TJAMS
+        else:
+          print(" -- Epsilons (reverse order) -- ")  
+          for i in range(self.cols_sto):
+              print("   " +  str(xx[-1-i ])) 
+          CCS_param_dict = {'eps': list([xx[-1-i ] for i in range(self.cols_sto)])}
+          with open('CCS_param_dict.pkl', 'wb') as f:
+              pickle.dump(CCS_param_dict, f)
+          with open('CCS_param.txt', 'w') as f:
+              f.write(" -- Epsilons (reverse order) -- \n")
+              for i in range(self.cols_sto):
+                  f.write("   " +  str(xx[-1-i ]) + "\n")
+              f.close()
 
         return model_energies, mse
 
