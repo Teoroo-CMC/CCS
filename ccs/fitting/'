@@ -167,7 +167,7 @@ def twp_fit(filename):
     while(reduce):
         check=0
         for ci in range(np.shape(sto)[1]):
-            if( np.linalg.matrix_rank(sto[:,0:ci+1]) <  (ci+1) ):
+            if( np.linalg.matrix_rank(sto[:,0:ci]) <  (np.shape(sto)[1]+1) ):
                print('There is linear dependence in stochiometry matrix!')
                print('    removing onebody term: ' + atom_onebodies[ci+n_redundant].name)
                sto=np.delete(sto,ci,1)
