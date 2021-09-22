@@ -288,7 +288,8 @@ class Objective:
           CCS_params['Charge scaling factor'] = str( float( xx[-1]**0.5 ))
 
         eps_params=OrderedDict()
-        for i  in range(self.no):
+        for k  in range(self.no):
+            i=self.no-k-1
             if(self.l_one[i].epsilon_supported):
                counter+=1
                self.l_one[i].epsilon=float( xx[-1-counter] )
