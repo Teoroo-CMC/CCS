@@ -138,6 +138,11 @@ def twp_fit(filename):
 
 
 
+        try:
+           values['Rmin']
+        except:
+           values['Rmin']=min(min(list_dist))           
+
         logger.info('\nThe minimum distance for atom pair %s is %s '
                     %(atmpair, min(list_dist)))
         dist_mat = pd.DataFrame(list_dist)
