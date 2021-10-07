@@ -90,7 +90,7 @@ def twp_fit(filename):
                 except KeyError:
                     logger.critical(' Check Energy key in structure file')
                     raise
-                if gen_params['interface'] == 'DFTB':
+                if 'DFTB' in gen_params['interface']:
                     try:
                         dftb_energies.append(vv['energy_dftb'])
                     except KeyError:
@@ -104,7 +104,7 @@ def twp_fit(filename):
                         raise
     
         if counter1 == 1:
-            if gen_params['interface'] == 'DFTB':
+            if gen_params['interface'] == 'DFTB+':
                 assert len(ref_energies) == len(dftb_energies)
                 columns = ['DFT(eV)', 'DFTB(eV)', 'delta(Hartree)']
                 energies = np.vstack(
