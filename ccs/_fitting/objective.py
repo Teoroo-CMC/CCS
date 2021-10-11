@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------#
+
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
@@ -12,7 +12,8 @@
 import logging
 import itertools
 import pickle
-
+import json
+from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
 from cvxopt import matrix, solvers
@@ -27,12 +28,13 @@ class Objective:
     '''Objective function for the ccs method.'''
 
 
-    def __init__(self, l_twb, sto, energy_ref, gen_params, ewald=[]):
+    def __init__(self, l_twb,l_one, sto, energy_ref, gen_params, ewald=[]):
         '''Generates Objective class object.
 
         Args:
 
             l_twb (list): list of Twobody class objects
+            l_one (list): list of Onebody class objects
             sto (ndarray): array containing number of atoms of each type
             energy_ref (ndarray): reference energies
             ewald (list, optional) : ewald energy values for CCS+Q
@@ -46,6 +48,7 @@ class Objective:
         '''
 
         self.l_twb = l_twb
+        self.l_one = l_one
         self.sto = sto
         self.energy_ref = energy_ref
         self.ewald = np.array(ewald).reshape(-1, 1)
@@ -55,6 +58,7 @@ class Objective:
 
         self.cols_sto = sto.shape[1]
         self.np = len(l_twb)
+        self.no = len(l_one)
         self.cparams = [self.l_twb[i].cols for i in range(self.np)]
         self.ns = len(energy_ref)
 
@@ -135,6 +139,7 @@ class Objective:
         ax1.plot(model_energies, self.energy_ref, 'bo')
         ax1.set_xlabel('Predicted energies')
         ax1.set_ylabel('Ref. energies')
+        ax1.set_ylim(-1,5)
         zz = np.polyfit(model_energies, self.energy_ref, 1)
         pp = np.poly1d(zz)
         ax1.plot(model_energies, pp(model_energies), 'r--')
@@ -143,17 +148,20 @@ class Objective:
         ax2.scatter(s_interval, s_a, c=[i < 0 for i in s_a])
         ax2.set_xlabel('Distance')
         ax2.set_ylabel('a coefficients')
+        ax2.set_ylim(-1,5)
 
         ax3 = fig.add_subplot(2, 2, 3)
         cc = [ii < 0 for ii in xx]
         ax3.scatter(s_interval[1:], xx, c=cc)
         ax3.set_ylabel('c coefficients')
         ax3.set_xlabel('Distance')
+        ax3.set_ylim(-1,5)
 
         ax4 = fig.add_subplot(2, 2, 4)
         plt.hist(x=np.ravel(dismat), bins=s_interval, color='g', rwidth=0.85)
         ax4.set_ylabel('Frequency of a distance')
         ax4.set_xlabel('Spline interval')
+        ax4.set_ylim(-1,5)
         plt.tight_layout()
         plt.savefig(name + '-summary.png')
 
@@ -172,7 +180,7 @@ class Objective:
 
         for ii in range(self.np):
             curvatures = xx[ind : ind + self.cparams[ii]]
-            ind = ind+ self.cparams[ii] 
+            ind = ind+ self.cparams[ii]
             s_a = np.dot(self.l_twb[ii].aa, curvatures)
             s_b = np.dot(self.l_twb[ii].bb, curvatures)
             s_c = np.dot(self.l_twb[ii].cc, curvatures)
@@ -196,7 +204,7 @@ class Objective:
             s_a = np.insert(s_a, 0, splderivs[0])
             splcoeffs = sf.get_spline_coeffs(self.l_twb[ii].interval, s_a,
                                              splderivs[1], 0)
-            
+
 
             sf.write_splinerep(
                 self.l_twb[ii].name + '.spl',
@@ -278,35 +286,36 @@ class Objective:
         self.get_coeffs(list(xx), model_energies)
         sf.write_error(model_energies, self.energy_ref, mse)
 
-        
-        if(self.interface == "CCS+Q"):
-          print("Charge scaling : " + str(xx[-1]**0.5))
-          print(" -- Epsilons (reverse order) -- ")
-          for i in range(self.cols_sto):
-              print("   " +  str(xx[-2-i ])) 
-          CCS_param_dict = {'q': xx[-1]**0.5, 'eps': [xx[-2-i] for i in range(self.cols_sto)]}
-          with open('CCS_param_dict.pkl', 'wb') as f:
-              pickle.dump(CCS_param_dict, f)
-          with open('CCS_param.txt', 'w') as f:
-              f.write("Charge scaling : " + str(xx[-1]**0.5) + "\n")
-              f.write(" -- Epsilons (reverse order) -- \n")
-              for i in range(self.cols_sto):
-                  f.write("   " +  str(xx[-2-i ]) + "\n")
-              f.close()
 
-        # if(self.interface == "CCS"): DEBUG TJAMS
-        else:
-          print(" -- Epsilons (reverse order) -- ")  
-          for i in range(self.cols_sto):
-              print("   " +  str(xx[-1-i ])) 
-          CCS_param_dict = {'eps': list([xx[-1-i ] for i in range(self.cols_sto)])}
-          with open('CCS_param_dict.pkl', 'wb') as f:
-              pickle.dump(CCS_param_dict, f)
-          with open('CCS_param.txt', 'w') as f:
-              f.write(" -- Epsilons (reverse order) -- \n")
-              for i in range(self.cols_sto):
-                  f.write("   " +  str(xx[-1-i ]) + "\n")
-              f.close()
+        #PRINT CCS_params.json FILE
+        counter=-1
+        CCS_params=OrderedDict()
+        if(self.interface == "CCS+Q"):
+          counter=0
+          CCS_params['Charge scaling factor'] = str( float( xx[-1]**0.5 ))
+
+        eps_params=OrderedDict()
+        for k  in range(self.no):
+            i=self.no-k-1
+            if(self.l_one[i].epsilon_supported):
+               counter+=1
+               self.l_one[i].epsilon=float( xx[-1-counter] )
+            eps_params[ self.l_one[i].name   ]=str(self.l_one[i].epsilon)
+        CCS_params['eps']=eps_params
+        with open('CCS_params.json', 'w') as f:
+            json.dump(CCS_params, f, indent=8)
+        #/PRINT CCS_params.json FILE
+
+
+        #PERFORM SENSITIVITY TEST
+        #  J Obective
+        #  dJ/dc_i    =  0    ?
+        #  d2J/dc_i2  =  V_i* (V_i*) T  ?
+        #  Harmonic approximation...
+        for i in range(np.shape(self.mm)[1]):
+           logger.info(str(np.dot(self.mm[:,i],self.mm[:,i] )) + " " + str( np.dot(self.mm[:,i],self.mm[:,i]*xx[i])) )
+
+        #/PERFORM SENSI...
 
         return model_energies, mse
 
@@ -331,10 +340,10 @@ class Objective:
 
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
- 
+
 
         return mm
-       
+
 
     def get_g(self, n_switch):
         '''Returns constraints matrix.
@@ -398,6 +407,6 @@ class Objective:
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface == 'CCS+Q':
             gg = block_diag(gg, 0)
-     
-     
+
+
         return gg, aa

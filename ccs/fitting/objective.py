@@ -147,6 +147,7 @@ class Objective:
         ax2.scatter(s_interval, s_a, c=[i < 0 for i in s_a])
         ax2.set_xlabel('Distance')
         ax2.set_ylabel('a coefficients')
+        ax2.set_ylim(-1,5)
 
         ax3 = fig.add_subplot(2, 2, 3)
         cc = [ii < 0 for ii in xx]

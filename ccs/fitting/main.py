@@ -104,21 +104,16 @@ def twp_fit(filename):
                         raise
     
         if counter1 == 1:
-            if gen_params['interface'] == 'DFTB+':
+            if 'DFTB' in gen_params['interface']:
                 assert len(ref_energies) == len(dftb_energies)
-                columns = ['DFT(eV)', 'DFTB(eV)', 'delta(Hartree)']
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(dftb_energies))
                 )
-                # convert energies from eV to Hartree
-                ref_energies = (energies[0] - energies[1])  * eV__Hartree
-                write_as_nxy(
-                    'Train_energy.dat',
-                    'The input energies',
-                    np.vstack((energies, ref_energies)),
-                    columns,
-                )
-                list_dist=[[element /Bohr__AA  for element in elements ] for elements in list_dist] 
+                ref_energies = (energies[0] - energies[1])
+                if gen_params['interface'] == 'DFTB+':
+                    # convert energies from eV to Hartree and Ang to Bohr
+                    ref_energies = ref_energies * eV__Hartree
+                    list_dist=[[element /Bohr__AA  for element in elements ] for elements in list_dist] 
 
             if gen_params['interface'] == 'CCS2Q':
                 assert len(ref_energies) == len(ewald_energies)
