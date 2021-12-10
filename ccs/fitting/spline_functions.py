@@ -13,7 +13,9 @@ This module contains functions for spline construction, evaluation and output.
 
 import logging
 import numpy as np
+import json
 import scipy.linalg as linalg
+from collections import OrderedDict
 from ccs.data.conversion import Bohr__AA, eV__Hartree
 
 logger = logging.getLogger(__name__)
@@ -103,9 +105,9 @@ def spline_eval012(aa, bb, cc, dd, rr, rmin, dx, xx):
     if index >= 1:
         dr = rr - xx[index]
         f0 = aa[index - 1] + dr \
-            * (bb[index - 1] + dr \
+            * (bb[index - 1] + dr
                * (0.5 * cc[index - 1] + (dd[index - 1] * dr / 6.0))
-        )
+               )
         f1 = bb[index - 1] + dr * (cc[index - 1] + (0.5 * dd[index - 1] * dr))
         f2 = cc[index - 1] + dd[index - 1] * dr
 
@@ -215,15 +217,47 @@ def write_splinecoeffs(twb, coeffs, fname='splines.out'):
 
     '''
 
-
     coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
 
     with open(fname, 'w') as fout:
         fout.write('Spline table\n')
         for index in range(len(twb.interval) - 1):
-            r_start = twb.interval[index] -0.2  
-            r_stop = twb.interval[index + 1]  -0.2
+            r_start = twb.interval[index] - 0.2
+            r_stop = twb.interval[index + 1] - 0.2
             fout.write(coeffs_format.format(r_start, r_stop, *coeffs[index]))
+
+
+def write_CCS_params(sol):
+    CCS_params = OrderedDict()
+
+    CCS_params['Charge scaling factor'] = float(sol.charge_scaling)
+
+    eps_params = OrderedDict()
+    for k in range(sol.no):
+        if(sol.l_one[k].epsilon_supported):
+            eps_params[sol.l_one[k].name] = sol.l_one[k].epsilon
+    CCS_params['One_body'] = eps_params
+
+    two_bodies_dict = OrderedDict()
+    for k in range(sol.np):
+        two_body_dict = OrderedDict()
+        two_body_dict["r_min"] = sol.l_twb[k].Rmin
+        two_body_dict["r_cut"] = sol.l_twb[k].Rcut
+        two_body_dict["dr"] = sol.l_twb[k].dx
+        two_body_dict["r"] = list(sol.l_twb[k].interval)
+        two_body_dict["exp_a"] = sol.l_twb[k].expcoeffs[0]
+        two_body_dict["exp_b"] = sol.l_twb[k].expcoeffs[1]
+        two_body_dict["exp_c"] = sol.l_twb[k].expcoeffs[2]
+        two_body_dict["spl_a"] = list(sol.l_twb[k].splcoeffs[:, 0])
+        two_body_dict["spl_b"] = list(sol.l_twb[k].splcoeffs[:, 1])
+        two_body_dict["spl_c"] = list(sol.l_twb[k].splcoeffs[:, 2])
+        two_body_dict["spl_d"] = list(sol.l_twb[k].splcoeffs[:, 3])
+
+        two_bodies_dict[sol.l_twb[k].name] = two_body_dict
+
+    CCS_params["Two_body"] = two_bodies_dict
+    with open('CCS_params.json', 'w') as f:
+        json.dump(CCS_params, f, indent=8)
 
 
 def write_error(mdl_eng, ref_eng, mse, fname='error.out'):
@@ -325,7 +359,7 @@ def print_io_log(fname, fcontent):
     print("{} -> '{}'".format(fcontent, fname))
 
 
-def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut,dx):
+def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut, dx):
     '''Calculates coefficients of exponential function.
 
     Args:
@@ -348,13 +382,14 @@ def write_splinerep(fname, expcoeffs, splcoeffs, rr, rcut,dx):
 
         splcoeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
         for ir in range(len(rr) - 1):
-            rcur = rr[ir]           
-            rnext = rr[ir + 1] 
-            tmp_splcoeffs= splcoeffs[ir]
-            tmp_splcoeffs[2]=tmp_splcoeffs[2]
-            tmp_splcoeffs[3]=tmp_splcoeffs[3]
+            rcur = rr[ir]
+            rnext = rr[ir + 1]
+            tmp_splcoeffs = splcoeffs[ir]
+            tmp_splcoeffs[2] = tmp_splcoeffs[2]
+            tmp_splcoeffs[3] = tmp_splcoeffs[3]
             fp.write(splcoeffs_format.format(rcur, rnext, *tmp_splcoeffs))
-        poly5coeffs_format = ' '.join(['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
+        poly5coeffs_format = ' '.join(
+            ['{:6.3f}'] * 2 + ['{:15.8E}'] * 4) + '\n'
         fp.write(poly5coeffs_format.
                  format(rr[-1], rr[-1] + delta, 0.0, 0.0, 0.0, 0.0))
 
@@ -423,7 +458,6 @@ def spline_mask(rcut, rmin, df, cols, dx, size):
 class Twobody:
     '''Twobody class that describes properties of an Atom pair.'''
 
-
     def __init__(self, name, dismat, nconfigs, Rcut, Nknots, Swtype='rep',
                  Rmin=None, nswitch=None):
         '''Constructs a Twobody object.
@@ -458,7 +492,9 @@ class Twobody:
             spline_construction(self.cols - 1, self.cols, self.dx)
         self.vv, self.indices = self.get_v()
         self.mask = self.get_mask()
-
+        self.curvatures = None
+        self.splcoeffs = None
+        self.expcoeffs = None
 
     def get_v(self):
         '''Returns spline matrix.
@@ -472,7 +508,6 @@ class Twobody:
         return spline_energy_model(self.Rcut, self.Rmin, self.dismat, self.cols,
                                    self.dx, self.nconfigs, self.interval)
 
-
     def get_mask(self):
         ''' Returns spline mask.
 
@@ -483,14 +518,13 @@ class Twobody:
         '''
 
         return spline_mask(self.Rcut, self.Rmin, self.dismat, self.cols,
-                           self.dx, self.nconfigs) 
+                           self.dx, self.nconfigs)
 
 
 class Onebody:
     '''Onebody class that describes properties of an atom.'''
 
-
-    def __init__(self, name, epsilon_supported=True ,epsilon=0.0):
+    def __init__(self, name, epsilon_supported=True, epsilon=0.0):
         '''Constructs a Onebody object.
 
         Args:
@@ -500,8 +534,6 @@ class Onebody:
             epsilon (float): onebody energy term
 
         '''
-        self.name=name
-        self.epsilon_supported=True
-        self.epsilon=0.0
-
-
+        self.name = name
+        self.epsilon_supported = True
+        self.epsilon = 0.0

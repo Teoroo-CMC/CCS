@@ -27,8 +27,7 @@ logger = logging.getLogger(__name__)
 class Objective:
     '''Objective function for the ccs method.'''
 
-
-    def __init__(self, l_twb,l_one, sto, energy_ref, gen_params, ewald=[]):
+    def __init__(self, l_twb, l_one, sto, energy_ref, gen_params, ewald=[]):
         '''Generates Objective class object.
 
         Args:
@@ -52,6 +51,7 @@ class Objective:
         self.sto = sto
         self.energy_ref = energy_ref
         self.ewald = np.array(ewald).reshape(-1, 1)
+        self.charge_scaling = 0.0
 
         for kk, vv in gen_params.items():
             setattr(self, kk, vv)
@@ -64,7 +64,6 @@ class Objective:
 
         logger.debug('The reference energy : \n %s \n Number of pairs:%s',
                      self.energy_ref, self.np)
-
 
     @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
@@ -102,7 +101,6 @@ class Objective:
 
         return sol
 
-
     def eval_obj(self, xx):
         '''Mean squared error function.
 
@@ -117,9 +115,8 @@ class Objective:
         '''
 
         return np.format_float_scientific(
-            np.sum((self.energy_ref - (np.ravel(self.mm.dot(xx))))**2) \
+            np.sum((self.energy_ref - (np.ravel(self.mm.dot(xx))))**2)
             / self.ns, precision=4)
-
 
     def plot(self, name, model_energies, s_interval, dismat, s_a, xx):
         ''' Plots the results.
@@ -147,7 +144,7 @@ class Objective:
         ax2.scatter(s_interval, s_a, c=[i < 0 for i in s_a])
         ax2.set_xlabel('Distance')
         ax2.set_ylabel('a coefficients')
-        ax2.set_ylim(-1,5)
+        ax2.set_ylim(-1, 5)
 
         ax3 = fig.add_subplot(2, 2, 3)
         cc = [ii < 0 for ii in xx]
@@ -162,7 +159,6 @@ class Objective:
         plt.tight_layout()
         plt.savefig(name + '-summary.png')
 
-
     def get_coeffs(self, xx, model_energies):
         '''Plots the results.
 
@@ -176,12 +172,13 @@ class Objective:
         ind = 0
 
         for ii in range(self.np):
-            curvatures = xx[ind : ind + self.cparams[ii]]
-            ind = ind+ self.cparams[ii] 
-            s_a = np.dot(self.l_twb[ii].aa, curvatures)
-            s_b = np.dot(self.l_twb[ii].bb, curvatures)
-            s_c = np.dot(self.l_twb[ii].cc, curvatures)
-            s_d = np.dot(self.l_twb[ii].dd, curvatures)
+            self.l_twb[ii].curvatures = np.asarray(
+                xx[ind: ind + self.cparams[ii]])
+            ind = ind + self.cparams[ii]
+            s_a = np.dot(self.l_twb[ii].aa, self.l_twb[ii].curvatures)
+            s_b = np.dot(self.l_twb[ii].bb, self.l_twb[ii].curvatures)
+            s_c = np.dot(self.l_twb[ii].cc, self.l_twb[ii].curvatures)
+            s_d = np.dot(self.l_twb[ii].dd, self.l_twb[ii].curvatures)
 
             splderivs = sf.spline_eval012(
                 s_a, s_b, s_c, s_d, self.l_twb[ii].Rmin, self.l_twb[ii].Rmin,
@@ -189,6 +186,7 @@ class Objective:
 
             expcoeffs = sf.get_expcoeffs(*splderivs, self.l_twb[ii].Rmin)
             expbuf = 0.5
+            self.l_twb[ii].expcoeffs = expcoeffs
 
             rexp = np.linspace(
                 self.l_twb[ii].Rmin - expbuf, self.l_twb[ii].Rmin,
@@ -199,10 +197,10 @@ class Objective:
                             ('rr', 'exponential head'))
 
             s_a = np.insert(s_a, 0, splderivs[0])
+
             splcoeffs = sf.get_spline_coeffs(self.l_twb[ii].interval, s_a,
                                              splderivs[1], 0)
-            
-
+            self.l_twb[ii].splcoeffs = np.asarray(splcoeffs)
             sf.write_splinerep(
                 self.l_twb[ii].name + '.spl',
                 np.array(expcoeffs).tolist(),
@@ -219,7 +217,6 @@ class Objective:
                 s_a,
                 s_c)
 
-
     def list_iterator(self):
         '''Iterates over the self.np attribute.'''
 
@@ -235,7 +232,6 @@ class Objective:
         n_list = list(itertools.product(*tmp))
 
         return n_list
-
 
     def solution(self):
         '''Function to solve the objective with constraints.'''
@@ -276,43 +272,37 @@ class Objective:
                               matrix(bb))
 
         xx = np.array(opt_sol['x'])
+
+        # ASSIGN VALUES
+        counter = -1
+        if(self.interface == "CCS+Q"):
+            counter = 0
+            self.charge_scaling = (xx[-1]**0.5)
+        for k in range(self.no):
+            i = self.no-k-1
+            if(self.l_one[i].epsilon_supported):
+                counter += 1
+                self.l_one[i].epsilon = float(xx[-1-counter])
+
         model_energies = np.ravel(self.mm.dot(xx))
         self.get_coeffs(list(xx), model_energies)
+
         sf.write_error(model_energies, self.energy_ref, mse)
-        
 
-        #PRINT CCS_params.json FILE
-        counter=-1
-        CCS_params=OrderedDict()
-        if(self.interface == "CCS+Q"):
-          counter=0
-          CCS_params['Charge scaling factor'] = str( float( xx[-1]**0.5 ))
+        sf.write_CCS_params(self)
 
-        eps_params=OrderedDict()
-        for k  in range(self.no):
-            i=self.no-k-1
-            if(self.l_one[i].epsilon_supported):
-               counter+=1
-               self.l_one[i].epsilon=float( xx[-1-counter] )
-            eps_params[ self.l_one[i].name   ]=str(self.l_one[i].epsilon)
-        CCS_params['eps']=eps_params
-        with open('CCS_params.json', 'w') as f:
-            json.dump(CCS_params, f, indent=8)
-        #/PRINT CCS_params.json FILE
-
-
-        #PERFORM SENSITIVITY TEST
+        # PERFORM SENSITIVITY TEST
         #  J Obective
         #  dJ/dc_i    =  0    ?
-        #  d2J/dc_i2  =  V_i* (V_i*) T  ? 
-        #  Harmonic approximation...  
+        #  d2J/dc_i2  =  V_i* (V_i*) T  ?
+        #  Harmonic approximation...
         for i in range(np.shape(self.mm)[1]):
-           logger.info(str(np.dot(self.mm[:,i],self.mm[:,i] )) + " " + str( np.dot(self.mm[:,i],self.mm[:,i]*xx[i])) )
+            logger.info(str(np.dot(self.mm[:, i], self.mm[:, i])) +
+                        " " + str(np.dot(self.mm[:, i], self.mm[:, i]*xx[i])))
 
-        #/PERFORM SENSI...
+        # /PERFORM SENSI...
 
         return model_energies, mse
-
 
     def get_m(self):
         '''Returns the M matrix.
@@ -334,10 +324,8 @@ class Objective:
 
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
- 
 
         return mm
-       
 
     def get_g(self, n_switch):
         '''Returns constraints matrix.
@@ -377,7 +365,7 @@ class Objective:
             for elem in range(self.np):
                 n_gaps = (
                     n_gaps + self.l_twb[elem].cols - 2 - sum(
-                        self.l_twb[elem].mask[1 : self.l_twb[elem].cols - 1]))
+                        self.l_twb[elem].mask[1: self.l_twb[elem].cols - 1]))
                 wid = wid + self.l_twb[elem].cols
             if self.interface == 'CCS+Q':
                 wid = wid + 1
@@ -401,6 +389,5 @@ class Objective:
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface == 'CCS+Q':
             gg = block_diag(gg, 0)
-     
-     
+
         return gg, aa
