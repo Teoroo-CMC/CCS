@@ -1,8 +1,12 @@
 # Compiled python modules
 *.pyc
 *__pycache__
+build
+dist
+ccsx.egg-info/
 
-
+# GitHub related
+_gitmsg.saved.txt
 
 # Editor backup files 
 *~
