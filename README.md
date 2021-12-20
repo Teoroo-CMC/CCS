@@ -46,7 +46,7 @@ pip install cvxopt
 #### Git clone
 
 ```
-git clone https://github.com/Teoroo-CMC/CCS.git
+git clone git@github.com:aksam432/CCS.git
 cd CCS
 python setup.py install
 ```

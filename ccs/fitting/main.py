@@ -73,9 +73,9 @@ def twp_fit(filename):
     ewald_energies = []
     counter1 = 0
     for atmpair, values in data['Twobody'].items():
+        # MAKE SURE TO TRY AND READ BOTH COMBINATIONS OF A PAIR
         atmpair_members = atmpair.split('-')
         atmpair_rev = atmpair_members[1]+'-'+atmpair_members[0]
-        print(atmpair_rev)
 
         counter1 = counter1 + 1
         logger.info('\n The atom pair is : %s' % (atmpair))
@@ -149,7 +149,7 @@ def twp_fit(filename):
                     % (atmpair, min(list_dist)))
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.fillna(0)
-        dist_mat.to_csv(atmpair + '.dat', sep=' ', index=False)
+        #dist_mat.to_csv(atmpair + '.dat', sep=' ', index=False)
         dist_mat = dist_mat.values
         logger.debug('Distance matrix for %s is \n %s ' % (atmpair, dist_mat))
         atom_pairs.append(
