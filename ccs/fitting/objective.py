@@ -204,8 +204,8 @@ class Objective:
                 int(expbuf / self.l_twb[ii].dx) + 1)
 
             expvals = sf.get_exp_values(expcoeffs, rexp)
-            sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals),
-                            ('rr', 'exponential head'))
+            #sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals),
+            #                ('rr', 'exponential head'))
 
             s_a = np.insert(self.l_twb[ii].s_a, 0, splderivs[0])
 

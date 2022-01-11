@@ -11,13 +11,12 @@ from scipy.linalg import block_diag
 
 
 class CCS_regressor:
-    def __init__(self, N=10, xmin=0, xmax=1, sw=False, eps=False):
+    def __init__(self, N=100, xmin=0, xmax=1, sw=False, eps=False):
         self.N = N
         self.sw = sw
         self.xmin = xmin
         self.xmax = xmax
         self.dx = (self.xmax-self.xmin)/self.N
-        print(self.dx)
         self.eps = eps
         self.C, self.D, self.B, self.A = self.spline_construction(
             self.N, self.dx)
@@ -61,7 +60,7 @@ class CCS_regressor:
 
     def fit(self, x, y):
         self.mm, self.incices = self.model(x)
-        n_switch = 0
+        n_switch = self.N
         pp = matrix(np.transpose(self.mm).dot(self.mm))
         qq = -1 * matrix(np.transpose(self.mm).dot(y))
         gg, aa = self.const(n_switch)
@@ -76,7 +75,7 @@ class CCS_regressor:
         ii, jj = np.indices(g_mono.shape)
         g_mono[ii == jj - 1] = 1
         g_mono[ii > n_switch] = -g_mono[ii > n_switch]
-
+        gg = block_diag(g_mono, 0)
         return gg, aa
 
     def predict(self, x):
@@ -152,20 +151,23 @@ class CCS_regressor:
         dd = self.D
         size = len(x)
         dx = self.dx
+        xmin = self.xmin
 
         vv = np.zeros((size, self.N))
+        uu = np.zeros((self.N, 1)).flatten()
         indices = []
         for i in range(size):
             index = int(np.ceil(np.around(((x[i] - xmin) / dx), decimals=5)))
-            indices.append(index)
-            delta = x[i] - self.inteval[index]
-            aa_ind = aa[index - 1]
-            bb_ind = bb[index - 1] * delta
-            dd_ind = dd[index - 1] * np.power(delta, 3) / 6.0
-            c_d = cc[index - 1] * np.power(delta, 2) / 2.0
-            uu = aa_ind + bb_ind + c_d + dd_ind
+            if(index < self.N) & (index > 0):
+                indices.append(index)
+                delta = x[i] - self.interval[index]
+                aa_ind = aa[index - 1]
+                bb_ind = bb[index - 1] * delta
+                dd_ind = dd[index - 1] * np.power(delta, 3) / 6.0
+                c_d = cc[index - 1] * np.power(delta, 2) / 2.0
+                uu = aa_ind + bb_ind + c_d + dd_ind
 
             vv[i, :] = uu
-            vv = np.hstack((vv, 1))
+        vv = np.hstack((vv, np.ones((size, 1))))
 
         return vv, set(indices)
