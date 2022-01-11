@@ -1,0 +1,18 @@
+{
+        "Onebody": [
+                "Ce",
+                "O"
+        ],
+        "Reference": "structures.json",
+        "General": {
+                "interface": "DFTB"
+        },
+        "Twobody": {
+                "Ce-O": {
+                        "Rcut": 8.0,
+                        "Nknots": 20,
+                        "Swtype": "rep",
+                        "Rmin": 1.759588
+                }
+        }
+}

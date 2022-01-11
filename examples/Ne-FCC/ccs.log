@@ -1,0 +1,102 @@
+2022-01-10 17:53:40,982 - root - INFO -       Started
+2022-01-10 17:54:27,023 - root - INFO -       Started
+2022-01-10 17:54:27,104 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-10 17:54:27,104 - ccs.fitting.main - CRITICAL -        Check Energy key in structure file
+2022-01-10 17:54:56,740 - root - INFO -       Started
+2022-01-10 17:54:56,833 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-10 17:54:56,833 - ccs.fitting.main - CRITICAL -        Check Energy key in structure file
+2022-01-10 17:55:18,363 - root - INFO -       Started
+2022-01-10 17:55:18,435 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-10 17:55:18,471 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ne-Ne is 3.1337029999999997 
+2022-01-10 17:55:19,063 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-10 17:55:19,123 - ccs.fitting.objective - INFO -       
+ The best switch is : (19,) and mse : 9.0915e-06
+2022-01-10 17:55:19,603 - ccs.fitting.objective - INFO -       0.0007951488917629147 0.0023605396405376304
+2022-01-10 17:55:19,603 - ccs.fitting.objective - INFO -       0.5147803943481221 1.1791501985590882
+2022-01-10 17:55:19,603 - ccs.fitting.objective - INFO -       6.910298508625047 9.467356761264657
+2022-01-10 17:55:19,603 - ccs.fitting.objective - INFO -       28.409441445466314 22.22030013966676
+2022-01-10 17:55:19,603 - ccs.fitting.objective - INFO -       74.20657983639018 35.158774256792455
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       153.49205478412676 39.010023312513674
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       276.8017196856812 62.376140404498315
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       465.2479248306714 36.51439506072959
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       742.7166032257855 44.09732713536602
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       1127.8631231775862 32.363671567835425
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       1643.1367048782126 47.148684976995774
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       2370.6793930207423 23.213426449164846
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       3435.292130265063 0.03439760771049479
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       4920.283367910722 -0.13286630891966417
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       6920.528575569177 -0.18828309258289688
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       9596.865167707929 -0.2613135613444637
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       13092.223682792479 -0.35659235414851126
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       17560.21117382424 -0.478421264342651
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       23333.952174216407 -0.6358656577700803
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       30721.49945285597 -0.8375704174921177
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       9154.401591898932 -265.36423668010934
+2022-01-10 17:55:19,604 - ccs.fitting.objective - INFO -       3680.0 -6.955656499020896
+2022-01-10 17:55:19,606 - root - INFO -       Ended
+2022-01-10 17:57:55,520 - root - INFO -       Started
+2022-01-10 17:57:55,621 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-10 17:57:55,654 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ne-Ne is 3.1337029999999997 
+2022-01-10 17:57:56,230 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-10 17:57:56,294 - ccs.fitting.objective - INFO -       
+ The best switch is : (19,) and mse : 9.0915e-06
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       0.0007951488917629147 0.0023605396405376304
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       0.5147803943481221 1.1791501985590882
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       6.910298508625047 9.467356761264657
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       28.409441445466314 22.22030013966676
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       74.20657983639018 35.158774256792455
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       153.49205478412676 39.010023312513674
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       276.8017196856812 62.376140404498315
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       465.2479248306714 36.51439506072959
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       742.7166032257855 44.09732713536602
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       1127.8631231775862 32.363671567835425
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       1643.1367048782126 47.148684976995774
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       2370.6793930207423 23.213426449164846
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       3435.292130265063 0.03439760771049479
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       4920.283367910722 -0.13286630891966417
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       6920.528575569177 -0.18828309258289688
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       9596.865167707929 -0.2613135613444637
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       13092.223682792479 -0.35659235414851126
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       17560.21117382424 -0.478421264342651
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       23333.952174216407 -0.6358656577700803
+2022-01-10 17:57:56,795 - ccs.fitting.objective - INFO -       30721.49945285597 -0.8375704174921177
+2022-01-10 17:57:56,796 - ccs.fitting.objective - INFO -       9154.401591898932 -265.36423668010934
+2022-01-10 17:57:56,796 - ccs.fitting.objective - INFO -       3680.0 -6.955656499020896
+2022-01-10 17:57:56,797 - root - INFO -       Ended
+2022-01-10 17:58:43,415 - root - INFO -       Started
+2022-01-10 17:58:43,508 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-10 17:58:43,542 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ne-Ne is 3.1337029999999997 
+2022-01-10 17:58:44,135 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-10 17:58:44,195 - ccs.fitting.objective - INFO -       
+ The best switch is : (19,) and mse : 9.0915e-06
+2022-01-10 17:58:44,691 - ccs.fitting.objective - INFO -       0.0007951488917629147 0.0023605396405376304
+2022-01-10 17:58:44,691 - ccs.fitting.objective - INFO -       0.5147803943481221 1.1791501985590882
+2022-01-10 17:58:44,691 - ccs.fitting.objective - INFO -       6.910298508625047 9.467356761264657
+2022-01-10 17:58:44,691 - ccs.fitting.objective - INFO -       28.409441445466314 22.22030013966676
+2022-01-10 17:58:44,691 - ccs.fitting.objective - INFO -       74.20657983639018 35.158774256792455
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       153.49205478412676 39.010023312513674
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       276.8017196856812 62.376140404498315
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       465.2479248306714 36.51439506072959
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       742.7166032257855 44.09732713536602
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       1127.8631231775862 32.363671567835425
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       1643.1367048782126 47.148684976995774
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       2370.6793930207423 23.213426449164846
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       3435.292130265063 0.03439760771049479
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       4920.283367910722 -0.13286630891966417
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       6920.528575569177 -0.18828309258289688
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       9596.865167707929 -0.2613135613444637
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       13092.223682792479 -0.35659235414851126
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       17560.21117382424 -0.478421264342651
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       23333.952174216407 -0.6358656577700803
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       30721.49945285597 -0.8375704174921177
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       9154.401591898932 -265.36423668010934
+2022-01-10 17:58:44,692 - ccs.fitting.objective - INFO -       3680.0 -6.955656499020896
+2022-01-10 17:58:44,694 - root - INFO -       Ended

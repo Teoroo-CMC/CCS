@@ -1,0 +1,17 @@
+{
+        "Onebody": [
+                "Ne"
+        ],
+        "Reference": "structures.json",
+        "General": {
+                "interface": "CCS"
+        },
+        "Twobody": {
+                "Ne-Ne": {
+                        "Rcut": 8.0,
+                        "Nknots": 20,
+                        "Swtype": "sw",
+                        "Rmin": 3.1337029999999997
+                }
+        }
+}

@@ -73,7 +73,7 @@ def spline_construction(rows, cols, dx):
     return cc, dd, bb, aa
 
 
-def spline_eval012(aa, bb, cc, dd, rr, rmin, dx, xx):
+def spline_eval012(twb, rr,):
     '''Returns cubic spline value, first and second derivative at a point r.
 
     Args:
@@ -96,6 +96,13 @@ def spline_eval012(aa, bb, cc, dd, rr, rmin, dx, xx):
         floats: values for spline function value, first and second derivative
 
     '''
+    aa = twb.s_a
+    bb = twb.s_b
+    cc = twb.s_c
+    dd = twb.s_d
+    rmin = twb.Rmin
+    dx = twb.dx
+    xx = twb.interval
 
     if rr == rmin:
         index = 1
@@ -524,7 +531,7 @@ class Twobody:
 class Onebody:
     '''Onebody class that describes properties of an atom.'''
 
-    def __init__(self, name, epsilon_supported=True, epsilon=0.0):
+    def __init__(self, name, stomat, epsilon_supported=True, epsilon=0.0):
         '''Constructs a Onebody object.
 
         Args:
@@ -537,3 +544,4 @@ class Onebody:
         self.name = name
         self.epsilon_supported = True
         self.epsilon = 0.0
+        self.stomat = stomat

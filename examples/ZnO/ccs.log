@@ -3113,3 +3113,41 @@ The minimum distance for atom pair Zn-O is [3.217969, 3.217977, 3.217986, 3.2179
 2021-09-14 10:29:23,148 - ccs.fitting.objective - INFO -       
  The best switch is : (7,) and mse : 16.033
 2021-09-14 10:29:23,562 - root - INFO -       Ended
+2022-01-10 17:59:55,405 - root - INFO -       Started
+2022-01-10 17:59:55,423 - ccs.fitting.main - CRITICAL -       Input file not in json format
+2022-01-10 18:01:51,556 - root - INFO -       Started
+2022-01-10 18:01:51,559 - ccs.fitting.main - CRITICAL -       Input file not in json format
+2022-01-10 18:02:33,862 - root - INFO -       Started
+2022-01-10 18:02:33,891 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-10 18:02:33,893 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-10 18:02:33,931 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-10 18:02:33,951 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-10 18:02:34,325 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-10 18:02:34,325 - root - INFO -       Ended
+2022-01-10 18:09:52,639 - root - INFO -       Started
+2022-01-10 18:09:52,646 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-10 18:09:52,648 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-10 18:09:52,702 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-10 18:09:52,719 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-10 18:09:53,074 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-10 18:09:53,074 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-10 18:09:53,075 - root - INFO -       Ended

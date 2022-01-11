@@ -1,4 +1,5 @@
 
+#------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
@@ -118,7 +119,7 @@ class Objective:
             np.sum((self.energy_ref - (np.ravel(self.mm.dot(xx))))**2)
             / self.ns, precision=4)
 
-    def plot(self, name, model_energies, s_interval, dismat, s_a, xx):
+    def plot(self, model_energies):
         ''' Plots the results.
 
         Args:
@@ -131,33 +132,41 @@ class Objective:
         '''
 
         fig = plt.figure()
-
-        ax1 = fig.add_subplot(2, 2, 1)
-        ax1.plot(model_energies, self.energy_ref, 'bo')
-        ax1.set_xlabel('Predicted energies')
-        ax1.set_ylabel('Ref. energies')
-        zz = np.polyfit(model_energies, self.energy_ref, 1)
-        pp = np.poly1d(zz)
-        ax1.plot(model_energies, pp(model_energies), 'r--')
-
-        ax2 = fig.add_subplot(2, 2, 2)
-        ax2.scatter(s_interval, s_a, c=[i < 0 for i in s_a])
-        ax2.set_xlabel('Distance')
-        ax2.set_ylabel('a coefficients')
-        ax2.set_ylim(-1, 5)
-
-        ax3 = fig.add_subplot(2, 2, 3)
-        cc = [ii < 0 for ii in xx]
-        ax3.scatter(s_interval[1:], xx, c=cc)
-        ax3.set_ylabel('c coefficients')
-        ax3.set_xlabel('Distance')
-
-        ax4 = fig.add_subplot(2, 2, 4)
-        plt.hist(x=np.ravel(dismat), bins=s_interval, color='g', rwidth=0.85)
-        ax4.set_ylabel('Frequency of a distance')
-        ax4.set_xlabel('Spline interval')
+        nat = self.l_one[0].stomat
+        for i in range(1, self.no):
+            nat += self.l_one[i].stomat
+        # nat = nat.flatten()
+        ax1 = fig.add_subplot(1, 1, 1)
+        ax1.plot(model_energies/nat, self.energy_ref/nat, 'bo')
+        ax1.set_xlabel('Predicted energies [eV per atom]')
+        ax1.set_ylabel('Ref. energies [eV per atom]')
+        xx = [min(self.energy_ref/nat), max(self.energy_ref/nat)]
+        ax1.plot(xx, xx, 'r--')
         plt.tight_layout()
-        plt.savefig(name + '-summary.png')
+        plt.savefig('CCS_fitting_summary.png')
+        plt.close()
+
+        for i in range(self.np):
+            fig = plt.figure()
+            xx = []
+            yy = []
+            ax1 = fig.add_subplot(1, 2, 1)
+            for r in range(int(100*(self.l_twb[i].Rcut - self.l_twb[i].Rmin))):
+                xx.append(r*0.01+self.l_twb[i].Rmin)
+                yy.append(sf.spline_eval012(
+                    self.l_twb[i], r*0.01+self.l_twb[i].Rmin)[0])
+            ax1.set_ylim(min(yy), min([3, max(yy)]))
+            ax1.set_xlabel(r'Distance [\AA]')
+            ax1.set_ylabel(r'Energy [eV]')
+            ax1.plot(xx, yy, '--')
+
+            ax2 = fig.add_subplot(1, 2, 2)
+            plt.hist(x=np.ravel(self.l_twb[i].dismat), bins=self.l_twb[i].interval,
+                     color='g', rwidth=0.85)
+            ax2.set_ylabel('Frequency of a distance')
+            ax2.set_xlabel('Spline interval')
+            plt.savefig('CCS_spline_summary_'+self.l_twb[i].name+'.png')
+            plt.close()
 
     def get_coeffs(self, xx, model_energies):
         '''Plots the results.
@@ -175,14 +184,16 @@ class Objective:
             self.l_twb[ii].curvatures = np.asarray(
                 xx[ind: ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
-            s_a = np.dot(self.l_twb[ii].aa, self.l_twb[ii].curvatures)
-            s_b = np.dot(self.l_twb[ii].bb, self.l_twb[ii].curvatures)
-            s_c = np.dot(self.l_twb[ii].cc, self.l_twb[ii].curvatures)
-            s_d = np.dot(self.l_twb[ii].dd, self.l_twb[ii].curvatures)
+            self.l_twb[ii].s_a = np.dot(
+                self.l_twb[ii].aa, self.l_twb[ii].curvatures)
+            self.l_twb[ii].s_b = np.dot(
+                self.l_twb[ii].bb, self.l_twb[ii].curvatures)
+            self.l_twb[ii].s_c = np.dot(
+                self.l_twb[ii].cc, self.l_twb[ii].curvatures)
+            self.l_twb[ii].s_d = np.dot(
+                self.l_twb[ii].dd, self.l_twb[ii].curvatures)
 
-            splderivs = sf.spline_eval012(
-                s_a, s_b, s_c, s_d, self.l_twb[ii].Rmin, self.l_twb[ii].Rmin,
-                self.l_twb[ii].dx, self.l_twb[ii].interval)
+            splderivs = sf.spline_eval012(self.l_twb[ii], self.l_twb[ii].Rmin)
 
             expcoeffs = sf.get_expcoeffs(*splderivs, self.l_twb[ii].Rmin)
             expbuf = 0.5
@@ -196,7 +207,7 @@ class Objective:
             sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals),
                             ('rr', 'exponential head'))
 
-            s_a = np.insert(s_a, 0, splderivs[0])
+            s_a = np.insert(self.l_twb[ii].s_a, 0, splderivs[0])
 
             splcoeffs = sf.get_spline_coeffs(self.l_twb[ii].interval, s_a,
                                              splderivs[1], 0)
@@ -209,13 +220,7 @@ class Objective:
                 self.l_twb[ii].Rcut,
                 self.l_twb[ii].dx)
 
-            self.plot(
-                self.l_twb[ii].name,
-                model_energies,
-                self.l_twb[ii].interval,
-                self.l_twb[ii].dismat,
-                s_a,
-                s_c)
+        self.plot(model_energies)
 
     def list_iterator(self):
         '''Iterates over the self.np attribute.'''
@@ -332,7 +337,7 @@ class Objective:
 
         Args:
 
-            n_switch (int): switching point to cahnge signs of curvatures.
+            n_switch (int): switching point to change signs of curvatures.
 
         Returns:
 

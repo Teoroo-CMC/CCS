@@ -1,0 +1,17 @@
+{
+        "Onebody": [
+                "O"
+        ],
+        "General": {
+                "interface": "CCS"
+        },
+        "Reference": "structures.json",
+        "Twobody": {
+                "O-O": {
+                        "Rcut": 2.38,
+                        "Nknots": 20,
+                        "Swtype": "sw",
+                        "Rmin": 0.86
+                }
+        }
+}

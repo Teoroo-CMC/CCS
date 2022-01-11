@@ -1,21 +1,18 @@
 {
-"Twobody":{
-	"Zn-O":{
-		"Rmin":3.1,
-		"Rcut":5.0,
-		"Nknots":6
-	}
-
+	"Twobody": {
+		"Zn-O": {
+			"Rcut": 5.0,
+			"Nknots": 6,
+			"Swtype": "sw"
+		}
 	},
-
-"Onebody":["O"],
-
-"Reference":"structures.json",
-
-"General":{
-	"interface":"CCS+fQ",
-        "ewald_scaling":1.5,
-	"ctype":"mono"
-}
-
+	"Onebody": [
+		"Zn",
+		"O"
+	],
+	"Reference": "structures.json",
+	"General": {
+		"interface": "CCS+sQ",
+		"ewald_scaling": 1.5
+	}
 }

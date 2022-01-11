@@ -1,15 +1,7 @@
 {
-"Twobody":{
-	"O-O":{
-		"Rmin":0.95,   
-		"Rcut":2.5,
-		"Nknots":20
-
-	}
-	},
 
 "Onebody":["O"],
-
+"General":{ "interface":"CCS"},
 "Reference":"structures.json"
 			
 

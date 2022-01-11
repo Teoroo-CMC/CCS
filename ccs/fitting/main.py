@@ -10,6 +10,7 @@
 
 
 import json
+import copy
 import logging
 from collections import OrderedDict
 
@@ -36,9 +37,9 @@ def twp_fit(filename):
 
     gen_params = {'interface': None,
                   'spline': None,
-                  'ctype': None,
-                  'scan': False,
-                  'smooth': False,
+                  'ctype': 'mono',
+                  'scan':   False,
+                  'smooth': True,
                   'ewald_scaling': 1.0
                   }
 
@@ -67,11 +68,35 @@ def twp_fit(filename):
         raise
 
     # Read the input.json file and structure file to see the keys are matching
+
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
     counter1 = 0
+
+    # Make defaults or general setting for Twobody
+    if 'Twobody' not in data.keys():
+        if 'DFTB' in data['General']['interface']:
+            data['Twobody'] = {'X-X': {"Rcut": 5.0,
+                                       "Nknots": 20,
+                                       "Swtype": "rep"}}
+        if 'CCS' in data['General']['interface']:
+            data['Twobody'] = {'X-X': {"Rcut": 8.0,
+                                       "Nknots": 20,
+                                       "Swtype": "sw"}}
+
+    if 'X-X' in data['Twobody']:
+        print("Generating two-body potentials from one-body information.")
+        for atom_i in data['Onebody']:
+            for atom_j in data['Onebody']:
+                if atom_j >= atom_i:
+                    print("Adding pair: "+atom_i+"-"+atom_j)
+                    data['Twobody'][atom_i+'-' +
+                                    atom_j] = copy.deepcopy(data['Twobody']['X-X'])
+
+        del data['Twobody']['X-X']
+
     for atmpair, values in data['Twobody'].items():
         # MAKE SURE TO TRY AND READ BOTH COMBINATIONS OF A PAIR
         atmpair_members = atmpair.split('-')
@@ -143,22 +168,27 @@ def twp_fit(filename):
         try:
             values['Rmin']
         except:
-            values['Rmin'] = min(min(list_dist))
+            values['Rmin'] = min(
+                [item for sublist in list_dist for item in sublist if item > 0]) - 0.1
+        Rmax = max(
+            [item for sublist in list_dist for item in sublist if item > 0])
+        if values['Rcut'] > Rmax:
+            values['Rcut'] = Rmax
 
         logger.info('\nThe minimum distance for atom pair %s is %s '
-                    % (atmpair, min(list_dist)))
+                    % (atmpair, values['Rmin']))
         dist_mat = pd.DataFrame(list_dist)
         dist_mat = dist_mat.fillna(0)
-        #dist_mat.to_csv(atmpair + '.dat', sep=' ', index=False)
+        # dist_mat.to_csv(atmpair + '.dat', sep=' ', index=False)
         dist_mat = dist_mat.values
         logger.debug('Distance matrix for %s is \n %s ' % (atmpair, dist_mat))
-        atom_pairs.append(
-            Twobody(atmpair, dist_mat, len(struct_data), **values))
+        if values['Rmin'] < values['Rcut']:
+            atom_pairs.append(
+                Twobody(atmpair, dist_mat, len(struct_data), **values))
 
     atom_onebodies = []
     sto = np.zeros((len(struct_data), len(data['Onebody'])))
     for i, key in enumerate(data['Onebody']):
-        atom_onebodies.append(Onebody(key))
         count = 0
         for _, vv in struct_data.items():
             # print(vv['atoms'][key] )
@@ -167,6 +197,7 @@ def twp_fit(filename):
             except KeyError:
                 sto[count][i] = 0
             count = count + 1
+        atom_onebodies.append(Onebody(key, sto[:, i].flatten()))
     # REDUCE STO-MATRIX IF RANK IS TOO LOW
     reduce = True
     n_redundant = 0
@@ -187,6 +218,9 @@ def twp_fit(filename):
 
     assert sto.shape[1] == np.linalg.matrix_rank(sto), \
         'Linear dependence in stochiometry matrix'
+
+    with open('input_interpreted.json', 'w') as f:
+        json.dump(data, f, indent=8)
 
     nn = Objective(atom_pairs, atom_onebodies, sto, ref_energies, gen_params,
                    ewald=ewald_energies)
