@@ -6,11 +6,6 @@
 			"Swtype": "sw"
 		}
 	},
-	"Onebody": [
-		"Zn",
-		"O"
-	],
-	"Reference": "structures.json",
 	"General": {
 		"interface": "CCS+sQ",
 		"ewald_scaling": 1.5

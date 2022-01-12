@@ -1,9 +1,6 @@
 {
 
 "Onebody":["O"],
-"General":{ "interface":"CCS"},
-"Reference":"structures.json"
-			
-
+"General":{ "interface":"CCS"}
 
 }

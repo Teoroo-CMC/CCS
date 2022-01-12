@@ -3151,3 +3151,112 @@ The minimum distance for atom pair Zn-O is 3.117969
 2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
 2022-01-10 18:09:53,075 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
 2022-01-10 18:09:53,075 - root - INFO -       Ended
+2022-01-12 10:20:09,490 - root - INFO -       Started
+2022-01-12 10:20:09,512 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 10:20:09,514 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 10:20:09,563 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 10:20:09,581 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-12 10:20:09,936 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-12 10:20:09,936 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 10:20:09,937 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 10:20:09,954 - root - INFO -       Ended
+2022-01-12 10:20:43,793 - root - INFO -       Started
+2022-01-12 10:20:43,804 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 10:20:43,809 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 10:21:45,336 - root - INFO -       Started
+2022-01-12 10:21:45,350 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 10:21:45,354 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 10:21:45,406 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 10:21:45,427 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-12 10:21:45,795 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-12 10:21:45,795 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 10:21:45,796 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 10:21:45,813 - root - INFO -       Ended
+2022-01-12 11:20:06,693 - root - INFO -       Started
+2022-01-12 11:20:20,881 - root - INFO -       Started
+2022-01-12 11:20:27,524 - root - INFO -       Started
+2022-01-12 11:20:55,414 - root - INFO -       Started
+2022-01-12 11:21:11,424 - root - INFO -       Started
+2022-01-12 11:21:20,889 - root - INFO -       Started
+2022-01-12 11:21:29,666 - root - INFO -       Started
+2022-01-12 11:22:27,425 - root - INFO -       Started
+2022-01-12 11:22:54,860 - root - INFO -       Started
+2022-01-12 11:23:02,825 - root - INFO -       Started
+2022-01-12 11:23:13,825 - root - INFO -       Started
+2022-01-12 11:23:22,653 - root - INFO -       Started
+2022-01-12 11:23:40,551 - root - INFO -       Started
+2022-01-12 11:35:59,069 - root - INFO -       Started
+2022-01-12 11:40:06,938 - root - INFO -       Started
+2022-01-12 11:40:23,393 - root - INFO -       Started
+2022-01-12 11:42:42,540 - root - INFO -       Started
+2022-01-12 11:43:10,714 - root - INFO -       Started
+2022-01-12 11:44:24,876 - root - INFO -       Started
+2022-01-12 11:44:45,384 - root - INFO -       Started
+2022-01-12 11:46:04,198 - root - INFO -       Started
+2022-01-12 11:46:04,205 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 11:46:04,206 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 11:46:04,272 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 11:46:04,302 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-12 11:46:04,858 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-12 11:46:04,859 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-12 11:46:04,859 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-12 11:46:04,859 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 11:46:04,859 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 11:46:04,889 - root - INFO -       Ended
+2022-01-12 11:49:42,634 - root - INFO -       Started
+2022-01-12 11:49:42,643 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 11:49:42,645 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 11:49:42,708 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 11:49:42,756 - ccs.fitting.objective - INFO -       
+ The best switch is : (4,) and mse : 0.0015764
+2022-01-12 11:49:43,395 - ccs.fitting.objective - INFO -       0.0021823651269503724 0.032116749746552736
+2022-01-12 11:49:43,395 - ccs.fitting.objective - INFO -       0.8019120193450687 6.513264914228376
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       10.409158627201895 29.8785514528279
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       42.628835788458005 79.36280379994611
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       110.90441745360948 206.47257442951607
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       228.13232799772447 -705.0413235780566
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       83.33719020366249 -257.552986221802
+2022-01-12 11:49:43,396 - ccs.fitting.objective - INFO -       184.0 -1026.3400269898614
+2022-01-12 11:49:43,396 - ccs.fitting.main - INFO -       
+ The atom pair is : Zn-O
+2022-01-12 11:49:43,397 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Zn-O is 3.117969 
+2022-01-12 11:49:43,433 - root - INFO -       Ended

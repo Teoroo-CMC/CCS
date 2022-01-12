@@ -1,9 +1,4 @@
 {
-        "Onebody": [
-                "Ce",
-                "O"
-        ],
-        "Reference": "structures.json",
         "General": {
                 "interface": "DFTB"
         },

@@ -101,7 +101,6 @@ class CCS_regressor:
         cc = np.zeros((rows, cols), dtype=float)
         np.fill_diagonal(cc, 1, wrap=True)
         cc = np.roll(cc, 1, axis=1)
-
         dd = np.zeros((rows, cols), dtype=float)
         ii, jj = np.indices(dd.shape)
         dd[ii == jj] = -1

@@ -37,13 +37,8 @@ class Objective:
             l_one (list): list of Onebody class objects
             sto (ndarray): array containing number of atoms of each type
             energy_ref (ndarray): reference energies
+            ge_params (dict) : options
             ewald (list, optional) : ewald energy values for CCS+Q
-            c (str, optional): Type of solver. Defaults to 'C'.
-            RT ([type], optional): Regularization Type. Defaults to None.
-            RF ([type], optional): Regularization factor. Defaults to 1e-6.
-            switch (bool, optional): switch condition. Defaults to False.
-            ST ([type], optional): switch search where there is data
-                (default: None)
 
         '''
 
@@ -125,9 +120,6 @@ class Objective:
         Args:
 
             model_energies (ndarray): Predicted energies via splines.
-            s_interval (list): Spline interval.
-            s_a (ndarray): Spline a coeffcients.
-            xx (ndarrray): The solution array.
 
         '''
 
@@ -204,9 +196,6 @@ class Objective:
                 int(expbuf / self.l_twb[ii].dx) + 1)
 
             expvals = sf.get_exp_values(expcoeffs, rexp)
-            #sf.write_as_nxy('headfit.dat', 'Exponentail head', (rexp, expvals),
-            #                ('rr', 'exponential head'))
-
             s_a = np.insert(self.l_twb[ii].s_a, 0, splderivs[0])
 
             splcoeffs = sf.get_spline_coeffs(self.l_twb[ii].interval, s_a,
@@ -219,8 +208,6 @@ class Objective:
                 self.l_twb[ii].interval,
                 self.l_twb[ii].Rcut,
                 self.l_twb[ii].dx)
-
-        self.plot(model_energies)
 
     def list_iterator(self):
         '''Iterates over the self.np attribute.'''
@@ -290,10 +277,10 @@ class Objective:
                 self.l_one[i].epsilon = float(xx[-1-counter])
 
         model_energies = np.ravel(self.mm.dot(xx))
+
         self.get_coeffs(list(xx), model_energies)
-
+        self.plot(model_energies)
         sf.write_error(model_energies, self.energy_ref, mse)
-
         sf.write_CCS_params(self)
 
         # PERFORM SENSITIVITY TEST
@@ -304,10 +291,31 @@ class Objective:
         for i in range(np.shape(self.mm)[1]):
             logger.info(str(np.dot(self.mm[:, i], self.mm[:, i])) +
                         " " + str(np.dot(self.mm[:, i], self.mm[:, i]*xx[i])))
-
         # /PERFORM SENSI...
 
-        return model_energies, mse
+        return model_energies, mse, xx
+
+    def predict(self, xx):
+        '''Predict results.
+
+        Args:
+
+            xx (ndarrray): Solution array from training.
+
+        '''
+        self.mm = self.get_m()
+        try:
+            model_energies = np.ravel(self.mm.dot(xx))
+            error = (model_energies-self.energy_ref)
+            mse = ((error) ** 2).mean()
+        except:
+            model_energy = []
+            error = []
+            mse = 0
+
+        sf.write_error(model_energies, self.energy_ref,
+                       mse, fname='error_test.out')
+        return model_energies, error
 
     def get_m(self):
         '''Returns the M matrix.

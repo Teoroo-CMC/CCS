@@ -1730,3 +1730,75 @@ The minimum distance for atom pair Ce-O is 1.759588
 2022-01-10 17:52:13,500 - ccs.fitting.objective - INFO -       70029841.79283199 0.000499652441015931
 2022-01-10 17:52:13,500 - ccs.fitting.objective - INFO -       71392.0 13270566.844324486
 2022-01-10 17:52:13,510 - root - INFO -       Ended
+2022-01-12 09:42:56,594 - root - INFO -       Started
+2022-01-12 09:42:56,974 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-12 09:42:57,000 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ce-O is 1.759588 
+2022-01-12 09:43:04,271 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 09:43:04,285 - ccs.fitting.objective - INFO -       
+ The best switch is : (21,) and mse : 1.3886
+2022-01-12 09:43:04,770 - ccs.fitting.objective - INFO -       0.0055969813941740875 1.2419112739659748
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       77.7194081431898 1924.5069360066348
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       6254.564698140271 45549.3840299116
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       62704.41425632725 180855.45513755595
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       201374.66248621466 891.9549350297718
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       421378.28477701975 1866.4236532752118
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       722661.7015608815 3200.9074349885645
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       1116577.1912950855 4945.689270341251
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       1735851.3121651753 7688.658932221461
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       3210965.067741126 14222.425083776972
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       6301334.793685149 27910.69356010514
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       10822395.502608709 47935.96505814623
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       16882795.725961547 74779.47981181185
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       25530151.322814863 113081.47454488496
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       38897907.82499379 172291.68439323694
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       57732054.82992494 255714.34371246048
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       82252222.63738824 364322.26728352194
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       116017656.1114578 513880.5264916004
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       163840355.31068736 725703.0598947599
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       227195244.62793642 1006322.7936719304
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       70029841.79283199 0.000499652441015931
+2022-01-12 09:43:04,771 - ccs.fitting.objective - INFO -       71392.0 13270566.844324486
+2022-01-12 09:43:04,771 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-12 09:43:04,796 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ce-O is 1.759588 
+2022-01-12 09:43:12,034 - root - INFO -       Ended
+2022-01-12 11:50:30,126 - root - INFO -       Started
+2022-01-12 11:50:30,128 - ccs.fitting.main - CRITICAL -       Input file not in json format
+2022-01-12 11:50:40,991 - root - INFO -       Started
+2022-01-12 11:50:41,585 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-12 11:50:41,629 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ce-O is 1.759588 
+2022-01-12 11:50:55,026 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-12 11:50:55,078 - ccs.fitting.objective - INFO -       
+ The best switch is : (21,) and mse : 1.3886
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       0.0055969813941740875 1.2419112739659748
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       77.7194081431898 1924.5069360066348
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       6254.564698140271 45549.3840299116
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       62704.41425632725 180855.45513755595
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       201374.66248621466 891.9549350297718
+2022-01-12 11:50:55,858 - ccs.fitting.objective - INFO -       421378.28477701975 1866.4236532752118
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       722661.7015608815 3200.9074349885645
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       1116577.1912950855 4945.689270341251
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       1735851.3121651753 7688.658932221461
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       3210965.067741126 14222.425083776972
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       6301334.793685149 27910.69356010514
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       10822395.502608709 47935.96505814623
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       16882795.725961547 74779.47981181185
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       25530151.322814863 113081.47454488496
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       38897907.82499379 172291.68439323694
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       57732054.82992494 255714.34371246048
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       82252222.63738824 364322.26728352194
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       116017656.1114578 513880.5264916004
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       163840355.31068736 725703.0598947599
+2022-01-12 11:50:55,859 - ccs.fitting.objective - INFO -       227195244.62793642 1006322.7936719304
+2022-01-12 11:50:55,860 - ccs.fitting.objective - INFO -       70029841.79283199 0.000499652441015931
+2022-01-12 11:50:55,860 - ccs.fitting.objective - INFO -       71392.0 13270566.844324486
+2022-01-12 11:50:55,860 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-12 11:50:55,906 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair Ce-O is 1.759588 
+2022-01-12 11:51:09,193 - root - INFO -       Ended

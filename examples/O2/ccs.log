@@ -542,3 +542,38 @@ The minimum distance for atom pair O-O is 0.86
 2022-01-10 17:51:44,995 - ccs.fitting.objective - INFO -       0.0666983361843373 -6.529671198719414
 2022-01-10 17:51:44,995 - ccs.fitting.objective - INFO -       288.0 -432.83544122418004
 2022-01-10 17:51:44,995 - root - INFO -       Ended
+2022-01-12 09:42:39,349 - root - INFO -       Started
+2022-01-12 09:42:39,363 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-12 09:42:39,364 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair O-O is 0.86 
+2022-01-12 09:42:39,401 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-12 09:42:39,498 - ccs.fitting.objective - INFO -       
+ The best switch is : (19,) and mse : 9.6288e-05
+2022-01-12 09:42:39,940 - ccs.fitting.objective - INFO -       0.0 0.0
+2022-01-12 09:42:39,940 - ccs.fitting.objective - INFO -       1.0025843274853856e-07 5.1449610797657835e-05
+2022-01-12 09:42:39,940 - ccs.fitting.objective - INFO -       2.5464401531548214e-05 0.008162932454967332
+2022-01-12 09:42:39,940 - ccs.fitting.objective - INFO -       0.00025478519088458005 0.049842171649062864
+2022-01-12 09:42:39,940 - ccs.fitting.objective - INFO -       0.000944503991982764 0.10983576586178478
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.0023481752380080023 0.1560630574134868
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.004719349687982764 0.17505360380977059
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.008311576913551246 0.1625632084672316
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.01337841168688458 0.12976925108980494
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.02017340869598276 0.03642154520787482
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.028950120838008 0.0006628011859752233
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.03996209887198275 -0.26327316327023803
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.05346289236955125 -0.35222856443008616
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.06970605610288458 -0.45924464224793415
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.08894514475998275 -0.5859980446051237
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.11143371123800799 -0.7341598812557217
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.13742530629598276 -0.9054007453294377
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.16717347950555125 -1.101391155312033
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.20093178563888459 -1.323801693460457
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.2389537793839827 -1.5743032389929805
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       0.0666983361843373 -6.529671198719414
+2022-01-12 09:42:39,941 - ccs.fitting.objective - INFO -       288.0 -432.83544122418004
+2022-01-12 09:42:39,941 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-12 09:42:39,941 - ccs.fitting.main - INFO -       
+The minimum distance for atom pair O-O is 0.86 
+2022-01-12 09:42:39,947 - root - INFO -       Ended
