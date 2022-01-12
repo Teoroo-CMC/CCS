@@ -22,6 +22,7 @@ from ccs.fitting.spline_functions import Twobody
 from ccs.fitting.spline_functions import Onebody
 from ccs.fitting.spline_functions import write_as_nxy
 from ccs.data.conversion import Bohr__AA, eV__Hartree
+from ccs.debugging_tools.timing import timing
 
 logger = logging.getLogger(__name__)
 
@@ -91,20 +92,20 @@ def prepare_input(filename):
     elements = set()
     [elements.add(key) for _, vv in struct_data.items()
      for key in vv['atoms'].keys()]
-    data['Onebody'] = list(elements)
 
     try:
-        data['Onbody']
+        data['Onebody']
     except:
+        print("Generating one-body information from training-set.")
+        print("    Added elements: ", *elements)
         data['Onebody'] = list(elements)
 
     if 'X-X' in data['Twobody']:
-        q
         print("Generating two-body potentials from one-body information.")
         for atom_i in data['Onebody']:
             for atom_j in data['Onebody']:
                 if atom_j >= atom_i:
-                    print("Adding pair: "+atom_i+"-"+atom_j)
+                    print("    Adding pair: "+atom_i+"-"+atom_j)
                     data['Twobody'][atom_i+'-' +
                                     atom_j] = copy.deepcopy(data['Twobody']['X-X'])
 
@@ -113,6 +114,7 @@ def prepare_input(filename):
     return data, struct_data, struct_data_test
 
 
+# @timing
 def parse(data, struct_data):
 
     atom_pairs = []

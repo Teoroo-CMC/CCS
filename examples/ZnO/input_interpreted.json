@@ -10,15 +10,15 @@
         "Train-set": "structures.json",
         "Test-set": "structures.json",
         "Twobody": {
-                "Zn-O": {
-                        "Rcut": 5.0,
-                        "Nknots": 6,
+                "O-Zn": {
+                        "Rcut": 8.0,
+                        "Nknots": 20,
                         "Swtype": "sw",
                         "Rmin": 3.117969
                 }
         },
         "Onebody": [
-                "O",
-                "Zn"
+                "Zn",
+                "O"
         ]
 }
