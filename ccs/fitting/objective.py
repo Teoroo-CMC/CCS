@@ -55,7 +55,7 @@ class Objective:
         self.cols_sto = sto.shape[1]
         self.np = len(l_twb)
         self.no = len(l_one)
-        self.cparams = [self.l_twb[i].cols for i in range(self.np)]
+        self.cparams = [self.l_twb[i].N for i in range(self.np)]
         self.ns = len(energy_ref)
 
         logger.debug('The reference energy : \n %s \n Number of pairs:%s',
@@ -161,12 +161,14 @@ class Objective:
             plt.close()
 
     def get_coeffs(self, xx, model_energies):
-        '''Plots the results.
+        '''Reformulate from right-aligned to left-aligned and write
+           results in DFTB+ format.
 
         Args:
 
             xx (ndarrray): The solution array.
             model_energies (ndarray): Predicted energies via spline.
+
 
         '''
 
@@ -177,13 +179,13 @@ class Objective:
                 xx[ind: ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
             self.l_twb[ii].s_a = np.dot(
-                self.l_twb[ii].aa, self.l_twb[ii].curvatures)
+                self.l_twb[ii].A, self.l_twb[ii].curvatures)
             self.l_twb[ii].s_b = np.dot(
-                self.l_twb[ii].bb, self.l_twb[ii].curvatures)
+                self.l_twb[ii].B, self.l_twb[ii].curvatures)
             self.l_twb[ii].s_c = np.dot(
-                self.l_twb[ii].cc, self.l_twb[ii].curvatures)
+                self.l_twb[ii].B, self.l_twb[ii].curvatures)
             self.l_twb[ii].s_d = np.dot(
-                self.l_twb[ii].dd, self.l_twb[ii].curvatures)
+                self.l_twb[ii].D, self.l_twb[ii].curvatures)
 
             splderivs = sf.spline_eval012(self.l_twb[ii], self.l_twb[ii].Rmin)
 
@@ -215,7 +217,7 @@ class Objective:
         tmp = []
         for elem in range(self.np):
             if self.l_twb[elem].Swtype == 'rep':
-                tmp.append([self.l_twb[elem].cols])
+                tmp.append([self.l_twb[elem].N])
             if self.l_twb[elem].Swtype == 'att':
                 tmp.append([0])
             if self.l_twb[elem].Swtype == 'sw':
@@ -249,7 +251,6 @@ class Objective:
             sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa),
                               matrix(bb))
             obj.append(float(self.eval_obj(sol['x'])))
-            sol_list.append(sol)
 
         obj = np.asarray(obj)
         mse = np.min(obj)
@@ -260,6 +261,7 @@ class Objective:
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
+
         opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa),
                               matrix(bb))
 
@@ -278,20 +280,10 @@ class Objective:
 
         model_energies = np.ravel(self.mm.dot(xx))
 
-        self.get_coeffs(list(xx), model_energies)
-        self.plot(model_energies)
-        sf.write_error(model_energies, self.energy_ref, mse)
-        sf.write_CCS_params(self)
-
-        # PERFORM SENSITIVITY TEST
-        #  J Obective
-        #  dJ/dc_i    =  0    ?
-        #  d2J/dc_i2  =  V_i* (V_i*) T  ?
-        #  Harmonic approximation...
-        for i in range(np.shape(self.mm)[1]):
-            logger.info(str(np.dot(self.mm[:, i], self.mm[:, i])) +
-                        " " + str(np.dot(self.mm[:, i], self.mm[:, i]*xx[i])))
-        # /PERFORM SENSI...
+        #self.get_coeffs(list(xx), model_energies)
+        # self.plot(model_energies)
+        self.write_error(model_energies, self.energy_ref, mse)
+        self.write_CCS_params()
 
         return model_energies, mse, xx
 
@@ -313,8 +305,8 @@ class Objective:
             error = []
             mse = 0
 
-        sf.write_error(model_energies, self.energy_ref,
-                       mse, fname='error_test.out')
+        self.write_error(model_energies, self.energy_ref,
+                         mse, fname='error_test.out')
         return model_energies, error
 
     def get_m(self):
@@ -354,53 +346,63 @@ class Objective:
         '''
 
         aa = np.zeros(0)
-        if self.ctype is None:
-            tmp_g = []
-            for ii in range(self.np):
-                tmp_g.append(
-                    block_diag(-1 * np.identity(n_switch[ii]),
-                               np.identity(self.l_twb[ii].cols - n_switch[ii])))
-            gg = block_diag(*tmp_g)
-        # Place to add custom constraints on G matrix
-
-        if self.ctype == 'mono':
-            tmp = []
-            for elem in range(self.np):
-                g_mono = -1 * np.identity(self.l_twb[elem].cols)
-                ii, jj = np.indices(g_mono.shape)
-                g_mono[ii == jj - 1] = 1
-                g_mono[ii > n_switch[elem]] = -g_mono[ii > n_switch[elem]]
-                tmp.append(g_mono)
-            gg = block_diag(*tmp)
-        if self.smooth == 'True':
-            n_gaps = 0
-            wid = self.cols_sto
-            for elem in range(self.np):
-                n_gaps = (
-                    n_gaps + self.l_twb[elem].cols - 2 - sum(
-                        self.l_twb[elem].mask[1: self.l_twb[elem].cols - 1]))
-                wid = wid + self.l_twb[elem].cols
-            if self.interface == 'CCS+Q':
-                wid = wid + 1
-            if n_gaps > 0:
-                aa = np.zeros([np.int(n_gaps), wid])
-                cnt1 = -1
-                cnt2 = 0
-                for elem in range(self.np):
-                    for ii in range(1, self.l_twb[elem].cols - 1):
-                        if self.l_twb[elem].mask[ii] == 0 \
-                           and ii != n_switch[elem]:
-                            cnt1 = cnt1 + 1
-                            aa[cnt1][cnt2 + ii - 1] = 1
-                            aa[cnt1][cnt2 + ii] = -2
-                            aa[cnt1][cnt2 + ii + 1] = 1
-                    cnt2 = cnt2 + self.l_twb[elem].cols
-                aa = aa[~np.all(aa == 0, axis=1)]
-            else:
-                aa = np.zeros(0)
+        tmp = []
+        for elem in range(self.np):
+            tmp.append(self.l_twb[elem].switch_const(n_switch[elem]))
+        gg = block_diag(*tmp)
 
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface == 'CCS+Q':
             gg = block_diag(gg, 0)
 
         return gg, aa
+
+    def write_error(self, mdl_eng, ref_eng, mse, fname='error.out'):
+        '''Prints the errors in a file.
+
+        Args:
+
+            mdl_eng (ndarray): Energy prediction values from splines.
+            ref_eng (ndarray): Reference energy values.
+            mse (float): Mean square error.
+            fname (str, optional): Output filename (default: 'error.out').
+
+        '''
+
+        header = '{:<15}{:<15}{:<15}'.format('Reference', 'Predicted', 'Error')
+        error = abs(ref_eng - mdl_eng)
+        maxerror = max(abs(error))
+        footer = 'MSE = {:2.5E}\nMaxerror = {:2.5E}'.format(mse, maxerror)
+        np.savetxt(fname, np.transpose([ref_eng, mdl_eng, error]), header=header,
+                   footer=footer, fmt='%-15.5f')
+
+    def write_CCS_params(self):
+        pass
+
+        # CCS_params = OrderedDict()
+
+        # CCS_params['Charge scaling factor'] = float(self.charge_scaling)
+
+        # eps_params = OrderedDict()
+        # for k in range(self.no):
+        #     if(self.l_one[k].epsilon_supported):
+        #         eps_params[self.l_one[k].name] = self.l_one[k].epsilon
+        # CCS_params['One_body'] = eps_params
+
+        # two_bodies_dict = OrderedDict()
+        # for k in range(self.np):
+        #     two_body_dict = OrderedDict()
+        #     two_body_dict["r_n"] = self.l_twb[k].rn
+        #     two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
+        #     two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
+        #     two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
+        #     two_body_dict["spl_a"] = list(self.l_twb[k].splcoeffs[:, 0])
+        #     two_body_dict["spl_b"] = list(self.l_twb[k].splcoeffs[:, 1])
+        #     two_body_dict["spl_c"] = list(self.l_twb[k].splcoeffs[:, 2])
+        #     two_body_dict["spl_d"] = list(self.l_twb[k].splcoeffs[:, 3])
+
+        #     two_bodies_dict[self.l_twb[k].name] = two_body_dict
+
+        # CCS_params["Two_body"] = two_bodies_dict
+        # with open('CCS_params.json', 'w') as f:
+        #     json.dump(CCS_params, f, indent=8)

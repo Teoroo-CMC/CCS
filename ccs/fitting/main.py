@@ -20,7 +20,6 @@ import pandas as pd
 from ccs.fitting.objective import Objective
 from ccs.fitting.spline_functions import Twobody
 from ccs.fitting.spline_functions import Onebody
-from ccs.fitting.spline_functions import write_as_nxy
 from ccs.data.conversion import Bohr__AA, eV__Hartree
 from ccs.debugging_tools.timing import timing
 
@@ -30,10 +29,6 @@ logger = logging.getLogger(__name__)
 def prepare_input(filename):
 
     gen_params = {'interface': None,
-                  'spline': None,
-                  'ctype': 'mono',
-                  'scan':   False,
-                  'smooth': True,
                   'ewald_scaling': 1.0
                   }
     struct_data_test = {}
@@ -81,11 +76,11 @@ def prepare_input(filename):
     if 'Twobody' not in data.keys():
         if 'DFTB' in data['General']['interface']:
             data['Twobody'] = {'X-X': {"Rcut": 5.0,
-                                       "Nknots": 20,
+                                       "res": 0.1,
                                        "Swtype": "rep"}}
         if 'CCS' in data['General']['interface']:
             data['Twobody'] = {'X-X': {"Rcut": 8.0,
-                                       "Nknots": 20,
+                                       "res": 0.1,
                                        "Swtype": "sw"}}
 
     # If onebody is not given it is generated from structures.json
@@ -195,7 +190,7 @@ def parse(data, struct_data):
             values['Rmin']
         except:
             values['Rmin'] = min(
-                [item for sublist in list_dist for item in sublist if item > 0]) - 0.1
+                [item for sublist in list_dist for item in sublist if item > 0])
         Rmax = max(
             [item for sublist in list_dist for item in sublist if item > 0])
         if values['Rcut'] > Rmax:
@@ -210,7 +205,7 @@ def parse(data, struct_data):
         logger.debug('Distance matrix for %s is \n %s ' % (atmpair, dist_mat))
         if values['Rmin'] < values['Rcut']:
             atom_pairs.append(
-                Twobody(atmpair, dist_mat, len(struct_data), **values))
+                Twobody(atmpair, dist_mat, **values))
 
     atom_onebodies = []
     sto = np.zeros((len(struct_data), len(data['Onebody'])))

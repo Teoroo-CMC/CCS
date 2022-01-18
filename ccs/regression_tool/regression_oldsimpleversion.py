@@ -2,8 +2,6 @@ import logging
 import itertools
 import pickle
 import json
-import bisect
-
 from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,51 +11,18 @@ from scipy.linalg import block_diag
 
 
 class CCS_regressor:
-    def __init__(self, N=100, xmin=0, xmax=1, dx=None, sw=False, eps=False):
+    def __init__(self, N=100, xmin=0, xmax=1, sw=False, eps=False):
         self.N = N
         self.sw = sw
         self.xmin = xmin
         self.xmax = xmax
-        if not dx:
-            self.dx = np.ones((N, 1))
-            self.dx = (self.xmax-self.xmin) * self.dx / np.sum(self.dx)
+        self.dx = (self.xmax-self.xmin)/self.N
         self.eps = eps
         self.C, self.D, self.B, self.A = self.spline_construction(
-            self.N)
+            self.N, self.dx)
+        self.interval = np.linspace(self.xmin, self.xmax, self.N, dtype=float)
 
-    def merge_intervals(self, x):
-        dx = self.dx
-        xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
-        indices = [self.N]
-        for i in range(len(x)):
-            index = bisect.bisect_left(xns, x[i])
-            indices.append(index)
-
-        indices = list(set(indices))
-        indices.sort()
-
-        N_new = len(indices)
-        dx_new = np.zeros((N_new, 1))
-
-        i_last = 0
-        cnt = 0
-        for i in indices:
-            dx_new[cnt] = np.sum(dx[i_last:i])
-            cnt += 1
-            i_last = i
-
-        self.N = N_new
-        self.dx = dx_new
-        self.C, self.D, self.B, self.A = self.spline_construction(
-            self.N)
-        print("Merging intervall. N reduced to: ", self.N)
-
-    def rubber_band(self):
-        pass
-
-    @ staticmethod
+    @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
         '''The solver for the objective.
 
@@ -94,7 +59,6 @@ class CCS_regressor:
         return sol
 
     def fit(self, x, y):
-        self.merge_intervals(x)
         self.mm, self.incices = self.model(x)
         n_switch = self.N
         pp = matrix(np.transpose(self.mm).dot(self.mm))
@@ -108,12 +72,9 @@ class CCS_regressor:
     def const(self, n_switch):
         aa = np.zeros(0)
         g_mono = -1 * np.identity(self.N)
-        for ii in range(self.N-1):
-            #g_mono[ii, ii] = - (1/self.dx[ii+1]+1/self.dx[ii])
-            #g_mono[ii, ii+1] = 2/self.dx[ii]
-            g_mono[ii, ii] = - (self.dx[ii+1]+self.dx[ii])
-            g_mono[ii, ii+1] = 2*self.dx[ii]
-        #g_mono[ii > n_switch] = -g_mono[ii > n_switch]
+        ii, jj = np.indices(g_mono.shape)
+        g_mono[ii == jj - 1] = 1
+        g_mono[ii > n_switch] = -g_mono[ii > n_switch]
         gg = block_diag(g_mono, 0)
         return gg, aa
 
@@ -122,17 +83,19 @@ class CCS_regressor:
         y = mm.dot(np.array(self.sol['x']))
         return y
 
-    def spline_construction(self, N):
+    def spline_construction(self, N, dx):
         ''' This function constructs the matrices A, B, C, D.
 
         Args:
             N : Number of knots
+            dx (list): grid spaceing
 
         Returns:
 
             cc, dd, bb, aa (matrices): constructed matrices
 
         '''
+
         rows = N-1
         cols = N
 
@@ -189,20 +152,15 @@ class CCS_regressor:
         size = len(x)
         dx = self.dx
         xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
 
         vv = np.zeros((size, self.N))
         uu = np.zeros((self.N, 1)).flatten()
         indices = []
         for i in range(size):
-
-            index = bisect.bisect_left(xns, x[i])
-            index = max(0, index)
-
+            index = int(np.ceil(np.around(((x[i] - xmin) / dx), decimals=5)))
             if(index < self.N) & (index > 0):
-                delta = (x[i]-xns[index]) / dx[index-1]
                 indices.append(index)
+                delta = (x[i] - self.interval[index])/dx
                 aa_ind = aa[index - 1]
                 bb_ind = bb[index - 1] * delta
                 dd_ind = dd[index - 1] * np.power(delta, 3) / 6.0

@@ -2,8 +2,6 @@ import logging
 import itertools
 import pickle
 import json
-import bisect
-
 from collections import OrderedDict
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,39 +23,13 @@ class CCS_regressor:
         self.C, self.D, self.B, self.A = self.spline_construction(
             self.N)
 
-    def merge_intervals(self, x):
-        dx = self.dx
-        xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
-        indices = [self.N]
-        for i in range(len(x)):
-            index = bisect.bisect_left(xns, x[i])
-            indices.append(index)
-
-        indices = list(set(indices))
-        indices.sort()
-
-        N_new = len(indices)
-        dx_new = np.zeros((N_new, 1))
-
-        i_last = 0
-        cnt = 0
-        for i in indices:
-            dx_new[cnt] = np.sum(dx[i_last:i])
-            cnt += 1
-            i_last = i
-
-        self.N = N_new
-        self.dx = dx_new
-        self.C, self.D, self.B, self.A = self.spline_construction(
-            self.N)
-        print("Merging intervall. N reduced to: ", self.N)
+    def merge_intervals(self):
+        pass
 
     def rubber_band(self):
         pass
 
-    @ staticmethod
+    @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
         '''The solver for the objective.
 
@@ -94,7 +66,6 @@ class CCS_regressor:
         return sol
 
     def fit(self, x, y):
-        self.merge_intervals(x)
         self.mm, self.incices = self.model(x)
         n_switch = self.N
         pp = matrix(np.transpose(self.mm).dot(self.mm))
@@ -109,11 +80,9 @@ class CCS_regressor:
         aa = np.zeros(0)
         g_mono = -1 * np.identity(self.N)
         for ii in range(self.N-1):
-            #g_mono[ii, ii] = - (1/self.dx[ii+1]+1/self.dx[ii])
-            #g_mono[ii, ii+1] = 2/self.dx[ii]
-            g_mono[ii, ii] = - (self.dx[ii+1]+self.dx[ii])
-            g_mono[ii, ii+1] = 2*self.dx[ii]
-        #g_mono[ii > n_switch] = -g_mono[ii > n_switch]
+            g_mono[ii, ii] = -1 * self.dx[ii+1]
+            g_mono[ii, ii+1] = 1  # self.dx[ii]
+        g_mono[ii > n_switch] = -g_mono[ii > n_switch]
         gg = block_diag(g_mono, 0)
         return gg, aa
 
@@ -189,20 +158,24 @@ class CCS_regressor:
         size = len(x)
         dx = self.dx
         xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
 
         vv = np.zeros((size, self.N))
         uu = np.zeros((self.N, 1)).flatten()
         indices = []
         for i in range(size):
 
-            index = bisect.bisect_left(xns, x[i])
-            index = max(0, index)
-
+            cnt = 0
+            x_temp = self.xmin
+            index = size-1
+            for dxs in dx:
+                x_temp += dxs
+                cnt += 1
+                if x[i] < x_temp:
+                    index = cnt
+                    break
             if(index < self.N) & (index > 0):
-                delta = (x[i]-xns[index]) / dx[index-1]
                 indices.append(index)
+                delta = (x[i] - x_temp)/dx[index-1]
                 aa_ind = aa[index - 1]
                 bb_ind = bb[index - 1] * delta
                 dd_ind = dd[index - 1] * np.power(delta, 3) / 6.0
