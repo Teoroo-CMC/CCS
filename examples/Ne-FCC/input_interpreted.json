@@ -8,7 +8,7 @@
         "Twobody": {
                 "Ne-Ne": {
                         "Rcut": 8.0,
-                        "res": 0.1,
+                        "Resolution": 0.1,
                         "Swtype": "sw",
                         "Rmin": 3.2337029999999998
                 }

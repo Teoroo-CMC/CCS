@@ -57,7 +57,13 @@ def prepare_input(filename):
 
     try:
         with open(data['Train-set']) as json_file:
-            struct_data = json.load(json_file, object_pairs_hook=OrderedDict)
+            struct_data_full = json.load(
+                json_file, object_pairs_hook=OrderedDict)
+            struct_data = struct_data_full['energies']
+            try:
+                struct_data_forces = struct_data_full['forces']
+            except:
+                struct_data_forces = {}
     except FileNotFoundError:
         logger.critical(' Reference file with pairwise distances missing')
         raise
@@ -67,8 +73,13 @@ def prepare_input(filename):
     if 'Test-set' in data:
         try:
             with open(data['Test-set']) as json_file:
-                struct_data_test = json.load(
+                struct_data_test_full = json.load(
                     json_file, object_pairs_hook=OrderedDict)
+                struct_data_test = struct_data_test_full['energies']
+                try:
+                    struct_data_test_forces = struct_data_test_full['forces']
+                except:
+                    struct_data_test_forces = {}
         except FileNotFoundError:
             logger.info('No test-set provided.')
 
@@ -76,11 +87,11 @@ def prepare_input(filename):
     if 'Twobody' not in data.keys():
         if 'DFTB' in data['General']['interface']:
             data['Twobody'] = {'X-X': {"Rcut": 5.0,
-                                       "res": 0.1,
+                                       "Resolution": 0.1,
                                        "Swtype": "rep"}}
         if 'CCS' in data['General']['interface']:
             data['Twobody'] = {'X-X': {"Rcut": 8.0,
-                                       "res": 0.1,
+                                       "Resolution": 0.1,
                                        "Swtype": "sw"}}
 
     # If onebody is not given it is generated from structures.json
@@ -106,18 +117,22 @@ def prepare_input(filename):
 
         del data['Twobody']['X-X']
 
-    return data, struct_data, struct_data_test
+    return data, struct_data, struct_data_test, struct_data_forces, struct_data_test_forces
 
 
 # @timing
-def parse(data, struct_data):
+def parse(data, struct_data, struct_data_forces):
 
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
     counter1 = 0
+    ref_forces = []
+    dftb_forces = []
+    ewald_forces = []
 
+    # ADD ENERGY-DATA
     for atmpair, values in data['Twobody'].items():
         atmpair_members = atmpair.split('-')
         atmpair_rev = atmpair_members[1]+'-'+atmpair_members[0]
@@ -186,27 +201,50 @@ def parse(data, struct_data):
                 ref_energies = (
                     energies[0] - data['General']['ewald_scaling']*energies[1])
 
-        try:
-            values['Rmin']
-        except:
-            values['Rmin'] = min(
-                [item for sublist in list_dist for item in sublist if item > 0])
-        Rmax = max(
-            [item for sublist in list_dist for item in sublist if item > 0])
-        if values['Rcut'] > Rmax:
-            values['Rcut'] = Rmax
+        Rmax = max([item for sublist in list_dist for item in sublist])
 
-        logger.info('\nThe minimum distance for atom pair %s is %s '
-                    % (atmpair, values['Rmin']))
-        dist_mat = pd.DataFrame(list_dist)
-        dist_mat = dist_mat.fillna(0)
-        # dist_mat.to_csv(atmpair + '.dat', sep=' ', index=False)
-        dist_mat = dist_mat.values
-        logger.debug('Distance matrix for %s is \n %s ' % (atmpair, dist_mat))
-        if values['Rmin'] < values['Rcut']:
-            atom_pairs.append(
-                Twobody(atmpair, dist_mat, **values))
+        if Rmax > 0:
+            try:
+                values['Rmin']
+            except:
+                values['Rmin'] = min(
+                    [item for sublist in list_dist for item in sublist if item > 0])
 
+            if values['Rcut'] > Rmax:
+                values['Rcut'] = Rmax
+
+            dist_mat = pd.DataFrame(list_dist)
+            dist_mat = dist_mat.fillna(0)
+            dist_mat = dist_mat.values
+
+            # ADD FORCE-DATA
+
+            list_dist_forces = []
+            for fnum, ff in struct_data_forces.items():
+                try:
+                    list_dist_forces.append(ff[atmpair])
+                except KeyError:
+                    try:
+                        list_dist_forces.append(ff[atmpair_rev])
+                    except KeyError:
+                        list_dist_forces.append([0.0, 0.0, 0.0])
+
+                if counter1 == 1:
+                    try:
+                        ref_forces.append(ff['force_dft'])
+                    except KeyError:
+                        logger.critical(' Check force key in structure file')
+                        raise
+            dist_mat_forces = pd.DataFrame(list_dist_forces)
+            dist_mat_forces = dist_mat_forces.fillna(0.0)
+            dist_mat_forces = dist_mat_forces.values
+
+            # APPEND DATA
+            if values['Rmin'] < values['Rcut']:
+                atom_pairs.append(
+                    Twobody(atmpair, dist_mat, dist_mat_forces, **values))
+
+    # ADD ONEBODY DATA
     atom_onebodies = []
     sto = np.zeros((len(struct_data), len(data['Onebody'])))
     for i, key in enumerate(data['Onebody']):
@@ -244,7 +282,7 @@ def parse(data, struct_data):
     with open('input_interpreted.json', 'w') as f:
         json.dump(data, f, indent=8)
 
-    return atom_pairs, atom_onebodies, sto, ref_energies, ewald_energies
+    return atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces
 
 
 def twp_fit(filename):
@@ -256,18 +294,23 @@ def twp_fit(filename):
 
     '''
     # Read the input.json file and structure file to see if the keys are matching
-    data, struct_data, struct_data_test = prepare_input(filename)
+    data, struct_data, struct_data_test, struct_data_forces, struct_data_test_forces = prepare_input(
+        filename)
     # Parse the input
-    atom_pairs, atom_onebodies, sto, ref_energies, ewald_energies = parse(
-        data, struct_data)
-    nn = Objective(atom_pairs, atom_onebodies, sto, ref_energies, data['General'],
-                   ewald=ewald_energies)
+    atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces = parse(
+        data, struct_data, struct_data_forces)
 
+    # set up the QP problem
+    nn = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
+                   ewald=ewald_energies, ewald_forces=ewald_forces)
+
+    # Solve QP problem
     predicted_energies, mse, xx = nn.solution()
 
+    # Perform prediction
     if struct_data_test != {}:
-        atom_pairs, atom_onebodies, sto, ref_energies, ewald_energies = parse(
-            data, struct_data)
-        nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, data['General'],
-                            ewald=ewald_energies)
+        atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces = parse(
+            data, struct_data_test, struct_data_test_forces)
+        nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
+                            ewald=ewald_energies, ewald_forces=ewald_forces)
         predicted_energies, error = nn_test.predict(xx)

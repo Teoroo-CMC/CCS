@@ -1,11 +1,8 @@
 {
         "General": {
                 "interface": "CCS",
-                "spline": null,
-                "ctype": "mono",
-                "scan": false,
-                "smooth": "True",
-                "ewald_scaling": 1.0
+                "ewald_scaling": 1.0,
+                "smooth": "True"
         },
         "Train-set": "structures.json",
         "Test-set": "structures.json",
@@ -15,7 +12,7 @@
         "Twobody": {
                 "O-O": {
                         "Rcut": 2.38,
-                        "Nknots": 20,
+                        "Resolution": 0.1,
                         "Swtype": "sw",
                         "Rmin": 0.96
                 }

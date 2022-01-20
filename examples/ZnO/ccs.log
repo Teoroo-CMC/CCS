@@ -493,3 +493,48 @@ The minimum distance for atom pair O-Zn is 3.217969
 2022-01-18 11:07:52,450 - ccs.fitting.main - INFO -       
 The minimum distance for atom pair O-Zn is 3.217969 
 2022-01-18 11:07:52,508 - root - INFO -       Ended
+2022-01-18 20:18:22,509 - root - INFO -       Started
+2022-01-18 20:18:22,524 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:18:22,614 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-18 20:18:22,693 - ccs.fitting.objective - INFO -       
+ The best switch is : (5,) and mse : 9.9315e-07
+2022-01-18 20:18:22,697 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:18:22,758 - root - INFO -       Ended
+2022-01-18 20:18:39,955 - root - INFO -       Started
+2022-01-18 20:18:39,958 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:18:40,047 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-18 20:18:40,109 - ccs.fitting.objective - INFO -       
+ The best switch is : (5,) and mse : 9.9315e-07
+2022-01-18 20:18:40,111 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:18:40,152 - root - INFO -       Ended
+2022-01-18 20:22:45,063 - root - INFO -       Started
+2022-01-18 20:22:45,072 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:22:45,155 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-18 20:22:45,222 - ccs.fitting.objective - INFO -       
+ The best switch is : (5,) and mse : 9.9315e-07
+2022-01-18 20:22:45,225 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-18 20:22:45,261 - root - INFO -       Ended
+2022-01-19 08:08:53,659 - root - INFO -       Started
+2022-01-19 08:08:53,672 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-19 08:08:53,775 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-19 08:08:53,989 - ccs.fitting.objective - INFO -       
+ The best switch is : (5,) and mse : 9.9315e-07
+2022-01-19 08:08:53,992 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-19 08:08:54,097 - root - INFO -       Ended
+2022-01-20 09:47:54,999 - root - INFO -       Started
+2022-01-20 09:47:55,013 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-20 09:47:55,097 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-20 09:47:55,172 - ccs.fitting.objective - INFO -       
+ The best switch is : (5,) and mse : 9.9315e-07
+2022-01-20 09:47:55,191 - ccs.fitting.main - INFO -       
+ The atom pair is : O-Zn
+2022-01-20 09:47:55,274 - root - INFO -       Ended

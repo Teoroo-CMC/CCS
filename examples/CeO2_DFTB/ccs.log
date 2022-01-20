@@ -1842,3 +1842,1238 @@ The minimum distance for atom pair Ce-O is 1.759588
 2022-01-12 12:16:28,790 - ccs.fitting.main - INFO -       
 The minimum distance for atom pair Ce-O is 1.759588 
 2022-01-12 12:16:43,261 - root - INFO -       Ended
+2022-01-19 08:20:52,386 - root - INFO -       Started
+2022-01-19 08:21:15,399 - root - INFO -       Started
+2022-01-19 08:21:15,457 - ccs.fitting.main - CRITICAL -       Reference file not in json format
+2022-01-19 08:21:51,355 - root - INFO -       Started
+2022-01-19 08:21:51,886 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:22:12,954 - root - INFO -       Started
+2022-01-19 08:22:13,499 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:22:25,522 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-19 08:22:25,633 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-19 08:22:25,713 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:22:38,673 - root - INFO -       Ended
+2022-01-19 08:32:36,162 - root - INFO -       Started
+2022-01-19 08:32:36,640 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:32:48,741 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:32:48,741 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,741 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,741 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,741 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,741 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,742 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,743 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,744 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:32:48,745 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:10,854 - root - INFO -       Started
+2022-01-19 08:35:11,416 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:35:28,246 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:35:28,246 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,246 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,247 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,248 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:35:28,249 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:11,103 - root - INFO -       Started
+2022-01-19 08:37:11,684 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:37:27,395 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,395 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,396 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,397 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,398 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,398 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,398 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:37:27,398 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:39:44,655 - root - INFO -       Started
+2022-01-19 08:39:45,862 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:40:09,356 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,356 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,357 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,358 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,359 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:09,360 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-19 08:40:09,399 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-19 08:40:09,448 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:40:23,958 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:40:23,958 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,960 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,961 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,962 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:40:23,997 - root - INFO -       Ended
+2022-01-19 08:40:59,475 - root - INFO -       Started
+2022-01-19 08:41:00,038 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:41:14,784 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:41:14,784 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,802 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,803 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,804 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,805 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,805 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,805 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,805 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:14,958 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-19 08:41:15,150 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-19 08:41:15,224 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:41:38,198 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,199 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,200 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,201 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,202 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,203 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,204 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,205 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,206 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,207 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,208 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,209 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,210 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,210 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:41:38,297 - root - INFO -       Ended
+2022-01-19 08:42:09,021 - root - INFO -       Started
+2022-01-19 08:42:09,616 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:42:24,503 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,503 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,504 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,505 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,506 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:24,533 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-19 08:42:24,690 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-19 08:42:24,752 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:42:41,305 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:42:41,305 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,305 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,306 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,307 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,308 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,309 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,310 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,311 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,312 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,313 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,314 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,315 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,316 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,316 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,316 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:42:41,397 - root - INFO -       Ended
+2022-01-19 08:51:57,119 - root - INFO -       Started
+2022-01-19 08:51:57,727 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:52:11,320 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,321 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,322 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,323 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,324 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,325 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,326 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:11,407 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-19 08:52:11,681 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-19 08:52:11,788 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:52:37,918 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,919 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,920 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,921 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,922 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,923 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:52:37,959 - root - INFO -       Ended
+2022-01-19 08:54:40,802 - root - INFO -       Started
+2022-01-19 08:54:41,308 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:54:55,027 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,028 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,029 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,030 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,031 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,032 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:54:55,100 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-19 08:54:55,763 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-19 08:54:56,295 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 08:55:23,212 - ccs.fitting.main - INFO -       
+ The atom pair is : La-O
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,212 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,213 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,214 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,215 - ccs.fitting.main - CRITICAL -       Name mismatch in input.json and structures.json
+2022-01-19 08:55:23,250 - root - INFO -       Ended
+2022-01-19 11:17:15,342 - root - INFO -       Started
+2022-01-19 11:17:15,687 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 11:17:22,917 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-19 11:17:23,069 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-19 11:17:23,091 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-19 11:17:30,366 - root - INFO -       Ended
+2022-01-20 08:21:07,390 - root - INFO -       Started
+2022-01-20 08:21:07,757 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 08:21:30,973 - root - INFO -       Started
+2022-01-20 08:21:31,314 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 08:21:38,631 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 08:21:38,785 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 08:21:38,811 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 08:21:45,960 - root - INFO -       Ended
+2022-01-20 08:53:09,118 - root - INFO -       Started
+2022-01-20 08:53:09,452 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 08:53:16,906 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 08:53:16,966 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 08:53:17,011 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 08:53:24,389 - root - INFO -       Ended
+2022-01-20 09:04:28,275 - root - INFO -       Started
+2022-01-20 09:04:28,636 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:04:35,742 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:04:35,775 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:04:35,804 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:04:42,901 - root - INFO -       Ended
+2022-01-20 09:13:38,129 - root - INFO -       Started
+2022-01-20 09:13:38,499 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:13:45,704 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:13:45,739 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:14:07,134 - root - INFO -       Started
+2022-01-20 09:14:07,499 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:14:14,874 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:14:14,907 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:14:28,863 - root - INFO -       Started
+2022-01-20 09:14:29,217 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:14:36,440 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:14:36,500 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:15:09,275 - root - INFO -       Started
+2022-01-20 09:15:09,631 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:15:16,828 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:15:16,891 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:16:01,130 - root - INFO -       Started
+2022-01-20 09:16:01,485 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:16:08,539 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:16:08,602 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:17:05,224 - root - INFO -       Started
+2022-01-20 09:17:05,576 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:17:13,066 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:17:13,163 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:18:02,696 - root - INFO -       Started
+2022-01-20 09:18:03,048 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:18:10,224 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:18:10,282 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:18:38,554 - root - INFO -       Started
+2022-01-20 09:18:38,897 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:18:46,153 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:18:46,213 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:20:19,373 - root - INFO -       Started
+2022-01-20 09:20:19,727 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:20:26,960 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:20:26,992 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:23:52,823 - root - INFO -       Started
+2022-01-20 09:23:53,176 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:24:00,386 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:24:00,447 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:25:32,765 - root - INFO -       Started
+2022-01-20 09:25:33,123 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:25:40,141 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:25:40,200 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:26:22,542 - root - INFO -       Started
+2022-01-20 09:26:22,901 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:26:30,202 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:26:30,236 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:29:49,548 - root - INFO -       Started
+2022-01-20 09:29:49,918 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:29:57,346 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:29:57,381 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:32:24,847 - root - INFO -       Started
+2022-01-20 09:32:25,204 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:32:32,528 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:32:32,600 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:33:52,865 - root - INFO -       Started
+2022-01-20 09:33:53,223 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:34:00,338 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:34:00,395 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:34:00,566 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:34:07,655 - root - INFO -       Ended
+2022-01-20 09:35:22,025 - root - INFO -       Started
+2022-01-20 09:35:22,386 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:35:29,727 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:35:29,789 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:35:29,959 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:35:37,350 - root - INFO -       Ended
+2022-01-20 09:43:47,090 - root - INFO -       Started
+2022-01-20 09:43:47,467 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:43:54,693 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:43:54,752 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:44:14,184 - root - INFO -       Started
+2022-01-20 09:44:14,535 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:44:21,842 - ccs.fitting.objective - INFO -       positive definite:False
+2022-01-20 09:44:21,902 - ccs.fitting.objective - INFO -       
+ The best switch is : (105,) and mse : 1.0275
+2022-01-20 09:44:22,016 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:44:29,208 - root - INFO -       Ended
+2022-01-20 09:47:21,245 - root - INFO -       Started
+2022-01-20 09:47:21,623 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:47:28,518 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-20 09:47:28,533 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-20 09:47:28,541 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-20 09:47:35,553 - root - INFO -       Ended

@@ -1,10 +1,6 @@
 {
         "General": {
                 "interface": "DFTB",
-                "spline": null,
-                "ctype": "mono",
-                "scan": false,
-                "smooth": true,
                 "ewald_scaling": 1.0
         },
         "Train-set": "structures.json",
@@ -12,13 +8,13 @@
         "Twobody": {
                 "Ce-O": {
                         "Rcut": 8.0,
-                        "Nknots": 20,
+                        "Resolution": 0.25,
                         "Swtype": "rep",
-                        "Rmin": 1.759588
+                        "Rmin": 1.859588
                 }
         },
         "Onebody": [
-                "Ce",
-                "O"
+                "O",
+                "Ce"
         ]
 }

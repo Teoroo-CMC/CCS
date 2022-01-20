@@ -940,3 +940,12 @@ The minimum distance for atom pair O-O is 0.96
 2022-01-18 10:43:11,972 - ccs.fitting.main - INFO -       
 The minimum distance for atom pair O-O is 0.96 
 2022-01-18 10:43:12,132 - root - INFO -       Ended
+2022-01-20 09:48:38,382 - root - INFO -       Started
+2022-01-20 09:48:38,395 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-20 09:48:38,417 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-20 09:48:38,578 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-20 09:48:38,587 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-20 09:48:38,599 - root - INFO -       Ended

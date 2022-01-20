@@ -5,9 +5,8 @@
         "Twobody": {
                 "Ce-O": {
                         "Rcut": 8.0,
-                        "Nknots": 20,
-                        "Swtype": "rep",
-                        "Rmin": 1.759588
+                        "Resolution": 0.25,
+                        "Swtype": "rep"
                 }
         }
 }
