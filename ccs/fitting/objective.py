@@ -371,7 +371,6 @@ class Objective:
 
         two_bodies_dict = OrderedDict()
         for k in range(self.np):
-            np.savetxt("tmp2", self.l_twb[k].curvatures)
             two_body_dict = OrderedDict()
             # From right to left aligned...
             two_body_dict["r_min"] = self.l_twb[k].rn[0]
