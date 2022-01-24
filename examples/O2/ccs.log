@@ -949,3 +949,39 @@ The minimum distance for atom pair O-O is 0.96
 2022-01-20 09:48:38,587 - ccs.fitting.main - INFO -       
  The atom pair is : O-O
 2022-01-20 09:48:38,599 - root - INFO -       Ended
+2022-01-21 15:46:21,832 - root - INFO -       Started
+2022-01-21 15:46:21,835 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-21 15:46:21,854 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 15:46:22,012 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-21 15:46:22,032 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-21 15:46:22,045 - root - INFO -       Ended
+2022-01-21 15:52:55,618 - root - INFO -       Started
+2022-01-21 15:52:55,622 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-21 15:52:55,639 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 15:52:55,796 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-21 15:52:55,809 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-21 15:52:55,820 - root - INFO -       Ended
+2022-01-23 09:23:04,507 - root - INFO -       Started
+2022-01-23 09:23:04,516 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-23 09:23:04,548 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-23 09:23:04,659 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-23 09:23:04,663 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-23 09:23:04,672 - root - INFO -       Ended
+2022-01-24 08:16:54,038 - root - INFO -       Started
+2022-01-24 08:16:54,044 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 08:16:54,119 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 08:16:54,243 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 08:16:54,281 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 08:16:54,291 - root - INFO -       Ended

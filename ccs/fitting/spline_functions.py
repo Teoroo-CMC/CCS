@@ -86,7 +86,7 @@ class Twobody:
             # Number of intervals to dissolve
             l = indices[i+1]-indices[i]
             for j in range(l):
-                tmp_curvatures.append(self.curvatures[i]/l + j/l)
+                tmp_curvatures.append(self.curvatures[i]/l)
         self.curvatures = tmp_curvatures
         self.N = self.N_full
         self.rn = self.rn_full
@@ -234,7 +234,7 @@ class Twobody:
                 np.transpose(mtx): spline coefficients in matrix-form
 
         '''
-
+        assert self.N == self.N_full, "Intervals still merged, dissolve them!"
         a_values = np.dot(self.A, self.curvatures)
         b_values = np.dot(self.B, self.curvatures)
         c_values = np.dot(self.C, self.curvatures)
@@ -242,16 +242,18 @@ class Twobody:
 
         # Add extra point at the left of the interval.
         # Note, we are still working with a right-aligned spline...
-        dr = self.rn[0]-self.rn[1]
+        dr = -1.
         x_values = np.array(self.rn)
-        #x_values = np.insert(x_values, 0, self.rn[0]+dr)
+        x_values = np.append(x_values, 0.0)
 
         y_values = a_values
         y_0 = a_values[0] + dr * \
             (b_values[0] + dr*(0.5*c_values[0]+dr*d_values[0]/6.0))
-        y_values = np.insert(y_values, 0, y_0)
+        y_values = np.insert(y_values, 0, q y_0)
+        y_values = np.append(y_values, 0.0)
 
-        left_deriv = b_values[0]+dr*(c_values[0] + dr*d_values[0]/2.)
+        left_deriv = (b_values[0]+dr*(c_values[0] +
+                                      dr*d_values[0]/2.))/self.res  #
         right_deriv = 0.0
 
         # The algebraic excersise starts here...

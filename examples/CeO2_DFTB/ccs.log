@@ -3077,3 +3077,123 @@ The minimum distance for atom pair Ce-O is 1.759588
 2022-01-20 09:47:28,541 - ccs.fitting.main - INFO -       
  The atom pair is : Ce-O
 2022-01-20 09:47:35,553 - root - INFO -       Ended
+2022-01-21 10:25:35,214 - root - INFO -       Started
+2022-01-21 10:25:35,575 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:25:42,901 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:25:42,916 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:25:51,952 - root - INFO -       Started
+2022-01-21 10:25:52,285 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:25:59,441 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:25:59,456 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:25:59,468 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:26:06,710 - root - INFO -       Ended
+2022-01-21 10:30:07,696 - root - INFO -       Started
+2022-01-21 10:30:08,078 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:30:15,093 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:30:15,108 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:30:15,131 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:30:22,151 - root - INFO -       Ended
+2022-01-21 10:31:20,020 - root - INFO -       Started
+2022-01-21 10:31:20,380 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:31:27,537 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:31:27,551 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:31:27,562 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:31:34,784 - root - INFO -       Ended
+2022-01-21 10:33:33,694 - root - INFO -       Started
+2022-01-21 10:33:34,059 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:33:41,384 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:33:41,401 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:33:41,413 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:33:48,633 - root - INFO -       Ended
+2022-01-21 10:35:12,046 - root - INFO -       Started
+2022-01-21 10:35:12,419 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:35:19,511 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:35:19,525 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:35:19,540 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:35:26,693 - root - INFO -       Ended
+2022-01-21 10:38:38,321 - root - INFO -       Started
+2022-01-21 10:38:38,689 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:38:45,819 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:38:45,835 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:39:07,794 - root - INFO -       Started
+2022-01-21 10:39:08,161 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:39:15,188 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:39:15,204 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:39:15,217 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:39:22,141 - root - INFO -       Ended
+2022-01-21 10:40:32,913 - root - INFO -       Started
+2022-01-21 10:40:33,286 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:40:40,439 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:40:40,455 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:40:40,467 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:40:47,448 - root - INFO -       Ended
+2022-01-21 10:42:37,998 - root - INFO -       Started
+2022-01-21 10:42:38,368 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:42:45,658 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:42:45,680 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:42:45,693 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:42:52,848 - root - INFO -       Ended
+2022-01-21 10:43:57,349 - root - INFO -       Started
+2022-01-21 10:43:57,711 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:44:04,870 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:44:04,884 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:44:04,897 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:44:11,990 - root - INFO -       Ended
+2022-01-21 10:45:33,991 - root - INFO -       Started
+2022-01-21 10:45:34,347 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:45:41,628 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:45:41,644 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:45:41,667 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:45:48,729 - root - INFO -       Ended
+2022-01-21 10:59:25,996 - root - INFO -       Started
+2022-01-21 10:59:26,355 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:59:33,463 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 10:59:33,477 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 10:59:33,498 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 10:59:40,695 - root - INFO -       Ended
+2022-01-21 11:00:53,849 - root - INFO -       Started
+2022-01-21 11:00:54,188 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 11:01:01,403 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-21 11:01:01,424 - ccs.fitting.objective - INFO -       
+ The best switch is : (23,) and mse : 1.1364
+2022-01-21 11:01:01,460 - ccs.fitting.main - INFO -       
+ The atom pair is : Ce-O
+2022-01-21 11:01:08,568 - root - INFO -       Ended

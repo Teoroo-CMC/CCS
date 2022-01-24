@@ -354,14 +354,13 @@ class Objective:
         error = abs(ref_for - mdl_for)
         print(error)
         maxerror = max(abs(error))
-        #footer = 'Maxerror = {:2.5E}'.format(maxerror)
+        # footer = 'Maxerror = {:2.5E}'.format(maxerror)
         # np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
         #           footer=footer, fmt='%-15.5f')
 
     def write_CCS_params(self):
 
         CCS_params = OrderedDict()
-
         CCS_params['Charge scaling factor'] = float(self.charge_scaling)
 
         eps_params = OrderedDict()
@@ -372,16 +371,30 @@ class Objective:
 
         two_bodies_dict = OrderedDict()
         for k in range(self.np):
+            np.savetxt("tmp2", self.l_twb[k].curvatures)
             two_body_dict = OrderedDict()
-            two_body_dict["r_n"] = self.l_twb[k].rn
+            # From right to left aligned...
+            two_body_dict["r_min"] = self.l_twb[k].rn[0]
+            two_body_dict["r_cut"] = self.l_twb[k].Rcut
+            two_body_dict["dr"] = self.l_twb[k].res
+            r_values = list(np.array(self.l_twb[k].rn))
+            # r_values.append(self.l_twb[k].Rcut)
+            two_body_dict["r"] = list(r_values)
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
             two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
             two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
-            two_body_dict["spl_a"] = list(self.l_twb[k].splcoeffs[:, 0])
-            two_body_dict["spl_b"] = list(self.l_twb[k].splcoeffs[:, 1])
-            two_body_dict["spl_c"] = list(self.l_twb[k].splcoeffs[:, 2])
-            two_body_dict["spl_d"] = list(self.l_twb[k].splcoeffs[:, 3])
-
+            a_values = list(self.l_twb[k].splcoeffs[:, 0])
+            a_values.append(0)
+            two_body_dict["spl_a"] = a_values
+            b_values = list(self.l_twb[k].splcoeffs[:, 1])
+            b_values.append(0)
+            two_body_dict["spl_b"] = b_values
+            c_values = list(self.l_twb[k].splcoeffs[:, 2])
+            c_values.append(0)
+            two_body_dict["spl_c"] = c_values
+            d_values = list(self.l_twb[k].splcoeffs[:, 3])
+            d_values.append(0)
+            two_body_dict["spl_d"] = d_values
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 
         CCS_params["Two_body"] = two_bodies_dict
