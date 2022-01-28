@@ -8,7 +8,7 @@
         "Twobody": {
                 "Ce-O": {
                         "Rcut": 8.0,
-                        "Resolution": 0.25,
+                        "Resolution": 0.05,
                         "Swtype": "rep",
                         "Rmin": 1.859588
                 }

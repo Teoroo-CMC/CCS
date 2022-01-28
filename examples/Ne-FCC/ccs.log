@@ -596,3 +596,10 @@ The minimum distance for atom pair Ne-Ne is 3.2337029999999998
 2022-01-20 09:49:04,502 - ccs.fitting.main - INFO -       
  The atom pair is : Ne-Ne
 2022-01-20 09:49:05,171 - root - INFO -       Ended
+2022-01-26 21:23:02,030 - root - INFO -       Started
+2022-01-26 21:23:02,221 - ccs.fitting.main - INFO -       
+ The atom pair is : Ne-Ne
+2022-01-26 21:23:03,715 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-26 21:23:08,288 - ccs.fitting.objective - INFO -       
+ The best switch is : (47,) and mse : 7.729e-06
+2022-01-26 21:23:08,563 - root - INFO -       Ended

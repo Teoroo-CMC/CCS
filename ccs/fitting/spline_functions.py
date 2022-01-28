@@ -11,6 +11,7 @@ This module contains functions for spline construction, evaluation and output.
 '''
 
 
+from ctypes import c_int
 import logging
 import numpy as np
 import json
@@ -41,14 +42,11 @@ class Twobody:
             Nknots (int): number of knots in the spline interval
             Rmin (float, optional): minimum value of the spline interval
                 (default: None).
-
-
         '''
 
         self.name = name
         self.Rcut = Rcut
         self.res = Resolution
-        self.Rmin = min
         self.N = int(np.ceil((Rcut - Rmin) / self.res))+1
         self.N_full = self.N
         self.Rmin = self.Rcut - (self.N-1)*self.res
@@ -61,9 +59,6 @@ class Twobody:
         self.Nconfs_forces = np.shape(distmat_forces)[0]
         self.C, self.D, self.B, self.A = self.spline_construction()
         self.vv, self.indices = self.get_v()
-        self.merge_intervals()
-        self.C, self.D, self.B, self.A = self.spline_construction()
-        self.vv, _ = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z = self.get_v_forces()
         self.curvatures = None
@@ -74,19 +69,38 @@ class Twobody:
         self.indices.sort()
         self.N = len(self.indices)
         self.rn = [self.rn[i] for i in self.indices]
+        self.C, self.D, self.B, self.A = self.spline_construction()
+        self.vv, _ = self.get_v()
+        self.const = self.get_const()
+        self.fvv_x, self.fvv_y, self.fvv_z = self.get_v_forces()
         print("Merging intervall. N reduced to: ", self.N)
 
     def dissolve_interval(self):
         tmp_curvatures = []
         indices = self.indices
-        if self.N_full not in indices:
-            indices.append(self.N_full)
+        for i in range(self.N_full-1-indices[-1]):
+            tmp_curvatures.append(0.)
 
-        for i in range(self.N):
-            # Number of intervals to dissolve
-            l = indices[i+1]-indices[i]
-            for j in range(l):
-                tmp_curvatures.append(self.curvatures[i]/l)
+        for i in range(self.N-1, 0, -1):
+            l_i = indices[i]-indices[i-1]
+            if(i > 1):
+                l_i_minus_1 = indices[i-1]-indices[i-2]
+            else:
+                l_i_minus_1 = 1
+            c_i = self.curvatures[i][0]/l_i
+            c_i_minus_1 = self.curvatures[i-1][0]/l_i_minus_1
+            d_i = (c_i - c_i_minus_1)/l_i
+            for j in range(l_i):
+                c_tmp = c_i - j*d_i
+                tmp_curvatures.append(c_tmp)
+        tmp_curvatures.append(*self.curvatures[0])
+        tmp_curvatures.reverse()
+
+        for i in range(len(indices)):
+            print(indices[i], *self.curvatures[i])
+        for i in range(len(tmp_curvatures)):
+            print(i, tmp_curvatures[i])
+
         self.curvatures = tmp_curvatures
         self.N = self.N_full
         self.rn = self.rn_full
@@ -172,12 +186,15 @@ class Twobody:
                 index = bisect.bisect_left(self.rn, rr)
                 # index = max(0, index)
                 dr = max(self.res, (self.rn[index]-self.rn[index-1]))
+                if dr > (self.res+0.02):
+                    print("---", dr, self.rn[index], index)
                 delta = (rr-self.rn[index]) / dr
                 indices.append(index)
-                aa_ind = self.A[index-1]
-                bb_ind = self.B[index-1] * delta
-                dd_ind = self.D[index-1] * np.power(delta, 3) / 6.0
-                c_d = self.C[index-1] * np.power(delta, 2) / 2.0
+                index = index-1
+                aa_ind = self.A[index]
+                bb_ind = self.B[index] * delta
+                dd_ind = self.D[index] * np.power(delta, 3) / 6.0
+                c_d = self.C[index] * np.power(delta, 2) / 2.0
                 uu = uu + aa_ind + bb_ind + c_d + dd_ind
 
             vv[config, :] = uu
@@ -244,13 +261,13 @@ class Twobody:
         # Note, we are still working with a right-aligned spline...
         dr = -1.
         x_values = np.array(self.rn)
-        x_values = np.append(x_values, 0.0)
+        # x_values = np.append(x_values, 0.0)
 
         y_values = a_values
         y_0 = a_values[0] + dr * \
             (b_values[0] + dr*(0.5*c_values[0]+dr*d_values[0]/6.0))
-        y_values = np.insert(y_values, 0, q y_0)
-        y_values = np.append(y_values, 0.0)
+        y_values = np.insert(y_values, 0, y_0)
+        # y_values = np.append(y_values, 0.0)
 
         left_deriv = (b_values[0]+dr*(c_values[0] +
                                       dr*d_values[0]/2.))/self.res  #

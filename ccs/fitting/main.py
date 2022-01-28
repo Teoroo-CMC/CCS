@@ -259,30 +259,30 @@ def parse(data, struct_data, struct_data_forces):
         atom_onebodies.append(Onebody(key, sto[:, i].flatten()))
 
     # REDUCE STO-MATRIX IF RANK IS TOO LOW
-    reduce = True
-    n_redundant = 0
-    while(reduce):
-        check = 0
-        for ci in range(np.shape(sto)[1]):
-            if(np.linalg.matrix_rank(sto[:, 0:ci+1]) < (ci+1)):
-                print('There is linear dependence in stochiometry matrix!')
-                print('    removing onebody term: ' +
-                      atom_onebodies[ci+n_redundant].name)
-                sto = np.delete(sto, ci, 1)
-                atom_onebodies[ci+n_redundant].epsilon_supported = False
-                check = 1
-                n_redundant += 1
-                break
-        if (check == 0):
-            reduce = False
+    # reduce = True
+    # n_redundant = 0
+    # while(reduce):
+    #     check = 0
+    #     for ci in range(np.shape(sto)[1]):
+    #         if(np.linalg.matrix_rank(sto[:, 0:ci+1]) < (ci+1)):
+    #             print('There is linear dependence in stochiometry matrix!')
+    #             print('    removing onebody term: ' +
+    #                   atom_onebodies[ci+n_redundant].name)
+    #             sto = np.delete(sto, ci, 1)
+    #             atom_onebodies[ci+n_redundant].epsilon_supported = False
+    #             check = 1
+    #             n_redundant += 1
+    #             break
+    #     if (check == 0):
+    #         reduce = False
 
-    assert sto.shape[1] == np.linalg.matrix_rank(sto), \
-        'Linear dependence in stochiometry matrix'
+    # assert sto.shape[1] == np.linalg.matrix_rank(sto), \
+    #     'Linear dependence in stochiometry matrix'
 
     with open('input_interpreted.json', 'w') as f:
         json.dump(data, f, indent=8)
 
-    return atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces
+    return atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, data
 
 
 def twp_fit(filename):
@@ -297,7 +297,7 @@ def twp_fit(filename):
     data, struct_data, struct_data_test, struct_data_forces, struct_data_test_forces = prepare_input(
         filename)
     # Parse the input
-    atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces = parse(
+    atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, data = parse(
         data, struct_data, struct_data_forces)
 
     # set up the QP problem
@@ -305,12 +305,13 @@ def twp_fit(filename):
                    ewald=ewald_energies, ewald_forces=ewald_forces)
 
     # Solve QP problem
-    predicted_energies, mse, xx = nn.solution()
+    predicted_energies, mse, xx_unfolded = nn.solution()
 
     # Perform prediction
+    # NEEDS TO BE UPDATED TO HANDLE MERGING AND DISSOLVING INTERVALS!!!
     if struct_data_test != {}:
-        atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces = parse(
+        atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, _ = parse(
             data, struct_data_test, struct_data_test_forces)
         nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
                             ewald=ewald_energies, ewald_forces=ewald_forces)
-        predicted_energies, error = nn_test.predict(xx)
+        predicted_energies, error = nn_test.predict(xx_unfolded)

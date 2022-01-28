@@ -8,7 +8,7 @@
         "Twobody": {
                 "O-Zn": {
                         "Rcut": 8.0,
-                        "Resolution": 0.25,
+                        "Resolution": 0.1,
                         "Swtype": "sw"
                 }
         },

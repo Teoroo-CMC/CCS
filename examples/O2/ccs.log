@@ -985,3 +985,37 @@ The minimum distance for atom pair O-O is 0.96
 2022-01-24 08:16:54,281 - ccs.fitting.main - INFO -       
  The atom pair is : O-O
 2022-01-24 08:16:54,291 - root - INFO -       Ended
+2022-01-24 20:17:47,667 - root - INFO -       Started
+2022-01-24 20:17:47,669 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:17:47,689 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 20:17:48,187 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 20:17:48,205 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:17:48,228 - root - INFO -       Ended
+2022-01-24 20:48:18,341 - root - INFO -       Started
+2022-01-24 20:48:18,348 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:48:18,369 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 20:48:18,610 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 20:48:42,936 - root - INFO -       Started
+2022-01-24 20:48:42,944 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:48:42,971 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 20:48:43,272 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 20:49:19,173 - root - INFO -       Started
+2022-01-24 20:49:19,188 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:49:19,214 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 20:49:19,532 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 20:49:49,218 - root - INFO -       Started
+2022-01-24 20:49:49,225 - ccs.fitting.main - INFO -       
+ The atom pair is : O-O
+2022-01-24 20:49:49,253 - ccs.fitting.objective - INFO -       positive definite:True
+2022-01-24 20:49:49,502 - ccs.fitting.objective - INFO -       
+ The best switch is : (14,) and mse : 0.00016235
+2022-01-24 20:49:49,507 - root - INFO -       Ended

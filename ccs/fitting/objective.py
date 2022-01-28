@@ -45,6 +45,8 @@ class Objective:
         self.l_twb = l_twb
         self.l_one = l_one
         self.sto = sto
+        self.sto_full = self.sto
+
         self.energy_ref = energy_ref
         self.force_ref_x = [x[0] for x in force_ref]
         self.force_ref_y = [y[1] for y in force_ref]
@@ -59,7 +61,7 @@ class Objective:
         for kk, vv in gen_params.items():
             setattr(self, kk, vv)
 
-        self.cols_sto = sto.shape[1]
+        self.cols_sto = self.sto.shape[1]
         self.np = len(l_twb)
         self.no = len(l_one)
         self.cparams = [self.l_twb[i].N for i in range(self.np)]
@@ -68,8 +70,36 @@ class Objective:
         logger.debug('The reference energy : \n %s \n Number of pairs:%s',
                      self.energy_ref, self.np)
 
+    def reduce_stoichiometry(self):
+        reduce = True
+        n_redundant = 0
+        while(reduce):
+            check = 0
+            for ci in range(np.shape(self.sto)[1]):
+                if(np.linalg.matrix_rank(self.sto[:, 0:ci+1]) < (ci+1)):
+                    print('There is linear dependence in stochiometry matrix!')
+                    print('    removing onebody term: ' +
+                          self.l_one[ci+n_redundant].name)
+                    self.sto = np.delete(self.sto, ci, 1)
+                    self.l_one[ci+n_redundant].epsilon_supported = False
+                    check = 1
+                    n_redundant += 1
+                    break
+            if (check == 0):
+                reduce = False
+
+        assert self.sto.shape[1] == np.linalg.matrix_rank(self.sto), \
+            'Linear dependence in stochiometry matrix'
+        self.cols_sto = self.sto.shape[1]
+
     def solution(self):
         '''Function to solve the objective with constraints.'''
+
+        # COMMENTS MERGING THE INTERVALS
+        # self.merge_intervals()
+
+        # Reduce stoichiometry
+        self.reduce_stoichiometry()
 
         self.mm = self.get_m()
         logger.debug('\n Shape of M matrix is : %s', self.mm.shape)
@@ -100,6 +130,7 @@ class Objective:
         logger.info('\n The best switch is : %s and mse : %s',
                     nswitch_list[opt_sol_index], mse)
 
+        print(nswitch_list[opt_sol_index])
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
@@ -109,30 +140,34 @@ class Objective:
         xx = np.array(opt_sol['x'])
         self.assign_parameter_values(xx)
 
-        # counter = -1
-        # if(self.interface == "CCS+Q"):
-        #     counter = 0
-        #     self.charge_scaling = (xx[-1]**0.5)
-        # for k in range(self.no):
-        #     i = self.no-k-1
-        #     if(self.l_one[i].epsilon_supported):
-        #         counter += 1
-        #         self.l_one[i].epsilon = float(xx[-1-counter])
-
-        model_energies = np.ravel(self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(
+            self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(-3 *
                                     self.mm[-self.l_twb[0].Nconfs_forces:-1, :].dot(xx))
             self.write_error_forces(model_forces, self.force_ref)
 
-        # self.get_coeffs(list(xx), model_energies)
-        # self.plot(model_energies)
-        self.write_error(model_energies, self.energy_ref, mse)
+        self.write_error()
+
+        # COMMENT: Unfold the spline to an equdistant grid
+        # self.unfold_intervals()
+
+        x_unfolded = []
+        for ii in range(self.np):
+            self.l_twb[ii].get_spline_coeffs()
+            self.l_twb[ii].get_expcoeffs()
+            x_unfolded = np.hstack(
+                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten()))
+        for onb in self.l_one:
+            if onb.epsilon_supported:
+                x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+            else:
+                x_unfolded = np.hstack((x_unfolded, 0.))
+        xx = x_unfolded
 
         self.write_CCS_params()
-
-        return model_energies, mse, xx
+        return self.model_energies, mse, xx
 
     def predict(self, xx):
         '''Predict results.
@@ -140,24 +175,26 @@ class Objective:
         Args:
 
             xx (ndarrray): Solution array from training.
+            Needs to be updated to handle merging and dissolving intervals
 
         '''
+        self.sto = self.sto_full
         self.mm = self.get_m()
+
         try:
-            model_energies = np.ravel(
+            self.model_energies = np.ravel(
                 self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
-            error = (model_energies-self.energy_ref)
+            error = (self.model_energies-self.energy_ref)
             mse = ((error) ** 2).mean()
         except:
-            model_energy = []
+            self.model_energies = []
             error = []
             mse = 0
 
-        self.write_error(model_energies, self.energy_ref,
-                         mse, fname='error_test.out')
-        return model_energies, error
+        self.write_error(fname='error_test.out')
+        return self.model_energies, error
 
-    @staticmethod
+    @ staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
         '''The solver for the objective.
 
@@ -192,6 +229,16 @@ class Objective:
             sol = solvers.qp(pp, qq, gg, hh)
 
         return sol
+
+    def merge_intervals(self):
+        # Merge intervals
+        for i in range(self.np):
+            self.l_twb[i].merge_intervals()
+            self.cparams = [self.l_twb[i].N for i in range(self.np)]
+
+    def unfold_intervals(self):
+        for ii in range(self.np):
+            self.l_twb[ii].dissolve_interval()
 
     def eval_obj(self, xx):
         '''Mean squared error function.
@@ -229,9 +276,9 @@ class Objective:
                 xx[ind: ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
             # Unfold the spline to an equdistant grid
-            self.l_twb[ii].dissolve_interval()
-            self.l_twb[ii].get_spline_coeffs()
-            self.l_twb[ii].get_expcoeffs()
+            # self.l_twb[ii].dissolve_interval()
+            # self.l_twb[ii].get_spline_coeffs()
+            # self.l_twb[ii].get_expcoeffs()
 
     def list_iterator(self):
         '''Iterates over the self.np attribute.'''
@@ -320,7 +367,7 @@ class Objective:
 
         return gg, aa
 
-    def write_error(self, mdl_eng, ref_eng, mse, fname='error.out'):
+    def write_error(self, fname='error.out'):
         '''Prints the errors in a file.
 
         Args:
@@ -331,12 +378,16 @@ class Objective:
             fname (str, optional): Output filename (default: 'error.out').
 
         '''
-
-        header = '{:<15}{:<15}{:<15}'.format('Reference', 'Predicted', 'Error')
-        error = abs(ref_eng - mdl_eng)
+        header = '{:<15}{:<15}{:<15}{:<15}'.format(
+            'Reference', 'Predicted', 'Error', "#atoms")
+        error = abs(self.energy_ref - self.model_energies)
         maxerror = max(abs(error))
+        mse = ((error) ** 2).mean()
+        Natoms = self.l_one[0].stomat
+        for i in range(1, self.no):
+            Natoms = Natoms+self.l_one[i].stomat
         footer = 'MSE = {:2.5E}\nMaxerror = {:2.5E}'.format(mse, maxerror)
-        np.savetxt(fname, np.transpose([ref_eng, mdl_eng, error]), header=header,
+        np.savetxt(fname, np.transpose([self.energy_ref, self.model_energies, error, Natoms]), header=header,
                    footer=footer, fmt='%-15.5f')
 
     def write_error_forces(self, mdl_for, ref_for, fname='error_forces.out'):
@@ -354,6 +405,8 @@ class Objective:
         error = abs(ref_for - mdl_for)
         print(error)
         maxerror = max(abs(error))
+        mse = ((error) ** 2).mean()
+
         # footer = 'Maxerror = {:2.5E}'.format(maxerror)
         # np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
         #           footer=footer, fmt='%-15.5f')
