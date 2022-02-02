@@ -201,7 +201,10 @@ def parse(data, struct_data, struct_data_forces):
                 ref_energies = (
                     energies[0] - data['General']['ewald_scaling']*energies[1])
 
-        Rmax = max([item for sublist in list_dist for item in sublist])
+        try:
+            Rmax = max([item for sublist in list_dist for item in sublist])
+        except:
+            Rmax = 0
 
         if Rmax > 0:
             try:
@@ -309,9 +312,9 @@ def twp_fit(filename):
 
     # Perform prediction
     # NEEDS TO BE UPDATED TO HANDLE MERGING AND DISSOLVING INTERVALS!!!
-    if struct_data_test != {}:
-        atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, _ = parse(
-            data, struct_data_test, struct_data_test_forces)
-        nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
-                            ewald=ewald_energies, ewald_forces=ewald_forces)
-        predicted_energies, error = nn_test.predict(xx_unfolded)
+    # if struct_data_test != {}:
+    #     atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, _ = parse(
+    #         data, struct_data_test, struct_data_test_forces)
+    #     nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
+    #                         ewald=ewald_energies, ewald_forces=ewald_forces)
+    #     predicted_energies, error = nn_test.predict(xx_unfolded)
