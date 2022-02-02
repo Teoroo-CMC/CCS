@@ -7,9 +7,9 @@ from numpy import linalg as LA
 from ase.neighborlist import NeighborList
 from ase.calculators.calculator import Calculator, all_changes
 from ase.calculators.calculator import PropertyNotImplementedError
-from pymatgen import Lattice, Structure
-from pymatgen.analysis import ewald
-from pymatgen.io.ase import AseAtomsAdaptor
+#from pymatgen import Lattice, Structure
+#from pymatgen.analysis import ewald
+#from pymatgen.io.ase import AseAtomsAdaptor
 from ase.constraints import full_3x3_to_voigt_6_stress
 
 
