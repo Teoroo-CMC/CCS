@@ -6,16 +6,16 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
 
-'''Command line wrapper for the atom_json script.'''
+'''Command line wrapper for the ccs_fit script.'''
 
 
 import sys
 from ccs.common.exceptions import ScriptError
-import ccs.scripts.atom_json as atom_json
+import ccs.scripts.ccs_fetch as ccs_fetch
 
 
 try:
-    atom_json.main()
+    ccs_fetch.main()
 except ScriptError as exc:
     sys.stderr.write('ScriptError: ' + str(exc) + '\n')
     sys.exit(1)

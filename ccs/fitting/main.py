@@ -70,18 +70,19 @@ def prepare_input(filename):
     except ValueError:
         logger.critical('Reference file not in json format')
         raise
-    if 'Test-set' in data:
-        try:
-            with open(data['Test-set']) as json_file:
-                struct_data_test_full = json.load(
-                    json_file, object_pairs_hook=OrderedDict)
-                struct_data_test = struct_data_test_full['energies']
-                try:
-                    struct_data_test_forces = struct_data_test_full['forces']
-                except:
-                    struct_data_test_forces = {}
-        except FileNotFoundError:
-            logger.info('No test-set provided.')
+    if 'Test-set' not in data:
+        data['Test-set'] = data['Train-set']
+    try:
+        with open(data['Test-set']) as json_file:
+            struct_data_test_full = json.load(
+                json_file, object_pairs_hook=OrderedDict)
+            struct_data_test = struct_data_test_full['energies']
+            try:
+                struct_data_test_forces = struct_data_test_full['forces']
+            except:
+                struct_data_test_forces = {}
+    except FileNotFoundError:
+        logger.info('Could not locate Test-set.')
 
     # Make defaults or general setting for Twobody
     if 'Twobody' not in data.keys():

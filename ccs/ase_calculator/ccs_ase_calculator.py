@@ -4,14 +4,15 @@ import numpy as np
 import itertools as it
 from collections import OrderedDict, defaultdict
 from numpy import linalg as LA
-#from ase.neighborlist import NeighborList
 from ase.calculators.calculator import Calculator, all_changes
 from ase.calculators.calculator import PropertyNotImplementedError
-# from pymatgen import Lattice, Structure
-# from pymatgen.analysis import ewald
-# from pymatgen.io.ase import AseAtomsAdaptor
 from ase.constraints import full_3x3_to_voigt_6_stress
-
+try:
+    from pymatgen import Lattice, Structure
+    from pymatgen.analysis import ewald
+    from pymatgen.io.ase import AseAtomsAdaptor
+except:
+    pass
 
 logging.basicConfig(filename='ccs.spl', level=logging.DEBUG)
 logg = logging.getLogger(__name__)
@@ -108,15 +109,19 @@ def ew(atoms, q):
 class CCS(Calculator):
     implemented_properties = {'stress', 'energy', 'forces'}
 
-    def __init__(self, CCS_params=None, **kwargs):
+    def __init__(self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs):
         self.rc = 7.0  # SET THIS MAX OF ANY PAIR
         self.exp = None
-        self.charge = None
+        self.charge = charge
         self.species = None
         self.pair = None
-        self.q = None
+        self.q = q
         self.CCS_params = CCS_params
         self.eps = CCS_params['One_body']
+        if charge_scaling:
+            for key in self.q:
+                self.q[key] *= self.CCS_params['Charge scaling factor']
+
         Calculator.__init__(self, **kwargs)
 
     def calculate(self, atoms=None, properties=['energy'], system_changes=all_changes):
@@ -174,14 +179,23 @@ class CCS(Calculator):
                 norm_dist = np.linalg.norm(dist, axis=1)
                 dist_mask = norm_dist < self.rc
                 xy_distances.extend(norm_dist[dist_mask].tolist())
-                forces[id, :] += np.sum(list(map(self.pair[x + y].eval_force,
+                # Sometimes there are no distances to append
+                try:
+                    forces[id, :] += np.sum(list(map(self.pair[x + y].eval_force,
                                                  norm_dist[dist_mask]))[0]*dist[dist_mask], axis=0)
+                except:
+                    pass
             if(x == y):
                 energy += 0.5 * \
                     sum(map(self.pair[x + y].eval_energy, xy_distances))
             else:
                 energy += sum(map(self.pair[x +
                                             y].eval_energy, xy_distances))
+
+        if self.charge:
+            ewa = ew(self.atoms, self.q)
+            energy = energy + ewa.total_energy
+            forces = forces + ewa.forces
 
         self.results['energy'] = energy
         self.results['free_energy'] = energy

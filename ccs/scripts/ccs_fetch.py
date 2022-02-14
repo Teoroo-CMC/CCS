@@ -144,7 +144,7 @@ def gen_CCS_train(mode, DFT_DB, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=Non
 
 
 def main():
-    print("--- USAGE:  DB2TRAIN.py MODE [...] --- ")
+    print("--- USAGE:  ccs_fetch MODE [...] --- ")
     print("    The following modes and inputs are supported:")
     print("      CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)")
     print("      CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)")
@@ -160,18 +160,20 @@ def main():
         Ns = int(sys.argv[3])
 
     mode = sys.argv[1]
-    print("    MODE", mode)
+    print("    Mode: ", mode)
     if(mode == "CCS"):
         print("    R_c set to: ", R_c)
+        print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("")
         print("-------------------------------------------------")
         gen_CCS_train(mode, DFT_DB, R_c, Ns)
     if(mode == "CCS+Q"):
-        print("   NOTE: charge dict should use double quotes to enclose property nanes. Example:")
+        print("   NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
         print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
         charge_dict = sys.argv[5]
         print("    R_c set to: ", R_c)
+        print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("    Charge dictionary: ", charge_dict)
         print("")
@@ -182,6 +184,7 @@ def main():
         DFTB_data = sys.argv[5]
         DFTB_DB = db.connect(DFT_data)
         print("    R_c set to: ", R_c)
+        print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("    DFTB reference data base: ", DFTB_data)
         print("")
