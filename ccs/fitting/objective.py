@@ -125,12 +125,12 @@ class Objective:
 
         obj = np.asarray(obj)
         mse = np.min(obj)
-        opt_sol_index = int(np.ravel(np.argwhere(obj == mse)))
+        print()
+        opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
         logger.info('\n The best switch is : %s and mse : %s',
                     nswitch_list[opt_sol_index], mse)
 
-        print(nswitch_list[opt_sol_index])
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
@@ -312,8 +312,10 @@ class Objective:
         vv = np.hstack([*tmp])
         mm = np.hstack((vv, self.sto))
 
+        Q = 0
         if self.interface == 'CCS+Q':
             mm = np.hstack((mm, self.ewald))
+            Q = 1
 
         # Add force data
         tmp = []
@@ -321,7 +323,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_x)
         fvv_x = np.hstack([*tmp])
         fvv_x = np.hstack((fvv_x,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]))))
+            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
         mm = np.vstack((mm, fvv_x))
 
         tmp = []
@@ -329,7 +331,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_y)
         fvv_y = np.hstack([*tmp])
         fvv_y = np.hstack((fvv_y,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]))))
+            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
         mm = np.vstack((mm, fvv_y))
 
         tmp = []
@@ -337,7 +339,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_z)
         fvv_z = np.hstack([*tmp])
         fvv_z = np.hstack((fvv_z,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]))))
+            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
         mm = np.vstack((mm, fvv_z))
 
         return mm

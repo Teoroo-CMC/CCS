@@ -1,0 +1,193 @@
+#!/usr/bin/python3.6
+import math
+import sys
+import json
+import itertools as it
+from collections import OrderedDict, defaultdict
+import numpy as np
+from ase import Atoms
+from ase import io
+import ase.db as db
+from sympy import true
+from tqdm import tqdm
+import itertools
+import random
+
+
+def pair_dist(atoms, R_c, ch1, ch2, counter):
+    ''' This function returns pairwise distances between two types of atoms within a certain cuttoff
+    Args:
+        R_c (float): Cut off distance(6. Å)
+        ch1 (str): Atom species 1
+        ch2 (str): Atoms species 2
+
+    Returns:
+        A list of distances
+    '''
+    cell = atoms.get_cell()
+    n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
+    n_repeat = np.ceil(n_repeat).astype(int)
+
+    mask1 = [atom == ch1 for atom in atoms.get_chemical_symbols()]
+    mask2 = [atom == ch2 for atom in atoms.get_chemical_symbols()]
+    pos1 = atoms[mask1].positions
+    index1 = np.arange(0, len(atoms))[mask1]
+    atoms_2 = atoms[mask2]
+    Natoms_2 = len(atoms_2)
+
+    offsets = [*itertools.product(*[np.arange(-n, n+1)
+                                  for n in n_repeat])]
+
+    pos2 = []
+    for offset in offsets:
+        pos2.append((atoms_2.positions+offset@cell))
+
+    pos2 = np.array(pos2)
+    pos2 = np.reshape(pos2, (-1, 3))
+    r_distance = []
+    forces = OrderedDict()
+    for p1, id in zip(pos1, index1):
+        tmp = pos2-p1
+        norm_dist = np.linalg.norm(tmp, axis=1)
+        dist_mask = norm_dist < R_c
+        r_distance.extend(norm_dist[dist_mask].tolist())
+        forces["F"+str(counter)+"_"+str(id)
+               ] = np.asarray(tmp[dist_mask]).tolist()
+
+    if(ch1 == ch2):
+        r_distance.sort()
+        r_distance = r_distance[::2]
+
+    return r_distance, forces
+
+
+def gen_CCS_train(mode, DFT_DB, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None):
+    """  Function to read files and output structures.json
+
+    Args:
+        args(list): list of filenames
+        R_c (float, optional): Distance cut-off. Defaults to 7.0.
+    """
+    if(mode == "CCS"):
+        REF_DB = DFT_DB
+
+    if(mode == "CCS+Q"):
+        from pymatgen import Lattice, Structure
+        from pymatgen.analysis import ewald
+        REF_DB = DFT_DB
+
+    if(mode == "DFTB"):
+        REF_DB = DFTB_DB
+
+    if(Ns != 'all'):
+        mask = [a <= Ns for a in range(len(REF_DB))]
+        random.shuffle(mask)
+    else:
+        mask = len(REF_DB)*[True]
+
+    species = []
+    counter = -1
+    c = OrderedDict()
+    d = OrderedDict()
+    for row in tqdm(REF_DB.select()):
+        counter = counter + 1
+        if(mask[counter]):
+            struct = row.toatoms()
+            ce = OrderedDict()
+
+            FREF = row.forces
+            EREF = row.energy
+            ce['energy_dft'] = EREF
+            if(mode == "DFTB"):
+                key = str(row.key)
+                EDFT = DFT_DB.get('key='+key).energy
+                FDFT = DFT_DB.get('key='+key).forces
+                ce['energy_dft'] = EDFT
+                ce['energy_dftb'] = EREF
+            dict_species = defaultdict(int)
+            struct.charges = []
+            for elem in struct.get_chemical_symbols():
+                dict_species[elem] += 1
+                if(mode == "CCS+Q"):
+                    struct.charges.append(charge_dict[elem])
+            atom_pair = it.combinations_with_replacement(
+                dict_species.keys(), 2)
+            if(mode == "CCS+Q"):
+                lattice = Lattice(struct.get_cell())
+                coords = struct.get_scaled_positions()
+                ew_struct = Structure(lattice, struct.get_chemical_symbols(
+                ), coords, site_properties={"charge": struct.charges})
+                Ew = ewald.EwaldSummation(ew_struct)
+                ES_energy = Ew.total_energy
+                ce['ewald'] = ES_energy
+
+            cf = OrderedDict()
+            for i in range(len(struct)):
+                cf["F"+str(counter)+"_"+str(i)
+                   ] = {'force_dft':  list(FDFT[i, :])}
+            ce['atoms'] = dict_species
+            for (x, y) in atom_pair:
+                pair_distances, forces = pair_dist(struct, R_c, x, y, counter)
+                ce[str(x)+'-'+str(y)] = pair_distances
+                for i in range(len(struct)):
+                    try:
+                        cf["F"+str(counter)+"_"+str(i)][str(x)+'-'+str(y)
+                                                        ] = forces["F"+str(counter)+"_"+str(i)]
+                    except:
+                        pass
+            d['S'+str(counter+1)] = ce
+    st = OrderedDict()
+    st['energies'] = d
+    # st['forces'] = cf
+    with open('structures.json', 'w') as f:
+        json.dump(st, f, indent=8)
+
+
+def main():
+    print("--- USAGE:  DB2TRAIN.py MODE [...] --- ")
+    print("    The following modes and inputs are supported:")
+    print("      CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)")
+    print("      CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)")
+    print("      DFTB:  CutoffRadius(float) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
+    print(" ")
+    R_c = float(sys.argv[2])
+    Ns = sys.argv[3]
+    DFT_data = sys.argv[4]
+    DFT_DB = db.connect(DFT_data)
+    if(sys.argv[3] == "all"):
+        pass
+    else:
+        Ns = int(sys.argv[3])
+
+    mode = sys.argv[1]
+    print("    MODE", mode)
+    if(mode == "CCS"):
+        print("    R_c set to: ", R_c)
+        print("    DFT reference data base: ", DFT_data)
+        print("")
+        print("-------------------------------------------------")
+        gen_CCS_train(mode, DFT_DB, R_c, Ns)
+    if(mode == "CCS+Q"):
+        print("   NOTE: charge dict should use double quotes to enclose property nanes. Example:")
+        print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
+        charge_dict = sys.argv[5]
+        print("    R_c set to: ", R_c)
+        print("    DFT reference data base: ", DFT_data)
+        print("    Charge dictionary: ", charge_dict)
+        print("")
+        print("-------------------------------------------------")
+        charge_dict = json.loads(charge_dict)
+        gen_CCS_train(mode, DFT_DB, R_c, Ns, charge_dict=charge_dict)
+    if(mode == "DFTB"):
+        DFTB_data = sys.argv[5]
+        DFTB_DB = db.connect(DFT_data)
+        print("    R_c set to: ", R_c)
+        print("    DFT reference data base: ", DFT_data)
+        print("    DFTB reference data base: ", DFTB_data)
+        print("")
+        print("-------------------------------------------------")
+        gen_CCS_train(mode, DFT_DB, R_c, Ns, DFTB_DB=DFTB_DB)
+
+
+if __name__ == "__main__":
+    main()
