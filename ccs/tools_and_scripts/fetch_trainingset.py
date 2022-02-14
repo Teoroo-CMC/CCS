@@ -124,7 +124,7 @@ def gen_CCS_train(mode, DFT_DB, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=Non
             cf = OrderedDict()
             for i in range(len(struct)):
                 cf["F"+str(counter)+"_"+str(i)
-                   ] = {'force_dft':  list(FDFT[i, :])}
+                   ] = {'force_dft':  list(FREF[i, :])}
             ce['atoms'] = dict_species
             for (x, y) in atom_pair:
                 pair_distances, forces = pair_dist(struct, R_c, x, y, counter)
