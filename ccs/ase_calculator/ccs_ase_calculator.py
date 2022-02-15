@@ -85,7 +85,7 @@ class spline_table():
                 (2*self.c[index] + (3*self.d[index] * dr))
             return f1
         elif r < self.Rmin:
-            val = self.aa * np.exp(-self.aa*r+self.bb)
+            val = -self.aa * np.exp(-self.aa*r+self.bb)
             return val
         else:
             val = 0.0
@@ -142,8 +142,6 @@ class CCS(Calculator):
         dict_species = defaultdict(int)
         for elem in self.atoms.get_chemical_symbols():
             dict_species[elem] += 1
-        atom_pair = it.combinations_with_replacement(
-            dict_species.keys(), 2)
 
         energy = 0.0
         forces = np.zeros((natoms, 3))
@@ -159,7 +157,7 @@ class CCS(Calculator):
                 pass
 
         # PAIR-WISE ENERGY AND FORCE
-        for (x, y) in atom_pair:
+        for x, y in it.product(self.species, self.species):
             xy_distances = []
             mask1 = [atom == x for atom in self.atoms.get_chemical_symbols()]
             mask2 = [atom == y for atom in self.atoms.get_chemical_symbols()]
@@ -177,20 +175,17 @@ class CCS(Calculator):
             for p1, id in zip(pos1, index1):
                 dist = pos2-p1
                 norm_dist = np.linalg.norm(dist, axis=1)
-                dist_mask = norm_dist < self.rc
+                dist_mask = (norm_dist < self.rc) & (norm_dist > 0)
                 xy_distances.extend(norm_dist[dist_mask].tolist())
                 # Sometimes there are no distances to append
+
                 try:
-                    forces[id, :] += np.sum(list(map(self.pair[x + y].eval_force,
-                                                 norm_dist[dist_mask]))[0]*dist[dist_mask], axis=0)
+                    forces[id, :] += np.sum((dist[dist_mask].T*list(map(self.pair[x + y].eval_force,
+                                                                        norm_dist[dist_mask]))/norm_dist[dist_mask]).T, axis=0)
                 except:
                     pass
-            if(x == y):
-                energy += 0.5 * \
-                    sum(map(self.pair[x + y].eval_energy, xy_distances))
-            else:
-                energy += sum(map(self.pair[x +
-                                            y].eval_energy, xy_distances))
+
+            energy += 0.5*sum(map(self.pair[x + y].eval_energy, xy_distances))
 
         if self.charge:
             ewa = ew(self.atoms, self.q)

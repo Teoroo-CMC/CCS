@@ -30,7 +30,7 @@ def validate(mode, CCS_params, Ns, DFT_DB, charge=False, q=None, charge_scaling=
         mask = len(DFT_DB)*[True]
 
     counter = -1
-    for row in tqdm(DFT_DB.select()):
+    for row in tqdm(DFT_DB.select(), total=len(DFT_DB)):
         counter += 1
         if(mask[counter]):
             structure = row.toatoms()
