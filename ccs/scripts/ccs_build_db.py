@@ -16,8 +16,11 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
         DFTB_DB = db.connect("DFTB.db")
 
     f = open(file_list, "r")
+    L = len(f.readlines())
+    f.close()
+    f = open(file_list, "r")
     counter = 0
-    for lns in f:
+    for lns in tqdm(f, total=L):
         counter = counter+1
         lns = lns.split()
         DFT_FOLDER = lns[0]
@@ -72,6 +75,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
             structure_DFTB.get_potential_energy()
             structure_DFTB.get_forces()
             DFTB_DB.write(structure_DFTB, DFTB=True, key=counter)
+    f.close()
 
 
 def main():
