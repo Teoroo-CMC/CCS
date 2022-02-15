@@ -5,10 +5,11 @@ The `CCS` package is a tool to construct two-body potentials using the idea of c
 ## Getting Started
 ### Package Layout
 ```
-ccs-0.1.0
+ccs-x.y.z
 ├── bin
-│   ├── atom-json               
-│   └── ccs_fit                 
+│   ├── ccs_fetch
+│   ├── ccs_fit               
+│   └── ccs_validate                 
 ├── ccs
 │   ├── __init__.py                     
 │   ├── main.py                 
@@ -25,8 +26,8 @@ ccs-0.1.0
 ├── README.md
 └── setup.py
 ```
-* `atom-json`-A tool to convert OUTCAR (VASP output) files to structures.json
-* `ccs_fit`             - The executable file for ccs package.
+* `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.
+* `ccs_fit`             - The primary executable file for the ccs package.
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.
 * `spline_functions.py` - A module for spline construction/evaluation/output. 
@@ -60,27 +61,27 @@ $ export PATH=<path-to-CCS-bin>:$PATH
 
 ## Tutorials
 
-We provide two tutorials in the [examples](examples/) folder. To run the example,  go to one of the folders ( O2 or Ne-FCC ). Each contain two primary input files required for fitting. A sample `input.json` for O2 is shown below:
+We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `input.json` for O2 is shown below:
 ```
 {
-
-"Twobody":{
-	"O-O":{
-		"Rmin":0.95,   
-		"Rcut":2.5,
-		"Nknots":20
-
-	}
-	},
-
-"Onebody":["O"],
-
-"Reference":"structures.json"
-			
+        "General": {
+                "interface": "CCS"
+        },
+        "Train-set": "structures.json",
+        "Twobody": {
+                "O-O": {
+                        "Rcut": 2.5,
+                        "Resolution": 0.02,
+                        "Swtype": "sw"
+                }
+        },
+        "Onebody": [
+                "O"
+        ]
 }
+
 ```
-The `input.json` file should provide spline interval cutoff's (Rcut and Rmin), number of knots (Nknots), and path to the `structure.json` file. The onebody energy terms should be provided as a json array using atomic symbols. 
-The format for `structure.json` is shown below :
+The `input.json` file should provide at a minimum the block "Genaral" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
 ```
 {
         "S1": {
@@ -121,7 +122,7 @@ The format for `structure.json` is shown below :
         }
 }
 ```
-The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stoichiometry of each configuration is given under the atoms label (" Atoms") as a key-value pair ("O" : 2 ). 
+The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stoichiometry of each configuration is given under the atoms label ("Atoms") as a key-value pair ("O" : 2 ). 
 
 
 To perform the fit : 
@@ -130,12 +131,11 @@ ccs_fit
 ```
 The following output files are obtained:
 ```
-splines.out error.out ccs.log summary.png 
+CCS_params.json error.out ccs.log 
 ```
-* splines.out  - Contains the spline coefficients  for two body potential.
-* error.out    - Contains target energies, predicted energies and absolute error for each configuration.
-* ccs.log       - Contains debug information
-* summary.png   -  Plot showing fit quality, selected spline coefficients, and distance histogram.
+* CCS_params.json  - Contains the spline coefficients, and one-body terms for two body potentials.
+* error.out        - Contains target energies, predicted energies and absolute error for each configuration.
+* ccs.log          - Contains debug information
 ## Authors
 
 * **Akshay Krishna AK** 
