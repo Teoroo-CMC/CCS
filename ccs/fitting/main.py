@@ -212,10 +212,10 @@ def parse(data, struct_data, struct_data_forces):
                 values['Rmin']
             except:
                 values['Rmin'] = min(
-                    [item for sublist in list_dist for item in sublist if item > 0])-values['Resolution']
+                    [item for sublist in list_dist for item in sublist if item > 0]) - 0.5*values['Resolution']
 
-            # if values['Rcut'] > Rmax:
-            #    values['Rcut'] = Rmax
+            if values['Rcut'] > Rmax:
+                values['Rcut'] = Rmax
 
             dist_mat = pd.DataFrame(list_dist)
             dist_mat = dist_mat.fillna(0)
