@@ -11,6 +11,7 @@
 
 
 import logging
+from tqdm import tqdm
 import itertools
 import pickle
 import json
@@ -115,7 +116,7 @@ class Objective:
         obj = []
         sol_list = []
 
-        for n_switch_id in nswitch_list:
+        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch'):
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
@@ -125,7 +126,6 @@ class Objective:
 
         obj = np.asarray(obj)
         mse = np.min(obj)
-        print()
         opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
         logger.info('\n The best switch is : %s and mse : %s',

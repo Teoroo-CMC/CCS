@@ -43,10 +43,10 @@ def validate(mode, CCS_params, Ns, DFT_DB, charge=False, q=None, charge_scaling=
 def main():
     print("--- USAGE:  ccs_validate MODE [...] --- ")
     print(" ")
-    print("      The following modes and inputs are supported:")
-    print("      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
-    print("      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
-    print("      DFTB:  Not yet supported...")
+    print("       The following modes and inputs are supported:")
+    print("       CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+    print("       CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
+    print("       DFTB:  Not yet supported...")
     print(" ")
 
     assert sys.argv[1] in ['CCS', 'CCS+Q', 'DFTB'], 'Mode not supproted.'
@@ -67,10 +67,10 @@ def main():
         print("-------------------------------------------------")
         validate(mode, CCS_params, Ns, DFT_DB)
     if(mode == "CCS+Q"):
-        print("   NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
+        print("        NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
         print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
-        charge_dict = sys.argv[3]
-        charge_scaling = bool(sys.argv[4])
+        charge_dict = sys.argv[5]
+        charge_scaling = bool(sys.argv[6])
         print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("    Charge dictionary: ", charge_dict)
@@ -78,5 +78,9 @@ def main():
         print("")
         print("-------------------------------------------------")
         charge_dict = json.loads(charge_dict)
-        validate(mode, CCS_params, Ns, DFT_DB,
-                 charge_dict=charge_dict, charge_scaling=charge_scaling)
+        validate(mode, CCS_params, Ns, DFT_DB, charge=True,
+                 q=charge_dict, charge_scaling=charge_scaling)
+
+
+if __name__ == "__main__":
+    main()

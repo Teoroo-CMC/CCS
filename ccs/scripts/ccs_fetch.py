@@ -61,13 +61,15 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
     return r_distance, forces
 
 
-def gen_CCS_train(mode, DFT_DB, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None):
+def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None):
     """  Function to read files and output structures.json
 
     Args:
         args(list): list of filenames
         R_c (float, optional): Distance cut-off. Defaults to 7.0.
     """
+    DFT_DB = db.connect(DFT_DB)
+
     if(mode == "CCS"):
         REF_DB = DFT_DB
 
@@ -77,7 +79,7 @@ def gen_CCS_train(mode, DFT_DB, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=Non
         REF_DB = DFT_DB
 
     if(mode == "DFTB"):
-        REF_DB = DFTB_DB
+        REF_DB = db.connect(DFTB_DB)
 
     if(Ns != 'all'):
         mask = [a <= Ns for a in range(len(REF_DB))]
@@ -152,8 +154,7 @@ def main():
     print(" ")
     R_c = float(sys.argv[2])
     Ns = sys.argv[3]
-    DFT_data = sys.argv[4]
-    DFT_DB = db.connect(DFT_data)
+    DFT_DB = sys.argv[4]
     if(sys.argv[3] == "all"):
         pass
     else:
@@ -164,32 +165,32 @@ def main():
     if(mode == "CCS"):
         print("    R_c set to: ", R_c)
         print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
+        print("    DFT reference data base: ", DFT_DB)
         print("")
         print("-------------------------------------------------")
-        gen_CCS_train(mode, DFT_DB, R_c, Ns)
+        ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns)
     if(mode == "CCS+Q"):
         print("   NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
         print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
         charge_dict = sys.argv[5]
         print("    R_c set to: ", R_c)
         print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
+        print("    DFT reference data base: ", DFT_DB)
         print("    Charge dictionary: ", charge_dict)
         print("")
         print("-------------------------------------------------")
         charge_dict = json.loads(charge_dict)
-        gen_CCS_train(mode, DFT_DB, R_c, Ns, charge_dict=charge_dict)
+        ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c,
+                  Ns=Ns, charge_dict=charge_dict)
     if(mode == "DFTB"):
-        DFTB_data = sys.argv[5]
-        DFTB_DB = db.connect(DFT_data)
+        DFTB_DB = sys.argv[5]
         print("    R_c set to: ", R_c)
         print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
-        print("    DFTB reference data base: ", DFTB_data)
+        print("    DFT reference data base: ", DFT_DB)
+        print("    DFTB reference data base: ", DFTB_DB)
         print("")
         print("-------------------------------------------------")
-        gen_CCS_train(mode, DFT_DB, R_c, Ns, DFTB_DB=DFTB_DB)
+        ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns, DFTB_DB=DFTB_DB)
 
 
 if __name__ == "__main__":
