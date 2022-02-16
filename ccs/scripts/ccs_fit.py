@@ -19,7 +19,7 @@ FILENAME = "input.json"
 
 
 USAGE = \
-'''
+    '''
 A tool to fit two body potentials using constrained cubic splines.
 '''
 

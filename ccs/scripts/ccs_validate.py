@@ -15,7 +15,10 @@ except:
 from ccs.ase_calculator.ccs_ase_calculator import CCS
 
 
-def validate(mode, CCS_params, Ns, DFT_DB, charge=False, q=None, charge_scaling=False):
+def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS_DB='CCS_DB.db' charge=False, q=None, charge_scaling=False):
+
+    DFT_DB = db.connect(DFT_data)
+    CCS_DB = db.connect(CCS_DB)
 
     f = open("CCS_validate.dat", 'w')
     print("#Reference      Predicted      Error      No_of_atoms structure_no", file=f)
@@ -33,11 +36,13 @@ def validate(mode, CCS_params, Ns, DFT_DB, charge=False, q=None, charge_scaling=
     for row in tqdm(DFT_DB.select(), total=len(DFT_DB)):
         counter += 1
         if(mask[counter]):
+            key = str(row.key)
             structure = row.toatoms()
             EDFT = structure.get_total_energy()
             structure.calc = calc
             ECCS = structure.get_potential_energy()
             print(EDFT, ECCS, EDFT-ECCS, len(structure), counter,  file=f)
+            CCS_DB.write(structure, CCS=True, key=key)
 
 
 def main():
@@ -55,7 +60,6 @@ def main():
     CCS_params_file = sys.argv[2]
     Ns = int(sys.argv[3])
     DFT_data = sys.argv[4]
-    DFT_DB = db.connect(DFT_data)
     with open(CCS_params_file, 'r') as f:
         CCS_params = json.load(f)
 
@@ -65,7 +69,7 @@ def main():
         print("    DFT reference data base: ", DFT_data)
         print("")
         print("-------------------------------------------------")
-        validate(mode, CCS_params, Ns, DFT_DB)
+        validate(mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data)
     if(mode == "CCS+Q"):
         print("        NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
         print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
@@ -78,7 +82,7 @@ def main():
         print("")
         print("-------------------------------------------------")
         charge_dict = json.loads(charge_dict)
-        validate(mode, CCS_params, Ns, DFT_DB, charge=True,
+        validate(mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data, charge=True,
                  q=charge_dict, charge_scaling=charge_scaling)
 
 
