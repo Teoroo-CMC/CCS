@@ -17,7 +17,7 @@ from ccs.ase_calculator.ccs_ase_calculator import CCS
 
 def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS_DB='CCS_DB.db', DFTB_DB=None, charge=False, q=None, charge_scaling=False):
 
-    DFT_DB = db.connect(DFT_data)
+    DFT_DB = db.connect(DFT_DB)
     CCS_DB = db.connect(CCS_DB)
 
     f = open("CCS_validate.dat", 'w')
@@ -33,16 +33,16 @@ def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS
         mask = len(DFT_DB)*[True]
 
     counter = -1
-    for row in tqdm(DFT_DB.select(), total=len(DFT_DB)):
+    for row in tqdm(DFT_DB.select(), total=len(DFT_DB), colour='#800000'):
         counter += 1
         if(mask[counter]):
-            key = str(row.key)
+            key = row.key
             structure = row.toatoms()
             EDFT = structure.get_total_energy()
             structure.calc = calc
             ECCS = structure.get_potential_energy()
             print(EDFT, ECCS, EDFT-ECCS, len(structure), counter,  file=f)
-            CCS_DB.write(structure, CCS=True, key=key)
+            CCS_DB.write(structure, key=key)
 
 
 def main():

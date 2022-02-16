@@ -92,7 +92,7 @@ def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_di
     counter = -1
     c = OrderedDict()
     d = OrderedDict()
-    for row in tqdm(REF_DB.select(), total=len(DFT_DB)):
+    for row in tqdm(REF_DB.select(), total=len(DFT_DB), colour='#008080'):
         counter = counter + 1
         if(mask[counter]):
             struct = row.toatoms()

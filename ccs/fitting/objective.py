@@ -116,7 +116,7 @@ class Objective:
         obj = []
         sol_list = []
 
-        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch'):
+        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch', colour='#800080'):
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
