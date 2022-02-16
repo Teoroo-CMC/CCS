@@ -15,7 +15,7 @@ except:
 from ccs.ase_calculator.ccs_ase_calculator import CCS
 
 
-def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS_DB='CCS_DB.db' charge=False, q=None, charge_scaling=False):
+def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS_DB='CCS_DB.db', DFTB_DB=None, charge=False, q=None, charge_scaling=False):
 
     DFT_DB = db.connect(DFT_data)
     CCS_DB = db.connect(CCS_DB)
