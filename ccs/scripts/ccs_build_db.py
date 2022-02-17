@@ -7,9 +7,13 @@ import numpy as np
 from tqdm import tqdm
 import copy
 import sys
+try:
+    from fortformat import Fnetdata
+except:
+    pass
 
 
-def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
+def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True):
 
     DFT_DB = db.connect(DFT_DB)
     if mode == "DFTB":
@@ -19,6 +23,11 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
     L = len(f.readlines())
     f.close()
     f = open(file_list, "r")
+
+    fnet_energies = np.empty((L, 1))
+    fnet_strucs = []
+    fnet_features = []
+
     counter = 0
     for lns in tqdm(f, total=L):
         counter = counter+1
@@ -63,6 +72,50 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
 
                 if not next_line:
                     break
+            f2.close
+
+            # READ MULLIKEN POPULATIONS
+            f2 = open(DFTB_FOLDER+"/detailed.out", "r")
+            time_to_read = False
+            DFTB_MULLIKEN = np.zeros(
+                [structure_DFTB.get_global_number_of_atoms(), 4])
+            while True:
+                next_line = f2.readline()
+                if(next_line == "\n"):
+                    time_to_read = False
+
+                if(time_to_read):
+                    af = next_line.split()
+                    at = int(af[0])-1
+                    orb = int(af[2])
+                    DFTB_MULLIKEN[at][orb] += float(af[3])
+
+                if(next_line == " Atom Sh.   l       Population\n"):
+                    time_to_read = True
+
+                if not next_line:
+                    break
+
+            # READ NET CHARGES
+            f2 = open(DFTB_FOLDER+"/detailed.out", "r")
+            time_to_read = False
+            DFTB_CHARGES = np.zeros(
+                [structure_DFTB.get_global_number_of_atoms(), 1])
+            while True:
+                next_line = f2.readline()
+                if(next_line == "\n"):
+                    time_to_read = False
+
+                if(time_to_read):
+                    af = next_line.split()
+                    at = int(af[0])-1
+                    DFTB_CHARGES[at, 0] = float(af[1])
+
+                if(next_line == " Atom           Charge\n"):
+                    time_to_read = True
+
+                if not next_line:
+                    break
 
             f2.close
 
@@ -74,8 +127,16 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None):
             structure_DFTB.calc = calculator
             structure_DFTB.get_potential_energy()
             structure_DFTB.get_forces()
-            DFTB_DB.write(structure_DFTB, DFTB=True, key=counter)
+            DFTB_DB.write(structure_DFTB, DFTB=True, key=counter, data={
+                          'fnet_charges': DFTB_CHARGES, 'fnet_mull': DFTB_MULLIKEN})
+            fnet_strucs.append(structure_DFT)
+            fnet_features.append(DFTB_MULLIKEN)
+            fnet_energies[counter-1, 0] = EDFT - EDFTB
     f.close()
+    if(Fortnet == True):
+        fnetdata = Fnetdata(atoms=fnet_strucs, targets=np.asarray(
+            fnet_energies), features=fnet_features, atomic=False)
+        fnetdata.dump('fnetdata.hdf5')
 
 
 def main():
@@ -83,7 +144,7 @@ def main():
     print(" ")
     print("       The following modes and inputs are supported:")
     print("       CCS:  file_list(string) DFT.db(string")
-    print("       DFTB: file_list(string) DFT.db(string) DFTB.db(string)")
+    print("       DFTB: file_list(string) DFT.db(string) DFTB.db(string) Fortnet(bool)")
     print(" ")
 
     mode = sys.argv[1]
@@ -97,11 +158,14 @@ def main():
         BUILD_DB(mode, DFT_DB=DFT_data, file_list=file_list)
     if(mode == "DFTB"):
         DFTB_data = sys.argv[4]
+        Fortnet = bool(sys.argv[5])
         print("    DFT data base: ", DFT_data)
         print("    DFTB data base: ", DFTB_data)
+        print("    DFTB data base: ", Fortnet)
         print("")
         print("-------------------------------------------------")
-        BUILD_DB(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list)
+        BUILD_DB(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data,
+                 file_list=file_list, Fortnet=Fortnet)
 
 
 if __name__ == "__main__":
