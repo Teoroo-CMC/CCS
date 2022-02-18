@@ -4,6 +4,7 @@ from ase.io import Trajectory, read, write
 from ase.calculators.neighborlist import *
 from ase.calculators.singlepoint import SinglePointCalculator
 import numpy as np
+from sympy import E
 from tqdm import tqdm
 import copy
 import sys
@@ -17,7 +18,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True)
 
     DFT_DB = db.connect(DFT_DB)
     if mode == "DFTB":
-        DFTB_DB = db.connect("DFTB.db")
+        DFTB_DB = db.connect(DFTB_DB)
 
     f = open(file_list, "r")
     L = len(f.readlines())
@@ -58,17 +59,19 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True)
             while True:
                 next_line = f2.readline()
 
-                if(next_line == "\n"):
+                if(next_line == " \n"):
                     time_to_read = False
 
                 if(time_to_read):
                     af = next_line.split()
-                    DFTB_forces[int(af[0])-1][0] = float(af[1])
-                    DFTB_forces[int(af[0])-1][1] = float(af[2])
-                    DFTB_forces[int(af[0])-1][2] = float(af[3])
+                    DFTB_forces[acnt, 0] = float(af[0])
+                    DFTB_forces[acnt, 1] = float(af[1])
+                    DFTB_forces[acnt, 2] = float(af[2])
+                    acnt += 1
 
-                if(next_line == "Total Forces\n"):
+                if("Total Forces" in next_line):
                     time_to_read = True
+                    acnt = 0
 
                 if not next_line:
                     break
