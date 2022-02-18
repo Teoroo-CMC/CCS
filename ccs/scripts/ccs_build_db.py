@@ -8,6 +8,7 @@ from sympy import E
 from tqdm import tqdm
 import copy
 import sys
+from ase.units import Bohr, Hartree
 try:
     from fortformat import Fnetdata
 except:
@@ -15,6 +16,8 @@ except:
 
 
 def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True):
+
+    AUtoEvA = Hartree/Bohr
 
     DFT_DB = db.connect(DFT_DB)
     if mode == "DFTB":
@@ -64,9 +67,9 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True)
 
                 if(time_to_read):
                     af = next_line.split()
-                    DFTB_forces[acnt, 0] = float(af[0])
-                    DFTB_forces[acnt, 1] = float(af[1])
-                    DFTB_forces[acnt, 2] = float(af[2])
+                    DFTB_forces[acnt, 0] = float(af[0])*AUtoEvA
+                    DFTB_forces[acnt, 1] = float(af[1])*AUtoEvA
+                    DFTB_forces[acnt, 2] = float(af[2])*AUtoEvA
                     acnt += 1
 
                 if("Total Forces" in next_line):
