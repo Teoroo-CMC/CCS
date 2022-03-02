@@ -15,7 +15,7 @@ except:
     pass
 
 
-def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False, greedy=False, greed_threshold=0.0001):
+def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=True):
 
     AUtoEvA = Hartree/Bohr
 
@@ -34,41 +34,13 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
 
     counter = 0
     for lns in tqdm(f, total=L):
-        counter += 1
+        counter = counter+1
         lns = lns.split()
         DFT_FOLDER = lns[0]
 
         structure_DFT = read(DFT_FOLDER+"/OUTCAR", index=-1)
         EDFT = structure_DFT.get_potential_energy()
         DFT_DB.write(structure_DFT, PBE=True, key=counter)
-
-        # EXTRACT ALL REASONABLE STEPS?
-        converged_indices = []
-        Natoms = len(structure_DFT)
-        if greedy and (mode != "DFTB"):
-            f2 = open(DFT_FOLDER+"/OUTCAR", "r")
-            outcar = f2.read()
-            f2.close
-            NELM = int(re.findall("NELM   \=(.+?)\;", outcar)[0])
-            indices = re.findall("Iteration(.+?)\(", outcar)
-            all_energies = re.findall("entropy\=(.+?)e", outcar)
-            all_energies = [float(x)/Natoms for x in all_energies]
-            indices = [int(x) for x in indices]
-            dE = re.findall("2. order\) :(.+?)\(", outcar)
-            uindices = set(indices)
-            converged_indices = []
-            previous_E = EDFT
-            for i in uindices:
-                N_SCF = [(el == i) for el in indices]
-                if(sum(N_SCF) < NELM) & (abs(all_energies[i-1]-previous_E) > greed_threshold):
-                    converged_indices.append(i)
-                    previous_E = all_energies[i]
-
-            for i in tqdm(converged_indices):
-                counter += 1
-                structure_DFT = read(DFT_FOLDER+"/OUTCAR", index=-1)
-                EDFT = structure_DFT.get_potential_energy()
-                DFT_DB.write(structure_DFT, PBE=True, key=counter)
 
         if mode == "DFTB":
             DFTB_FOLDER = lns[1]
@@ -177,7 +149,7 @@ def main():
     print("--- USAGE:  ccs_build_db MODE [...] --- ")
     print(" ")
     print("       The following modes and inputs are supported:")
-    print("       CCS:  file_list(string) DFT.db(string) greedy(bool)")
+    print("       CCS:  file_list(string) DFT.db(string")
     print("       DFTB: file_list(string) DFT.db(string) DFTB.db(string) Fortnet(bool)")
     print(" ")
 
@@ -186,12 +158,10 @@ def main():
     DFT_data = sys.argv[3]
     print("    Mode: ", mode)
     if(mode == "CCS"):
-        greedy = bool(sys.argv[4])
         print("    DFT data base: ", DFT_data)
-        print("    Greedy mode: ", greedy)
         print("")
         print("-------------------------------------------------")
-        BUILD_DB(mode, DFT_DB=DFT_data, file_list=file_list, greedy=greedy)
+        BUILD_DB(mode, DFT_DB=DFT_data, file_list=file_list)
     if(mode == "DFTB"):
         DFTB_data = sys.argv[4]
         Fortnet = bool(sys.argv[5])
