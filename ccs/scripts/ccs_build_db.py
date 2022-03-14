@@ -15,7 +15,7 @@ except:
     pass
 
 
-def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False, greedy=False, greed_threshold=0.0001):
+def ccs_build_db(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False, greedy=False, greed_threshold=0.0001):
 
     AUtoEvA = Hartree/Bohr
 
