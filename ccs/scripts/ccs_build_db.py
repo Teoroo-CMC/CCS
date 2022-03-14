@@ -192,7 +192,7 @@ def main():
         print("    Greedy mode: ", greedy)
         print("")
         print("-------------------------------------------------")
-        BUILD_DB(mode, DFT_DB=DFT_data, file_list=file_list, greedy=greedy)
+        ccs_build_db(mode, DFT_DB=DFT_data, file_list=file_list, greedy=greedy)
     if(mode == "DFTB"):
         DFTB_data = sys.argv[4]
         Fortnet = bool(sys.argv[5])
@@ -201,8 +201,8 @@ def main():
         print("    Create Fortnet data: ", Fortnet)
         print("")
         print("-------------------------------------------------")
-        BUILD_DB(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data,
-                 file_list=file_list, Fortnet=Fortnet)
+        ccs_build_db(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data,
+                     file_list=file_list, Fortnet=Fortnet)
 
 
 if __name__ == "__main__":
