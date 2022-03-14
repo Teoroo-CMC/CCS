@@ -97,7 +97,6 @@ def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_di
         if(mask[counter]):
             struct = row.toatoms()
             ce = OrderedDict()
-
             FREF = row.forces
             EREF = row.energy
             ce['energy_dft'] = EREF

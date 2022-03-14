@@ -53,20 +53,20 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
             indices = re.findall("Iteration(.+?)\(", outcar)
             all_energies = re.findall("entropy\=(.+?)e", outcar)
             all_energies = [float(x)/Natoms for x in all_energies]
-            indices = [int(x) for x in indices]
+            indices = [int(x)-1 for x in indices]
             dE = re.findall("2. order\) :(.+?)\(", outcar)
             uindices = set(indices)
             converged_indices = []
             previous_E = EDFT
             for i in uindices:
                 N_SCF = [(el == i) for el in indices]
-                if(sum(N_SCF) < NELM) & (abs(all_energies[i-1]-previous_E) > greed_threshold):
+                if(sum(N_SCF) < NELM) & (abs(all_energies[i]-previous_E) > greed_threshold):
                     converged_indices.append(i)
                     previous_E = all_energies[i]
 
             for i in tqdm(converged_indices):
                 counter += 1
-                structure_DFT = read(DFT_FOLDER+"/OUTCAR", index=-1)
+                structure_DFT = read(DFT_FOLDER+"/OUTCAR", index=i)
                 EDFT = structure_DFT.get_potential_energy()
                 DFT_DB.write(structure_DFT, PBE=True, key=counter)
 
@@ -115,7 +115,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
                 [structure_DFTB.get_global_number_of_atoms(), 4])
             while True:
                 next_line = f2.readline()
-                if(next_line == "\n"):
+                if(next_line == " \n"):
                     time_to_read = False
 
                 if(time_to_read):
@@ -124,7 +124,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
                     orb = int(af[2])
                     DFTB_MULLIKEN[at][orb] += float(af[3])
 
-                if(next_line == " Atom Sh.   l       Population\n"):
+                if(" Atom Sh.   l       Population" in next_line):
                     time_to_read = True
 
                 if not next_line:
@@ -137,7 +137,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
                 [structure_DFTB.get_global_number_of_atoms(), 1])
             while True:
                 next_line = f2.readline()
-                if(next_line == "\n"):
+                if(next_line == " \n"):
                     time_to_read = False
 
                 if(time_to_read):
@@ -145,7 +145,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
                     at = int(af[0])-1
                     DFTB_CHARGES[at, 0] = float(af[1])
 
-                if(next_line == " Atom           Charge\n"):
+                if(" Atom           Charge" in next_line):
                     time_to_read = True
 
                 if not next_line:
@@ -166,6 +166,7 @@ def BUILD_DB(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False
             fnet_strucs.append(structure_DFT)
             fnet_features.append(DFTB_MULLIKEN)
             fnet_energies[counter-1, 0] = EDFT - EDFTB
+
     f.close()
     if(Fortnet == True):
         fnetdata = Fnetdata(atoms=fnet_strucs, targets=np.asarray(
@@ -197,7 +198,7 @@ def main():
         Fortnet = bool(sys.argv[5])
         print("    DFT data base: ", DFT_data)
         print("    DFTB data base: ", DFTB_data)
-        print("    DFTB data base: ", Fortnet)
+        print("    Create Fortnet data: ", Fortnet)
         print("")
         print("-------------------------------------------------")
         BUILD_DB(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data,
