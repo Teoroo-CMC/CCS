@@ -109,30 +109,14 @@ def prepare_input(filename):
 
     if 'X-X' in data['Twobody']:
         print("Generating two-body potentials from one-body information.")
-
-    for atom_i in data['Onebody']:
-        for atom_j in data['Onebody']:
-            if (atom_j >= atom_i) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']) and ('X-'+atom_i not in data['Twobody']) and ('X-'+atom_j not in data['Twobody']):
-                try:
+        for atom_i in data['Onebody']:
+            for atom_j in data['Onebody']:
+                if atom_j >= atom_i:
                     print("    Adding pair: "+atom_i+"-"+atom_j)
                     data['Twobody'][atom_i+'-' +
                                     atom_j] = copy.deepcopy(data['Twobody']['X-X'])
-                except:
-                    print("    Failed adding pair: "+atom_i+"-"+atom_j)
-                    pass
-            if ('X-'+atom_i in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
-                data['Twobody'][atom_i+'-' +
-                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_i])
-            if ('X-'+atom_j in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
-                data['Twobody'][atom_i+'-' +
-                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_j])
 
-        tmp_data = copy.deepcopy(data)
-        for dat in tmp_data['Twobody']:
-            print(dat)
-            if 'X' in dat:
-                del data['Twobody'][dat]
-        del tmp_data
+        del data['Twobody']['X-X']
 
     return data, struct_data, struct_data_test, struct_data_forces, struct_data_test_forces
 

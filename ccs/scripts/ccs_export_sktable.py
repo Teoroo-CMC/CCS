@@ -4,6 +4,7 @@ import itertools as it
 from collections import OrderedDict, defaultdict
 from numpy import linalg as LA
 import json
+from ase.units import Bohr, Hartree
 
 
 def _write(elem1, elem2, CCS_params, exp=True):
@@ -23,8 +24,8 @@ def _write(elem1, elem2, CCS_params, exp=True):
     if(no_pair):
         pass
     else:
-        Rmin = CCS_params['Two_body'][pair]['r_min']
-        Rcut = CCS_params['Two_body'][pair]['r_cut']
+        Rmin = CCS_params['Two_body'][pair]['r_min'] / Bohr
+        Rcut = CCS_params['Two_body'][pair]['r_cut'] / Bohr
         a = CCS_params['Two_body'][pair]['spl_a']
         b = CCS_params['Two_body'][pair]['spl_b']
         c = CCS_params['Two_body'][pair]['spl_c']
@@ -38,16 +39,27 @@ def _write(elem1, elem2, CCS_params, exp=True):
 
         with open(f'{elem1}-{elem2}.spl', 'w') as f:
             print('Spline', file=f)
-            print(len(x), Rcut+dx, file=f)
-            print(aa, bb, cc, file=f)
+            print(len(x), (Rcut+dx)/Bohr, file=f)
+            print(aa*Bohr, bb+np.log(1/Hartree), cc/Hartree, file=f)
             for i in range(len(x)):
-                print(x[i], x[i]+dx, a[i], b[i], c[i], d[i], file=f)
+                if(i < (len(x)-1)):
+                    print(x[i]/Bohr, (x[i]+dx)/Bohr, a[i]/Hartree, b[i]*(Bohr) /
+                          Hartree, c[i]*(Bohr**2)/Hartree, d[i]*(Bohr**3)/Hartree, file=f)
+                else:
+                    print(x[i]/Bohr, (x[i]+dx)/Bohr, a[i]/Hartree, b[i]*(Bohr)/Hartree,
+                          c[i]*(Bohr**2)/Hartree, d[i]*(Bohr**3)/Hartree, "0.0 0.0", file=f)
+
         with open(f'{elem2}-{elem1}.spl', 'w') as f:
             print('Spline', file=f)
-            print(len(x), Rcut+dx, file=f)
-            print(aa, bb, cc, file=f)
+            print(len(x), (Rcut+dx)/Bohr, file=f)
+            print(aa*Bohr, bb+np.log(1/Hartree), cc/Hartree, file=f)
             for i in range(len(x)):
-                print(x[i], x[i]+dx, a[i], b[i], c[i], d[i], file=f)
+                if(i < (len(x)-1)):
+                    print(x[i]/Bohr, (x[i]+dx)/Bohr, a[i]/Hartree, b[i]*(Bohr) /
+                          Hartree, c[i]*(Bohr**2)/Hartree, d[i]*(Bohr**3)/Hartree, file=f)
+                else:
+                    print(x[i]/Bohr, (x[i]+dx)/Bohr, a[i]/Hartree, b[i]*(Bohr)/Hartree,
+                          c[i]*(Bohr**2)/Hartree, d[i]*(Bohr**3)/Hartree, "0.0 0.0", file=f)
 
 
 def write_dftb_spline(CCS_params_file):

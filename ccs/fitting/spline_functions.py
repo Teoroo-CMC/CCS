@@ -319,10 +319,17 @@ class Twobody:
             gamma (float):
 
         '''
-        aa = self.splcoeffs[0, 0]
-        bb = self.splcoeffs[0, 1]
-        cc = self.splcoeffs[0, 2]
-        r0 = self.rn[0]
+        # NOTE WE SHOULD NOTE INCLUDE INNERMOST POINT WHICH IS IL-DEFINED!
+        # OLD CODE
+        # aa = self.splcoeffs[0, 0]
+        # bb = self.splcoeffs[0, 1]
+        # cc = self.splcoeffs[0, 2]
+        # r0 = self.rn[0]
+        # NEW CODE
+        aa = self.splcoeffs[1, 0]
+        bb = self.splcoeffs[1, 1]
+        cc = self.splcoeffs[1, 2]
+        r0 = self.rn[1]
 
         alpha = -cc / bb
         beta = alpha * r0 + np.log(cc / alpha ** 2)

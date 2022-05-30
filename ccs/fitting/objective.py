@@ -428,26 +428,35 @@ class Objective:
         for k in range(self.np):
             two_body_dict = OrderedDict()
             # From right to left aligned...
-            two_body_dict["r_min"] = self.l_twb[k].rn[0]
+            # REMOVE INNER PART WHICH IS ILL-DEFINE
+            two_body_dict["r_min"] = self.l_twb[k].rn[1]
             two_body_dict["r_cut"] = self.l_twb[k].Rcut
             two_body_dict["dr"] = self.l_twb[k].res
             r_values = list(np.array(self.l_twb[k].rn))
+            del r_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             # r_values.append(self.l_twb[k].Rcut)
             two_body_dict["r"] = list(r_values)
+            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
+            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
+            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
+            del a_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
             b_values.append(0)
+            del b_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
             c_values.append(0)
+            del c_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_c"] = c_values
             d_values = list(self.l_twb[k].splcoeffs[:, 3])
             d_values.append(0)
+            del d_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_d"] = d_values
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 
