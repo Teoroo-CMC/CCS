@@ -1,7 +1,6 @@
-
 #------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
-#  Copyright (C) 2019 - 2021  CCS developers group                             #
+#  Copyright (C) 2019 - 2022  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
@@ -11,16 +10,14 @@
 
 
 import logging
-from tqdm import tqdm
 import itertools
-import pickle
 import json
 from collections import OrderedDict
 import numpy as np
-import matplotlib.pyplot as plt
-from cvxopt import matrix, solvers
 from scipy.linalg import block_diag
 
+from tqdm import tqdm
+from cvxopt import matrix, solvers
 import ccs.fitting.spline_functions as sf
 
 logger = logging.getLogger(__name__)
@@ -29,7 +26,8 @@ logger = logging.getLogger(__name__)
 class Objective:
     '''Objective function for the ccs method.'''
 
-    def __init__(self, l_twb, l_one, sto, energy_ref, force_ref, gen_params, ewald=[], ewald_forces=[]):
+    def __init__(self, l_twb, l_one, sto, energy_ref, force_ref, gen_params,
+                 ewald=[], ewald_forces=[]):
         '''Generates Objective class object.
 
         Args:
@@ -114,9 +112,9 @@ class Objective:
             matrix(np.transpose(self.mm).dot(self.ref))
         nswitch_list = self.list_iterator()
         obj = []
-        sol_list = []
 
-        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch', colour='#800080'):
+        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch',
+                                colour='#800080'):
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
@@ -144,8 +142,8 @@ class Objective:
             self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
 
         if self.l_twb[0].Nconfs_forces > 0:
-            model_forces = np.ravel(-3 *
-                                    self.mm[-self.l_twb[0].Nconfs_forces:-1, :].dot(xx))
+            model_forces = np.ravel(
+                -3 * self.mm[-self.l_twb[0].Nconfs_forces:-1, :].dot(xx))
             self.write_error_forces(model_forces, self.force_ref)
 
         self.write_error()
@@ -389,7 +387,8 @@ class Objective:
         for i in range(1, self.no):
             Natoms = Natoms+self.l_one[i].stomat
         footer = 'MSE = {:2.5E}\nMaxerror = {:2.5E}'.format(mse, maxerror)
-        np.savetxt(fname, np.transpose([self.energy_ref, self.model_energies, error, Natoms]), header=header,
+        np.savetxt(fname, np.transpose([self.energy_ref, self.model_energies,
+                                        error, Natoms]), header=header,
                    footer=footer, fmt='%-15.5f')
 
     def write_error_forces(self, mdl_for, ref_for, fname='error_forces.out'):

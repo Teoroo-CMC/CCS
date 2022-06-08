@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
-#  Copyright (C) 2019 - 2021  CCS developers group                             #
+#  Copyright (C) 2019 - 2022  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
@@ -11,15 +11,11 @@ This module contains functions for spline construction, evaluation and output.
 '''
 
 
-from ctypes import c_int
 import logging
-import numpy as np
-import json
 import bisect
 import copy
 import scipy.linalg as linalg
-from collections import OrderedDict
-from ccs.data.conversion import Bohr__AA, eV__Hartree
+import numpy as np
 from scipy.linalg import block_diag
 
 
@@ -107,7 +103,6 @@ class Twobody:
         self.C, self.D, self.B, self.A = self.spline_construction()
 
     def get_const(self):
-        aa = np.zeros(0)
         g_mono = -1 * np.identity(self.N)
         g_mono[0, 0] = -1*(self.rn[1]-self.rn[0]+self.res)
         g_mono[0, 1] = 2*(self.res)
@@ -119,7 +114,7 @@ class Twobody:
 
     def switch_const(self, n_switch):
         g = copy.deepcopy(self.const)
-        ii, jj = np.indices(g.shape)
+        ii, _ = np.indices(g.shape)
         g[ii > n_switch] = -g[ii > n_switch]
         return g
 
@@ -347,7 +342,8 @@ class Onebody:
         Args:
 
             name (str): name of the atom type.
-            epsilon_supported  (bool): flag to tell if epsilon can be determined from the data
+            epsilon_supported (bool): flag to tell if epsilon can be determined
+                from the data
             epsilon (float): onebody energy term
 
         '''
