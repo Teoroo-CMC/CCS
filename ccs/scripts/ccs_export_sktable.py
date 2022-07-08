@@ -73,7 +73,12 @@ def write_dftb_spline(CCS_params_file):
 
 
 def main():
-    CCS_params_file = sys.argv[1]
+    try:
+        CCS_params_file = sys.argv[1]
+    except:
+        print("Please provide CCS params-file as first argument.")
+        exit()
+
     write_dftb_spline(CCS_params_file)
 
 

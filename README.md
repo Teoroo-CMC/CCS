@@ -61,7 +61,7 @@ $ export PATH=<path-to-CCS-bin>:$PATH
 
 ## Tutorials
 
-We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `input.json` for O2 is shown below:
+We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `CCS_input.json` for O2 is shown below:
 ```
 {
         "General": {
@@ -81,9 +81,10 @@ We provide tutorials in the [examples](examples/) folder. To run the example, go
 }
 
 ```
-The `input.json` file should provide at a minimum the block "Genaral" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
+The `CCS_input.json` file should provide at a minimum the block "Genaral" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
 ```
 {
+"energies":{
         "S1": {
                 "Energy": -4.22425752,
                 "Atoms": {
@@ -121,6 +122,7 @@ The `input.json` file should provide at a minimum the block "Genaral" specifying
                 ]
         }
 }
+}
 ```
 The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stoichiometry of each configuration is given under the atoms label ("Atoms") as a key-value pair ("O" : 2 ). 
 
@@ -131,7 +133,7 @@ ccs_fit
 ```
 The following output files are obtained:
 ```
-CCS_params.json error.out ccs.log 
+CCS_params.json CCS_error.out ccs.log 
 ```
 * CCS_params.json  - Contains the spline coefficients, and one-body terms for two body potentials.
 * error.out        - Contains target energies, predicted energies and absolute error for each configuration.

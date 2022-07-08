@@ -30,7 +30,7 @@ This should produce the following standard output. The progress bar at bottom al
 -------------------------------------------------
 100%|████████████████████████████████| 75/75 [00:00<00:00, 89.50it/s]
 ```
-Next write the input to the `input.json` file as shown below:
+Next write the input to the `CCS_input.json` file as shown below:
 ```
 {
         "General": {
@@ -54,9 +54,9 @@ ccs_fit
 This will produce two primary output files: 
 
 * `CCS_params.json` containing the spline tables and other all parameters defining the repulsive potential. 
-* `error.out` a summary of the fitting quality.
+* `CCS_error.out` a summary of the fitting quality.
 
-A compressed version of the  `error.out` file is shown below: 
+A compressed version of the  `CCS_error.out` file is shown below: 
 ``` 
 # Reference      Predicted      Error          #atoms         
 15245.26615     15240.46770     4.79845         240.00000      

@@ -369,7 +369,7 @@ class Objective:
 
         return gg, aa
 
-    def write_error(self, fname='error.out'):
+    def write_error(self, fname='CCS_error.out'):
         '''Prints the errors in a file.
 
         Args:

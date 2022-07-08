@@ -146,12 +146,21 @@ def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_di
 
 
 def main():
-    print("--- USAGE:  ccs_fetch MODE [...] --- ")
-    print("    The following modes and inputs are supported:")
+    print("--------------------------------------------------------------------------------")
+    print("  USAGE:  ccs_fetch MODE [...]  ")
+    print("")
+    print("  The following modes and inputs are supported:")
+    print("")
     print("      CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)")
     print("      CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)")
     print("      DFTB:  CutoffRadius(float) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
     print(" ")
+
+    try:
+        assert sys.argv[1] in ['CCS', 'CCS+Q', 'DFTB'], 'Mode not supproted.'
+    except:
+        exit()
+
     R_c = float(sys.argv[2])
     Ns = sys.argv[3]
     DFT_DB = sys.argv[4]
@@ -167,7 +176,7 @@ def main():
         print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_DB)
         print("")
-        print("-------------------------------------------------")
+        print("---")
         ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns)
     if(mode == "CCS+Q"):
         print("   NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
@@ -178,7 +187,7 @@ def main():
         print("    DFT reference data base: ", DFT_DB)
         print("    Charge dictionary: ", charge_dict)
         print("")
-        print("-------------------------------------------------")
+        print("--------------------------------------------------------------------------------")
         charge_dict = json.loads(charge_dict)
         ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c,
                   Ns=Ns, charge_dict=charge_dict)
@@ -189,7 +198,7 @@ def main():
         print("    DFT reference data base: ", DFT_DB)
         print("    DFTB reference data base: ", DFTB_DB)
         print("")
-        print("-------------------------------------------------")
+        print("--------------------------------------------------------------------------------")
         ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns, DFTB_DB=DFTB_DB)
 
 

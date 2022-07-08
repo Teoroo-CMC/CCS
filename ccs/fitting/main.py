@@ -129,7 +129,6 @@ def prepare_input(filename):
 
         tmp_data = copy.deepcopy(data)
         for dat in tmp_data['Twobody']:
-            print(dat)
             if 'X' in dat:
                 del data['Twobody'][dat]
         del tmp_data
@@ -165,7 +164,7 @@ def parse(data, struct_data, struct_data_forces):
                     list_dist.append(vv[atmpair_rev])
                 except KeyError:
                     logger.critical(
-                        'Name mismatch in input.json and structures.json')
+                        'Name mismatch in CCS_input.json and structures.json')
                     list_dist.append([0])
 
             if counter1 == 1:

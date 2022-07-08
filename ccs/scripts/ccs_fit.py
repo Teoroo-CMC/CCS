@@ -15,7 +15,7 @@ import argparse
 
 from ccs.fitting.main import twp_fit
 
-FILENAME = "input.json"
+FILENAME = "CCS_input.json"
 
 
 USAGE = \

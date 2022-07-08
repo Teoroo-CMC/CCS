@@ -1,3 +1,3 @@
-S1/DFT/   S1/DFTB/
-S2/DFT/   S2/DFTB/
-S3/DFT/   S3/DFTB/
+S1/VASP/out.xyz   S1/DFTB/results.tag
+S2/VASP/out.xyz   S2/DFTB/results.tag
+S3/VASP/out.xyz   S3/DFTB/results.tag
