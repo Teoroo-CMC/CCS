@@ -1,3 +1,13 @@
+#------------------------------------------------------------------------------#
+#  CCS: Curvature Constrained Splines                                          #
+#  Copyright (C) 2019 - 2022  CCS developers group                             #
+#                                                                              #
+#  See the LICENSE file for terms of usage and distribution.                   #
+#------------------------------------------------------------------------------#
+
+'''Auxiliary timing functions for debugging purposes.'''
+
+
 from functools import wraps
 from time import time
 
