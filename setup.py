@@ -10,21 +10,24 @@ if sys.version_info[:2] < (3,0):
 setup(
     name='ccs',
     version='0.1.0',
-    url='https://github.com/aksam432/CCS',
-    description=' A Python package for fitting two-body potentials using' +\
+    url='https://github.com/Teoroo-CMC/CCS',
+    description='A Python package for fitting two-body potentials using' +\
     ' curvature constrained splines',
     author='Akshay Krishna AK',
     author_email='akshay.kandy@kemi.uu.se',
     platforms=['unix'],
     packages=find_packages(),
-    scripts=['bin/atom_json', 'bin/ccs_fit'],
+    scripts=['bin/ccs_build_db', 'bin/ccs_export_sktable', 'bin/ccs_fetch',
+             'bin/ccs_fit', 'bin/ccs_validate'],
     license='GPLv3',
     install_requires=[
-        'cvxopt==1.2.4',
-        'numpy>=1.18.1',
-        'pandas==0.24.2',
+        'cvxopt',
+        'numpy',
+        'pandas',
         'scipy',
-        'ase>=3.19.0'],
+        'sympy',
+        'tqdm',
+        'ase'],
     classifiers=[
         'Programming Language :: Python',
         'Environment :: Console',

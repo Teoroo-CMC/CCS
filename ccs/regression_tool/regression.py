@@ -20,16 +20,14 @@ class CCS_regressor:
         self.xmax = xmax
         if not dx:
             self.dx = np.ones((N, 1))
-            self.dx = (self.xmax-self.xmin) * self.dx / np.sum(self.dx)
+            self.dx = (self.xmax - self.xmin) * self.dx / np.sum(self.dx)
         self.eps = eps
-        self.C, self.D, self.B, self.A = self.spline_construction(
-            self.N)
+        self.C, self.D, self.B, self.A = self.spline_construction(self.N)
 
     def merge_intervals(self, x):
         dx = self.dx
         xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
+        xns = np.array([float(sum(dx[0:i])) + xmin for i in range(len(dx))])
         indices = [self.N]
         for i in range(len(x)):
             index = bisect.bisect_left(xns, x[i])
@@ -50,16 +48,15 @@ class CCS_regressor:
 
         self.N = N_new
         self.dx = dx_new
-        self.C, self.D, self.B, self.A = self.spline_construction(
-            self.N)
+        self.C, self.D, self.B, self.A = self.spline_construction(self.N)
         print("Merging intervall. N reduced to: ", self.N)
 
     def rubber_band(self):
         pass
 
-    @ staticmethod
+    @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
-        '''The solver for the objective.
+        """The solver for the objective.
 
         Args:
 
@@ -78,13 +75,13 @@ class CCS_regressor:
 
             sol (dict): dictionary containing solution details
 
-        '''
+        """
 
-        solvers.options['show_progress'] = False
-        solvers.options['maxiters'] = maxiter
-        solvers.options['feastol'] = tol[0]
-        solvers.options['abstol'] = tol[1]
-        solvers.options['reltol'] = tol[2]
+        solvers.options["show_progress"] = False
+        solvers.options["maxiters"] = maxiter
+        solvers.options["feastol"] = tol[0]
+        solvers.options["abstol"] = tol[1]
+        solvers.options["reltol"] = tol[2]
 
         if aa:
             sol = solvers.qp(pp, qq, gg, hh, aa, bb)
@@ -102,28 +99,27 @@ class CCS_regressor:
         gg, aa = self.const(n_switch)
         hh = np.zeros(gg.shape[0])
         bb = np.zeros(aa.shape[0])
-        self.sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa),
-                               matrix(bb))
+        self.sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
 
     def const(self, n_switch):
         aa = np.zeros(0)
         g_mono = -1 * np.identity(self.N)
-        for ii in range(self.N-1):
-            #g_mono[ii, ii] = - (1/self.dx[ii+1]+1/self.dx[ii])
-            #g_mono[ii, ii+1] = 2/self.dx[ii]
-            g_mono[ii, ii] = - (self.dx[ii+1]+self.dx[ii])
-            g_mono[ii, ii+1] = 2*self.dx[ii]
-        #g_mono[ii > n_switch] = -g_mono[ii > n_switch]
+        for ii in range(self.N - 1):
+            # g_mono[ii, ii] = - (1/self.dx[ii+1]+1/self.dx[ii])
+            # g_mono[ii, ii+1] = 2/self.dx[ii]
+            g_mono[ii, ii] = -(self.dx[ii + 1] + self.dx[ii])
+            g_mono[ii, ii + 1] = 2 * self.dx[ii]
+        # g_mono[ii > n_switch] = -g_mono[ii > n_switch]
         gg = block_diag(g_mono, 0)
         return gg, aa
 
     def predict(self, x):
         mm, indices = self.model(x)
-        y = mm.dot(np.array(self.sol['x']))
+        y = mm.dot(np.array(self.sol["x"]))
         return y
 
     def spline_construction(self, N):
-        ''' This function constructs the matrices A, B, C, D.
+        """This function constructs the matrices A, B, C, D.
 
         Args:
             N : Number of knots
@@ -132,8 +128,8 @@ class CCS_regressor:
 
             cc, dd, bb, aa (matrices): constructed matrices
 
-        '''
-        rows = N-1
+        """
+        rows = N - 1
         cols = N
 
         cc = np.zeros((rows, cols), dtype=float)
@@ -172,7 +168,7 @@ class CCS_regressor:
         return cc, dd, bb, aa
 
     def model(self, x):
-        '''Constructs the v matrix.
+        """Constructs the v matrix.
 
         Args:
             self
@@ -181,7 +177,7 @@ class CCS_regressor:
 
             ndarray: The v matrix for a pair.
 
-        '''
+        """
         aa = self.A
         bb = self.B
         cc = self.C
@@ -189,8 +185,7 @@ class CCS_regressor:
         size = len(x)
         dx = self.dx
         xmin = self.xmin
-        xns = np.array(
-            [float(sum(dx[0:i])) + xmin for i in range(len(dx))])
+        xns = np.array([float(sum(dx[0:i])) + xmin for i in range(len(dx))])
 
         vv = np.zeros((size, self.N))
         uu = np.zeros((self.N, 1)).flatten()
@@ -200,8 +195,8 @@ class CCS_regressor:
             index = bisect.bisect_left(xns, x[i])
             index = max(0, index)
 
-            if(index < self.N) & (index > 0):
-                delta = (x[i]-xns[index]) / dx[index-1]
+            if (index < self.N) & (index > 0):
+                delta = (x[i] - xns[index]) / dx[index - 1]
                 indices.append(index)
                 aa_ind = aa[index - 1]
                 bb_ind = bb[index - 1] * delta

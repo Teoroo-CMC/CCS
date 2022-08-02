@@ -10,4 +10,5 @@ def timing(func):
         time_end = time()
         print(f"func {func.__name__} took {time_end-time_start}")
         return result
+
     return wrap

@@ -1,13 +1,13 @@
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
-'''
+"""
 Common neighbor list routines used by the CCS project.
-'''
+"""
 
 
 import numpy as np
@@ -17,7 +17,7 @@ from ccs.data.conversion import AA__Bohr
 
 
 def pair_dist(atoms, rcut, ch1, ch2):
-    '''Calculates the pairwise distances between two types of atoms within a
+    """Calculates the pairwise distances between two types of atoms within a
        certain cuttoff.
 
     Args:
@@ -31,15 +31,18 @@ def pair_dist(atoms, rcut, ch1, ch2):
 
         dists_rounded (list): list of distances in Bohr, i.e. atomic units
 
-    '''
+    """
 
     if ch1 == ch2:
         bothways = False
     else:
         bothways = True
 
-    nl = NeighborList(atoms.get_global_number_of_atoms() * [rcut],
-                      self_interaction=False, bothways=bothways)
+    nl = NeighborList(
+        atoms.get_global_number_of_atoms() * [rcut],
+        self_interaction=False,
+        bothways=bothways,
+    )
     nl.update(atoms)
 
     distances = []
