@@ -34,6 +34,7 @@ def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS
                q=q, charge_scaling=charge_scaling)
 
     if(Ns != 'all'):
+        Ns = int(Ns)
         mask = [a <= Ns for a in range(len(DFT_DB))]
         random.shuffle(mask)
     else:
@@ -43,13 +44,13 @@ def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS
     for row in tqdm(DFT_DB.select(), total=len(DFT_DB), colour='#800000'):
         counter += 1
         if(mask[counter]):
-            key = row.key
             structure = row.toatoms()
             EDFT = structure.get_total_energy()
             EREF = EDFT
             structure.calc = calc
             ECCS = structure.get_potential_energy()
             if(mode == "DFTB"):
+                key = row.key
                 EDFTB = DFTB_DB.get('key='+str(key)).energy
                 EREF = EDFT-EDFTB
                 sp_calculator = SinglePointCalculator(structure,
@@ -59,7 +60,10 @@ def validate(mode=None, CCS_params='CCS_params.json', Ns='all', DFT_DB=None, CCS
 
             print(EREF, ECCS, np.abs(EREF-ECCS),
                   len(structure), counter,  file=f)
-            CCS_DB.write(structure, key=key)
+            try:
+                CCS_DB.write(structure, key=key)
+            except:
+                CCS_DB.write(structure)
 
 
 def main():
@@ -106,7 +110,11 @@ def main():
         print("        NOTE: charge_dict should use double quotes to enclose property nanes. Example:")
         print("        \'{\"Zn\":2.0,\"O\" : -2.0 } \'")
         charge_dict = sys.argv[5]
-        charge_scaling = bool(sys.argv[6])
+        charge_scaling = sys.argv[6]
+        if charge_scaling == "True":
+            charge_scaling = True
+        if charge_scaling == "False":
+            charge_scaling = False
         print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("    Charge dictionary: ", charge_dict)
