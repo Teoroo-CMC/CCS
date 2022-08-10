@@ -263,6 +263,7 @@ class Objective:
         counter = -1
         if(self.interface == "CCS+Q"):
             counter = 0
+            print("Charge scaling squared: ", xx[-1])
             self.charge_scaling = (xx[-1]**0.5)
         for k in range(self.no):
             i = self.no-k-1
@@ -365,7 +366,7 @@ class Objective:
 
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.interface == 'CCS+Q':
-            gg = block_diag(gg, 0)
+            gg = block_diag(gg, -1)
 
         return gg, aa
 

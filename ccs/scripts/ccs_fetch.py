@@ -30,10 +30,10 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
         n_repeat = np.ceil(n_repeat).astype(int)
         offsets = [*itertools.product(*[np.arange(-n, n+1)
-                                  for n in n_repeat])]
+                                        for n in n_repeat])]
     except:
-        cell=[[0,0,0],[0,0,0],[0,0,0]]
-        offsets=[[0,0,0]]
+        cell = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        offsets = [[0, 0, 0]]
 
     mask1 = [atom == ch1 for atom in atoms.get_chemical_symbols()]
     mask2 = [atom == ch2 for atom in atoms.get_chemical_symbols()]
@@ -41,7 +41,6 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
     index1 = np.arange(0, len(atoms))[mask1]
     atoms_2 = atoms[mask2]
     Natoms_2 = len(atoms_2)
-
 
     pos2 = []
     for offset in offsets:
@@ -79,7 +78,7 @@ def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_di
         REF_DB = DFT_DB
 
     if(mode == "CCS+Q"):
-        from pymatgen import Lattice, Structure
+        from pymatgen.core import Lattice, Structure
         from pymatgen.analysis import ewald
         REF_DB = DFT_DB
 
@@ -87,7 +86,7 @@ def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_di
         REF_DB = db.connect(DFTB_DB)
 
     if(Ns != 'all'):
-        Ns=int(Ns)
+        Ns = int(Ns)
         mask = [a <= Ns for a in range(len(REF_DB))]
         random.shuffle(mask)
     else:

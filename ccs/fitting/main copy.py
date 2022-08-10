@@ -109,14 +109,29 @@ def prepare_input(filename):
 
     if 'X-X' in data['Twobody']:
         print("Generating two-body potentials from one-body information.")
-        for atom_i in data['Onebody']:
-            for atom_j in data['Onebody']:
-                if atom_j >= atom_i:
+
+    for atom_i in data['Onebody']:
+        for atom_j in data['Onebody']:
+            if (atom_j >= atom_i) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']) and ('X-'+atom_i not in data['Twobody']) and ('X-'+atom_j not in data['Twobody']):
+                try:
                     print("    Adding pair: "+atom_i+"-"+atom_j)
                     data['Twobody'][atom_i+'-' +
                                     atom_j] = copy.deepcopy(data['Twobody']['X-X'])
+                except:
+                    print("    Failed adding pair: "+atom_i+"-"+atom_j)
+                    pass
+            if ('X-'+atom_i in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
+                data['Twobody'][atom_i+'-' +
+                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_i])
+            if ('X-'+atom_j in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
+                data['Twobody'][atom_i+'-' +
+                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_j])
 
-        del data['Twobody']['X-X']
+        tmp_data = copy.deepcopy(data)
+        for dat in tmp_data['Twobody']:
+            if 'X' in dat:
+                del data['Twobody'][dat]
+        del tmp_data
 
     return data, struct_data, struct_data_test, struct_data_forces, struct_data_test_forces
 
@@ -149,7 +164,7 @@ def parse(data, struct_data, struct_data_forces):
                     list_dist.append(vv[atmpair_rev])
                 except KeyError:
                     logger.critical(
-                        'Name mismatch in input.json and structures.json')
+                        'Name mismatch in CCS_input.json and structures.json')
                     list_dist.append([0])
 
             if counter1 == 1:

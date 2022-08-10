@@ -87,13 +87,13 @@ def prepare_input(filename):
     # Make defaults or general setting for Twobody
     if 'Twobody' not in data.keys():
         if 'DFTB' in data['General']['interface']:
-            data['Twobody'] = {'X-X': {"Rcut": 5.0,
-                                       "Resolution": 0.1,
-                                       "Swtype": "rep"}}
+            data['Twobody'] = {'Xx-Xx': {"Rcut": 5.0,
+                                         "Resolution": 0.1,
+                                         "Swtype": "rep"}}
         if 'CCS' in data['General']['interface']:
-            data['Twobody'] = {'X-X': {"Rcut": 8.0,
-                                       "Resolution": 0.1,
-                                       "Swtype": "sw"}}
+            data['Twobody'] = {'Xx-Xx': {"Rcut": 8.0,
+                                         "Resolution": 0.1,
+                                         "Swtype": "sw"}}
 
     # If onebody is not given it is generated from structures.json
     elements = set()
@@ -107,29 +107,29 @@ def prepare_input(filename):
         print("    Added elements: ", *elements)
         data['Onebody'] = list(elements)
 
-    if 'X-X' in data['Twobody']:
+    if 'Xx-Xx' in data['Twobody']:
         print("Generating two-body potentials from one-body information.")
 
     for atom_i in data['Onebody']:
         for atom_j in data['Onebody']:
-            if (atom_j >= atom_i) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']) and ('X-'+atom_i not in data['Twobody']) and ('X-'+atom_j not in data['Twobody']):
+            if (atom_j >= atom_i) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']) and ('Xx-'+atom_i not in data['Twobody']) and ('Xx-'+atom_j not in data['Twobody']):
                 try:
                     print("    Adding pair: "+atom_i+"-"+atom_j)
                     data['Twobody'][atom_i+'-' +
-                                    atom_j] = copy.deepcopy(data['Twobody']['X-X'])
+                                    atom_j] = copy.deepcopy(data['Twobody']['Xx-Xx'])
                 except:
-                    print("    Failed adding pair: "+atom_i+"-"+atom_j)
+                    print("    Did not add pair: "+atom_i+"-"+atom_j)
                     pass
-            if ('X-'+atom_i in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
+            if ('Xx-'+atom_i in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
                 data['Twobody'][atom_i+'-' +
-                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_i])
-            if ('X-'+atom_j in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
+                                atom_j] = copy.deepcopy(data['Twobody']['Xx-'+atom_i])
+            if ('Xx-'+atom_j in data['Twobody']) and (atom_i+'-'+atom_j not in data['Twobody']) and (atom_j+'-'+atom_i not in data['Twobody']):
                 data['Twobody'][atom_i+'-' +
-                                atom_j] = copy.deepcopy(data['Twobody']['X-'+atom_j])
+                                atom_j] = copy.deepcopy(data['Twobody']['Xx-'+atom_j])
 
         tmp_data = copy.deepcopy(data)
         for dat in tmp_data['Twobody']:
-            if 'X' in dat:
+            if 'Xx' in dat:
                 del data['Twobody'][dat]
         del tmp_data
 
