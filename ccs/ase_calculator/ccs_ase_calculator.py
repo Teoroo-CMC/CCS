@@ -8,7 +8,7 @@ from ase.calculators.calculator import Calculator, all_changes
 from ase.calculators.calculator import PropertyNotImplementedError
 from ase.constraints import full_3x3_to_voigt_6_stress
 try:
-    from pymatgen import Lattice, Structure
+    from pymatgen.core import Lattice, Structure
     from pymatgen.analysis import ewald
     from pymatgen.io.ase import AseAtomsAdaptor
 except:
