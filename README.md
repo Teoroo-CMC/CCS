@@ -47,7 +47,7 @@ pip install cvxopt
 #### Git clone
 
 ```
-git clone git@github.com:aksam432/CCS.git
+git clone git@github.com:Teoroo-CMC/CCS.git
 cd CCS
 python setup.py install
 ```
@@ -55,7 +55,10 @@ python setup.py install
 Set the following environment variables:
 ```
 $export PYTHONPATH=<path-to-CCS-package>:$PYTHONPATH
-$ export PATH=<path-to-CCS-bin>:$PATH
+$export PATH=<path-to-CCS-bin>:$PATH
+
+Within a conda virtual environment, you can update the path by using:
+conda develop <path-to-CCS-package>
 ```
 
 
