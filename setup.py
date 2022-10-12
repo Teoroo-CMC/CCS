@@ -4,14 +4,14 @@ import sys
 from setuptools import setup, find_packages
 
 
-if sys.version_info[:2] < (3,0):
+if sys.version_info[:2] < (3, 0):
     raise SystemExit('Python in version 3 required.')
 
 setup(
     name='ccs',
     version='0.1.0',
-    url='https://github.com/aksam432/CCS',
-    description=' A Python package for fitting two-body potentials using' +\
+    url='...',
+    description=' A Python package for fitting two-body potentials using' +
     ' curvature constrained splines',
     author='Akshay Krishna AK',
     author_email='akshay.kandy@kemi.uu.se',
@@ -31,4 +31,4 @@ setup(
         'Intended Audience :: Science/Research',
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering'],
-    keywords = ['Two-Body Potentials', 'Optimization', 'Force-Field'])
+    keywords=['Two-Body Potentials', 'Optimization', 'Force-Field'])
