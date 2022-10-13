@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ccs"
+version = "0.1.0"
+description = "Fitting tools for repulsive two body interactions using curvature constrained splines."
+authors = [
+    "Akshay Krishna AK"
+    "Jolla Kullgren <jolla.kullgren@kemi.uu.se>"
+    "Eddie Wadbro"
+    ]
+maintainers = [
+    "Jolla Kullgren <jolla.kullgren@kemi.uu.se>"
+    ]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"]
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
