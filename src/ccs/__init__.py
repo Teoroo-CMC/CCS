@@ -4,3 +4,9 @@
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
+
+# read version from installed package
+from importlib.metadata import version
+__version__ = version("ccs")
+
+from ccs.ase_calculator import CCS
