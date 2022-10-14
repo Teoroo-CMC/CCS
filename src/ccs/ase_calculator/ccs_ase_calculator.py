@@ -107,6 +107,26 @@ def ew(atoms, q):
 
 
 class CCS(Calculator):
+    """
+    CCS calculator
+
+    Curvature constrained splines calculator compatible with the ASE
+    format.
+
+    Parameters
+    ----------
+    input_file : XXX
+        To be added, Jolla.
+
+    Returns
+    -------
+    What does it return actually, Jolla?
+        
+
+    Examples
+    --------
+    >>> To be added, Jolla.
+    """    
     implemented_properties = {'stress', 'energy', 'forces'}
 
     def __init__(self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs):
