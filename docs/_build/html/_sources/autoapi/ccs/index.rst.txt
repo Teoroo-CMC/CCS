@@ -1,0 +1,26 @@
+:py:mod:`ccs`
+=============
+
+.. py:module:: ccs
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   common/index.rst
+   data/index.rst
+   fitting/index.rst
+   scripts/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+   
+
+   
+

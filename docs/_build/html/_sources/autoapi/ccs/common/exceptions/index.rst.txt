@@ -1,0 +1,21 @@
+:py:mod:`ccs.common.exceptions`
+===============================
+
+.. py:module:: ccs.common.exceptions
+
+.. autoapi-nested-parse::
+
+   Common exceptions needed by the CCS project.
+
+
+
+Module Contents
+---------------
+
+.. py:exception:: ScriptError
+
+   Bases: :py:obj:`Exception`
+
+   Exception thrown by the command line scripts.
+
+

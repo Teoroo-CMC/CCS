@@ -1,0 +1,30 @@
+:py:mod:`ccs.scripts.ccs_export_sktable`
+========================================
+
+.. py:module:: ccs.scripts.ccs_export_sktable
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_export_sktable._write
+   ccs.scripts.ccs_export_sktable.write_dftb_spline
+   ccs.scripts.ccs_export_sktable.main
+
+
+
+.. py:function:: _write(elem1, elem2, CCS_params, exp=True)
+
+
+.. py:function:: write_dftb_spline(CCS_params_file)
+
+
+.. py:function:: main()
+
+

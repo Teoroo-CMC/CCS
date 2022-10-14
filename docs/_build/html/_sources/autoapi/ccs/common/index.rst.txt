@@ -1,0 +1,26 @@
+:py:mod:`ccs.common`
+====================
+
+.. py:module:: ccs.common
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   math/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   exceptions/index.rst
+   io/index.rst
+   neighborlist/index.rst
+
+

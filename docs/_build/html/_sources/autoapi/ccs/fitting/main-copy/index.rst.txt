@@ -1,0 +1,53 @@
+:py:mod:`ccs.fitting.main copy`
+===============================
+
+.. py:module:: ccs.fitting.main copy
+
+.. autoapi-nested-parse::
+
+   Parses the inputs used by the ccs fitting script.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.main copy.prepare_input
+   ccs.fitting.main copy.parse
+   ccs.fitting.main copy.twp_fit
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.main copy.logger
+
+
+.. py:data:: logger
+   
+
+   
+
+.. py:function:: prepare_input(filename)
+
+
+.. py:function:: parse(data, struct_data, struct_data_forces)
+
+
+.. py:function:: twp_fit(filename)
+
+   Parses the input files and fits the reference data.
+
+   :param filename: The input file (input.json).
+   :type filename: str
+
+

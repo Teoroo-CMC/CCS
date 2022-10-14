@@ -1,0 +1,22 @@
+:py:mod:`timing`
+================
+
+.. py:module:: timing
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   timing.timing
+
+
+
+.. py:function:: timing(func)
+
+
