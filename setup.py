@@ -9,7 +9,7 @@ if sys.version_info[:2] < (3, 0):
 
 setup(
     name='ccs',
-    version='0.1.0',
+    version='0.2.0',
     url='...',
     description=' A Python package for fitting two-body potentials using' +
     ' curvature constrained splines',
