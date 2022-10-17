@@ -10,7 +10,7 @@ authors = [
 maintainers = [
     "Jolla Kullgren <jolla.kullgren@kemi.uu.se>"
     ]
-license = "MIT"
+license = "GPL-3"
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -20,6 +20,7 @@ ase = ">=3.22.1"
 scipy = ">=1.9.2"
 numpy = ">=1.23.4"
 tqdm = ">=4.64.1"
+sympy = ">=1.11.1"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=7.1.3"
