@@ -1,5 +1,6 @@
 # This is a basic workflow to support continuous integration and deployment of the ccs code using poetry
 
+# Name of the workflow
 name: CI-CD
 
 # Controls when the workflow will run
