@@ -1,0 +1,44 @@
+# This is a basic workflow to support continuous integration and deployment of the ccs code using poetry
+
+name: CI-CD
+
+# Controls when the workflow will run
+on: [push, pull_request]
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  ci:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check-out repository
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install package
+        run: poetry install
+
+      - name: Test with pytest
+        run: poetry run pytest tests/ --cov=ccs --cov-report=xml
+
+        ### Optional, but useful
+      # - name: Use Codecov to track test coverage
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     files: ./coverage.xml
+
+      - name: Build documentation
+        run: poetry run make html --directory docs/
