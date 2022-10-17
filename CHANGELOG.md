@@ -2,6 +2,44 @@
 
 '<!--next-version-placeholder-->'
 
+## v0.2.0 (17/10/2022)
+### Feature
+* Add automatic cd to ci-cd workflow ([`02209c8`](https://github.com/ThijsSmolders/CCS/commit/02209c8f9f0895f4ef8abb31476b1de7c426eaa0))
+* Add documentation ccs.ase_calculator.ccs_ase_calculator.CCS ([`0e2d5dd`](https://github.com/ThijsSmolders/CCS/commit/0e2d5dd8d36bacc557737aef574e1285f0e6b66d))
+
+### Fix
+* Fixed wrong name of git branch in pyproject.toml ([`ee2c894`](https://github.com/ThijsSmolders/CCS/commit/ee2c89410d518ecd94fb4f2b2c60196c4e8b823c))
+* Trying to fix syntax error in CI-CD.yml ([`fedba02`](https://github.com/ThijsSmolders/CCS/commit/fedba028abe3fc6eb862469e12d9ddd192a53db5))
+* Fixed testing routine ([`1ecb1b2`](https://github.com/ThijsSmolders/CCS/commit/1ecb1b2d72d8ecd0ddf82db7899274c53e66a3cd))
+* Added pandasw dependency ([`647cfe3`](https://github.com/ThijsSmolders/CCS/commit/647cfe3e307267fe6f6a74ee8f2d4979daa2ea0b))
+* Added sympy dependency and updated license in pyproject ([`91018ac`](https://github.com/ThijsSmolders/CCS/commit/91018ac614e06dbd75eaa707629a8bb62624368a))
+* Made changes to the CI-CD workflow again ([`53eedf7`](https://github.com/ThijsSmolders/CCS/commit/53eedf7736add0f460b009397603aa6a6bf8ab75))
+* Copied pycounts version to see what goes wrong ([`f144e8d`](https://github.com/ThijsSmolders/CCS/commit/f144e8da151ff7539b50b14b7b9798353b7ae47e))
+* Copied pycounts version to see what goes wrong ([`69f1907`](https://github.com/ThijsSmolders/CCS/commit/69f1907cc6837abf3bc882a6d26ae82f0c62b48f))
+* Made changes to the CI-CD workflow again ([`bec7801`](https://github.com/ThijsSmolders/CCS/commit/bec78019e60a7b862562849675a33c46f390bbd5))
+* Made changes to the CI-CD workflow again ([`521dc33`](https://github.com/ThijsSmolders/CCS/commit/521dc33426c267e29a0e0b6fdc2dafdb60488b96))
+* Made changes to the CI-CD workflow again ([`1a615a1`](https://github.com/ThijsSmolders/CCS/commit/1a615a10ac473cd5d0873ce08f6a3eebd47b9fbd))
+* Made changes to the CI-CD workflow again ([`1c53e04`](https://github.com/ThijsSmolders/CCS/commit/1c53e04301608ce13637ec30c3048754b9063422))
+* Made changes to the CI-CD workflow again ([`f2d60ee`](https://github.com/ThijsSmolders/CCS/commit/f2d60ee3c4d7d1bd890f3d67f2df5fcc9bae0115))
+* Made changes to the CI-CD workflow again ([`7e3e53c`](https://github.com/ThijsSmolders/CCS/commit/7e3e53cf7d294231bc9a416d5e75654c5121e0c2))
+* Made changes to the CI-CD workflow again ([`530eb4f`](https://github.com/ThijsSmolders/CCS/commit/530eb4faf64074e1993f40019a847b63343deb05))
+* Made changes to the CI-CD workflow ([`a536eb4`](https://github.com/ThijsSmolders/CCS/commit/a536eb4f985f57c7069b1159e6930fcc2831cbeb))
+* Fixed automatic loading of the original functions in the bin/ folder ([`18975a0`](https://github.com/ThijsSmolders/CCS/commit/18975a05bb31178353b3a367ce6278c08347a303))
+* Added dependency on tqdm ([`7b44aee`](https://github.com/ThijsSmolders/CCS/commit/7b44aeef7d1bc2854c628eacd795cdcbeb1321fa))
+* Fixed reference to CCS calculator ([`99e4238`](https://github.com/ThijsSmolders/CCS/commit/99e42383aeb95bfae15a7710a784c5f1e1661775))
+
+### Documentation
+* Added documentation to CI-CD workflow ([`6d39ace`](https://github.com/ThijsSmolders/CCS/commit/6d39ace3f17593f6aa61375f6661c24e73d80ad9))
+* Modified CHANGELOG.md ([`aa290ef`](https://github.com/ThijsSmolders/CCS/commit/aa290efe9f9f647b605977a4a750790aa5fe37ad))
+* Added CHANGELOG.md ([`ff6be9a`](https://github.com/ThijsSmolders/CCS/commit/ff6be9a5ba6dc5e3bc3a9e203eb12c3be4007fe5))
+* Automatically build html documentation using make html ([`ff82862`](https://github.com/ThijsSmolders/CCS/commit/ff828623cf7526d355ae56d7e06392474b811b84))
+* Add sphinx-related dependencies to pyproject.toml ([`de58282`](https://github.com/ThijsSmolders/CCS/commit/de5828227ccba9778b32410c9307e19961b64d59))
+* Add documentation for automatic sphinx generation using make html ([`234554b`](https://github.com/ThijsSmolders/CCS/commit/234554b12b91b3825b3a4af1e087686396cbafd0))
+* "Fixed typo in installation command" ([`23f7713`](https://github.com/ThijsSmolders/CCS/commit/23f771345bc4b81d2c7d82975acef3f6061cb8f7))
+
+### Performance
+* Add version number and automatic calculator import to __init__.py ([`1c2b479`](https://github.com/ThijsSmolders/CCS/commit/1c2b4790ede7e412e697b2e07eb4bb2f5a479b8d))
+
 ## v0.1.0 (12/11/2019)
 
 - First release of `ccs`!
