@@ -1,7 +1,7 @@
 # This is a basic workflow for continuous integration of ccs
 
 # Name of the workflow
-name: CI
+name: ci-cd
 
 on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run 
@@ -35,3 +35,31 @@ jobs:
 
     - name: Build documentation
       run: poetry run make html --directory docs/
+
+  cd:
+    # Only run this job if the "ci" job passes
+    needs: ci
+
+    # Only run this job if new work is pushed to the "main" branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # Set up operating system
+    runs-on: ubuntu-latest
+
+    # Define job steps
+    steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Check-out repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install package
+      run: poetry install
