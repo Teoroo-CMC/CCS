@@ -1,4 +1,4 @@
-name: ci-cd
+name: CI-CD
 
 on: [push, pull_request]
 
@@ -15,7 +15,7 @@ jobs:
         python-version: 3.9
 
     - name: Check-out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install poetry
       uses: snok/install-poetry@v1
