@@ -1,4 +1,4 @@
-# This is a basic workflow to support continuous integration and deployment of the ccs code using poetry
+# This is a basic workflow to support continuous integration and deployment
 # Name of the workflow
 name: CI-CD
 
