@@ -1,5 +1,4 @@
 # This is a basic workflow to support continuous integration and deployment
-# Name of the workflow
 name: CI-CD
 
 # Controls when the workflow will run
