@@ -1,6 +1,5 @@
 name: CI-CD
 
-# Controls when the workflow will run
 on: [push, pull_request]
   workflow_dispatch:
 
