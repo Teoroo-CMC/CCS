@@ -1,19 +1,29 @@
-name: CI-CD
+# This is a basic workflow for continuous integration of ccs
+
+# Name of the workflow
+name: CI
 
 on: [push, pull_request]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run 
+# sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "ci"
   ci:
     # Set up operating system
     runs-on: ubuntu-latest
 
     # Define job steps
     steps:
+    # Set up a Python environment for use in actions
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
+    # This workflow contains a single job called "build"
     - name: Check-out repository
       uses: actions/checkout@v3
 
