@@ -72,6 +72,9 @@ jobs:
           git config user.email github-actions@github.com
           poetry run semantic-release publish
 
+    - name: Build new documentation
+      run: make html
+
     # Uncomment code block below for automatic upload to both TestPyPI and if that works to PyPI. This can also be replaced by setting upload_to_pypi = true in pyproject.toml 
     # - name: Publish to TestPyPI
     #   uses: pypa/gh-action-pypi-publish@release/v1
