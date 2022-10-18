@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.10 (2022-10-18)
+### Documentation
+* Fix example notebook call in documentation builder ([`c438038`](https://github.com/ThijsSmolders/CCS/commit/c4380381379f9a8e649a4041c9e0c203ee56e5fa))
+
 ## v0.2.9 (2022-10-18)
 ### Documentation
 * Fix reference to example jupyter notebook ([`fe42702`](https://github.com/ThijsSmolders/CCS/commit/fe4270210a07fad806253353971eac77cc00123b))
