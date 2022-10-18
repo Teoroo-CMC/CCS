@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.4 (2022-10-18)
+### Documentation
+* Add automatic documentation building to workflow ([`3f383fb`](https://github.com/ThijsSmolders/CCS/commit/3f383fb54de219920b5b8e47490d4d7accdef3bd))
+
 ## v0.2.3 (2022-10-18)
 ### Documentation
 * Added jupyter notebook example to documentation page ([`0c44e9d`](https://github.com/ThijsSmolders/CCS/commit/0c44e9d5ed40f04d8c04ec438fb30d475befec85))
