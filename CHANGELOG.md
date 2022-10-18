@@ -2,6 +2,9 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.2 (2022-10-18)
+
+
 ## v0.2.1 (2022-10-17)
 ### Fix
 * Just trying to fix the ci-cd crashes on github ([`41fb7db`](https://github.com/ThijsSmolders/CCS/commit/41fb7db391be2bf7629d3fa34c6d0fb0be847b35))'
