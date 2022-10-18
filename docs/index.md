@@ -5,6 +5,6 @@
 :maxdepth: 1
 :hidden:
 
-examples/DFTB_repulsive_fitting/run_example.ipynb
+../examples/DFTB_repulsive_fitting/run_example.ipynb
 autoapi/index
 ```
