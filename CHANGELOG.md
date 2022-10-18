@@ -2,6 +2,13 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.8 (2022-10-18)
+### Fix
+* Trying to fix the reference to an example notebook in the ([`4347339`](https://github.com/ThijsSmolders/CCS/commit/434733936f6232c6354c39a41af0ee70612731d8))
+
+### Documentation
+* Fix reference to example jupyter notebook ([`bda0012`](https://github.com/ThijsSmolders/CCS/commit/bda0012d98555f12a6ac51859c26d4abe594db9a))
+
 ## v0.2.7 (2022-10-18)
 ### Documentation
 * Fix reference to example jupyter notebook ([`5881e22`](https://github.com/ThijsSmolders/CCS/commit/5881e22c55d08a5cb386e1a7d3c49d247f5597ee))
