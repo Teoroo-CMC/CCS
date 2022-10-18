@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.3 (2022-10-18)
+### Documentation
+* Added jupyter notebook example to documentation page ([`0c44e9d`](https://github.com/ThijsSmolders/CCS/commit/0c44e9d5ed40f04d8c04ec438fb30d475befec85))
+
 ## v0.2.2 (2022-10-18)
 
 
