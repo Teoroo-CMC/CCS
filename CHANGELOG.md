@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.5 (2022-10-18)
+### Fix
+* Automatic documentation update was already implemented ([`86a8e85`](https://github.com/ThijsSmolders/CCS/commit/86a8e8536e28254063a7b9945b11c09795747d6e))
+
 ## v0.2.4 (2022-10-18)
 ### Documentation
 * Add automatic documentation building to workflow ([`3f383fb`](https://github.com/ThijsSmolders/CCS/commit/3f383fb54de219920b5b8e47490d4d7accdef3bd))
