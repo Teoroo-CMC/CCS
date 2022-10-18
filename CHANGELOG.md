@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.6 (2022-10-18)
+### Documentation
+* Fix reference to example jupyter notebook ([`1da3d7b`](https://github.com/ThijsSmolders/CCS/commit/1da3d7bb08732ac834ca2c63091cf31c7bc12980))
+
 ## v0.2.5 (2022-10-18)
 ### Fix
 * Automatic documentation update was already implemented ([`86a8e85`](https://github.com/ThijsSmolders/CCS/commit/86a8e8536e28254063a7b9945b11c09795747d6e))
