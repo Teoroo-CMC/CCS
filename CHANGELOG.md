@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.2.11 (2022-10-19)
+### Documentation
+* Add working example to documentation ([`8f94a01`](https://github.com/ThijsSmolders/CCS/commit/8f94a018a70e82b5fe36ae829b0cf19162c69030))
+
 ## v0.2.10 (2022-10-18)
 ### Documentation
 * Fix example notebook call in documentation builder ([`c438038`](https://github.com/ThijsSmolders/CCS/commit/c4380381379f9a8e649a4041c9e0c203ee56e5fa))
