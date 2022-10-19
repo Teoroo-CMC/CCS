@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.0 (2022-10-19)
+### Feature
+* Added direct call of main functions in bin ([`b678dee`](https://github.com/ThijsSmolders/CCS/commit/b678dee9d1cf696601bd9e4506b0f34d96671c70))
+
 ## v0.2.11 (2022-10-19)
 ### Documentation
 * Add working example to documentation ([`8f94a01`](https://github.com/ThijsSmolders/CCS/commit/8f94a018a70e82b5fe36ae829b0cf19162c69030))
