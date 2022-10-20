@@ -1,0 +1,133 @@
+:py:mod:`ccs_ppmd`
+==================
+
+.. py:module:: ccs_ppmd
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ccs_ppmd.FIRE
+   ccs_ppmd.CCS
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs_ppmd.steepest_descent
+   ccs_ppmd.newtonic
+   ccs_ppmd.optimize
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs_ppmd.PairLoop
+   ccs_ppmd.ParticleLoop
+   ccs_ppmd.State
+   ccs_ppmd.PositionDat
+   ccs_ppmd.ParticleDat
+   ccs_ppmd.ScalarArray
+   ccs_ppmd.Kernel
+   ccs_ppmd.GlobalArray
+   ccs_ppmd.Constant
+   ccs_ppmd.IntegratorRange
+
+
+.. py:data:: PairLoop
+   
+
+   
+
+.. py:data:: ParticleLoop
+   
+
+   
+
+.. py:data:: State
+   
+
+   
+
+.. py:data:: PositionDat
+   
+
+   
+
+.. py:data:: ParticleDat
+   
+
+   
+
+.. py:data:: ScalarArray
+   
+
+   
+
+.. py:data:: Kernel
+   
+
+   
+
+.. py:data:: GlobalArray
+   
+
+   
+
+.. py:data:: Constant
+   
+
+   
+
+.. py:data:: IntegratorRange
+   
+
+   
+
+.. py:function:: steepest_descent(A, constants)
+
+
+.. py:function:: newtonic(A, constants)
+
+
+.. py:class:: FIRE(A, CCS=None, dt_start=0.1, a_start=0.1, dt_max=1.0)
+
+   .. py:method:: FIRE_LOOP_1(A)
+
+
+   .. py:method:: FIRE_LOOP_2(A)
+
+
+   .. py:method:: FIRE_LOOP_3(A)
+
+
+   .. py:method:: FIRE_LOOP_4(A)
+
+
+   .. py:method:: FIRE_LOOP_5(A)
+
+
+   .. py:method:: opt(A, steps=10000, fmax=0.05)
+
+
+
+.. py:class:: CCS(A, atoms, q=None, CCS_params='CCS_params.json')
+
+   .. py:method:: eval(A, pos=None)
+
+
+
+.. py:function:: optimize(A, atoms, CCS, Type='LBGS', Fmax=0.05)
+
+

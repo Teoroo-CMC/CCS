@@ -1,0 +1,26 @@
+:py:mod:`ccs.scripts.ccs_validate`
+==================================
+
+.. py:module:: ccs.scripts.ccs_validate
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_validate.ccs_validate
+   ccs.scripts.ccs_validate.main
+
+
+
+.. py:function:: ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB=None, CCS_DB='CCS_validate.db', DFTB_DB=None, charge=False, q=None, charge_scaling=False)
+
+
+.. py:function:: main()
+
+

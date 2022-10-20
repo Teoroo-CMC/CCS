@@ -1,0 +1,32 @@
+:py:mod:`ccs.common.math.ewald`
+===============================
+
+.. py:module:: ccs.common.math.ewald
+
+.. autoapi-nested-parse::
+
+   Common Ewald summation tools used by the CCS project.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.common.math.ewald.ewald_summation
+
+
+
+.. py:function:: ewald_summation(atoms)
+
+   Calculates the Ewald summation of multiple structures.
+
+   :param atoms: list of ASE Atoms objects
+   :type atoms: list
+
+

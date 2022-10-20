@@ -1,0 +1,68 @@
+:py:mod:`ccs`
+=============
+
+.. py:module:: ccs
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   common/index.rst
+   data/index.rst
+   fitting/index.rst
+   scripts/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.ccs_build_db
+   ccs.ccs_export_sktable
+   ccs.ccs_fetch
+   ccs.ccs_fit
+   ccs.ccs_validate
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.__version__
+
+
+.. py:data:: __version__
+   
+
+   
+
+.. py:function:: ccs_build_db()
+
+
+.. py:function:: ccs_export_sktable()
+
+
+.. py:function:: ccs_fetch()
+
+
+.. py:function:: ccs_fit(cmdlineargs=None)
+
+   Main driver routine for ccs_fit.
+
+   :param cmdlineargs: list of command line arguments
+                       When None, arguments in sys.argv are parsed (default: None)
+
+
+.. py:function:: ccs_validate()
+
+
