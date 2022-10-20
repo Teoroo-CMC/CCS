@@ -33,19 +33,25 @@ jobs:
     - name: Test with pytest
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
 
+#     - name: Build documentation
+#       run: poetry run make clean html --directory docs/
+
     - name: Build documentation
-      run: poetry run make clean html --directory docs/
-
-    - name: Build and Commit Documentation
-      uses: sphinx-notes/pages@master
+      uses: actions/upload-artifact@v3
       with:
-        documentation_path: docs/
+        name: docs
+        path: docs/_build
 
-    - name: Push Documentation
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
+#     - name: Build and Commit Documentation
+#       uses: sphinx-notes/pages@master
+#       with:
+#         documentation_path: docs/
+
+#     - name: Push Documentation
+#       uses: ad-m/github-push-action@master
+#       with:
+#         github_token: ${{ secrets.GITHUB_TOKEN }}
+#         branch: gh-pages
 
   cd:
     # Only run this job if the "ci" job passes
