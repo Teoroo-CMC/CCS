@@ -175,9 +175,10 @@ class Twobody:
         '''
         Constructs the v matrix.
 
-        Returns:
-
-            ndarray: The v matrix for a pair.
+        Returns
+        -------
+            ndarray : matrix
+                The v matrix for a pair.
 
         '''
 
