@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.7 (2022-10-20)
+### Documentation
+* Automatic clean of documentation _build ([`12b8819`](https://github.com/ThijsSmolders/CCS/commit/12b8819592b04c528d59042a3546924c05ce8954))
+
 ## v0.3.6 (2022-10-20)
 ### Documentation
 * Update documentation of ccs_fetch.py ([`e36316f`](https://github.com/ThijsSmolders/CCS/commit/e36316fc9b5a8b303324371dca551dc3ec6fcc7b))
