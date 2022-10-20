@@ -21,15 +21,18 @@ Functions
 
 .. py:function:: pair_dist(atoms, R_c, ch1, ch2, counter)
 
-   This function returns pairwise distances between two types of atoms within a certain cuttoff
-   :param R_c: Cut off distance(6. Å)
-   :type R_c: float
-   :param ch1: Atom species 1
-   :type ch1: str
-   :param ch2: Atoms species 2
-   :type ch2: str
+       This function returns pairwise distances between two types of atoms within a certain cuttoff
 
-   :returns: A list of distances
+   Input
+   -----
+       R_c : float
+           Cut off distance(6. Å)
+       ch1 : str
+           Atom species 1
+       ch2 : str
+           Atoms species 2
+
+   :rtype: A list of distances
 
 
 .. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None)
