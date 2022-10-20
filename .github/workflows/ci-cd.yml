@@ -34,7 +34,7 @@ jobs:
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
 
     - name: Build documentation
-      run: poetry run make html --directory docs/
+      run: poetry run make clean html --directory docs/
 
   cd:
     # Only run this job if the "ci" job passes
