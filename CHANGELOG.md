@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.1 (2022-10-20)
+### Documentation
+* Removed __init__.py to see result ([`18140cf`](https://github.com/ThijsSmolders/CCS/commit/18140cfa3e6b760b54b09a5b49aa9c8a2f651ef6))
+
 ## v0.3.0 (2022-10-19)
 ### Feature
 * Added direct call of main functions in bin ([`b678dee`](https://github.com/ThijsSmolders/CCS/commit/b678dee9d1cf696601bd9e4506b0f34d96671c70))
