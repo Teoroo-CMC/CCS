@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.2 (2022-10-20)
+### Documentation
+* Added title to notebook example ([`485eac3`](https://github.com/ThijsSmolders/CCS/commit/485eac3f72e56320590c82bada11ee0596e5c3be))
+
 ## v0.3.1 (2022-10-20)
 ### Documentation
 * Removed __init__.py to see result ([`18140cf`](https://github.com/ThijsSmolders/CCS/commit/18140cfa3e6b760b54b09a5b49aa9c8a2f651ef6))
