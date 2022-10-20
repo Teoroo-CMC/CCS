@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.5 (2022-10-20)
+### Documentation
+* Removed current documentation to check autodocs ([`82927de`](https://github.com/ThijsSmolders/CCS/commit/82927dec8fc4a274a430391784f1c3531c6f6813))
+
 ## v0.3.4 (2022-10-20)
 ### Documentation
 * Added documentation to ccs_fetch ([`36bb602`](https://github.com/ThijsSmolders/CCS/commit/36bb602ef2a601b9b24c29d4e41532e2c7566f1a))
