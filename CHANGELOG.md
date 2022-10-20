@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.11 (2022-10-20)
+### Documentation
+* Trying to add documentation push ([`34e8bb7`](https://github.com/ThijsSmolders/CCS/commit/34e8bb738664721e4f49cdd4f38969095a705f1f))
+
 ## v0.3.10 (2022-10-20)
 ### Documentation
 * Adding license to documentation ([`4df9f35`](https://github.com/ThijsSmolders/CCS/commit/4df9f35c9fb37c375bcccb7cc416664dba7863e1))
