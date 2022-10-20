@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.8 (2022-10-20)
+### Documentation
+* Add documentation ([`d45b1e7`](https://github.com/ThijsSmolders/CCS/commit/d45b1e76ed69ea13a7f67e95866569988d258f97))
+
 ## v0.3.7 (2022-10-20)
 ### Documentation
 * Automatic clean of documentation _build ([`12b8819`](https://github.com/ThijsSmolders/CCS/commit/12b8819592b04c528d59042a3546924c05ce8954))
