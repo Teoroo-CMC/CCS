@@ -31,17 +31,23 @@ class Twobody:
 
     def __init__(self, name, dismat, distmat_forces, Rcut, Swtype='rep',
                  Rmin=None, Resolution=0.1):
-        '''Constructs a Twobody object.
+        '''
+        Constructs a Twobody object.
 
-        Args:
-
-            name (str): name of the atom pair.
-            dismat (dataframe): pairwise  distance matrix.
-            nconfigs (int): number of configurations
-            Rcut (float): maximum cut off value for spline interval
-            Nknots (int): number of knots in the spline interval
-            Rmin (float, optional): minimum value of the spline interval
-                (default: None).
+        Input
+        -----
+            name : str
+                name of the atom pair.
+            dismat : dataframe
+                pairwise  distance matrix.
+            nconfigs : int
+                number of configurations
+            Rcut : float
+                maximum cut off value for spline interval
+            Nknots : int
+                number of knots in the spline interval
+            Rmin : float
+                optional, minimum value of the spline interval, default None
         '''
 
         self.name = name
