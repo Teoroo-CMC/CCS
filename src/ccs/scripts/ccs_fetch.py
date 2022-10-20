@@ -66,11 +66,24 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
 
 
 def ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None):
-    """  Function to read files and output structures.json
+    """  
+    Function to read files and output structures.json
 
-    Args:
-        args(list): list of filenames
-        R_c (float, optional): Distance cut-off. Defaults to 7.0.
+    Input
+    -----
+        args : list
+            list of filenames
+        R_c : float 
+            optional: Distance cut-off. Defaults to 7.0.
+
+    Returns
+    -------
+        structures.json : JSON file
+            Collection of structures in .json format.
+    
+    Example
+    -------
+        To be added.
     """
     DFT_DB = db.connect(DFT_DB)
 
