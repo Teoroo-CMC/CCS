@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.10 (2022-10-20)
+### Documentation
+* Adding license to documentation ([`4df9f35`](https://github.com/ThijsSmolders/CCS/commit/4df9f35c9fb37c375bcccb7cc416664dba7863e1))
+
 ## v0.3.9 (2022-10-20)
 
 
