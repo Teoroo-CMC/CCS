@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.12 (2022-10-20)
+### Documentation
+* Added documentation to Twobody class in spline_functions.py ([`5f7d8d3`](https://github.com/ThijsSmolders/CCS/commit/5f7d8d34e854bc2ceaecb0776664fa3bac7f1ce8))
+* Added documentation to Twobody class in spline_functions.py ([`bb6acc1`](https://github.com/ThijsSmolders/CCS/commit/bb6acc13e2812c60929338f169725f663089f3dd))
+* Trying to add documentation push ([`6c195f9`](https://github.com/ThijsSmolders/CCS/commit/6c195f97f2cd3061492f3c97b1515a2767c3f155))
+* Local make html ([`4f5f402`](https://github.com/ThijsSmolders/CCS/commit/4f5f402da0fa68c61d377086920fa481c5c90c36))
+* Trying to add documentation push ([`227244b`](https://github.com/ThijsSmolders/CCS/commit/227244b1c4d7fa43063b5b7d680505b8f9b3d489))
+
 ## v0.3.11 (2022-10-20)
 ### Documentation
 * Trying to add documentation push ([`34e8bb7`](https://github.com/ThijsSmolders/CCS/commit/34e8bb738664721e4f49cdd4f38969095a705f1f))
