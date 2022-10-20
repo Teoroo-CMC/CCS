@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.6 (2022-10-20)
+### Documentation
+* Update documentation of ccs_fetch.py ([`e36316f`](https://github.com/ThijsSmolders/CCS/commit/e36316fc9b5a8b303324371dca551dc3ec6fcc7b))
+
 ## v0.3.5 (2022-10-20)
 ### Documentation
 * Removed current documentation to check autodocs ([`82927de`](https://github.com/ThijsSmolders/CCS/commit/82927dec8fc4a274a430391784f1c3531c6f6813))
