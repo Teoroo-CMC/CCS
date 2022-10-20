@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.4 (2022-10-20)
+### Documentation
+* Added documentation to ccs_fetch ([`36bb602`](https://github.com/ThijsSmolders/CCS/commit/36bb602ef2a601b9b24c29d4e41532e2c7566f1a))
+
 ## v0.3.3 (2022-10-20)
 ### Documentation
 * Added changelog to autodocs ([`d9580f6`](https://github.com/ThijsSmolders/CCS/commit/d9580f6aadd47db034a8ebc46613cfff21c666e0))
