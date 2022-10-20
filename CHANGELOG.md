@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.13 (2022-10-20)
+
+
 ## v0.3.12 (2022-10-20)
 ### Documentation
 * Added documentation to Twobody class in spline_functions.py ([`5f7d8d3`](https://github.com/ThijsSmolders/CCS/commit/5f7d8d34e854bc2ceaecb0776664fa3bac7f1ce8))
