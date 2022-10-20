@@ -16,13 +16,20 @@ import random
 
 
 def pair_dist(atoms, R_c, ch1, ch2, counter):
-    ''' This function returns pairwise distances between two types of atoms within a certain cuttoff
-    Args:
-        R_c (float): Cut off distance(6. Å)
-        ch1 (str): Atom species 1
-        ch2 (str): Atoms species 2
+    ''' 
+        This function returns pairwise distances between two types of atoms within a certain cuttoff
+    
+    Input
+    -----
+        R_c : float
+            Cut off distance(6. Å)
+        ch1 : str
+            Atom species 1
+        ch2 : str
+            Atoms species 2
 
-    Returns:
+    Returns
+    -------
         A list of distances
     '''
     try:
