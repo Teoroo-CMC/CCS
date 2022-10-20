@@ -1,6 +1,6 @@
 # Changelog
 
-'<!--next-version-placeholder-->
+<!--next-version-placeholder-->
 
 ## v0.3.8 (2022-10-20)
 ### Documentation
