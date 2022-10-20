@@ -45,7 +45,7 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
+        branch: master
 
   cd:
     # Only run this job if the "ci" job passes
