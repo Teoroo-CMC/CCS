@@ -2,6 +2,10 @@
 
 '<!--next-version-placeholder-->
 
+## v0.3.3 (2022-10-20)
+### Documentation
+* Added changelog to autodocs ([`d9580f6`](https://github.com/ThijsSmolders/CCS/commit/d9580f6aadd47db034a8ebc46613cfff21c666e0))
+
 ## v0.3.2 (2022-10-20)
 ### Documentation
 * Added title to notebook example ([`485eac3`](https://github.com/ThijsSmolders/CCS/commit/485eac3f72e56320590c82bada11ee0596e5c3be))
