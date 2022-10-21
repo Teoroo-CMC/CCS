@@ -6,7 +6,6 @@
 :hidden:
 
 changelog.md
-license.md
 examples.md
 autoapi/index
 ```
