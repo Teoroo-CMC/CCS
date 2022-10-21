@@ -22,7 +22,7 @@
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="timing" href="../../../timing/index.html" />
+    <link rel="next" title="regression" href="../../../regression/index.html" />
     <link rel="prev" title="ccs.scripts.ccs_fit" href="../ccs_fit/index.html" /> 
 </head>
 
@@ -55,10 +55,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../timing/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timing</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../regression/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">regression</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ccs_ase_calculator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ase_calculator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../ccs_ppmd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ppmd</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ccs_ase_calculator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ase_calculator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../timing/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timing</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -103,7 +103,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ccs.scripts.ccs_validate.ccs_validate" title="ccs.scripts.ccs_validate.ccs_validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_validate</span></code></a>([mode, CCS_params, Ns, DFT_DB, CCS_DB, ...])</p></td>
-<td><p></p></td>
+<td><p>Function to verify database generation.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ccs.scripts.ccs_validate.main" title="ccs.scripts.ccs_validate.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
@@ -113,7 +113,18 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs.scripts.ccs_validate.ccs_validate">
 <span class="sig-prename descclassname"><span class="pre">ccs.scripts.ccs_validate.</span></span><span class="sig-name descname"><span class="pre">ccs_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS_validate.db'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/ccs_validate.html#ccs_validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.ccs_validate.ccs_validate" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Function to verify database generation.
+print(”——————————————————————————–“)
+print(”  USAGE:  ccs_validate MODE […] “)
+print(” “)
+print(”  The following modes and inputs are supported:”)
+print(“”)
+print(”      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)”)
+print(”      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)”)
+print(”      DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)”)
+print(“”)
+print(”——————————————————————————–“)</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs.scripts.ccs_validate.main">
@@ -129,7 +140,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../ccs_fit/index.html" class="btn btn-neutral float-left" title="ccs.scripts.ccs_fit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../../timing/index.html" class="btn btn-neutral float-right" title="timing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../../regression/index.html" class="btn btn-neutral float-right" title="regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

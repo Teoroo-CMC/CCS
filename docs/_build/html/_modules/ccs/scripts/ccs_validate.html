@@ -88,7 +88,19 @@
 
 
 <div class="viewcode-block" id="ccs_validate"><a class="viewcode-back" href="../../../autoapi/ccs/scripts/ccs_validate/index.html#ccs.ccs_validate">[docs]</a><span class="k">def</span> <span class="nf">ccs_validate</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">CCS_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">CCS_DB</span><span class="o">=</span><span class="s1">&#39;CCS_validate.db&#39;</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge_scaling</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to verify database generation.</span>
+<span class="sd">    print(&quot;--------------------------------------------------------------------------------&quot;)</span>
+<span class="sd">    print(&quot;  USAGE:  ccs_validate MODE [...] &quot;)</span>
+<span class="sd">    print(&quot; &quot;)</span>
+<span class="sd">    print(&quot;  The following modes and inputs are supported:&quot;)</span>
+<span class="sd">    print(&quot;&quot;)</span>
+<span class="sd">    print(&quot;      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)&quot;)</span>
+<span class="sd">    print(&quot;      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)&quot;)</span>
+<span class="sd">    print(&quot;      DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)&quot;)</span>
+<span class="sd">    print(&quot;&quot;)</span>
+<span class="sd">    print(&quot;--------------------------------------------------------------------------------&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">CCS_DB</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">CCS_DB</span><span class="p">)</span>
 
