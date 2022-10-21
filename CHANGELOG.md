@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.16 (2022-10-21)
+### Documentation
+* Revert to .md invocation of dummy changelog and index files in docs ([`4d9a99d`](https://github.com/ThijsSmolders/CCS/commit/4d9a99d4e370aafe5b6b752aa9ba1f8a2ff3d110))
+
 ## v0.3.15 (2022-10-21)
 ### Documentation
 * Local make clean html ([`c07ec96`](https://github.com/ThijsSmolders/CCS/commit/c07ec9687d9210b25ac9d649efa0016013307d63))
