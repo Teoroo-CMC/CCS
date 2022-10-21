@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.24 (2022-10-21)
+### Fix
+* Adding autodocs to pyproject.toml did not work ([`3505c0b`](https://github.com/ThijsSmolders/CCS/commit/3505c0b9701f57aeb75e8f1aa133721e54d45dd0))
+
 ## v0.3.23 (2022-10-21)
 ### Documentation
 * Moving autodocs into pyproject.toml, not very elegant ([`5545652`](https://github.com/ThijsSmolders/CCS/commit/554565209372a5a4fe2414f6eecd0536e7b8f0e3))
