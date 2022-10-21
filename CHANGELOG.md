@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.25 (2022-10-21)
+### Documentation
+* Revert to original documentation build, still not working as expected ([`4c474ef`](https://github.com/ThijsSmolders/CCS/commit/4c474ef731e6150ea7e160c847f01605398b0184))
+
 ## v0.3.24 (2022-10-21)
 ### Fix
 * Adding autodocs to pyproject.toml did not work ([`3505c0b`](https://github.com/ThijsSmolders/CCS/commit/3505c0b9701f57aeb75e8f1aa133721e54d45dd0))
