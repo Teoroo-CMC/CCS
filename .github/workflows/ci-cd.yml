@@ -36,11 +36,16 @@ jobs:
 #     - name: Build documentation
 #       run: poetry run make clean html --directory docs/
 
+#     - name: Build documentation
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: docs
+#         path: docs/_build
+
     - name: Build documentation
-      uses: actions/upload-artifact@v3
+      uses: ammaraskar/sphinx-action@master
       with:
-        name: docs
-        path: docs/_build
+        docs-folder: "docs/"
 
 #     - name: Build and Commit Documentation
 #       uses: sphinx-notes/pages@master
