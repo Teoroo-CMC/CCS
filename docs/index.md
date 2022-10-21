@@ -5,8 +5,8 @@
 :maxdepth: 1
 :hidden:
 
-changelog
-license
+changelog.md
+license.md
 examples.md
 autoapi/index
 ```
