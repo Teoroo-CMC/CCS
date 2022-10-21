@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.22 (2022-10-21)
+### Documentation
+* Added documentation to ccs_validate.py to check new autodocs ([`c2a2350`](https://github.com/ThijsSmolders/CCS/commit/c2a2350dd0b8115fe9eeb18f8c96ad82499bc04b))
+
 ## v0.3.21 (2022-10-21)
 ### Documentation
 * Trying to fix autodocs by moving documentation action to cd phase of ci-cd.yml ([`27360f3`](https://github.com/ThijsSmolders/CCS/commit/27360f3643194ee1c96a1537aebf5297eaa18122))
