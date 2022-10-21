@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.19 (2022-10-21)
+### Documentation
+* Reverting to very first autodocs action ([`c9b2278`](https://github.com/ThijsSmolders/CCS/commit/c9b2278efe3f73797ec499959cfa4ea47cb22d5c))
+* Reverting to very first autodocs action ([`ccc35c4`](https://github.com/ThijsSmolders/CCS/commit/ccc35c41428dbd1e0e608e432ef6020308da3e59))
+
 ## v0.3.18 (2022-10-21)
 ### Documentation
 * Trying new autodocs action ([`a061e17`](https://github.com/ThijsSmolders/CCS/commit/a061e1761443219df4667736f0704f926065e343))
