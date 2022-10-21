@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.27 (2022-10-21)
+### Documentation
+* Local documentation build ([`8021661`](https://github.com/ThijsSmolders/CCS/commit/8021661d83b80125eb01e47bfdcbaac738eec2b7))
+
 ## v0.3.26 (2022-10-21)
 ### Documentation
 * Adding docs upload to gh-pages ([`842564c`](https://github.com/ThijsSmolders/CCS/commit/842564c2ca32072e94d44360c36898b468091239))
