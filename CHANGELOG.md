@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.15 (2022-10-21)
+### Documentation
+* Local make clean html ([`c07ec96`](https://github.com/ThijsSmolders/CCS/commit/c07ec9687d9210b25ac9d649efa0016013307d63))
+
 ## v0.3.14 (2022-10-21)
 ### Documentation
 * Changed names of dummy files for easier import ([`d4127d6`](https://github.com/ThijsSmolders/CCS/commit/d4127d6260cc4222d7a8e712c30ce7be8214e6c2))
