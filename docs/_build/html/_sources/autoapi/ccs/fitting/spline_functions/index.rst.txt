@@ -63,8 +63,8 @@ Attributes
 
       Constructs the v matrix.
 
-      :returns: The v matrix for a pair.
-      :rtype: ndarray
+      :returns: **ndarray** -- The v matrix for a pair.
+      :rtype: matrix
 
 
    .. py:method:: get_v_forces()

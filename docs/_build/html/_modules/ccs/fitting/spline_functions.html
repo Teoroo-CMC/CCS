@@ -39,7 +39,6 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -101,17 +100,23 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dismat</span><span class="p">,</span> <span class="n">distmat_forces</span><span class="p">,</span> <span class="n">Rcut</span><span class="p">,</span> <span class="n">Swtype</span><span class="o">=</span><span class="s1">&#39;rep&#39;</span><span class="p">,</span>
                  <span class="n">Rmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Resolution</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Constructs a Twobody object.</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructs a Twobody object.</span>
 
-<span class="sd">        Args:</span>
-
-<span class="sd">            name (str): name of the atom pair.</span>
-<span class="sd">            dismat (dataframe): pairwise  distance matrix.</span>
-<span class="sd">            nconfigs (int): number of configurations</span>
-<span class="sd">            Rcut (float): maximum cut off value for spline interval</span>
-<span class="sd">            Nknots (int): number of knots in the spline interval</span>
-<span class="sd">            Rmin (float, optional): minimum value of the spline interval</span>
-<span class="sd">                (default: None).</span>
+<span class="sd">        Input</span>
+<span class="sd">        -----</span>
+<span class="sd">            name : str</span>
+<span class="sd">                name of the atom pair.</span>
+<span class="sd">            dismat : dataframe</span>
+<span class="sd">                pairwise  distance matrix.</span>
+<span class="sd">            nconfigs : int</span>
+<span class="sd">                number of configurations</span>
+<span class="sd">            Rcut : float</span>
+<span class="sd">                maximum cut off value for spline interval</span>
+<span class="sd">            Nknots : int</span>
+<span class="sd">                number of knots in the spline interval</span>
+<span class="sd">            Rmin : float</span>
+<span class="sd">                optional, minimum value of the spline interval, default None</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -239,9 +244,10 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructs the v matrix.</span>
 
-<span class="sd">        Returns:</span>
-
-<span class="sd">            ndarray: The v matrix for a pair.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            ndarray : matrix</span>
+<span class="sd">                The v matrix for a pair.</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
 
