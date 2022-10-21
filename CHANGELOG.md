@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.26 (2022-10-21)
+### Documentation
+* Adding docs upload to gh-pages ([`842564c`](https://github.com/ThijsSmolders/CCS/commit/842564c2ca32072e94d44360c36898b468091239))
+* Adding docs upload to gh-pages ([`12ce1b3`](https://github.com/ThijsSmolders/CCS/commit/12ce1b3912dbff5807d4cb3506fdd709bd1b68f8))
+
 ## v0.3.25 (2022-10-21)
 ### Documentation
 * Revert to original documentation build, still not working as expected ([`4c474ef`](https://github.com/ThijsSmolders/CCS/commit/4c474ef731e6150ea7e160c847f01605398b0184))
