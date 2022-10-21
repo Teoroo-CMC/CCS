@@ -18,7 +18,19 @@ from ccs.ase_calculator.ccs_ase_calculator import CCS
 
 
 def ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB=None, CCS_DB='CCS_validate.db', DFTB_DB=None, charge=False, q=None, charge_scaling=False):
-
+    """
+    Function to verify database generation.
+    print("--------------------------------------------------------------------------------")
+    print("  USAGE:  ccs_validate MODE [...] ")
+    print(" ")
+    print("  The following modes and inputs are supported:")
+    print("")
+    print("      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+    print("      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
+    print("      DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
+    print("")
+    print("--------------------------------------------------------------------------------")
+    """
     if os.path.isfile(CCS_DB):
         os.remove(CCS_DB)
 
