@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.18 (2022-10-21)
+### Documentation
+* Trying new autodocs action ([`a061e17`](https://github.com/ThijsSmolders/CCS/commit/a061e1761443219df4667736f0704f926065e343))
+
 ## v0.3.17 (2022-10-21)
 ### Documentation
 * Local make clean html ([`93527c8`](https://github.com/ThijsSmolders/CCS/commit/93527c82b62ba14238eafe75e22d181c1108bd3b))
