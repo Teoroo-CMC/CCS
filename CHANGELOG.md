@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.20 (2022-10-21)
+### Documentation
+* Trying to fix autodocs ([`a30ac5a`](https://github.com/ThijsSmolders/CCS/commit/a30ac5a8c8cfff2a3c0adf358923bcf7fa13fae9))
+* Update docs Makefile to see what happens ([`a12708d`](https://github.com/ThijsSmolders/CCS/commit/a12708d42444061152ac0b74ef0b5743ef0f8383))
+
 ## v0.3.19 (2022-10-21)
 ### Documentation
 * Reverting to very first autodocs action ([`c9b2278`](https://github.com/ThijsSmolders/CCS/commit/c9b2278efe3f73797ec499959cfa4ea47cb22d5c))
