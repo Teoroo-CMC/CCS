@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.23 (2022-10-21)
+### Documentation
+* Moving autodocs into pyproject.toml, not very elegant ([`5545652`](https://github.com/ThijsSmolders/CCS/commit/554565209372a5a4fe2414f6eecd0536e7b8f0e3))
+
 ## v0.3.22 (2022-10-21)
 ### Documentation
 * Added documentation to ccs_validate.py to check new autodocs ([`c2a2350`](https://github.com/ThijsSmolders/CCS/commit/c2a2350dd0b8115fe9eeb18f8c96ad82499bc04b))
