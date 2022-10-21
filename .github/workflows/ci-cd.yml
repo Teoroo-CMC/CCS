@@ -36,6 +36,15 @@ jobs:
     - name: Build documentation
       run: poetry run make clean html --directory docs/
 
+    - name: Deploy to GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v3
+      with:
+        target_branch: gh-pages
+        build_dir: docs/
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   cd:
     # Only run this job if the "ci" job passes
     needs: ci
