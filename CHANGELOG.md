@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.21 (2022-10-21)
+### Documentation
+* Trying to fix autodocs by moving documentation action to cd phase of ci-cd.yml ([`27360f3`](https://github.com/ThijsSmolders/CCS/commit/27360f3643194ee1c96a1537aebf5297eaa18122))
+* Trying to fix autodocs by adding commit and push changes to ([`f98f8df`](https://github.com/ThijsSmolders/CCS/commit/f98f8df132c2e2acf08a917cc08ec63409c683a5))
+* Trying to fix autodocs by adding additional commit and push changes action to ci-cd.yml ([`7c03ab7`](https://github.com/ThijsSmolders/CCS/commit/7c03ab7e8ed3e5e459b1a548e59602f7498343b9))
+
 ## v0.3.20 (2022-10-21)
 ### Documentation
 * Trying to fix autodocs ([`a30ac5a`](https://github.com/ThijsSmolders/CCS/commit/a30ac5a8c8cfff2a3c0adf358923bcf7fa13fae9))
