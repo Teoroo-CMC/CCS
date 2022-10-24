@@ -47,13 +47,13 @@ jobs:
     - name: Build documentation
       run: poetry run make clean html --directory docs/
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+#     - name: Install dependencies
+#       run: |
+#         pip install -r requirements.txt
     
-    - name: Sphinx build
-      run: |
-        sphinx-build docs _build
+#     - name: Sphinx build
+#       run: |
+#         sphinx-build docs/ docs/_build
     
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
@@ -61,7 +61,7 @@ jobs:
       with:
         publish_branch: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: _build/
+        publish_dir: docs/_build
         force_orphan: true
 
   cd:
