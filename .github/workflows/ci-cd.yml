@@ -36,14 +36,25 @@ jobs:
     - name: Build documentation
       run: poetry run make clean html --directory docs/
 
-    - name: Deploy to GitHub Pages
-      if: success()
-      uses: crazy-max/ghaction-github-pages@v3
+#     - name: Deploy to GitHub Pages
+#       if: success()
+#       uses: crazy-max/ghaction-github-pages@v3
+#       with:
+#         target_branch: gh-pages
+#         build_dir: docs/_build/
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Commit Documentation
+      uses: sphinx-notes/pages@master
       with:
-        target_branch: gh-pages
-        build_dir: docs/_build/
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        documentation_path: docs/_build
+
+    - name: Push Documentation
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages
 
   cd:
     # Only run this job if the "ci" job passes
