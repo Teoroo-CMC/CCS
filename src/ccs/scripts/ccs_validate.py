@@ -25,7 +25,7 @@ def ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB=None, CCS_DB='CCS_
     Input
     -----
         mode : str
-            String describing which mode is usedm supported modes are:
+            String describing which mode is used, supported modes are:
                 CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
                 CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
                 DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
