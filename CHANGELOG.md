@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.38 (2022-10-25)
+### Documentation
+* Added documentation to ccs_validate.py ([`7ad9aff`](https://github.com/ThijsSmolders/CCS/commit/7ad9affdaee17077f0bf2b6aa689ff103ebf6007))
+
 ## v0.3.37 (2022-10-25)
 ### Documentation
 * Added documentation to ccs_validate.py ([`30750ba`](https://github.com/ThijsSmolders/CCS/commit/30750ba7ee70e0234fce44a6e9016f1832393773))
