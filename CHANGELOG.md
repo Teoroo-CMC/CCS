@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.40 (2022-10-31)
+
+
 ## v0.3.39 (2022-10-31)
 ### Documentation
 * Added Eddie Wadbro's email address to pyproject.toml ([`dffe31f`](https://github.com/ThijsSmolders/CCS/commit/dffe31f47f8f56a34f4f931673d6f0b43ee67675))
