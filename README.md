@@ -31,6 +31,8 @@ ccs-x.y.z
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.
 * `spline_functions.py` - A module for spline construction/evaluation/output. 
+
+<!---
 ### Prerequisites
 
 You need to install the following softwares
@@ -41,7 +43,6 @@ pip install scipy
 pip install ase
 pip install cvxopt
 ```
-
 ### Installing from source
 
 #### Git clone
@@ -51,6 +52,9 @@ git clone git@github.com/Teoroo-CMC/CCS.git
 cd CCS
 python setup.py install
 ```
+--->
+### Installing from source
+pip install -e git+<https://github.com/Teoroo-CMC/CCS>
 ### Environment Variables
 Set the following environment variables:
 ```
