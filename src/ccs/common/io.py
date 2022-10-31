@@ -1,32 +1,33 @@
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
-'''
+"""
 Common IO routines used by the CCS project.
-'''
-
+"""
 
 
 def read_detailedout(fname):
-    '''Reads desired energy terms from DFTB+ detailed.out files.
+    """Reads desired energy terms from DFTB+ detailed.out files.
 
     Args:
 
         fname (str): filename to read from
 
-    '''
+    """
 
-    tags = [('Elec', 'Total Electronic energy:'),
-            ('Rep', 'Repulsive energy'),
-            ('Tene', 'Total energy')]
+    tags = [
+        ("Elec", "Total Electronic energy:"),
+        ("Rep", "Repulsive energy"),
+        ("Tene", "Total energy"),
+    ]
 
     tag_values = {}
 
-    with open(fname, 'r') as fp:
+    with open(fname, "r") as fp:
         lines = fp.readlines()
         for line in lines:
             words = line.split()
@@ -38,7 +39,7 @@ def read_detailedout(fname):
 
 
 def get_paths_from_file(fname):
-    '''Extracts a list of paths from a given file.
+    """Extracts a list of paths from a given file.
 
     Args:
 
@@ -48,11 +49,11 @@ def get_paths_from_file(fname):
 
         paths (list): list of raw paths
 
-    '''
+    """
 
-    with open(fname, 'r') as infile:
+    with open(fname, "r") as infile:
         paths = infile.readlines()
 
-    paths = [entry.strip('\n') for entry in paths]
+    paths = [entry.strip("\n") for entry in paths]
 
     return paths

@@ -1,13 +1,12 @@
-
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2021  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
-#------------------------------------------------------------------------------#
+# ------------------------------------------------------------------------------#
 
 
-'''This module constructs and solves the spline objective.'''
+"""This module constructs and solves the spline objective."""
 
 
 import logging
@@ -27,10 +26,20 @@ logger = logging.getLogger(__name__)
 
 
 class Objective:
-    '''Objective function for the ccs method.'''
+    """Objective function for the ccs method."""
 
-    def __init__(self, l_twb, l_one, sto, energy_ref, force_ref, gen_params, ewald=[], ewald_forces=[]):
-        '''Generates Objective class object.
+    def __init__(
+        self,
+        l_twb,
+        l_one,
+        sto,
+        energy_ref,
+        force_ref,
+        gen_params,
+        ewald=[],
+        ewald_forces=[],
+    ):
+        """Generates Objective class object.
 
         Args:
 
@@ -41,7 +50,7 @@ class Objective:
             ge_params (dict) : options
             ewald (list, optional) : ewald energy values for CCS+Q
 
-        '''
+        """
 
         self.l_twb = l_twb
         self.l_one = l_one
@@ -52,8 +61,9 @@ class Objective:
         self.force_ref_x = [x[0] for x in force_ref]
         self.force_ref_y = [y[1] for y in force_ref]
         self.force_ref_z = [z[2] for z in force_ref]
-        self.force_ref = np.array([*self.force_ref_x, *
-                                   self.force_ref_y, *self.force_ref_z])
+        self.force_ref = np.array(
+            [*self.force_ref_x, *self.force_ref_y, *self.force_ref_z]
+        )
 
         self.ref = np.hstack((self.energy_ref, self.force_ref))
         self.ewald = np.array(ewald).reshape(-1, 1)
@@ -68,33 +78,39 @@ class Objective:
         self.cparams = [self.l_twb[i].N for i in range(self.np)]
         self.ns = len(energy_ref)
 
-        logger.debug('The reference energy : \n %s \n Number of pairs:%s',
-                     self.energy_ref, self.np)
+        logger.debug(
+            "The reference energy : \n %s \n Number of pairs:%s",
+            self.energy_ref,
+            self.np,
+        )
 
     def reduce_stoichiometry(self):
         reduce = True
         n_redundant = 0
-        while(reduce):
+        while reduce:
             check = 0
             for ci in range(np.shape(self.sto)[1]):
-                if(np.linalg.matrix_rank(self.sto[:, 0:ci+1]) < (ci+1)):
-                    print('There is linear dependence in stochiometry matrix!')
-                    print('    removing onebody term: ' +
-                          self.l_one[ci+n_redundant].name)
+                if np.linalg.matrix_rank(self.sto[:, 0 : ci + 1]) < (ci + 1):
+                    print("There is linear dependence in stochiometry matrix!")
+                    print(
+                        "    removing onebody term: "
+                        + self.l_one[ci + n_redundant].name
+                    )
                     self.sto = np.delete(self.sto, ci, 1)
-                    self.l_one[ci+n_redundant].epsilon_supported = False
+                    self.l_one[ci + n_redundant].epsilon_supported = False
                     check = 1
                     n_redundant += 1
                     break
-            if (check == 0):
+            if check == 0:
                 reduce = False
 
-        assert self.sto.shape[1] == np.linalg.matrix_rank(self.sto), \
-            'Linear dependence in stochiometry matrix'
+        assert self.sto.shape[1] == np.linalg.matrix_rank(
+            self.sto
+        ), "Linear dependence in stochiometry matrix"
         self.cols_sto = self.sto.shape[1]
 
     def solution(self):
-        '''Function to solve the objective with constraints.'''
+        """Function to solve the objective with constraints."""
 
         # COMMENTS MERGING THE INTERVALS
         # self.merge_intervals()
@@ -103,49 +119,49 @@ class Objective:
         self.reduce_stoichiometry()
 
         self.mm = self.get_m()
-        logger.debug('\n Shape of M matrix is : %s', self.mm.shape)
+        logger.debug("\n Shape of M matrix is : %s", self.mm.shape)
 
         pp = matrix(np.transpose(self.mm).dot(self.mm))
         eigvals = np.linalg.eigvals(pp)
 
-        logger.info('positive definite:%s', np.all((eigvals > 0)))
+        logger.info("positive definite:%s", np.all((eigvals > 0)))
 
-        qq = -1 * \
-            matrix(np.transpose(self.mm).dot(self.ref))
+        qq = -1 * matrix(np.transpose(self.mm).dot(self.ref))
         nswitch_list = self.list_iterator()
         obj = []
         sol_list = []
 
-        for n_switch_id in tqdm(nswitch_list, desc='Finding optimum switch', colour='#800080'):
+        for n_switch_id in tqdm(
+            nswitch_list, desc="Finding optimum switch", colour="#800080"
+        ):
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
-            sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa),
-                              matrix(bb))
-            obj.append(float(self.eval_obj(sol['x'])))
+            sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
+            obj.append(float(self.eval_obj(sol["x"])))
 
         obj = np.asarray(obj)
         mse = np.min(obj)
         opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
-        logger.info('\n The best switch is : %s and mse : %s',
-                    nswitch_list[opt_sol_index], mse)
+        logger.info(
+            "\n The best switch is : %s and mse : %s", nswitch_list[opt_sol_index], mse
+        )
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
-        opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa),
-                              matrix(bb))
+        opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb))
 
-        xx = np.array(opt_sol['x'])
+        xx = np.array(opt_sol["x"])
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(
-            self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
 
         if self.l_twb[0].Nconfs_forces > 0:
-            model_forces = np.ravel(-3 *
-                                    self.mm[-self.l_twb[0].Nconfs_forces:-1, :].dot(xx))
+            model_forces = np.ravel(
+                -3 * self.mm[-self.l_twb[0].Nconfs_forces : -1, :].dot(xx)
+            )
             self.write_error_forces(model_forces, self.force_ref)
 
         self.write_error()
@@ -158,45 +174,45 @@ class Objective:
             self.l_twb[ii].get_spline_coeffs()
             self.l_twb[ii].get_expcoeffs()
             x_unfolded = np.hstack(
-                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten()))
+                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+            )
         for onb in self.l_one:
             if onb.epsilon_supported:
                 x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
             else:
-                x_unfolded = np.hstack((x_unfolded, 0.))
+                x_unfolded = np.hstack((x_unfolded, 0.0))
         xx = x_unfolded
 
         self.write_CCS_params()
         return self.model_energies, mse, xx
 
     def predict(self, xx):
-        '''Predict results.
+        """Predict results.
 
         Args:
 
             xx (ndarrray): Solution array from training.
             Needs to be updated to handle merging and dissolving intervals
 
-        '''
+        """
         self.sto = self.sto_full
         self.mm = self.get_m()
 
         try:
-            self.model_energies = np.ravel(
-                self.mm[0:self.l_twb[0].Nconfs, :].dot(xx))
-            error = (self.model_energies-self.energy_ref)
+            self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+            error = self.model_energies - self.energy_ref
             mse = ((error) ** 2).mean()
         except:
             self.model_energies = []
             error = []
             mse = 0
 
-        self.write_error(fname='error_test.out')
+        self.write_error(fname="error_test.out")
         return self.model_energies, error
 
-    @ staticmethod
+    @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
-        '''The solver for the objective.
+        """The solver for the objective.
 
         Args:
 
@@ -215,13 +231,13 @@ class Objective:
 
             sol (dict): dictionary containing solution details
 
-        '''
+        """
 
-        solvers.options['show_progress'] = False
-        solvers.options['maxiters'] = maxiter
-        solvers.options['feastol'] = tol[0]
-        solvers.options['abstol'] = tol[1]
-        solvers.options['reltol'] = tol[2]
+        solvers.options["show_progress"] = False
+        solvers.options["maxiters"] = maxiter
+        solvers.options["feastol"] = tol[0]
+        solvers.options["abstol"] = tol[1]
+        solvers.options["reltol"] = tol[2]
 
         if aa:
             sol = solvers.qp(pp, qq, gg, hh, aa, bb)
@@ -241,7 +257,7 @@ class Objective:
             self.l_twb[ii].dissolve_interval()
 
     def eval_obj(self, xx):
-        '''Mean squared error function.
+        """Mean squared error function.
 
         Args:
 
@@ -251,30 +267,28 @@ class Objective:
 
             float: mean square error
 
-        '''
+        """
 
         return np.format_float_scientific(
-            np.sum(
-                (self.ref - (np.ravel(self.mm.dot(xx))))**2)
-            / self.ns, precision=4)
+            np.sum((self.ref - (np.ravel(self.mm.dot(xx)))) ** 2) / self.ns, precision=4
+        )
 
     def assign_parameter_values(self, xx):
         # Onebodies
         counter = -1
-        if(self.interface == "CCS+Q"):
+        if self.interface == "CCS+Q":
             counter = 0
             print("Charge scaling squared: ", xx[-1])
-            self.charge_scaling = (xx[-1]**0.5)
+            self.charge_scaling = xx[-1] ** 0.5
         for k in range(self.no):
-            i = self.no-k-1
-            if(self.l_one[i].epsilon_supported):
+            i = self.no - k - 1
+            if self.l_one[i].epsilon_supported:
                 counter += 1
-                self.l_one[i].epsilon = float(xx[-1-counter])
+                self.l_one[i].epsilon = float(xx[-1 - counter])
         # Two-bodies
         ind = 0
         for ii in range(self.np):
-            self.l_twb[ii].curvatures = np.asarray(
-                xx[ind: ind + self.cparams[ii]])
+            self.l_twb[ii].curvatures = np.asarray(xx[ind : ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
             # Unfold the spline to an equdistant grid
             # self.l_twb[ii].dissolve_interval()
@@ -282,15 +296,15 @@ class Objective:
             # self.l_twb[ii].get_expcoeffs()
 
     def list_iterator(self):
-        '''Iterates over the self.np attribute.'''
+        """Iterates over the self.np attribute."""
 
         tmp = []
         for elem in range(self.np):
-            if self.l_twb[elem].Swtype == 'rep':
+            if self.l_twb[elem].Swtype == "rep":
                 tmp.append([self.l_twb[elem].N])
-            if self.l_twb[elem].Swtype == 'att':
+            if self.l_twb[elem].Swtype == "att":
                 tmp.append([0])
-            if self.l_twb[elem].Swtype == 'sw':
+            if self.l_twb[elem].Swtype == "sw":
                 tmp.append(self.l_twb[elem].indices)
 
         n_list = list(itertools.product(*tmp))
@@ -298,13 +312,13 @@ class Objective:
         return n_list
 
     def get_m(self):
-        '''Returns the M matrix.
+        """Returns the M matrix.
 
         Returns:
 
             ndarray: The M matrix.
 
-        '''
+        """
 
         # Add energy data
         tmp = []
@@ -314,7 +328,7 @@ class Objective:
         mm = np.hstack((vv, self.sto))
 
         Q = 0
-        if self.interface == 'CCS+Q':
+        if self.interface == "CCS+Q":
             mm = np.hstack((mm, self.ewald))
             Q = 1
 
@@ -323,30 +337,33 @@ class Objective:
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].fvv_x)
         fvv_x = np.hstack([*tmp])
-        fvv_x = np.hstack((fvv_x,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
+        fvv_x = np.hstack(
+            (fvv_x, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+        )
         mm = np.vstack((mm, fvv_x))
 
         tmp = []
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].fvv_y)
         fvv_y = np.hstack([*tmp])
-        fvv_y = np.hstack((fvv_y,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
+        fvv_y = np.hstack(
+            (fvv_y, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+        )
         mm = np.vstack((mm, fvv_y))
 
         tmp = []
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].fvv_z)
         fvv_z = np.hstack([*tmp])
-        fvv_z = np.hstack((fvv_z,  np.zeros((
-            self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1]+Q))))
+        fvv_z = np.hstack(
+            (fvv_z, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+        )
         mm = np.vstack((mm, fvv_z))
 
         return mm
 
     def get_g(self, n_switch):
-        '''Returns constraints matrix.
+        """Returns constraints matrix.
 
         Args:
 
@@ -356,7 +373,7 @@ class Objective:
 
             ndarray: returns G and A matrix
 
-        '''
+        """
 
         aa = np.zeros(0)
         tmp = []
@@ -365,13 +382,13 @@ class Objective:
         gg = block_diag(*tmp)
 
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
-        if self.interface == 'CCS+Q':
+        if self.interface == "CCS+Q":
             gg = block_diag(gg, -1)
 
         return gg, aa
 
-    def write_error(self, fname='CCS_error.out'):
-        '''Prints the errors in a file.
+    def write_error(self, fname="CCS_error.out"):
+        """Prints the errors in a file.
 
         Args:
 
@@ -380,21 +397,27 @@ class Objective:
             mse (float): Mean square error.
             fname (str, optional): Output filename (default: 'error.out').
 
-        '''
-        header = '{:<15}{:<15}{:<15}{:<15}'.format(
-            'Reference', 'Predicted', 'Error', "#atoms")
+        """
+        header = "{:<15}{:<15}{:<15}{:<15}".format(
+            "Reference", "Predicted", "Error", "#atoms"
+        )
         error = abs(self.energy_ref - self.model_energies)
         maxerror = max(abs(error))
         mse = ((error) ** 2).mean()
         Natoms = self.l_one[0].stomat
         for i in range(1, self.no):
-            Natoms = Natoms+self.l_one[i].stomat
-        footer = 'MSE = {:2.5E}\nMaxerror = {:2.5E}'.format(mse, maxerror)
-        np.savetxt(fname, np.transpose([self.energy_ref, self.model_energies, error, Natoms]), header=header,
-                   footer=footer, fmt='%-15.5f')
+            Natoms = Natoms + self.l_one[i].stomat
+        footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
+        np.savetxt(
+            fname,
+            np.transpose([self.energy_ref, self.model_energies, error, Natoms]),
+            header=header,
+            footer=footer,
+            fmt="%-15.5f",
+        )
 
-    def write_error_forces(self, mdl_for, ref_for, fname='error_forces.out'):
-        '''Prints the errors in a file.
+    def write_error_forces(self, mdl_for, ref_for, fname="error_forces.out"):
+        """Prints the errors in a file.
 
         Args:
 
@@ -403,8 +426,8 @@ class Objective:
             mse (float): Mean square error.
             fname (str, optional): Output filename (default: 'error.out').
 
-        '''
-        header = '{:<15}{:<15}{:<15}'.format('Reference', 'Predicted', 'Error')
+        """
+        header = "{:<15}{:<15}{:<15}".format("Reference", "Predicted", "Error")
         error = abs(ref_for - mdl_for)
         print(error)
         maxerror = max(abs(error))
@@ -417,13 +440,13 @@ class Objective:
     def write_CCS_params(self):
 
         CCS_params = OrderedDict()
-        CCS_params['Charge scaling factor'] = float(self.charge_scaling)
+        CCS_params["Charge scaling factor"] = float(self.charge_scaling)
 
         eps_params = OrderedDict()
         for k in range(self.no):
-            if(self.l_one[k].epsilon_supported):
+            if self.l_one[k].epsilon_supported:
                 eps_params[self.l_one[k].name] = self.l_one[k].epsilon
-        CCS_params['One_body'] = eps_params
+        CCS_params["One_body"] = eps_params
 
         two_bodies_dict = OrderedDict()
         for k in range(self.np):
@@ -462,5 +485,5 @@ class Objective:
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 
         CCS_params["Two_body"] = two_bodies_dict
-        with open('CCS_params.json', 'w') as f:
+        with open("CCS_params.json", "w") as f:
             json.dump(CCS_params, f, indent=8)
