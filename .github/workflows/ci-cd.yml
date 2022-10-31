@@ -36,8 +36,9 @@ jobs:
     - name: Test with pytest
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
 
-    - name: Automatic PEP8 formatting with black
-      uses: psf/black@stable
+    # Might be nice to add a later stage
+    # - name: Automatic PEP8 formatting with black
+    #   uses: psf/black@stable
 
     - name: Build documentation
       run: poetry run make clean html --directory docs/
