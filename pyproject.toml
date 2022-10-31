@@ -5,7 +5,7 @@ description = "Fitting tools for repulsive two body interactions using curvature
 authors = [
     "Akshay Krishna AK",
     "Jolla Kullgren <jolla.kullgren@kemi.uu.se>",
-    "Eddie Wadbro"
+    "Eddie Wadbro <eddie.wadbro@umu.se>"
     ]
 maintainers = [
     "Jolla Kullgren <jolla.kullgren@kemi.uu.se>"
