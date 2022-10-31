@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.41 (2022-10-31)
+### Documentation
+* Updated how to install CCS in README.md ([`8841f72`](https://github.com/ThijsSmolders/CCS/commit/8841f7266167131120a6074bbd194baa920dc51e))
+
 ## v0.3.40 (2022-10-31)
 
 
