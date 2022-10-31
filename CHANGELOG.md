@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.39 (2022-10-31)
+### Documentation
+* Added Eddie Wadbro's email address to pyproject.toml ([`dffe31f`](https://github.com/ThijsSmolders/CCS/commit/dffe31f47f8f56a34f4f931673d6f0b43ee67675))
+* Added Eddie Wadbro's email address to pyproject.toml ([`346492b`](https://github.com/ThijsSmolders/CCS/commit/346492b1342d9a6d70c9daf042fa0f64783dfcaa))
+
 ## v0.3.38 (2022-10-25)
 ### Documentation
 * Added documentation to ccs_validate.py ([`7ad9aff`](https://github.com/ThijsSmolders/CCS/commit/7ad9affdaee17077f0bf2b6aa689ff103ebf6007))
