@@ -3,19 +3,11 @@
 # Name of the workflow
 name: ci-cd
 
+run-name: ${{ github.actor}} updated the CCS package
+
 on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run 
 # sequentially or in parallel
-
-# permissions:
-#   contents: read
-#   pages: write
-#   id-token: write
-
-# Allow one concurrent deployment
-# concurrency:
-#   group: "pages"
-#   cancel-in-progress: true
 
 jobs:
   # This workflow contains a single job called "ci"
@@ -43,6 +35,9 @@ jobs:
 
     - name: Test with pytest
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
+
+    - name: Automatic PEP8 formatting with black
+      uses: psf/black@stable
 
     - name: Build documentation
       run: poetry run make clean html --directory docs/
