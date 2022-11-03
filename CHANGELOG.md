@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.48 (2022-11-03)
+### Documentation
+* Trying to add notebook to docs ([`087c2d5`](https://github.com/Teoroo-CMC/CCS/commit/087c2d5926d5064c6b18478e23487d2f3adb5590))
+
 ## v0.3.47 (2022-11-03)
 ### Documentation
 * Adding working example ([`b9d2d8b`](https://github.com/Teoroo-CMC/CCS/commit/b9d2d8b482eb00388a76dec6034471e990c60d56))
