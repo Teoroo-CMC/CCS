@@ -1,0 +1,12 @@
+{
+        "General": {
+                "interface": "CCS"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep"
+                }
+        }
+}
