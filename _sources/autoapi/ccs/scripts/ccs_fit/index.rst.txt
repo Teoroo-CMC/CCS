@@ -1,0 +1,83 @@
+:py:mod:`ccs.scripts.ccs_fit`
+=============================
+
+.. py:module:: ccs.scripts.ccs_fit
+
+.. autoapi-nested-parse::
+
+   Functionality to fit curvature constraint splines.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_fit.main
+   ccs.scripts.ccs_fit.parse_cmdline_args
+   ccs.scripts.ccs_fit.ccs_fit
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_fit.FILENAME
+   ccs.scripts.ccs_fit.USAGE
+
+
+.. py:data:: FILENAME
+   :annotation: = CCS_input.json
+
+   
+
+.. py:data:: USAGE
+   :annotation: = Multiline-String
+
+    .. raw:: html
+
+        <details><summary>Show Value</summary>
+
+    .. code-block:: text
+        :linenos:
+
+        
+        A tool to fit two body potentials using constrained cubic splines.
+
+
+    .. raw:: html
+
+        </details>
+
+   
+
+.. py:function:: main(cmdlineargs=None)
+
+   Main driver routine for ccs_fit.
+
+   :param cmdlineargs: list of command line arguments
+                       When None, arguments in sys.argv are parsed (default: None)
+
+
+.. py:function:: parse_cmdline_args(cmdlineargs=None)
+
+   Parses command line arguments.
+
+   :param cmdlineargs: list of command line arguments
+                       When None, arguments in sys.argv are parsed (default: None)
+
+
+.. py:function:: ccs_fit(args)
+
+   Reads desired output file and generates a structures.json file.
+
+   :param args: namespace of command line arguments
+
+
