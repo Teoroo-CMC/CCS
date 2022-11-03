@@ -1,0 +1,44 @@
+:py:mod:`ccs.common.io`
+=======================
+
+.. py:module:: ccs.common.io
+
+.. autoapi-nested-parse::
+
+   Common IO routines used by the CCS project.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.common.io.read_detailedout
+   ccs.common.io.get_paths_from_file
+
+
+
+.. py:function:: read_detailedout(fname)
+
+   Reads desired energy terms from DFTB+ detailed.out files.
+
+   :param fname: filename to read from
+   :type fname: str
+
+
+.. py:function:: get_paths_from_file(fname)
+
+   Extracts a list of paths from a given file.
+
+   :param fname: filename to read from
+   :type fname: str
+
+   :returns: list of raw paths
+   :rtype: paths (list)
+
+

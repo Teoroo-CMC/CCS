@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS - Curvature Constrained Splines &mdash; CCS  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> CCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">CCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>CCS - Curvature Constrained Splines</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ccs-curvature-constrained-splines">
+<h1>CCS - Curvature Constrained Splines<a class="headerlink" href="#ccs-curvature-constrained-splines" title="Permalink to this heading"></a></h1>
+<div style="text-align:center"><img src="https://raw.githubusercontent.com/aksam432/CCS/master/logo.png" width=600/></div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CCS</span></code> package is a tool to construct two-body potentials using the idea of curvature constrained splines.</p>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
+<section id="package-layout">
+<h3>Package Layout<a class="headerlink" href="#package-layout" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ccs-x.y.z
+├── bin
+│   ├── ccs_fetch
+│   ├── ccs_fit               
+│   └── ccs_validate                 
+├── ccs
+│   ├── __init__.py                     
+│   ├── main.py                 
+│   ├── objective.py            
+│   └── spline_functions.py     
+├── examples
+│   ├── Ne-FCC
+│   │   ├── input.json          
+│   │   └── structures.json     
+│   └── O2
+│       ├── input.json
+│       └── structures.json
+├── LICENSE
+├── README.md
+└── setup.py
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fetch</span></code>           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fit</span></code>             - The primary executable file for the ccs package.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">main.py</span></code>             - A module to parse input files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objective.py</span></code>        - A module which contains the objective function and solver.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spline_functions.py</span></code> - A module for spline construction/evaluation/output.</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h3>
+<p>You need to install the following softwares</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scipy</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">ase</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cvxopt</span>
+</pre></div>
+</div>
+</section>
+<section id="installing-from-source">
+<h3>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this heading"></a></h3>
+<section id="git-clone">
+<h4>Git clone<a class="headerlink" href="#git-clone" title="Permalink to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Teoroo</span><span class="o">-</span><span class="n">CMC</span><span class="o">/</span><span class="n">CCS</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">CCS</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading"></a></h3>
+<p>Set the following environment variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$export PYTHONPATH=&lt;path-to-CCS-package&gt;:$PYTHONPATH
+$export PATH=&lt;path-to-CCS-bin&gt;:$PATH
+
+Within a conda virtual environment, you can update the path by using:
+conda develop &lt;path-to-CCS-package&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="tutorials">
+<h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading"></a></h2>
+<p>We provide tutorials in the <a class="reference internal" href="examples.html"><span class="doc std std-doc">examples</span></a> folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample <code class="docutils literal notranslate"><span class="pre">CCS_input.json</span></code> for O2 is shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="s2">&quot;General&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;CCS&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Train-set&quot;</span><span class="p">:</span> <span class="s2">&quot;structures.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Twobody&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;O-O&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span>
+                        <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span>
+                        <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;sw&quot;</span>
+                <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Onebody&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;O&quot;</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CCS_input.json</span></code> file should provide at a minimum the block “Genaral” specifying an interface. The default is to look for input structures in the file <code class="docutils literal notranslate"><span class="pre">structure.json</span></code> file. The format for <code class="docutils literal notranslate"><span class="pre">structure.json</span></code> is shown below :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s2">&quot;energies&quot;</span><span class="p">:{</span>
+        <span class="s2">&quot;S1&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Energy&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.22425752</span><span class="p">,</span>
+                <span class="s2">&quot;Atoms&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;O&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;O-O&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="mf">0.96</span>
+                <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;S2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Energy&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">5.29665634</span><span class="p">,</span>
+                <span class="s2">&quot;Atoms&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;O&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;O-O&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="mf">0.98</span>
+                <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;S3&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Energy&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.20910363</span><span class="p">,</span>
+                <span class="s2">&quot;Atoms&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;O&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;O-O&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="mf">1.0</span>
+                <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;S4&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Energy&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">6.98075271</span><span class="p">,</span>
+                <span class="s2">&quot;Atoms&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;O&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;O-O&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="mf">1.02</span>
+                <span class="p">]</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">structure.json</span></code> file contains different configurations labeled (“S1”, “S2”…) and corresponding energy, pairwise distances (contained in an array labelled as “O-O” for oxygen). The stoichiometry of each configuration is given under the atoms label (“Atoms”) as a key-value pair (“O” : 2 ).</p>
+<p>To perform the fit :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ccs_fit</span>
+</pre></div>
+</div>
+<p>The following output files are obtained:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CCS_params</span><span class="o">.</span><span class="n">json</span> <span class="n">CCS_error</span><span class="o">.</span><span class="n">out</span> <span class="n">ccs</span><span class="o">.</span><span class="n">log</span> 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>CCS_params.json  - Contains the spline coefficients, and one-body terms for two body potentials.</p></li>
+<li><p>error.out        - Contains target energies, predicted energies and absolute error for each configuration.</p></li>
+<li><p>ccs.log          - Contains debug information</p></li>
+</ul>
+</section>
+<section id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Akshay Krishna AK</strong></p></li>
+<li><p><strong>Jolla Kullgren</strong></p></li>
+<li><p><strong>Eddie Wadbro</strong></p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>This project is licensed under the GPLv3 License - see the <span class="xref myst">LICENSE</span> file for details.</p>
+</section>
+<section id="acknowledgement">
+<h2>Acknowledgement<a class="headerlink" href="#acknowledgement" title="Permalink to this heading"></a></h2>
+<p>We thank all the members of  <a class="reference external" href="http://www.teoroo.kemi.uu.se/">TEOROO-group</a> at Uppsala University, Sweden.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jolla Kullgren.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+:py:mod:`ccs.common.neighborlist`
+=================================
+
+.. py:module:: ccs.common.neighborlist
+
+.. autoapi-nested-parse::
+
+   Common neighbor list routines used by the CCS project.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.common.neighborlist.pair_dist
+
+
+
+.. py:function:: pair_dist(atoms, rcut, ch1, ch2)
+
+   Calculates the pairwise distances between two types of atoms within a
+      certain cuttoff.
+
+   :param atoms: list of ASE Atoms objects
+   :type atoms: list
+   :param rcut: neighbor list cutoff in Angstrom
+   :type rcut: float
+   :param ch1: atom species 1
+   :type ch1: str
+   :param ch2: atoms species 2
+   :type ch2: str
+
+   :returns: list of distances in Bohr, i.e. atomic units
+   :rtype: dists_rounded (list)
+
+

@@ -1,0 +1,118 @@
+# This is a basic workflow for continuous integration of ccs
+
+# Name of the workflow
+name: ci-cd
+
+run-name: ${{ github.actor}} updated the CCS package
+
+on: [push, pull_request]
+# A workflow run is made up of one or more jobs that can run 
+# sequentially or in parallel
+
+jobs:
+  # This workflow contains a single job called "ci"
+  ci:
+    # Set up operating system
+    runs-on: ubuntu-latest
+
+    # Define job steps
+    steps:
+    # Set up a Python environment for use in actions
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    # This workflow contains a single job called "build"
+    - name: Check-out repository
+      uses: actions/checkout@v3
+
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install package
+      run: poetry install
+
+    - name: Test with pytest
+      run: poetry run pytest tests/ --cov=ccs --cov-report=xml
+
+    # Might be nice to add a later stage
+    # - name: Automatic PEP8 formatting with black
+    #   uses: psf/black@stable
+
+    - name: Build documentation
+      run: poetry run make clean html --directory docs/
+
+#     - name: Install dependencies
+#       run: |
+#         pip install -r requirements.txt
+    
+#     - name: Sphinx build
+#       run: |
+#         sphinx-build docs/ docs/_build
+    
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      with:
+        publish_branch: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/
+      #   force_orphan: true
+
+  cd:
+    # Only run this job if the "ci" job passes
+    needs: ci
+
+    # Only run this job if new work is pushed to the "master" branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+    # Set up operating system
+    runs-on: ubuntu-latest
+
+    # Define job steps
+    steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Check-out repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install package
+      run: poetry install
+
+    - name: Use Python Semantic Release to prepare release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+          git config user.name ThijsSmolders
+          git config user.email github-actions@github.com
+          poetry run semantic-release publish
+
+    # Uncomment code block below for automatic upload to both TestPyPI and if that works to PyPI. This can also be replaced by setting upload_to_pypi = true in pyproject.toml 
+    # - name: Publish to TestPyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1
+    #   with:
+    #     user: __token__
+    #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+    #     repository_url: https://test.pypi.org/legacy/
+
+    # - name: Test install from TestPyPI
+    #   run: |
+    #       pip install \
+    #       --index-url https://test.pypi.org/simple/ \
+    #       --extra-index-url https://pypi.org/simple \
+    #       pycounts
+
+    # - name: Publish to PyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1
+    #   with:
+    #     user: __token__
+    #     password: ${{ secrets.PYPI_API_TOKEN }}

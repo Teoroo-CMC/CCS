@@ -1,0 +1,59 @@
+:py:mod:`ccs.scripts.ccs_fetch`
+===============================
+
+.. py:module:: ccs.scripts.ccs_fetch
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_fetch.pair_dist
+   ccs.scripts.ccs_fetch.ccs_fetch
+   ccs.scripts.ccs_fetch.main
+
+
+
+.. py:function:: pair_dist(atoms, R_c, ch1, ch2, counter)
+
+       This function returns pairwise distances between two types of atoms within a certain cuttoff
+
+   Input
+   -----
+       R_c : float
+           Cut off distance(6. Å)
+       ch1 : str
+           Atom species 1
+       ch2 : str
+           Atoms species 2
+
+   :rtype: A list of distances
+
+
+.. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None)
+
+   Function to read files and output structures.json
+
+   Input
+   -----
+       args : list
+           list of filenames
+       R_c : float
+           optional: Distance cut-off. Defaults to 7.0.
+
+   :returns: **structures.json** -- Collection of structures in .json format.
+   :rtype: JSON file
+
+   .. rubric:: Example
+
+   To be added.
+
+
+.. py:function:: main()
+
+

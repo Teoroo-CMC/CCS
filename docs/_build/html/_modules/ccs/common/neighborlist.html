@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ccs.common.neighborlist &mdash; CCS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ccs.common.neighborlist</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ccs.common.neighborlist</h1><div class="highlight"><pre>
+<span></span><span class="c1">#------------------------------------------------------------------------------#</span>
+<span class="c1">#  CCS: Curvature Constrained Splines                                          #</span>
+<span class="c1">#  Copyright (C) 2019 - 2021  CCS developers group                             #</span>
+<span class="c1">#                                                                              #</span>
+<span class="c1">#  See the LICENSE file for terms of usage and distribution.                   #</span>
+<span class="c1">#------------------------------------------------------------------------------#</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Common neighbor list routines used by the CCS project.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.neighborlist</span> <span class="kn">import</span> <span class="n">NeighborList</span>
+
+<span class="kn">from</span> <span class="nn">ccs.data.conversion</span> <span class="kn">import</span> <span class="n">AA__Bohr</span>
+
+
+<div class="viewcode-block" id="pair_dist"><a class="viewcode-back" href="../../../autoapi/ccs/common/neighborlist/index.html#ccs.common.neighborlist.pair_dist">[docs]</a><span class="k">def</span> <span class="nf">pair_dist</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">rcut</span><span class="p">,</span> <span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculates the pairwise distances between two types of atoms within a</span>
+<span class="sd">       certain cuttoff.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">        atoms (list): list of ASE Atoms objects</span>
+<span class="sd">        rcut (float): neighbor list cutoff in Angstrom</span>
+<span class="sd">        ch1 (str): atom species 1</span>
+<span class="sd">        ch2 (str): atoms species 2</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        dists_rounded (list): list of distances in Bohr, i.e. atomic units</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">ch1</span> <span class="o">==</span> <span class="n">ch2</span><span class="p">:</span>
+        <span class="n">bothways</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bothways</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">nl</span> <span class="o">=</span> <span class="n">NeighborList</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_global_number_of_atoms</span><span class="p">()</span> <span class="o">*</span> <span class="p">[</span><span class="n">rcut</span><span class="p">],</span>
+                      <span class="n">self_interaction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bothways</span><span class="o">=</span><span class="n">bothways</span><span class="p">)</span>
+    <span class="n">nl</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_global_number_of_atoms</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()[</span><span class="n">jj</span><span class="p">]</span> <span class="o">==</span> <span class="n">ch1</span><span class="p">:</span>
+            <span class="n">indices</span><span class="p">,</span> <span class="n">offsets</span> <span class="o">=</span> <span class="n">nl</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">offset</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()[</span><span class="n">ii</span><span class="p">]</span> <span class="o">==</span> <span class="n">ch2</span><span class="p">:</span>
+                    <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+                                <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+                                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_cell</span><span class="p">())</span>
+                                <span class="o">-</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">jj</span><span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="n">distances</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="c1"># convert distances from Angstrom to Bohr and round</span>
+    <span class="n">dists_rounded</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">elem</span> <span class="o">*</span> <span class="n">AA__Bohr</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">distances</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dists_rounded</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jolla Kullgren.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

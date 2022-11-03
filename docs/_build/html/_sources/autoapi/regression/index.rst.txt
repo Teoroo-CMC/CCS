@@ -1,0 +1,85 @@
+:py:mod:`regression`
+====================
+
+.. py:module:: regression
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   regression.CCS_regressor
+
+
+
+
+.. py:class:: CCS_regressor(N=100, xmin=0, xmax=1, dx=None, sw=False, eps=False)
+
+   .. py:method:: merge_intervals(x)
+
+
+   .. py:method:: rubber_band()
+
+
+   .. py:method:: solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10))
+      :staticmethod:
+
+      The solver for the objective.
+
+      :param pp: P matrix as per standard Quadratic Programming(QP)
+                 notation.
+      :type pp: matrix
+      :param qq: q matrix as per standard QP notation.
+      :type qq: matrix
+      :param gg: G matrix as per standard QP notation.
+      :type gg: matrix
+      :param hh: h matrix as per standard QP notation
+      :type hh: matrix
+      :param aa: A matrix as per standard QP notation.
+      :type aa: matrix
+      :param bb: b matrix as per standard QP notation
+      :type bb: matrix
+      :param maxiter: maximum iteration steps (default: 300).
+      :type maxiter: int, optional
+      :param tol: tolerance value of the solution
+                  (default: (1e-10, 1e-10, 1e-10)).
+      :type tol: tuple, optional
+
+      :returns: dictionary containing solution details
+      :rtype: sol (dict)
+
+
+   .. py:method:: fit(x, y)
+
+
+   .. py:method:: const(n_switch)
+
+
+   .. py:method:: predict(x)
+
+
+   .. py:method:: spline_construction(N)
+
+      This function constructs the matrices A, B, C, D.
+
+      :param N: Number of knots
+
+      :returns: constructed matrices
+      :rtype: cc, dd, bb, aa (matrices)
+
+
+   .. py:method:: model(x)
+
+      Constructs the v matrix.
+
+      :param self:
+
+      :returns: The v matrix for a pair.
+      :rtype: ndarray
+
+
+

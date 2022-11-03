@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ccs.fitting.objective &mdash; CCS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ccs.fitting.objective</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ccs.fitting.objective</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1">#------------------------------------------------------------------------------#</span>
+<span class="c1">#  CCS: Curvature Constrained Splines                                          #</span>
+<span class="c1">#  Copyright (C) 2019 - 2021  CCS developers group                             #</span>
+<span class="c1">#                                                                              #</span>
+<span class="c1">#  See the LICENSE file for terms of usage and distribution.                   #</span>
+<span class="c1">#------------------------------------------------------------------------------#</span>
+
+
+<span class="sd">&#39;&#39;&#39;This module constructs and solves the spline objective.&#39;&#39;&#39;</span>
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">cvxopt</span> <span class="kn">import</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">block_diag</span>
+
+<span class="kn">import</span> <span class="nn">ccs.fitting.spline_functions</span> <span class="k">as</span> <span class="nn">sf</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Objective"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective">[docs]</a><span class="k">class</span> <span class="nc">Objective</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;Objective function for the ccs method.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l_twb</span><span class="p">,</span> <span class="n">l_one</span><span class="p">,</span> <span class="n">sto</span><span class="p">,</span> <span class="n">energy_ref</span><span class="p">,</span> <span class="n">force_ref</span><span class="p">,</span> <span class="n">gen_params</span><span class="p">,</span> <span class="n">ewald</span><span class="o">=</span><span class="p">[],</span> <span class="n">ewald_forces</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&#39;&#39;&#39;Generates Objective class object.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            l_twb (list): list of Twobody class objects</span>
+<span class="sd">            l_one (list): list of Onebody class objects</span>
+<span class="sd">            sto (ndarray): array containing number of atoms of each type</span>
+<span class="sd">            energy_ref (ndarray): reference energies</span>
+<span class="sd">            ge_params (dict) : options</span>
+<span class="sd">            ewald (list, optional) : ewald energy values for CCS+Q</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span> <span class="o">=</span> <span class="n">l_twb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span> <span class="o">=</span> <span class="n">l_one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sto</span> <span class="o">=</span> <span class="n">sto</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sto_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span> <span class="o">=</span> <span class="n">energy_ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_ref_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">force_ref</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_ref_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">force_ref</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_ref_z</span> <span class="o">=</span> <span class="p">[</span><span class="n">z</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">force_ref</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">force_ref_x</span><span class="p">,</span> <span class="o">*</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">force_ref_y</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">force_ref_z</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_ref</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ewald</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ewald</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charge_scaling</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">kk</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">gen_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kk</span><span class="p">,</span> <span class="n">vv</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cols_sto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l_twb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l_one</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cparams</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">energy_ref</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;The reference energy : </span><span class="se">\n</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="se">\n</span><span class="s1"> Number of pairs:</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Objective.reduce_stoichiometry"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.reduce_stoichiometry">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_stoichiometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">reduce</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">n_redundant</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">reduce</span><span class="p">):</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">ci</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">ci</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There is linear dependence in stochiometry matrix!&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    removing onebody term: &#39;</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">ci</span><span class="o">+</span><span class="n">n_redundant</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">,</span> <span class="n">ci</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">ci</span><span class="o">+</span><span class="n">n_redundant</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon_supported</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">check</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">n_redundant</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">check</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">reduce</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">),</span> \
+            <span class="s1">&#39;Linear dependence in stochiometry matrix&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cols_sto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Objective.solution"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.solution">[docs]</a>    <span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Function to solve the objective with constraints.&#39;&#39;&#39;</span>
+
+        <span class="c1"># COMMENTS MERGING THE INTERVALS</span>
+        <span class="c1"># self.merge_intervals()</span>
+
+        <span class="c1"># Reduce stoichiometry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reduce_stoichiometry</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_m</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Shape of M matrix is : </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">pp</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">))</span>
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;positive definite:</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="n">eigvals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)))</span>
+
+        <span class="n">qq</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> \
+            <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">))</span>
+        <span class="n">nswitch_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_iterator</span><span class="p">()</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sol_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n_switch_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">nswitch_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Finding optimum switch&#39;</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">):</span>
+            <span class="p">[</span><span class="n">gg</span><span class="p">,</span> <span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_g</span><span class="p">(</span><span class="n">n_switch_id</span><span class="p">)</span>
+            <span class="n">hh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">matrix</span><span class="p">(</span><span class="n">gg</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">hh</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">aa</span><span class="p">),</span>
+                              <span class="n">matrix</span><span class="p">(</span><span class="n">bb</span><span class="p">))</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_obj</span><span class="p">(</span><span class="n">sol</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])))</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">opt_sol_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">obj</span> <span class="o">==</span> <span class="n">mse</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The best switch is : </span><span class="si">%s</span><span class="s1"> and mse : </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">],</span> <span class="n">mse</span><span class="p">)</span>
+
+        <span class="p">[</span><span class="n">g_opt</span><span class="p">,</span> <span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_g</span><span class="p">(</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">])</span>
+        <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">opt_sol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">matrix</span><span class="p">(</span><span class="n">g_opt</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">hh</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">aa</span><span class="p">),</span>
+                              <span class="n">matrix</span><span class="p">(</span><span class="n">bb</span><span class="p">))</span>
+
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">opt_sol</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assign_parameter_values</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">model_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span> <span class="o">*</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_error_forces</span><span class="p">(</span><span class="n">model_forces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_ref</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">()</span>
+
+        <span class="c1"># COMMENT: Unfold the spline to an equdistant grid</span>
+        <span class="c1"># self.unfold_intervals()</span>
+
+        <span class="n">x_unfolded</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">get_spline_coeffs</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">get_expcoeffs</span><span class="p">()</span>
+            <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">curvatures</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">onb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">onb</span><span class="o">.</span><span class="n">epsilon_supported</span><span class="p">:</span>
+                <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">onb</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">x_unfolded</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_CCS_params</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="p">,</span> <span class="n">mse</span><span class="p">,</span> <span class="n">xx</span></div>
+
+<div class="viewcode-block" id="Objective.predict"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Predict results.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            xx (ndarrray): Solution array from training.</span>
+<span class="sd">            Needs to be updated to handle merging and dissolving intervals</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto_full</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_m</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span><span class="p">)</span>
+            <span class="n">mse</span> <span class="o">=</span> <span class="p">((</span><span class="n">error</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">mse</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;error_test.out&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="p">,</span> <span class="n">error</span></div>
+
+<div class="viewcode-block" id="Objective.solver"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.solver">[docs]</a>    <span class="o">@</span> <span class="nb">staticmethod</span>
+    <span class="k">def</span> <span class="nf">solver</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;The solver for the objective.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            pp (matrix): P matrix as per standard Quadratic Programming(QP)</span>
+<span class="sd">                notation.</span>
+<span class="sd">            qq (matrix): q matrix as per standard QP notation.</span>
+<span class="sd">            gg (matrix): G matrix as per standard QP notation.</span>
+<span class="sd">            hh (matrix): h matrix as per standard QP notation</span>
+<span class="sd">            aa (matrix): A matrix as per standard QP notation.</span>
+<span class="sd">            bb (matrix): b matrix as per standard QP notation</span>
+<span class="sd">            maxiter (int, optional): maximum iteration steps (default: 300).</span>
+<span class="sd">            tol (tuple, optional): tolerance value of the solution</span>
+<span class="sd">                (default: (1e-10, 1e-10, 1e-10)).</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            sol (dict): dictionary containing solution details</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;show_progress&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;maxiters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxiter</span>
+        <span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;feastol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;abstol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;reltol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">aa</span><span class="p">:</span>
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sol</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sol</span></div>
+
+<div class="viewcode-block" id="Objective.merge_intervals"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.merge_intervals">[docs]</a>    <span class="k">def</span> <span class="nf">merge_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Merge intervals</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">merge_intervals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cparams</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Objective.unfold_intervals"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.unfold_intervals">[docs]</a>    <span class="k">def</span> <span class="nf">unfold_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">dissolve_interval</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Objective.eval_obj"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.eval_obj">[docs]</a>    <span class="k">def</span> <span class="nf">eval_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Mean squared error function.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            xx (ndarray): the solution for the objective</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            float: mean square error</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_scientific</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">))))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Objective.assign_parameter_values"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.assign_parameter_values">[docs]</a>    <span class="k">def</span> <span class="nf">assign_parameter_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
+        <span class="c1"># Onebodies</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">):</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Charge scaling squared: &quot;</span><span class="p">,</span> <span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">charge_scaling</span> <span class="o">=</span> <span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon_supported</span><span class="p">):</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">counter</span><span class="p">])</span>
+        <span class="c1"># Two-bodies</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">curvatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+                <span class="n">xx</span><span class="p">[</span><span class="n">ind</span><span class="p">:</span> <span class="n">ind</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cparams</span><span class="p">[</span><span class="n">ii</span><span class="p">]])</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">ind</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cparams</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span></div>
+            <span class="c1"># Unfold the spline to an equdistant grid</span>
+            <span class="c1"># self.l_twb[ii].dissolve_interval()</span>
+            <span class="c1"># self.l_twb[ii].get_spline_coeffs()</span>
+            <span class="c1"># self.l_twb[ii].get_expcoeffs()</span>
+
+<div class="viewcode-block" id="Objective.list_iterator"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.list_iterator">[docs]</a>    <span class="k">def</span> <span class="nf">list_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Iterates over the self.np attribute.&#39;&#39;&#39;</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">Swtype</span> <span class="o">==</span> <span class="s1">&#39;rep&#39;</span><span class="p">:</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">N</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">Swtype</span> <span class="o">==</span> <span class="s1">&#39;att&#39;</span><span class="p">:</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">Swtype</span> <span class="o">==</span> <span class="s1">&#39;sw&#39;</span><span class="p">:</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
+
+        <span class="n">n_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">n_list</span></div>
+
+<div class="viewcode-block" id="Objective.get_m"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.get_m">[docs]</a>    <span class="k">def</span> <span class="nf">get_m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Returns the M matrix.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            ndarray: The M matrix.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># Add energy data</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">vv</span><span class="p">)</span>
+        <span class="n">vv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="o">*</span><span class="n">tmp</span><span class="p">])</span>
+        <span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">vv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">))</span>
+
+        <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="s1">&#39;CCS+Q&#39;</span><span class="p">:</span>
+            <span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">mm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ewald</span><span class="p">))</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Add force data</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">fvv_x</span><span class="p">)</span>
+        <span class="n">fvv_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="o">*</span><span class="n">tmp</span><span class="p">])</span>
+        <span class="n">fvv_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">fvv_x</span><span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">Q</span><span class="p">))))</span>
+        <span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">mm</span><span class="p">,</span> <span class="n">fvv_x</span><span class="p">))</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">fvv_y</span><span class="p">)</span>
+        <span class="n">fvv_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="o">*</span><span class="n">tmp</span><span class="p">])</span>
+        <span class="n">fvv_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">fvv_y</span><span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">Q</span><span class="p">))))</span>
+        <span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">mm</span><span class="p">,</span> <span class="n">fvv_y</span><span class="p">))</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">fvv_z</span><span class="p">)</span>
+        <span class="n">fvv_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="o">*</span><span class="n">tmp</span><span class="p">])</span>
+        <span class="n">fvv_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">fvv_z</span><span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">Q</span><span class="p">))))</span>
+        <span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">mm</span><span class="p">,</span> <span class="n">fvv_z</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">mm</span></div>
+
+<div class="viewcode-block" id="Objective.get_g"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.get_g">[docs]</a>    <span class="k">def</span> <span class="nf">get_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_switch</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Returns constraints matrix.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            n_switch (int): switching point to change signs of curvatures.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            ndarray: returns G and A matrix</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">aa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span><span class="o">.</span><span class="n">switch_const</span><span class="p">(</span><span class="n">n_switch</span><span class="p">[</span><span class="n">elem</span><span class="p">]))</span>
+        <span class="n">gg</span> <span class="o">=</span> <span class="n">block_diag</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="n">gg</span> <span class="o">=</span> <span class="n">block_diag</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cols_sto</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="s1">&#39;CCS+Q&#39;</span><span class="p">:</span>
+            <span class="n">gg</span> <span class="o">=</span> <span class="n">block_diag</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gg</span><span class="p">,</span> <span class="n">aa</span></div>
+
+<div class="viewcode-block" id="Objective.write_error"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.write_error">[docs]</a>    <span class="k">def</span> <span class="nf">write_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;CCS_error.out&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Prints the errors in a file.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            mdl_eng (ndarray): Energy prediction values from splines.</span>
+<span class="sd">            ref_eng (ndarray): Reference energy values.</span>
+<span class="sd">            mse (float): Mean square error.</span>
+<span class="sd">            fname (str, optional): Output filename (default: &#39;error.out&#39;).</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:&lt;15}{:&lt;15}{:&lt;15}{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">&#39;Reference&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted&#39;</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s2">&quot;#atoms&quot;</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="p">)</span>
+        <span class="n">maxerror</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+        <span class="n">mse</span> <span class="o">=</span> <span class="p">((</span><span class="n">error</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">Natoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stomat</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">):</span>
+            <span class="n">Natoms</span> <span class="o">=</span> <span class="n">Natoms</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">stomat</span>
+        <span class="n">footer</span> <span class="o">=</span> <span class="s1">&#39;MSE = </span><span class="si">{:2.5E}</span><span class="se">\n</span><span class="s1">Maxerror = </span><span class="si">{:2.5E}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mse</span><span class="p">,</span> <span class="n">maxerror</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">Natoms</span><span class="p">]),</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                   <span class="n">footer</span><span class="o">=</span><span class="n">footer</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%-15.5f</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Objective.write_error_forces"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.write_error_forces">[docs]</a>    <span class="k">def</span> <span class="nf">write_error_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdl_for</span><span class="p">,</span> <span class="n">ref_for</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s1">&#39;error_forces.out&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Prints the errors in a file.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            mdl_eng (ndarray): Energy prediction values from splines.</span>
+<span class="sd">            ref_eng (ndarray): Reference energy values.</span>
+<span class="sd">            mse (float): Mean square error.</span>
+<span class="sd">            fname (str, optional): Output filename (default: &#39;error.out&#39;).</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:&lt;15}{:&lt;15}{:&lt;15}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Reference&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted&#39;</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ref_for</span> <span class="o">-</span> <span class="n">mdl_for</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">maxerror</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+        <span class="n">mse</span> <span class="o">=</span> <span class="p">((</span><span class="n">error</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
+        <span class="c1"># footer = &#39;Maxerror = {:2.5E}&#39;.format(maxerror)</span>
+        <span class="c1"># np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,</span>
+        <span class="c1">#           footer=footer, fmt=&#39;%-15.5f&#39;)</span>
+
+<div class="viewcode-block" id="Objective.write_CCS_params"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/objective/index.html#ccs.fitting.objective.Objective.write_CCS_params">[docs]</a>    <span class="k">def</span> <span class="nf">write_CCS_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">CCS_params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="n">CCS_params</span><span class="p">[</span><span class="s1">&#39;Charge scaling factor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charge_scaling</span><span class="p">)</span>
+
+        <span class="n">eps_params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon_supported</span><span class="p">):</span>
+                <span class="n">eps_params</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span>
+        <span class="n">CCS_params</span><span class="p">[</span><span class="s1">&#39;One_body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eps_params</span>
+
+        <span class="n">two_bodies_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+            <span class="n">two_body_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="c1"># From right to left aligned...</span>
+            <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINE</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;r_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">rn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;r_cut&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">Rcut</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;dr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">res</span>
+            <span class="n">r_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">rn</span><span class="p">))</span>
+            <span class="k">del</span> <span class="n">r_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINED</span>
+            <span class="c1"># r_values.append(self.l_twb[k].Rcut)</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r_values</span><span class="p">)</span>
+            <span class="c1"># INNER PART ALLREADY REMOVED HERE...</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;exp_a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">expcoeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># INNER PART ALLREADY REMOVED HERE...</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;exp_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">expcoeffs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># INNER PART ALLREADY REMOVED HERE...</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;exp_c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">expcoeffs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">a_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">splcoeffs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="n">a_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">a_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINED</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;spl_a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_values</span>
+            <span class="n">b_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">splcoeffs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">b_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">b_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINED</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;spl_b&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b_values</span>
+            <span class="n">c_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">splcoeffs</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">c_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">c_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINED</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;spl_c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_values</span>
+            <span class="n">d_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">splcoeffs</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">d_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">d_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># REMOVE INNER PART WHICH IS ILL-DEFINED</span>
+            <span class="n">two_body_dict</span><span class="p">[</span><span class="s2">&quot;spl_d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_values</span>
+            <span class="n">two_bodies_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">two_body_dict</span>
+
+        <span class="n">CCS_params</span><span class="p">[</span><span class="s2">&quot;Two_body&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">two_bodies_dict</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;CCS_params.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">CCS_params</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jolla Kullgren.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

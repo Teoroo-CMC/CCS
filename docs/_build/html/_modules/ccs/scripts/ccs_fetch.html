@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ccs.scripts.ccs_fetch &mdash; CCS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ccs.scripts.ccs_fetch</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ccs.scripts.ccs_fetch</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python3.6</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">pink</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">io</span>
+<span class="kn">import</span> <span class="nn">ase.db</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">true</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+
+<div class="viewcode-block" id="pair_dist"><a class="viewcode-back" href="../../../autoapi/ccs/scripts/ccs_fetch/index.html#ccs.pair_dist">[docs]</a><span class="k">def</span> <span class="nf">pair_dist</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        This function returns pairwise distances between two types of atoms within a certain cuttoff</span>
+<span class="sd">    </span>
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">        R_c : float</span>
+<span class="sd">            Cut off distance(6. Å)</span>
+<span class="sd">        ch1 : str</span>
+<span class="sd">            Atom species 1</span>
+<span class="sd">        ch2 : str</span>
+<span class="sd">            Atoms species 2</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        A list of distances</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
+        <span class="n">n_repeat</span> <span class="o">=</span> <span class="n">R_c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">cell</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">n_repeat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n_repeat</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">n_repeat</span><span class="p">])]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+
+    <span class="n">mask1</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span> <span class="o">==</span> <span class="n">ch1</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()]</span>
+    <span class="n">mask2</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span> <span class="o">==</span> <span class="n">ch2</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()]</span>
+    <span class="n">pos1</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span><span class="o">.</span><span class="n">positions</span>
+    <span class="n">index1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))[</span><span class="n">mask1</span><span class="p">]</span>
+    <span class="n">atoms_2</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">mask2</span><span class="p">]</span>
+    <span class="n">Natoms_2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms_2</span><span class="p">)</span>
+
+    <span class="n">pos2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">:</span>
+        <span class="n">pos2</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">atoms_2</span><span class="o">.</span><span class="n">positions</span><span class="o">+</span><span class="n">offset</span><span class="nd">@cell</span><span class="p">))</span>
+
+    <span class="n">pos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pos2</span><span class="p">)</span>
+    <span class="n">pos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">pos2</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">r_distance</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">forces</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="nb">id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">index1</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">pos2</span><span class="o">-</span><span class="n">p1</span>
+        <span class="n">norm_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dist_mask</span> <span class="o">=</span> <span class="n">norm_dist</span> <span class="o">&lt;</span> <span class="n">R_c</span>
+        <span class="n">r_distance</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">norm_dist</span><span class="p">[</span><span class="n">dist_mask</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">forces</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+               <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">dist_mask</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">ch1</span> <span class="o">==</span> <span class="n">ch2</span><span class="p">):</span>
+        <span class="n">r_distance</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">r_distance</span> <span class="o">=</span> <span class="n">r_distance</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">r_distance</span><span class="p">,</span> <span class="n">forces</span></div>
+
+
+<div class="viewcode-block" id="ccs_fetch"><a class="viewcode-back" href="../../../autoapi/ccs/scripts/ccs_fetch/index.html#ccs.ccs_fetch">[docs]</a><span class="k">def</span> <span class="nf">ccs_fetch</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  </span>
+<span class="sd">    Function to read files and output structures.json</span>
+
+<span class="sd">    Input</span>
+<span class="sd">    -----</span>
+<span class="sd">        args : list</span>
+<span class="sd">            list of filenames</span>
+<span class="sd">        R_c : float </span>
+<span class="sd">            optional: Distance cut-off. Defaults to 7.0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        structures.json : JSON file</span>
+<span class="sd">            Collection of structures in .json format.</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">        To be added.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DFT_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS&quot;</span><span class="p">):</span>
+        <span class="n">REF_DB</span> <span class="o">=</span> <span class="n">DFT_DB</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pymatgen.core</span> <span class="kn">import</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">Structure</span>
+        <span class="kn">from</span> <span class="nn">pymatgen.analysis</span> <span class="kn">import</span> <span class="n">ewald</span>
+        <span class="n">REF_DB</span> <span class="o">=</span> <span class="n">DFT_DB</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">):</span>
+        <span class="n">REF_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">Ns</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="n">Ns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">Ns</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">REF_DB</span><span class="p">))]</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">REF_DB</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span>
+
+    <span class="n">species</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">REF_DB</span><span class="o">.</span><span class="n">select</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">),</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#008080&#39;</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="n">counter</span><span class="p">]):</span>
+            <span class="n">struct</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">()</span>
+            <span class="n">ce</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="n">FREF</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">forces</span>
+            <span class="n">EREF</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">energy</span>
+            <span class="n">ce</span><span class="p">[</span><span class="s1">&#39;energy_dft&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EREF</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">EDFT</span> <span class="o">=</span> <span class="n">DFT_DB</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key=&#39;</span><span class="o">+</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">energy</span>
+                <span class="n">FDFT</span> <span class="o">=</span> <span class="n">DFT_DB</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key=&#39;</span><span class="o">+</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">forces</span>
+                <span class="n">ce</span><span class="p">[</span><span class="s1">&#39;energy_dft&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EDFT</span>
+                <span class="n">ce</span><span class="p">[</span><span class="s1">&#39;energy_dftb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EREF</span>
+            <span class="n">dict_species</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">struct</span><span class="o">.</span><span class="n">charges</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">():</span>
+                <span class="n">dict_species</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">):</span>
+                    <span class="n">struct</span><span class="o">.</span><span class="n">charges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">[</span><span class="n">elem</span><span class="p">])</span>
+            <span class="n">atom_pair</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">combinations_with_replacement</span><span class="p">(</span>
+                <span class="n">dict_species</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">):</span>
+                <span class="n">lattice</span> <span class="o">=</span> <span class="n">Lattice</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">get_cell</span><span class="p">())</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">get_scaled_positions</span><span class="p">()</span>
+                <span class="n">ew_struct</span> <span class="o">=</span> <span class="n">Structure</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">(</span>
+                <span class="p">),</span> <span class="n">coords</span><span class="p">,</span> <span class="n">site_properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="n">struct</span><span class="o">.</span><span class="n">charges</span><span class="p">})</span>
+                <span class="n">Ew</span> <span class="o">=</span> <span class="n">ewald</span><span class="o">.</span><span class="n">EwaldSummation</span><span class="p">(</span><span class="n">ew_struct</span><span class="p">)</span>
+                <span class="n">ES_energy</span> <span class="o">=</span> <span class="n">Ew</span><span class="o">.</span><span class="n">total_energy</span>
+                <span class="n">ce</span><span class="p">[</span><span class="s1">&#39;ewald&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ES_energy</span>
+
+            <span class="n">cf</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">struct</span><span class="p">)):</span>
+                <span class="n">cf</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                   <span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;force_dft&#39;</span><span class="p">:</span>  <span class="nb">list</span><span class="p">(</span><span class="n">FREF</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])}</span>
+            <span class="n">ce</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_species</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">atom_pair</span><span class="p">:</span>
+                <span class="n">pair_distances</span><span class="p">,</span> <span class="n">forces</span> <span class="o">=</span> <span class="n">pair_dist</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+                <span class="n">ce</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pair_distances</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">struct</span><span class="p">)):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">cf</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                                                        <span class="p">]</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ce</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="n">st</span><span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+    <span class="c1"># st[&#39;forces&#39;] = cf</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;structures.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autoapi/ccs/scripts/ccs_fetch/index.html#ccs.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  USAGE:  ccs_fetch MODE [...]  &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  The following modes and inputs are supported:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;      CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;      CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;      DFTB:  CutoffRadius(float) NumberOfSamples(int) DFT.db(string) DFTB.db(string)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CCS&#39;</span><span class="p">,</span> <span class="s1">&#39;CCS+Q&#39;</span><span class="p">,</span> <span class="s1">&#39;DFTB&#39;</span><span class="p">],</span> <span class="s1">&#39;Mode not supproted.&#39;</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="n">R_c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">DFT_DB</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Ns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Mode: &quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    R_c set to: &quot;</span><span class="p">,</span> <span class="n">R_c</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+        <span class="n">ccs_fetch</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_DB</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="n">R_c</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   NOTE: charge_dict should use double quotes to enclose property nanes. Example:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        </span><span class="se">\&#39;</span><span class="s2">{</span><span class="se">\&quot;</span><span class="s2">Zn</span><span class="se">\&quot;</span><span class="s2">:2.0,</span><span class="se">\&quot;</span><span class="s2">O</span><span class="se">\&quot;</span><span class="s2"> : -2.0 } </span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    R_c set to: &quot;</span><span class="p">,</span> <span class="n">R_c</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Charge dictionary: &quot;</span><span class="p">,</span> <span class="n">charge_dict</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------&quot;</span><span class="p">)</span>
+        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">)</span>
+        <span class="n">ccs_fetch</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_DB</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="n">R_c</span><span class="p">,</span>
+                  <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">charge_dict</span><span class="o">=</span><span class="n">charge_dict</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">):</span>
+        <span class="n">DFTB_DB</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    R_c set to: &quot;</span><span class="p">,</span> <span class="n">R_c</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFTB reference data base: &quot;</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------------------------------------------------&quot;</span><span class="p">)</span>
+        <span class="n">ccs_fetch</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_DB</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="n">R_c</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="n">DFTB_DB</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jolla Kullgren.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

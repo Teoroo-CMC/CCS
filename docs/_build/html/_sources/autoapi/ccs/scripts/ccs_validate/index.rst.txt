@@ -1,0 +1,38 @@
+:py:mod:`ccs.scripts.ccs_validate`
+==================================
+
+.. py:module:: ccs.scripts.ccs_validate
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_validate.ccs_validate
+   ccs.scripts.ccs_validate.main
+
+
+
+.. py:function:: ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB=None, CCS_DB='CCS_validate.db', DFTB_DB=None, charge=False, q=None, charge_scaling=False)
+
+   Function to verify database generation.
+   print("--------------------------------------------------------------------------------")
+   print("  USAGE:  ccs_validate MODE [...] ")
+   print(" ")
+   print("  The following modes and inputs are supported:")
+   print("")
+   print("      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+   print("      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
+   print("      DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
+   print("")
+   print("--------------------------------------------------------------------------------")
+
+
+.. py:function:: main()
+
+

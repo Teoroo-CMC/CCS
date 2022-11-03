@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ccs.fitting.main &mdash; CCS  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>ccs.fitting.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ccs.fitting.main</h1><div class="highlight"><pre>
+<span></span><span class="c1">#------------------------------------------------------------------------------#</span>
+<span class="c1">#  CCS: Curvature Constrained Splines                                          #</span>
+<span class="c1">#  Copyright (C) 2019 - 2021  CCS developers group                             #</span>
+<span class="c1">#                                                                              #</span>
+<span class="c1">#  See the LICENSE file for terms of usage and distribution.                   #</span>
+<span class="c1">#------------------------------------------------------------------------------#</span>
+
+
+<span class="sd">&#39;&#39;&#39;Parses the inputs used by the ccs fitting script.&#39;&#39;&#39;</span>
+
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">ccs.fitting.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">ccs.fitting.spline_functions</span> <span class="kn">import</span> <span class="n">Twobody</span>
+<span class="kn">from</span> <span class="nn">ccs.fitting.spline_functions</span> <span class="kn">import</span> <span class="n">Onebody</span>
+<span class="kn">from</span> <span class="nn">ccs.data.conversion</span> <span class="kn">import</span> <span class="n">Bohr__AA</span><span class="p">,</span> <span class="n">eV__Hartree</span>
+<span class="kn">from</span> <span class="nn">ccs.debugging_tools.timing</span> <span class="kn">import</span> <span class="n">timing</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="prepare_input"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/main/index.html#ccs.fitting.main.prepare_input">[docs]</a><span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+
+    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;interface&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;ewald_scaling&#39;</span><span class="p">:</span> <span class="mf">1.0</span>
+                  <span class="p">}</span>
+    <span class="n">struct_data_test</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39; input.json file missing&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Input file not in json format&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">gen_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">])</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen_params</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">gen_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;General&#39;</span><span class="p">:</span> <span class="n">gen_params</span><span class="p">,</span>
+                    <span class="s2">&quot;Train-set&quot;</span><span class="p">:</span> <span class="s2">&quot;structures.json&quot;</span><span class="p">,</span> <span class="s2">&quot;Test-set&quot;</span><span class="p">:</span> <span class="s2">&quot;structures.json&quot;</span><span class="p">}</span>
+        <span class="n">gen_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gen_data</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Train-set&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">struct_data_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
+            <span class="n">struct_data</span> <span class="o">=</span> <span class="n">struct_data_full</span><span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">struct_data_forces</span> <span class="o">=</span> <span class="n">struct_data_full</span><span class="p">[</span><span class="s1">&#39;forces&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">struct_data_forces</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39; Reference file with pairwise distances missing&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Reference file not in json format&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">if</span> <span class="s1">&#39;Test-set&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Test-set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Train-set&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Test-set&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">struct_data_test_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
+            <span class="n">struct_data_test</span> <span class="o">=</span> <span class="n">struct_data_test_full</span><span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">struct_data_test_forces</span> <span class="o">=</span> <span class="n">struct_data_test_full</span><span class="p">[</span><span class="s1">&#39;forces&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">struct_data_test_forces</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Could not locate Test-set.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Make defaults or general setting for Twobody</span>
+    <span class="k">if</span> <span class="s1">&#39;Twobody&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s1">&#39;DFTB&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Xx-Xx&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span>
+                                         <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                                         <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;rep&quot;</span><span class="p">}}</span>
+        <span class="k">if</span> <span class="s1">&#39;CCS&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Xx-Xx&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">8.0</span><span class="p">,</span>
+                                         <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                                         <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;sw&quot;</span><span class="p">}}</span>
+
+    <span class="c1"># If onebody is not given it is generated from structures.json</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="p">[</span><span class="n">elements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating one-body information from training-set.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Added elements: &quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;Xx-Xx&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating two-body potentials from one-body information.&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">atom_i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">atom_j</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">atom_j</span> <span class="o">&gt;=</span> <span class="n">atom_i</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_j</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Adding pair: &quot;</span><span class="o">+</span><span class="n">atom_i</span><span class="o">+</span><span class="s2">&quot;-&quot;</span><span class="o">+</span><span class="n">atom_j</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span>
+                                    <span class="n">atom_j</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="s1">&#39;Xx-Xx&#39;</span><span class="p">])</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Did not add pair: &quot;</span><span class="o">+</span><span class="n">atom_i</span><span class="o">+</span><span class="s2">&quot;-&quot;</span><span class="o">+</span><span class="n">atom_j</span><span class="p">)</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_j</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span>
+                                <span class="n">atom_j</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_j</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">atom_j</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atom_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="n">atom_i</span><span class="o">+</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span>
+                                <span class="n">atom_j</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="s1">&#39;Xx-&#39;</span><span class="o">+</span><span class="n">atom_j</span><span class="p">])</span>
+
+        <span class="n">tmp_data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">tmp_data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s1">&#39;Xx&#39;</span> <span class="ow">in</span> <span class="n">dat</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">][</span><span class="n">dat</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">tmp_data</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">struct_data</span><span class="p">,</span> <span class="n">struct_data_test</span><span class="p">,</span> <span class="n">struct_data_forces</span><span class="p">,</span> <span class="n">struct_data_test_forces</span></div>
+
+
+<span class="c1"># @timing</span>
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/main/index.html#ccs.fitting.main.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">struct_data</span><span class="p">,</span> <span class="n">struct_data_forces</span><span class="p">):</span>
+
+    <span class="n">atom_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ref_energies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dftb_energies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ewald_energies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">counter1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ref_forces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dftb_forces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ewald_forces</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># ADD ENERGY-DATA</span>
+    <span class="k">for</span> <span class="n">atmpair</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Twobody&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">atmpair_members</span> <span class="o">=</span> <span class="n">atmpair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">atmpair_rev</span> <span class="o">=</span> <span class="n">atmpair_members</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">atmpair_members</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">counter1</span> <span class="o">=</span> <span class="n">counter1</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The atom pair is : </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">atmpair</span><span class="p">))</span>
+        <span class="n">list_dist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">snum</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">list_dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">atmpair</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">list_dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">atmpair_rev</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                        <span class="s1">&#39;Name mismatch in CCS_input.json and structures.json&#39;</span><span class="p">)</span>
+                    <span class="n">list_dist</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">counter1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ref_energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="s1">&#39;energy_dft&#39;</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39; Check Energy key in structure file&#39;</span><span class="p">)</span>
+                    <span class="k">raise</span>
+                <span class="k">if</span> <span class="s1">&#39;DFTB&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">dftb_energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="s1">&#39;energy_dftb&#39;</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s1">&#39;Structure with no key energy_dftb at </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">snum</span><span class="p">)</span>
+                        <span class="k">raise</span>
+                <span class="k">if</span> <span class="s1">&#39;Q&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">ewald_energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="s1">&#39;ewald&#39;</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Struture with no ewald key at </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">snum</span><span class="p">)</span>
+                        <span class="k">raise</span>
+
+        <span class="k">if</span> <span class="n">counter1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;DFTB&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">dftb_energies</span><span class="p">)</span>
+                <span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dftb_energies</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="n">ref_energies</span> <span class="o">=</span> <span class="p">(</span><span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;DFTB+&#39;</span><span class="p">:</span>
+                    <span class="c1"># convert energies from eV to Hartree and Ang to Bohr</span>
+                    <span class="n">ref_energies</span> <span class="o">=</span> <span class="n">ref_energies</span> <span class="o">*</span> <span class="n">eV__Hartree</span>
+                    <span class="n">list_dist</span> <span class="o">=</span> <span class="p">[[</span><span class="n">element</span> <span class="o">/</span> <span class="n">Bohr__AA</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">]</span>
+                                 <span class="k">for</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">list_dist</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CCS2Q&#39;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">)</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DFT(eV)&#39;</span><span class="p">,</span> <span class="s1">&#39;Ewald(eV)&#39;</span><span class="p">,</span> <span class="s1">&#39;delta(eV)&#39;</span><span class="p">]</span>
+                <span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="n">ref_energies</span> <span class="o">=</span> <span class="p">(</span><span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;interface&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CCS+fQ&#39;</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">)</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DFT(eV)&#39;</span><span class="p">,</span> <span class="s1">&#39;Ewald(eV)&#39;</span><span class="p">,</span> <span class="s1">&#39;delta(eV)&#39;</span><span class="p">]</span>
+                <span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="n">ref_energies</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ewald_scaling&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Rmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">list_dist</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">Rmax</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">Rmax</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rmin&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">list_dist</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">item</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;Resolution&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rcut&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Rmax</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rcut&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Rmax</span>
+
+            <span class="n">dist_mat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">list_dist</span><span class="p">)</span>
+            <span class="n">dist_mat</span> <span class="o">=</span> <span class="n">dist_mat</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">dist_mat</span> <span class="o">=</span> <span class="n">dist_mat</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="c1"># ADD FORCE-DATA</span>
+
+            <span class="n">list_dist_forces</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">fnum</span><span class="p">,</span> <span class="n">ff</span> <span class="ow">in</span> <span class="n">struct_data_forces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">list_dist_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="n">atmpair</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">list_dist_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="n">atmpair_rev</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">list_dist_forces</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="n">counter1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s1">&#39;force_dft&#39;</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39; Check force key in structure file&#39;</span><span class="p">)</span>
+                        <span class="k">raise</span>
+            <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">list_dist_forces</span><span class="p">)</span>
+            <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">dist_mat_forces</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">dist_mat_forces</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="c1"># APPEND DATA</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rmin&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;Rcut&#39;</span><span class="p">]:</span>
+                <span class="n">atom_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Twobody</span><span class="p">(</span><span class="n">atmpair</span><span class="p">,</span> <span class="n">dist_mat</span><span class="p">,</span> <span class="n">dist_mat_forces</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">))</span>
+
+    <span class="c1"># ADD ONEBODY DATA</span>
+    <span class="n">atom_onebodies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">struct_data</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">])))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Onebody&#39;</span><span class="p">]):</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># print(vv[&#39;atoms&#39;][key] )</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sto</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vv</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">sto</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">atom_onebodies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Onebody</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sto</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;input_interpreted.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">atom_pairs</span><span class="p">,</span> <span class="n">atom_onebodies</span><span class="p">,</span> <span class="n">sto</span><span class="p">,</span> <span class="n">ref_energies</span><span class="p">,</span> <span class="n">ref_forces</span><span class="p">,</span> <span class="n">ewald_energies</span><span class="p">,</span> <span class="n">ewald_forces</span><span class="p">,</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="twp_fit"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/main/index.html#ccs.fitting.main.twp_fit">[docs]</a><span class="k">def</span> <span class="nf">twp_fit</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Parses the input files and fits the reference data.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">        filename (str): The input file (input.json). </span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Read the input.json file and structure file to see if the keys are matching</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">struct_data</span><span class="p">,</span> <span class="n">struct_data_test</span><span class="p">,</span> <span class="n">struct_data_forces</span><span class="p">,</span> <span class="n">struct_data_test_forces</span> <span class="o">=</span> <span class="n">prepare_input</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">)</span>
+    <span class="c1"># Parse the input</span>
+    <span class="n">atom_pairs</span><span class="p">,</span> <span class="n">atom_onebodies</span><span class="p">,</span> <span class="n">sto</span><span class="p">,</span> <span class="n">ref_energies</span><span class="p">,</span> <span class="n">ref_forces</span><span class="p">,</span> <span class="n">ewald_energies</span><span class="p">,</span> <span class="n">ewald_forces</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">struct_data</span><span class="p">,</span> <span class="n">struct_data_forces</span><span class="p">)</span>
+
+    <span class="c1"># set up the QP problem</span>
+    <span class="n">nn</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="n">atom_pairs</span><span class="p">,</span> <span class="n">atom_onebodies</span><span class="p">,</span> <span class="n">sto</span><span class="p">,</span> <span class="n">ref_energies</span><span class="p">,</span> <span class="n">ref_forces</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">],</span>
+                   <span class="n">ewald</span><span class="o">=</span><span class="n">ewald_energies</span><span class="p">,</span> <span class="n">ewald_forces</span><span class="o">=</span><span class="n">ewald_forces</span><span class="p">)</span>
+
+    <span class="c1"># Solve QP problem</span>
+    <span class="n">predicted_energies</span><span class="p">,</span> <span class="n">mse</span><span class="p">,</span> <span class="n">xx_unfolded</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">solution</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Jolla Kullgren.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

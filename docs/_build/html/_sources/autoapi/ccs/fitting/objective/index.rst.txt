@@ -1,0 +1,162 @@
+:py:mod:`ccs.fitting.objective`
+===============================
+
+.. py:module:: ccs.fitting.objective
+
+.. autoapi-nested-parse::
+
+   This module constructs and solves the spline objective.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.objective.Objective
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.objective.logger
+
+
+.. py:data:: logger
+   
+
+   
+
+.. py:class:: Objective(l_twb, l_one, sto, energy_ref, force_ref, gen_params, ewald=[], ewald_forces=[])
+
+   Objective function for the ccs method.
+
+   .. py:method:: reduce_stoichiometry()
+
+
+   .. py:method:: solution()
+
+      Function to solve the objective with constraints.
+
+
+   .. py:method:: predict(xx)
+
+      Predict results.
+
+      :param xx: Solution array from training.
+      :type xx: ndarrray
+      :param Needs to be updated to handle merging and dissolving intervals:
+
+
+   .. py:method:: solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10))
+      :staticmethod:
+
+      The solver for the objective.
+
+      :param pp: P matrix as per standard Quadratic Programming(QP)
+                 notation.
+      :type pp: matrix
+      :param qq: q matrix as per standard QP notation.
+      :type qq: matrix
+      :param gg: G matrix as per standard QP notation.
+      :type gg: matrix
+      :param hh: h matrix as per standard QP notation
+      :type hh: matrix
+      :param aa: A matrix as per standard QP notation.
+      :type aa: matrix
+      :param bb: b matrix as per standard QP notation
+      :type bb: matrix
+      :param maxiter: maximum iteration steps (default: 300).
+      :type maxiter: int, optional
+      :param tol: tolerance value of the solution
+                  (default: (1e-10, 1e-10, 1e-10)).
+      :type tol: tuple, optional
+
+      :returns: dictionary containing solution details
+      :rtype: sol (dict)
+
+
+   .. py:method:: merge_intervals()
+
+
+   .. py:method:: unfold_intervals()
+
+
+   .. py:method:: eval_obj(xx)
+
+      Mean squared error function.
+
+      :param xx: the solution for the objective
+      :type xx: ndarray
+
+      :returns: mean square error
+      :rtype: float
+
+
+   .. py:method:: assign_parameter_values(xx)
+
+
+   .. py:method:: list_iterator()
+
+      Iterates over the self.np attribute.
+
+
+   .. py:method:: get_m()
+
+      Returns the M matrix.
+
+      :returns: The M matrix.
+      :rtype: ndarray
+
+
+   .. py:method:: get_g(n_switch)
+
+      Returns constraints matrix.
+
+      :param n_switch: switching point to change signs of curvatures.
+      :type n_switch: int
+
+      :returns: returns G and A matrix
+      :rtype: ndarray
+
+
+   .. py:method:: write_error(fname='CCS_error.out')
+
+      Prints the errors in a file.
+
+      :param mdl_eng: Energy prediction values from splines.
+      :type mdl_eng: ndarray
+      :param ref_eng: Reference energy values.
+      :type ref_eng: ndarray
+      :param mse: Mean square error.
+      :type mse: float
+      :param fname: Output filename (default: 'error.out').
+      :type fname: str, optional
+
+
+   .. py:method:: write_error_forces(mdl_for, ref_for, fname='error_forces.out')
+
+      Prints the errors in a file.
+
+      :param mdl_eng: Energy prediction values from splines.
+      :type mdl_eng: ndarray
+      :param ref_eng: Reference energy values.
+      :type ref_eng: ndarray
+      :param mse: Mean square error.
+      :type mse: float
+      :param fname: Output filename (default: 'error.out').
+      :type fname: str, optional
+
+
+   .. py:method:: write_CCS_params()
+
+
+

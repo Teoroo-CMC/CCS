@@ -1,0 +1,34 @@
+:py:mod:`ccs.data.conversion`
+=============================
+
+.. py:module:: ccs.data.conversion
+
+.. autoapi-nested-parse::
+
+   Conversion factory required by the CCS project.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: Bohr__AA
+   :annotation: = 0.529177249
+
+   
+
+.. py:data:: AA__Bohr
+   
+
+   
+
+.. py:data:: Hartree__eV
+   :annotation: = 27.2113845
+
+   
+
+.. py:data:: eV__Hartree
+   
+
+   
+

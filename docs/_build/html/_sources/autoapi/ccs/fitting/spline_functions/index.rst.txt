@@ -1,0 +1,113 @@
+:py:mod:`ccs.fitting.spline_functions`
+======================================
+
+.. py:module:: ccs.fitting.spline_functions
+
+.. autoapi-nested-parse::
+
+   This module contains functions for spline construction, evaluation and output.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.spline_functions.Twobody
+   ccs.fitting.spline_functions.Onebody
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.fitting.spline_functions.logger
+
+
+.. py:data:: logger
+   
+
+   
+
+.. py:class:: Twobody(name, dismat, distmat_forces, Rcut, Swtype='rep', Rmin=None, Resolution=0.1)
+
+   Twobody class that describes properties of an Atom pair.
+
+   .. py:method:: merge_intervals()
+
+
+   .. py:method:: dissolve_interval()
+
+
+   .. py:method:: get_const()
+
+
+   .. py:method:: switch_const(n_switch)
+
+
+   .. py:method:: spline_construction()
+
+      This function constructs the matrices A, B, C, D.
+
+
+
+
+   .. py:method:: get_v()
+
+      Constructs the v matrix.
+
+      :returns: **ndarray** -- The v matrix for a pair.
+      :rtype: matrix
+
+
+   .. py:method:: get_v_forces()
+
+      Constructs the v matrix.
+
+      :returns: The v matrix for a pair.
+      :rtype: ndarray
+
+
+   .. py:method:: get_spline_coeffs()
+
+      Spline coefficients for a spline with given 1st derivatives at its ends.
+      The process turns the (internal) right-aligned spline table to a more common
+      left-aligned form.
+
+          Returns:
+
+              np.transpose(mtx): spline coefficients in matrix-form
+
+
+
+   .. py:method:: get_expcoeffs()
+
+      Calculates coefficients of exponential function.
+
+      :param aa:
+      :type aa: float
+      :param bb:
+      :type bb: float
+      :param cc:
+      :type cc: float
+      :param r0:
+      :type r0: float
+
+      :returns: beta (float):
+                gamma (float):
+      :rtype: alpha (float)
+
+
+
+.. py:class:: Onebody(name, stomat, epsilon_supported=True, epsilon=0.0)
+
+   Onebody class that describes properties of an atom.
+
+

@@ -1,0 +1,26 @@
+:py:mod:`ccs.scripts.ccs_build_db copy`
+=======================================
+
+.. py:module:: ccs.scripts.ccs_build_db copy
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.scripts.ccs_build_db copy.ccs_build_db
+   ccs.scripts.ccs_build_db copy.main
+
+
+
+.. py:function:: ccs_build_db(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, Fortnet=False, greedy=False, greed_threshold=0.0001)
+
+
+.. py:function:: main()
+
+
