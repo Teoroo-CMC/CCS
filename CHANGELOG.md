@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.44 (2022-11-03)
+
+
 ## v0.3.43 (2022-10-31)
 ### Documentation
 * Added .readthedocs.yaml file for automatic sphinx documentation build on readthedocs ([`f360ddd`](https://github.com/ThijsSmolders/CCS/commit/f360ddd0d2b23e1f69c6a5b0dc220fe771e677ad))
