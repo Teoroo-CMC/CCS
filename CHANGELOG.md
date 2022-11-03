@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.47 (2022-11-03)
+### Documentation
+* Adding working example ([`b9d2d8b`](https://github.com/Teoroo-CMC/CCS/commit/b9d2d8b482eb00388a76dec6034471e990c60d56))
+* Adding working example ([`faa780a`](https://github.com/Teoroo-CMC/CCS/commit/faa780a29998776a36097fc9da6b4ec10924b824))
+
 ## v0.3.46 (2022-11-03)
 ### Documentation
 * **README.md:** Updated installation instructions ([`e215b2c`](https://github.com/Teoroo-CMC/CCS/commit/e215b2cdee7f0230ff906f835f90ebbfddfc97cd))
