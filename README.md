@@ -54,7 +54,7 @@ python setup.py install
 --->
 ### Installing from source
 ```
-pip install -e git+<https://github.com/Teoroo-CMC/CCS>
+pip install git+https://github.com/Teoroo-CMC/CCS@master
 ```
 ### Environment Variables
 Set the following environment variables:
