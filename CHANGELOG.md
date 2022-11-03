@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.46 (2022-11-03)
+### Documentation
+* **README.md:** Updated installation instructions ([`e215b2c`](https://github.com/Teoroo-CMC/CCS/commit/e215b2cdee7f0230ff906f835f90ebbfddfc97cd))
+
 ## v0.3.45 (2022-11-03)
 ### Documentation
 * **README.md:** Removed the logo. ([`551feb6`](https://github.com/Teoroo-CMC/CCS/commit/551feb678a09b408e50c25a0570d6c0be0a17721))
