@@ -1,2 +1,2 @@
-```{include} ../examples/Twobody_fit_for_solid_Ne/run_example.ipynb
+```{include} ../examples/gen_css.ipynb
 ```
