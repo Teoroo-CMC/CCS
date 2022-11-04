@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.52 (2022-11-04)
+### Documentation
+* **examples/gen_css.ipynb:** Adding notebook to original location to test relative link ([`c0683cb`](https://github.com/Teoroo-CMC/CCS/commit/c0683cb318d90935ec1f5fc4cc371e00aaec9d07))
+* **examples.md:** Changing relative link to example notebook ([`09e9eba`](https://github.com/Teoroo-CMC/CCS/commit/09e9eba8b594669e5e9d74729ee89da877d6a5b6))
+
 ## v0.3.51 (2022-11-04)
 ### Documentation
 * **index.md:** Removed direct link to example notebook in index.md to see if it still runs ([`4eda053`](https://github.com/Teoroo-CMC/CCS/commit/4eda0530630a9262c2097059c2a02e72f8199455))
