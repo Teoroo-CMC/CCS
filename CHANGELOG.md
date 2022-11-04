@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.51 (2022-11-04)
+### Documentation
+* **index.md:** Removed direct link to example notebook in index.md to see if it still runs ([`4eda053`](https://github.com/Teoroo-CMC/CCS/commit/4eda0530630a9262c2097059c2a02e72f8199455))
+
 ## v0.3.50 (2022-11-04)
 ### Documentation
 * Moving example in docs folder to see if it runs ([`415365c`](https://github.com/Teoroo-CMC/CCS/commit/415365c3d24a16d7359aff948010a0b8389df15e))
