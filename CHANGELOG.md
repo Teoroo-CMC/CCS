@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.50 (2022-11-04)
+### Documentation
+* Moving example in docs folder to see if it runs ([`415365c`](https://github.com/Teoroo-CMC/CCS/commit/415365c3d24a16d7359aff948010a0b8389df15e))
+
 ## v0.3.49 (2022-11-03)
 ### Documentation
 * Trying to add notebook to docs ([`ad18728`](https://github.com/Teoroo-CMC/CCS/commit/ad187284c0b9064376bd28d3e3359d540187305d))
