@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.53 (2022-11-04)
+### Documentation
+* **examples.md:** Going back to old relative link ([`f0d3688`](https://github.com/Teoroo-CMC/CCS/commit/f0d36889c4579f47f2d8d855b8e2e7b07af81f1d))
+
 ## v0.3.52 (2022-11-04)
 ### Documentation
 * **examples/gen_css.ipynb:** Adding notebook to original location to test relative link ([`c0683cb`](https://github.com/Teoroo-CMC/CCS/commit/c0683cb318d90935ec1f5fc4cc371e00aaec9d07))
