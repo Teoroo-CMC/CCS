@@ -1,2 +1,2 @@
-```{include} ../examples/gen_ccs.ipynb
+```{include} ../../examples/gen_ccs.ipynb
 ```
