@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.54 (2022-11-04)
+### Documentation
+* Adding notebook directly to examples, relative linking not working ([`9b1b28e`](https://github.com/Teoroo-CMC/CCS/commit/9b1b28e891b265adbe2a2716904d6122a0f87bdf))
+
 ## v0.3.53 (2022-11-04)
 ### Documentation
 * **examples.md:** Going back to old relative link ([`f0d3688`](https://github.com/Teoroo-CMC/CCS/commit/f0d36889c4579f47f2d8d855b8e2e7b07af81f1d))
