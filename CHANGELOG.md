@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.57 (2022-11-07)
+### Fix
+* Changed literal string identifiers to " ([`f94bfa0`](https://github.com/Teoroo-CMC/CCS/commit/f94bfa087ef805a7edb722330c4b40eec38e30c5))
+
 ## v0.3.56 (2022-11-07)
 ### Documentation
 * **README.md:** Cleaned up directory tree ([`53e8f63`](https://github.com/Teoroo-CMC/CCS/commit/53e8f63c582ba43371fda6b54af7ec045660eea4))
