@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.58 (2022-11-07)
+
+
 ## v0.3.57 (2022-11-07)
 ### Fix
 * Changed literal string identifiers to " ([`f94bfa0`](https://github.com/Teoroo-CMC/CCS/commit/f94bfa087ef805a7edb722330c4b40eec38e30c5))
