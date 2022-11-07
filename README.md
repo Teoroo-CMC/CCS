@@ -5,25 +5,98 @@ The `CCS` package is a tool to construct two-body potentials using the idea of c
 ### Package Layout
 ```
 ccs-x.y.z
-├── bin
-│   ├── ccs_fetch
-│   ├── ccs_fit               
-│   └── ccs_validate                 
-├── ccs
-│   ├── __init__.py                     
-│   ├── main.py                 
-│   ├── objective.py            
-│   └── spline_functions.py     
-├── examples
-│   ├── Ne-FCC
-│   │   ├── input.json          
-│   │   └── structures.json     
-│   └── O2
-│       ├── input.json
-│       └── structures.json
+├── CHANGELOG.md
 ├── LICENSE
+├── MANIFEST.in
 ├── README.md
-└── setup.py
+├── bin
+│   ├── ccs_build_db
+│   ├── ccs_export_sktable
+│   ├── ccs_fetch
+│   ├── ccs_fit
+│   └── ccs_validate
+├── docs
+├── examples
+│   ├── CCS
+│   │   ├── CCS_DB.db
+│   │   ├── CCS_error.out
+│   │   ├── CCS_params.json
+│   │   ├── DFT_DB.db
+│   │   ├── DFTvsDFTB+CCS.png
+│   │   ├── input.json
+│   │   ├── input_interpreted.json
+│   │   └── structures.json
+│   ├── DFTB_repulsive_fitting
+│   │   ├── DFT.db
+│   │   ├── DFTB.db
+│   │   ├── README.md
+│   │   └── run_example.ipynb
+│   ├── Preparing_ASE_db_trainingsets
+│   │   ├── S1
+│   │   │   ├── DFTB
+│   │   │   │   └── results.tag
+│   │   │   └── VASP
+│   │   │       └── out.xyz
+│   │   ├── S2
+│   │   │   ├── DFTB
+│   │   │   │   └── results.tag
+│   │   │   └── VASP
+│   │   │       └── out.xyz
+│   │   ├── S3
+│   │   │   ├── DFTB
+│   │   │   │   └── results.tag
+│   │   │   └── VASP
+│   │   │       └── out.xyz
+│   │   ├── run_example.ipynb
+│   │   └── trainset.list
+│   ├── Simple_regressor
+│   │   ├── ccs.log
+│   │   ├── example.py
+│   │   └── output.png
+│   ├── Twobody_fit_for_an_O2_molecule
+│   │   ├── CCS_input.json
+│   │   └── structures.json
+│   ├── Twobody_fit_for_solid_Ne
+│   │   ├── CCS_input.json
+│   │   ├── run_example.ipynb
+│   │   └── structures.json
+│   └── ppmd_interfacing
+│       ├── CCS_params.json
+│       ├── POSCAR
+│       └── example.ipynb
+├── logo.png
+├── poetry.lock
+├── pyproject.toml
+├── src
+│   └── ccs
+│       ├── ase_calculator
+│       │   └── ccs_ase_calculator.py
+│       ├── common
+│       │   ├── exceptions.py
+│       │   ├── io.py
+│       │   ├── math
+│       │   │   └── ewald.py
+│       │   └── neighborlist.py
+│       ├── data
+│       │   └── conversion.py
+│       ├── debugging_tools
+│       │   └── timing.py
+│       ├── fitting
+│       │   ├── main.py
+│       │   ├── objective.py
+│       │   └── spline_functions.py
+│       ├── ppmd_interface
+│       │   └── ccs_ppmd.py
+│       ├── regression_tool
+│       │   └── regression.py
+│       └── scripts
+│           ├── ccs_build_db.py
+│           ├── ccs_export_sktable.py
+│           ├── ccs_fetch.py
+│           ├── ccs_fit.py
+│           └── ccs_validate.py
+└── tests
+    └── test_ccs_import.py
 ```
 * `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.
 * `ccs_fit`             - The primary executable file for the ccs package.
@@ -65,8 +138,6 @@ $export PATH=<path-to-CCS-bin>:$PATH
 Within a conda virtual environment, you can update the path by using:
 conda develop <path-to-CCS-package>
 ```
-
-
 ## Tutorials
 
 We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `CCS_input.json` for O2 is shown below:
