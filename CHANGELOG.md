@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.55 (2022-11-07)
+### Documentation
+* Updated README.md ([`d217a5c`](https://github.com/Teoroo-CMC/CCS/commit/d217a5ccc38ce2db1fd4757417e87edaf2739bc1))
+
 ## v0.3.54 (2022-11-04)
 ### Documentation
 * Adding notebook directly to examples, relative linking not working ([`9b1b28e`](https://github.com/Teoroo-CMC/CCS/commit/9b1b28e891b265adbe2a2716904d6122a0f87bdf))
