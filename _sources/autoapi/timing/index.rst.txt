@@ -3,6 +3,11 @@
 
 .. py:module:: timing
 
+.. autoapi-nested-parse::
+
+   Auxiliary timing functions for debugging purposes.
+
+
 
 Module Contents
 ---------------
