@@ -28,7 +28,7 @@ class Objective:
 
     def __init__(self, l_twb, l_one, sto, energy_ref, force_ref, gen_params,
                  ewald=[], ewald_forces=[]):
-        '''Generates Objective class object.
+        """Generates Objective class object.
 
         Args:
 
