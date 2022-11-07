@@ -18,52 +18,12 @@ ccs-x.y.z
 ├── docs
 ├── examples
 │   ├── CCS
-│   │   ├── CCS_DB.db
-│   │   ├── CCS_error.out
-│   │   ├── CCS_params.json
-│   │   ├── DFT_DB.db
-│   │   ├── DFTvsDFTB+CCS.png
-│   │   ├── input.json
-│   │   ├── input_interpreted.json
-│   │   └── structures.json
 │   ├── DFTB_repulsive_fitting
-│   │   ├── DFT.db
-│   │   ├── DFTB.db
-│   │   ├── README.md
-│   │   └── run_example.ipynb
 │   ├── Preparing_ASE_db_trainingsets
-│   │   ├── S1
-│   │   │   ├── DFTB
-│   │   │   │   └── results.tag
-│   │   │   └── VASP
-│   │   │       └── out.xyz
-│   │   ├── S2
-│   │   │   ├── DFTB
-│   │   │   │   └── results.tag
-│   │   │   └── VASP
-│   │   │       └── out.xyz
-│   │   ├── S3
-│   │   │   ├── DFTB
-│   │   │   │   └── results.tag
-│   │   │   └── VASP
-│   │   │       └── out.xyz
-│   │   ├── run_example.ipynb
-│   │   └── trainset.list
 │   ├── Simple_regressor
-│   │   ├── ccs.log
-│   │   ├── example.py
-│   │   └── output.png
 │   ├── Twobody_fit_for_an_O2_molecule
-│   │   ├── CCS_input.json
-│   │   └── structures.json
 │   ├── Twobody_fit_for_solid_Ne
-│   │   ├── CCS_input.json
-│   │   ├── run_example.ipynb
-│   │   └── structures.json
 │   └── ppmd_interfacing
-│       ├── CCS_params.json
-│       ├── POSCAR
-│       └── example.ipynb
 ├── logo.png
 ├── poetry.lock
 ├── pyproject.toml
