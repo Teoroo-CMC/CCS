@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.56 (2022-11-07)
+### Documentation
+* **README.md:** Cleaned up directory tree ([`53e8f63`](https://github.com/Teoroo-CMC/CCS/commit/53e8f63c582ba43371fda6b54af7ec045660eea4))
+
 ## v0.3.55 (2022-11-07)
 ### Documentation
 * Updated README.md ([`d217a5c`](https://github.com/Teoroo-CMC/CCS/commit/d217a5ccc38ce2db1fd4757417e87edaf2739bc1))
