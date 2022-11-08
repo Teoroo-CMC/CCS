@@ -6,8 +6,12 @@
 # ------------------------------------------------------------------------------#
 
 # read version from installed package
-from importlib.metadata import version
-__version__ = "0.3.56" # version("ccs")
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("ccs")
+except PackageNotFoundError:
+    __version__ = "unknown version"
 
 from ccs.ase_calculator.ccs_ase_calculator import CCS
 from ccs.scripts.ccs_build_db import main as ccs_build_db
