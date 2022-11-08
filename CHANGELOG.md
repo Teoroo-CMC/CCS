@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2022-11-08)
+
+
 ## v0.7.0 (2022-11-08)
 ### Feature
 * Added direct call of main functions in bin ([`b678dee`](https://github.com/Teoroo-CMC/CCS/commit/b678dee9d1cf696601bd9e4506b0f34d96671c70))
