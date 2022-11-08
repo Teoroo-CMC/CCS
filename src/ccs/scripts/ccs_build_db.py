@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
 #  Copyright (C) 2019 - 2022  CCS developers group                             #
