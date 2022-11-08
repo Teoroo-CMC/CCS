@@ -1,3 +1,10 @@
+# ------------------------------------------------------------------------------#
+#  CCS: Curvature Constrained Splines                                          #
+#  Copyright (C) 2019 - 2022  CCS developers group                             #
+#                                                                              #
+#  See the LICENSE file for terms of usage and distribution.                   #
+# ------------------------------------------------------------------------------#
+
 import numpy as np
 from ctypes import *
 from ppmd import *
