@@ -65,7 +65,7 @@ jobs:
     needs: ci
 
     # Only run this job if new work is pushed to the "master" branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/namespace_package'
 
     # Set up operating system
     runs-on: ubuntu-latest
