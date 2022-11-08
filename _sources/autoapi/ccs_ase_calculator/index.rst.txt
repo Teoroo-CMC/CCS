@@ -3,11 +3,6 @@
 
 .. py:module:: ccs_ase_calculator
 
-.. autoapi-nested-parse::
-
-   ASE calculator for CCS.
-
-
 
 Module Contents
 ---------------
