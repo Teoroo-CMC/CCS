@@ -11,20 +11,15 @@ This module contains functions for spline construction, evaluation and output.
 """
 
 
-from ctypes import c_int
 import logging
 import numpy as np
-import json
 import bisect
 import copy
 import scipy.linalg as linalg
-from collections import OrderedDict
 from ccs.data.conversion import Bohr__AA, eV__Hartree
 from scipy.linalg import block_diag
 
-
 logger = logging.getLogger(__name__)
-
 
 class Twobody:
     """Twobody class that describes properties of an Atom pair."""

@@ -5,17 +5,9 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import logging
-import itertools
-import pickle
-import json
 import bisect
-
-from collections import OrderedDict
 import numpy as np
-import matplotlib.pyplot as plt
 from cvxopt import matrix, solvers
-from numpy.core.numeric import indices
 from scipy.linalg import block_diag
 
 

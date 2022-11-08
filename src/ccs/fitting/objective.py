@@ -12,18 +12,14 @@
 import logging
 from tqdm import tqdm
 import itertools
-import pickle
 import json
 from collections import OrderedDict
 import numpy as np
-import matplotlib.pyplot as plt
 from cvxopt import matrix, solvers
 from scipy.linalg import block_diag
 
-import ccs.fitting.spline_functions as sf
 
 logger = logging.getLogger(__name__)
-
 
 class Objective:
     """Objective function for the ccs method."""

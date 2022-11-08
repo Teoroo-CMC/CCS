@@ -8,15 +8,11 @@
 import numpy as np
 from ctypes import *
 from ppmd import *
-from ase.io import Trajectory, read, write
 import json
-import ppmd.coulomb.fmm
-import ppmd.coulomb.ewald
 from ppmd.coulomb.fmm import internal_to_ev
 import math
 from scipy.optimize import minimize as min
 from time import time as time
-from copy import deepcopy as copy
 from ase.calculators.singlepoint import SinglePointCalculator
 
 

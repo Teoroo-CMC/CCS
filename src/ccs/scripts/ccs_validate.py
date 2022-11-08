@@ -1,8 +1,5 @@
 import sys
 import os
-from ase.db import connect
-from ase.io import Trajectory, read, write
-import re
 import numpy as np
 import ase.db as db
 import json
@@ -10,11 +7,6 @@ import random
 from ase.calculators.singlepoint import SinglePointCalculator
 from tqdm import tqdm
 
-try:
-    from pymatgen.core import Lattice, Structure
-    from pymatgen.analysis import ewald
-except:
-    pass
 from ccs.ase_calculator.ccs_ase_calculator import CCS
 
 
