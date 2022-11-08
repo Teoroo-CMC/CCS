@@ -13,7 +13,7 @@ Module Contents
 ---------------
 
 .. py:data:: Bohr__AA
-   :annotation: = 0.529177249
+   
 
    
 
@@ -23,7 +23,7 @@ Module Contents
    
 
 .. py:data:: Hartree__eV
-   :annotation: = 27.2113845
+   
 
    
 
