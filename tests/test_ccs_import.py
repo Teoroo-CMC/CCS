@@ -9,4 +9,4 @@
 import ccs
 
 def test_import():
-    assert ccs.__version__, "CCS not successfully imported!"
+    assert ccs.__version__, "CCS not successfully imported as a regular package!"
