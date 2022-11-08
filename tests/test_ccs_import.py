@@ -8,4 +8,6 @@
 import ccs
 
 def test_import():
+    print(dir(ccs))
+    print(ccs.__path__) 
     assert ccs.__version__, "CCS not successfully imported as a regular package!"
