@@ -37,7 +37,7 @@ jobs:
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
 
     # Might be nice to add a later stage
-    # - name: Automatic PEP8 formatting with black
+    # - name: Automatic PEP8 formatting with black
     #   uses: psf/black@stable
 
     - name: Build documentation
