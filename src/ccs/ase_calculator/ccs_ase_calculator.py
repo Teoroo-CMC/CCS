@@ -8,7 +8,6 @@
 
 '''ASE calculator for CCS.'''
 
-
 import logging
 import itertools as it
 from collections import defaultdict
