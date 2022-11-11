@@ -8,6 +8,8 @@ _gitmsg.saved.txt
 # Editor backup files 
 *~
 *.swp
+.gitignore
+*.ipynb_checkpoints
 
 # Data files
 *.dat
