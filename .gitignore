@@ -10,6 +10,7 @@ _gitmsg.saved.txt
 *.swp
 .gitignore
 *.ipynb_checkpoints
+.coverage
 
 # Data files
 *.dat
