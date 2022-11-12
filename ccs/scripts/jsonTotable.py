@@ -6,7 +6,7 @@
 # ------------------------------------------------------------------------------#
 
 """
-Functionality to derive pair style table lammps potential
+Functionality to derive spline table for LAMMPS
 """
 
 import json
@@ -22,28 +22,15 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
     CCS_params = json.load(json_file)
     energy = []
     force = []
-    tags = []
+    tags = {}
     with open(table, "w") as f:
         for pair in CCS_params["Two_body"].keys():
             elem1, elem2 = pair.split("-")
             tb = spline_table(elem1, elem2, CCS_params)
-            rmin = CCS_params["Two_body"][pair]["r_min"]
+            rmin=CCS_params["Two_body"][pair]["r_min"]
             dr = CCS_params["Two_body"][pair]["dr"] / scale
             r = np.arange(rmin, tb.Rcut + dr, dr)
-            tags.extend((pair, len(r), rmin, tb.Rcut))
-            #        onebody=0.0
-            #        if CCS_params['One_body']:
-            #            try:
-            #                elem1_e = CCS_params['One_body'][elem1]
-            #            except KeyError as err:
-            #                print('Warning: Onebody energy of {} missing and set to  0.0'.format(elem1))
-            #                elem1_e = 0.0
-            #            try:
-            #                 elem2_e = CCS_params['One_body'][elem2]
-            #            except KeyError as err:
-            #                print('Warning: Onebody energy of {} missing and set to  0.0'.format(elem2))
-            #                elem2_e = 0.0
-            #            onebody= elem1_e +elem2_e
+            tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
             f.write("\n {}".format(pair))
             f.write("\n N {} R {} {} \n".format(len(r), rmin, tb.Rcut))
             [
@@ -57,26 +44,6 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
 
     return tags
 
-
-def jsontotable(jsonfile):
-    """This function converts json format to pair table lammps format"""
-    json_file = open(jsonfile)
-    data = json.load(json_file)
-    with open(table, "w") as f:
-        for key, value in data["Two_body"].items():
-            r = value["r"]
-            a = value["spl_a"]
-            b = value["spl_b"]  # -dE/dR lammps
-            f.write("\n {}".format(key))
-            f.write("\n N {} R {} {} \n".format(len(r), value["r_min"], value["r_cut"]))
-            [
-                f.write(
-                    "\n {} {} {} {}".format(
-                        index + 1, r[index], a[index], -1 * b[index]
-                    )
-                )
-                for index, elem in enumerate(value["r"])
-            ]
 
 
 if __name__ == "__main__":
