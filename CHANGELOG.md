@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2022-11-13)
+### Feature
+* Add examples for interface with LAMMPS ([`8e35bdf`](https://github.com/aksam432/CCS_new/commit/8e35bdf212ace1e0eb80fa848171e327e38e6c80))
+* Spline table in LAMMPS readable format without the exponential head part. ([`1250808`](https://github.com/aksam432/CCS_new/commit/12508083126a7a27a11a9d18dbd0852d964feeec))
+
 ## v0.7.5 (2022-11-11)
 
 
