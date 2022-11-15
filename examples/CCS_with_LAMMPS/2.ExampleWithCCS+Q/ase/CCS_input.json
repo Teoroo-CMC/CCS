@@ -1,0 +1,22 @@
+{
+        "General": {
+                "interface": "CCS+Q"
+        },
+        "Twobody": {
+                "O-Zn": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw"
+                },
+                "O-O": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.1,
+                        "Swtype": "rep"
+                },
+                "Zn-Zn": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.1,
+                        "Swtype": "rep"
+                }
+        }
+}

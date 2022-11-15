@@ -1,0 +1,22 @@
+units           real
+atom_style      atomic
+
+# data file with one atom type
+read_data       IN.data
+
+pair_style      table spline 1000
+
+#pair coefficients
+pair_coeff      * *  CCS.table O-O 2.38
+
+#fix             1 all nvt temp 300.0 300.0 200.0
+
+#velocity        all create 300 432567 dist uniform loop geom mom yes
+#timestep        2.0
+
+#thermo          100
+#dump            2 all custom 100 dump.spce id type x y z fx fy fz
+
+#pair_write       1 1 500 0.2 2.38 table.txt table    
+thermo_style custom  step pe etotal  epair eangle fmax fnorm
+run             0
