@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ccs.scripts.ccs_validate &mdash; CCS  documentation</title>
+  <title>ccs.scripts.jsonTotable &mdash; CCS  documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -22,8 +22,8 @@
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="ccs.scripts.jsonTotable" href="../jsonTotable/index.html" />
-    <link rel="prev" title="ccs.scripts.ccs_fit" href="../ccs_fit/index.html" /> 
+    <link rel="next" title="timing" href="../../../timing/index.html" />
+    <link rel="prev" title="ccs.scripts.ccs_validate" href="../ccs_validate/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -81,9 +81,9 @@
           <li><a href="../../../index.html">API Reference</a> &raquo;</li>
           <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs</span></code></a> &raquo;</li>
           <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts</span></code></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_validate</span></code></li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.jsonTotable</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../../_sources/autoapi/ccs/scripts/ccs_validate/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../../_sources/autoapi/ccs/scripts/jsonTotable/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -91,8 +91,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-ccs.scripts.ccs_validate">
-<span id="ccs-scripts-ccs-validate"></span><h1><a class="reference internal" href="#module-ccs.scripts.ccs_validate" title="ccs.scripts.ccs_validate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_validate</span></code></a><a class="headerlink" href="#module-ccs.scripts.ccs_validate" title="Permalink to this heading"></a></h1>
+  <section id="module-ccs.scripts.jsonTotable">
+<span id="ccs-scripts-jsontotable"></span><h1><a class="reference internal" href="#module-ccs.scripts.jsonTotable" title="ccs.scripts.jsonTotable"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.jsonTotable</span></code></a><a class="headerlink" href="#module-ccs.scripts.jsonTotable" title="Permalink to this heading"></a></h1>
+<p>Functionality to derive spline table for LAMMPS</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="functions">
@@ -103,41 +104,33 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ccs.scripts.ccs_validate.ccs_validate" title="ccs.scripts.ccs_validate.ccs_validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_validate</span></code></a>([mode, CCS_params, Ns, DFT_DB, CCS_DB, ...])</p></td>
-<td><p>Function to verify database generation.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs.scripts.jsonTotable.asecalcTotable" title="ccs.scripts.jsonTotable.asecalcTotable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">asecalcTotable</span></code></a>(jsonfile[, scale, table])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ccs.scripts.ccs_validate.main" title="ccs.scripts.ccs_validate.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs.scripts.jsonTotable.f" title="ccs.scripts.jsonTotable.f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt class="sig sig-object py" id="ccs.scripts.ccs_validate.ccs_validate">
-<span class="sig-prename descclassname"><span class="pre">ccs.scripts.ccs_validate.</span></span><span class="sig-name descname"><span class="pre">ccs_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS_validate.db'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/ccs_validate.html#ccs_validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.ccs_validate.ccs_validate" title="Permalink to this definition"></a></dt>
-<dd><blockquote>
-<div><dl class="simple">
-<dt>mode<span class="classifier">str</span></dt><dd><dl class="simple">
-<dt>String describing which mode is used, supported modes are:</dt><dd><p>CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)”)
-CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)”)
-DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)”)</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>What does it return Jolla?</p>
-</dd>
-</dl>
-<blockquote>
-<div><p>ccs_validate MODE […]</p>
-</div></blockquote>
-</dd></dl>
+<dt class="sig sig-object py" id="ccs.scripts.jsonTotable.asecalcTotable">
+<span class="sig-prename descclassname"><span class="pre">ccs.scripts.jsonTotable.</span></span><span class="sig-name descname"><span class="pre">asecalcTotable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jsonfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS.table'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/jsonTotable.html#asecalcTotable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.jsonTotable.asecalcTotable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ccs.scripts.ccs_validate.main">
-<span class="sig-prename descclassname"><span class="pre">ccs.scripts.ccs_validate.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/ccs_validate.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.ccs_validate.main" title="Permalink to this definition"></a></dt>
+<dl class="py data">
+<dt class="sig sig-object py" id="ccs.scripts.jsonTotable.f">
+<span class="sig-prename descclassname"><span class="pre">ccs.scripts.jsonTotable.</span></span><span class="sig-name descname"><span class="pre">f</span></span><a class="headerlink" href="#ccs.scripts.jsonTotable.f" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -148,8 +141,8 @@ DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(strin
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../ccs_fit/index.html" class="btn btn-neutral float-left" title="ccs.scripts.ccs_fit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../jsonTotable/index.html" class="btn btn-neutral float-right" title="ccs.scripts.jsonTotable" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../ccs_validate/index.html" class="btn btn-neutral float-left" title="ccs.scripts.ccs_validate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../timing/index.html" class="btn btn-neutral float-right" title="timing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

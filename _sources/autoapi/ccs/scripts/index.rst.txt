@@ -16,5 +16,6 @@ Submodules
    ccs_fetch/index.rst
    ccs_fit/index.rst
    ccs_validate/index.rst
+   jsonTotable/index.rst
 
 
