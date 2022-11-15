@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.1 (2022-11-15)
+
+
 ## v0.8.0 (2022-11-15)
 ### Feature
 * Add examples for interface with LAMMPS ([`8e35bdf`](https://github.com/Teoroo-CMC/CCS/commit/8e35bdf212ace1e0eb80fa848171e327e38e6c80))
