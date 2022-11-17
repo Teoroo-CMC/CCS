@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.3 (2022-11-17)
+### Fix
+* **__init__.py:** Fixed import statements ([`b0522a0`](https://github.com/Teoroo-CMC/CCS/commit/b0522a072b1a80cfdbe8a880b6fe95343ef25640))
+
 ## v0.8.2 (2022-11-17)
 ### Fix
 * **__init__.py:** Fixed import statements ([`4ae81c3`](https://github.com/Teoroo-CMC/CCS/commit/4ae81c36d8e7ee5057ddfddb1ba52fdeaf7b4324))
