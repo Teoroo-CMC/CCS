@@ -19,8 +19,54 @@ Subpackages
 Package Contents
 ----------------
 
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.ccs_fetch
+   ccs.ccs_fit
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs.__version__
+
+
 .. py:data:: __version__
    
 
    
+
+.. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None)
+
+   Function to read files and output structures.json
+
+   Input
+   -----
+       args : list
+           list of filenames
+       R_c : float
+           optional: Distance cut-off. Defaults to 7.0.
+
+   :returns: **structures.json** -- Collection of structures in .json format.
+   :rtype: JSON file
+
+   .. rubric:: Example
+
+   To be added.
+
+
+.. py:function:: ccs_fit(filename)
+
+   Parses the input files and fits the reference data.
+
+   :param filename: The input file (input.json).
+   :type filename: str
+
 

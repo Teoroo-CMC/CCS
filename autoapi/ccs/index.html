@@ -54,8 +54,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#ccs.__version__"><code class="docutils literal notranslate"><span class="pre">__version__</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#ccs.__version__">__version__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
 </ul>
 </li>
 </ul>
@@ -133,11 +133,77 @@
 </section>
 <section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs.ccs_fetch" title="ccs.ccs_fetch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_fetch</span></code></a>([mode, DFT_DB, R_c, Ns, DFTB_DB, charge_dict])</p></td>
+<td><p>Function to read files and output structures.json</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ccs.ccs_fit" title="ccs.ccs_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_fit</span></code></a>(filename)</p></td>
+<td><p>Parses the input files and fits the reference data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs.__version__" title="ccs.__version__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__version__</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py data">
 <dt class="sig sig-object py" id="ccs.__version__">
 <span class="sig-prename descclassname"><span class="pre">ccs.</span></span><span class="sig-name descname"><span class="pre">__version__</span></span><a class="headerlink" href="#ccs.__version__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs.ccs_fetch">
+<span class="sig-prename descclassname"><span class="pre">ccs.</span></span><span class="sig-name descname"><span class="pre">ccs_fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ccs/scripts/ccs_fetch.html#ccs_fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.ccs_fetch" title="Permalink to this definition"></a></dt>
+<dd><p>Function to read files and output structures.json</p>
+<blockquote>
+<div><dl class="simple">
+<dt>args<span class="classifier">list</span></dt><dd><p>list of filenames</p>
+</dd>
+<dt>R_c<span class="classifier">float</span></dt><dd><p>optional: Distance cut-off. Defaults to 7.0.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>structures.json</strong> – Collection of structures in .json format.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON file</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>To be added.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs.ccs_fit">
+<span class="sig-prename descclassname"><span class="pre">ccs.</span></span><span class="sig-name descname"><span class="pre">ccs_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ccs.ccs_fit" title="Permalink to this definition"></a></dt>
+<dd><p>Parses the input files and fits the reference data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The input file (input.json).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
