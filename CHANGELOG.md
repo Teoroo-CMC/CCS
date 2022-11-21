@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.2 (2022-11-21)
+### Documentation
+* Changed copyright header files ([`e4b13e9`](https://github.com/Teoroo-CMC/CCS/commit/e4b13e9f9b0a10b05ec832ff3bc5be285cb8a5c9))
+
 ## v0.9.1 (2022-11-18)
 ### Fix
 * Fixed attribute imports to ccs module ([`f50327f`](https://github.com/Teoroo-CMC/CCS/commit/f50327f1cef42bdf8b992dbf92e43008443a9f06))
