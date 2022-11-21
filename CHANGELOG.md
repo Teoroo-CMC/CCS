@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.3 (2022-11-21)
+### Documentation
+* Updated tree in README ([`b06ed0a`](https://github.com/Teoroo-CMC/CCS/commit/b06ed0a791e3be7ab46c36b54f542eed7f04f39d))
+* Adding some useful badges to README ([`8229340`](https://github.com/Teoroo-CMC/CCS/commit/82293407f283b782a3198963bc8d23b5811c28c3))
+
 ## v0.9.2 (2022-11-21)
 ### Documentation
 * Changed copyright header files ([`e4b13e9`](https://github.com/Teoroo-CMC/CCS/commit/e4b13e9f9b0a10b05ec832ff3bc5be285cb8a5c9))
