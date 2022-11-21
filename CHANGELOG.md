@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.1 (2022-11-18)
+### Fix
+* Fixed attribute imports to ccs module ([`f50327f`](https://github.com/Teoroo-CMC/CCS/commit/f50327f1cef42bdf8b992dbf92e43008443a9f06))
+* **__init__.py:** Fixed import statements ([`d918a79`](https://github.com/Teoroo-CMC/CCS/commit/d918a79f2bca5e76458c3e2fa50d27bfe8910055))
+* **__init__.py:** Fixed import statements ([`b0522a0`](https://github.com/Teoroo-CMC/CCS/commit/b0522a072b1a80cfdbe8a880b6fe95343ef25640))
+* **__init__.py:** Fixed import statements ([`4ae81c3`](https://github.com/Teoroo-CMC/CCS/commit/4ae81c36d8e7ee5057ddfddb1ba52fdeaf7b4324))
+
 ## v0.9.0 (2022-11-17)
 ### Feature
 * Add examples for interface with LAMMPS ([`8e35bdf`](https://github.com/Teoroo-CMC/CCS/commit/8e35bdf212ace1e0eb80fa848171e327e38e6c80))
