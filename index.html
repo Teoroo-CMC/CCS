@@ -72,31 +72,58 @@
              
   <section id="ccs-curvature-constrained-splines">
 <h1>CCS - Curvature Constrained Splines<a class="headerlink" href="#ccs-curvature-constrained-splines" title="Permalink to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/Teoroo-CMC/CCS/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&amp;color=brightgreen&amp;sort=semver" /></a>
+<a class="reference external" href="https://opensource.org/licenses/LGPL-3.0"><img alt="License" src="https://img.shields.io/github/license/teoroo-cmc/ccs" /></a>
+<a class="reference external" href="https://doi.org/10.1016/j.cpc.2020.107602"><img alt="DOI" src="https://img.shields.io/badge/DOI-10.1016%2Fj.cpc.2020.107602-blue" /></a>
+<a class="reference external" href="https://github.com/Teoroo-CMC/CCS/actions"><img alt="Build" src="https://img.shields.io/github/workflow/status/teoroo-cmc/CCS/ci-cd" /></a></p>
+<!--- [![Build Status](https://github.com/tblite/tblite/workflows/CI/badge.svg)](https://github.com/tblite/tblite/actions)
+[![Documentation](https://img.shields.io/badge/Github%20Pages-Pages-blue)](https://teoroo-cmc.github.io/CCS/)
+[![codecov](https://codecov.io/gh/tblite/tblite/branch/main/graph/badge.svg?token=JXIE6myqNH)](https://codecov.io/gh/tblite/tblite) --->
 <p>The <code class="docutils literal notranslate"><span class="pre">CCS</span></code> package is a tool to construct two-body potentials using the idea of curvature constrained splines.</p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
 <section id="package-layout">
 <h3>Package Layout<a class="headerlink" href="#package-layout" title="Permalink to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ccs-x.y.z
-├── bin
-│   ├── ccs_fetch
-│   ├── ccs_fit               
-│   └── ccs_validate                 
-├── ccs
-│   ├── __init__.py                     
-│   ├── main.py                 
-│   ├── objective.py            
-│   └── spline_functions.py     
-├── examples
-│   ├── Ne-FCC
-│   │   ├── input.json          
-│   │   └── structures.json     
-│   └── O2
-│       ├── input.json
-│       └── structures.json
+├── CHANGELOG.md
 ├── LICENSE
+├── MANIFEST.in
 ├── README.md
-└── setup.py
+├── bin
+│   ├── ccs_build_db
+│   ├── ccs_export_sktable
+│   ├── ccs_fetch
+│   ├── ccs_fit
+│   └── ccs_validate
+├── docs
+├── examples
+│   ├── CCS
+│   ├── CCS_with_LAMMPS
+│   ├── DFTB_repulsive_fitting
+│   ├── Preparing_ASE_db_trainingsets
+│   ├── Simple_regressor
+│   ├── Twobody_fit_for_an_O2_molecule
+│   ├── Twobody_fit_for_solid_Ne
+│   └── ppmd_interfacing
+├── logo.png
+├── poetry.lock
+├── pyproject.toml
+├── src
+│   └── ccs
+│       ├── ase_calculator
+│       ├── common
+│       ├── data
+│       ├── debugging_tools
+│       ├── fitting
+│       ├── ppmd_interface
+│       ├── regression_tool
+│       └── scripts
+│           ├── ccs_build_db.py
+│           ├── ccs_export_sktable.py
+│           ├── ccs_fetch.py
+│           ├── ccs_fit.py
+│           └── ccs_validate.py
+└── tests
 </pre></div>
 </div>
 <ul class="simple">
