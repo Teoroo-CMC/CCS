@@ -12,28 +12,50 @@
 The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
 ### Package Layout
+
 ```
 ccs-x.y.z
-├── bin
-│   ├── ccs_fetch
-│   ├── ccs_fit               
-│   └── ccs_validate                 
-├── ccs
-│   ├── __init__.py                     
-│   ├── main.py                 
-│   ├── objective.py            
-│   └── spline_functions.py     
-├── examples
-│   ├── Ne-FCC
-│   │   ├── input.json          
-│   │   └── structures.json     
-│   └── O2
-│       ├── input.json
-│       └── structures.json
+├── CHANGELOG.md
 ├── LICENSE
+├── MANIFEST.in
 ├── README.md
-└── setup.py
+├── bin
+│   ├── ccs_build_db
+│   ├── ccs_export_sktable
+│   ├── ccs_fetch
+│   ├── ccs_fit
+│   └── ccs_validate
+├── docs
+├── examples
+│   ├── CCS
+│   ├── CCS_with_LAMMPS
+│   ├── DFTB_repulsive_fitting
+│   ├── Preparing_ASE_db_trainingsets
+│   ├── Simple_regressor
+│   ├── Twobody_fit_for_an_O2_molecule
+│   ├── Twobody_fit_for_solid_Ne
+│   └── ppmd_interfacing
+├── logo.png
+├── poetry.lock
+├── pyproject.toml
+├── src
+│   └── ccs
+│       ├── ase_calculator
+│       ├── common
+│       ├── data
+│       ├── debugging_tools
+│       ├── fitting
+│       ├── ppmd_interface
+│       ├── regression_tool
+│       └── scripts
+│           ├── ccs_build_db.py
+│           ├── ccs_export_sktable.py
+│           ├── ccs_fetch.py
+│           ├── ccs_fit.py
+│           └── ccs_validate.py
+└── tests
 ```
+
 * `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.
 * `ccs_fit`             - The primary executable file for the ccs package.
 * `main.py`             - A module to parse input files.
