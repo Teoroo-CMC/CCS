@@ -11,6 +11,7 @@ _gitmsg.saved.txt
 .gitignore
 *.ipynb_checkpoints*
 .coverage
+settings.json
 
 # Data files
 *.dat
