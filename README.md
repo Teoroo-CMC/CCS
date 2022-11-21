@@ -1,5 +1,14 @@
 # CCS - Curvature Constrained Splines  
 
+[![Latest Release](https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&color=brightgreen&sort=semver)](https://github.com/Teoroo-CMC/CCS/releases/latest)
+[![License](https://img.shields.io/github/license/teoroo-cmc/ccs)](https://opensource.org/licenses/LGPL-3.0)
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cpc.2020.107602-blue)](https://doi.org/10.1016/j.cpc.2020.107602)
+[![Build](https://img.shields.io/github/workflow/status/teoroo-cmc/CCS/ci-cd)](https://github.com/Teoroo-CMC/CCS/actions)
+
+<!--- [![Build Status](https://github.com/tblite/tblite/workflows/CI/badge.svg)](https://github.com/tblite/tblite/actions)
+[![Documentation](https://img.shields.io/badge/Github%20Pages-Pages-blue)](https://teoroo-cmc.github.io/CCS/)
+[![codecov](https://codecov.io/gh/tblite/tblite/branch/main/graph/badge.svg?token=JXIE6myqNH)](https://codecov.io/gh/tblite/tblite) --->
+
 The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
 ### Package Layout
