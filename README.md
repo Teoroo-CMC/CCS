@@ -83,8 +83,9 @@ cd CCS
 python setup.py install
 ```
 --->
-### Installing from source
+### Installing from source using poetry
 ```
+pip install poetry
 pip install git+https://github.com/Teoroo-CMC/CCS@master
 ```
 ### Environment Variables
