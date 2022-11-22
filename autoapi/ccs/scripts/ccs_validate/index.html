@@ -77,11 +77,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../index.html">API Reference</a> &raquo;</li>
-          <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs</span></code></a> &raquo;</li>
-          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts</span></code></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_validate</span></code></li>
+      <li><a href="../../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_validate</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/ccs/scripts/ccs_validate/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -114,7 +114,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs.scripts.ccs_validate.ccs_validate">
 <span class="sig-prename descclassname"><span class="pre">ccs.scripts.ccs_validate.</span></span><span class="sig-name descname"><span class="pre">ccs_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS_validate.db'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/ccs_validate.html#ccs_validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.ccs_validate.ccs_validate" title="Permalink to this definition"></a></dt>
-<dd><blockquote>
+<dd><section id="function-to-verify-database-generation">
+<h4>Function to verify database generation.<a class="headerlink" href="#function-to-verify-database-generation" title="Permalink to this heading"></a></h4>
+</section>
+<section id="input">
+<h4>Input<a class="headerlink" href="#input" title="Permalink to this heading"></a></h4>
+<blockquote>
 <div><dl class="simple">
 <dt>mode<span class="classifier">str</span></dt><dd><dl class="simple">
 <dt>String describing which mode is used, supported modes are:</dt><dd><p>CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)”)
@@ -126,13 +131,17 @@ DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(strin
 </dl>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>What does it return Jolla?</p>
 </dd>
 </dl>
+</section>
+<section id="example-usage">
+<h4>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h4>
 <blockquote>
 <div><p>ccs_validate MODE […]</p>
 </div></blockquote>
+</section>
 </dd></dl>
 
 <dl class="py function">

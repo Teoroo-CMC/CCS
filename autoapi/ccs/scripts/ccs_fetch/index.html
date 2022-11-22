@@ -77,11 +77,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../index.html">API Reference</a> &raquo;</li>
-          <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs</span></code></a> &raquo;</li>
-          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts</span></code></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_fetch</span></code></li>
+      <li><a href="../../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs.scripts.ccs_fetch</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/ccs/scripts/ccs_fetch/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -120,6 +120,8 @@
 <dd><blockquote>
 <div><p>This function returns pairwise distances between two types of atoms within a certain cuttoff</p>
 </div></blockquote>
+<section id="input">
+<h4>Input<a class="headerlink" href="#input" title="Permalink to this heading"></a></h4>
 <blockquote>
 <div><dl class="simple">
 <dt>R_c<span class="classifier">float</span></dt><dd><p>Cut off distance(6. Å)</p>
@@ -131,16 +133,19 @@
 </dl>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>A list of distances</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs.scripts.ccs_fetch.ccs_fetch">
 <span class="sig-prename descclassname"><span class="pre">ccs.scripts.ccs_fetch.</span></span><span class="sig-name descname"><span class="pre">ccs_fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs/scripts/ccs_fetch.html#ccs_fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs.scripts.ccs_fetch.ccs_fetch" title="Permalink to this definition"></a></dt>
 <dd><p>Function to read files and output structures.json</p>
+<section id="id1">
+<h4>Input<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <blockquote>
 <div><dl class="simple">
 <dt>args<span class="classifier">list</span></dt><dd><p>list of filenames</p>
@@ -150,15 +155,16 @@
 </dl>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">returns</dt>
 <dd class="field-odd"><p><strong>structures.json</strong> – Collection of structures in .json format.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">rtype</dt>
 <dd class="field-even"><p>JSON file</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
 <p>To be added.</p>
+</section>
 </dd></dl>
 
 <dl class="py function">
