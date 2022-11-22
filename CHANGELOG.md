@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.4 (2022-11-22)
+### Documentation
+* **README:** Updated installation guide to include pip install poetry ([`b7932b7`](https://github.com/Teoroo-CMC/CCS/commit/b7932b7e3d42f662289c5c11e484fd24c34ae993))
+
 ## v0.9.3 (2022-11-21)
 ### Documentation
 * Updated tree in README ([`b06ed0a`](https://github.com/Teoroo-CMC/CCS/commit/b06ed0a791e3be7ab46c36b54f542eed7f04f39d))
