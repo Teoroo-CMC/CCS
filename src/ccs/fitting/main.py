@@ -97,13 +97,13 @@ def prepare_input(filename):
     # If onebody is not given it is generated from structures.json
     elements = set()
     [elements.add(key) for _, vv in struct_data.items() for key in vv["atoms"].keys()]
-
+    elements = sorted(list(elements))
     try:
         data["Onebody"]
     except:
         print("Generating one-body information from training-set.")
-        print("    Added elements: ", *elements)
-        data["Onebody"] = list(elements)
+        print("    Added elements: ", elements)
+        data["Onebody"] = list(elements) # list is now redundant here, but kept for future reference
 
     if "Xx-Xx" in data["Twobody"]:
         print("Generating two-body potentials from one-body information.")
@@ -118,10 +118,10 @@ def prepare_input(filename):
                 and ("Xx-" + atom_j not in data["Twobody"])
             ):
                 try:
-                    print("    Adding pair: " + atom_i + "-" + atom_j)
                     data["Twobody"][atom_i + "-" + atom_j] = copy.deepcopy(
                         data["Twobody"]["Xx-Xx"]
                     )
+                    print("    Adding pair: " + atom_i + "-" + atom_j)
                 except:
                     print("    Did not add pair: " + atom_i + "-" + atom_j)
                     pass
@@ -142,11 +142,11 @@ def prepare_input(filename):
                     data["Twobody"]["Xx-" + atom_j]
                 )
 
-        tmp_data = copy.deepcopy(data)
-        for dat in tmp_data["Twobody"]:
-            if "Xx" in dat:
-                del data["Twobody"][dat]
-        del tmp_data
+    tmp_data = copy.deepcopy(data)
+    for dat in tmp_data["Twobody"]:
+        if "Xx" in dat:
+            del data["Twobody"][dat]
+    del tmp_data
 
     return (
         data,

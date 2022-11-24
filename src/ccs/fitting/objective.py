@@ -167,6 +167,7 @@ class Objective:
 
         x_unfolded = []
         for ii in range(self.np):
+            print(f"DEBUG: Current pair {self.l_twb[ii].name} has {(self.l_twb[ii].N)} knots and {(self.l_twb[ii].A)} coefficients.")
             self.l_twb[ii].get_spline_coeffs()
             self.l_twb[ii].get_expcoeffs()
             x_unfolded = np.hstack(
