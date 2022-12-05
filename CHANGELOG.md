@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.7 (2022-12-05)
+
+
 ## v0.9.6 (2022-11-24)
 ### Fix
 * Debugging Xx-Xx twobody term error involving empty Li-Li dataset ([`8402e2c`](https://github.com/Teoroo-CMC/CCS/commit/8402e2c28b97e79dbb0f35d09c85e33ec9e52081))
