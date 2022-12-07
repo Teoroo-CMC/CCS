@@ -99,9 +99,9 @@ class Twobody:
                 l_i_minus_1 = indices[i - 1] - indices[i - 2]
             else:
                 l_i_minus_1 = 1
-            c_i = self.curvatures[i][0] / l_i
+            c_i = self.curvatures[i][0]  # / l_i  # DIVIDE OR MULTIPLY?
             c_i_minus_1 = self.curvatures[i - 1][0] / l_i_minus_1
-            d_i = (c_i - c_i_minus_1) / l_i
+            d_i = (c_i - c_i_minus_1)  # / l_i
             for j in range(l_i):
                 c_tmp = c_i - j * d_i
                 tmp_curvatures.append(c_tmp)
@@ -198,7 +198,7 @@ class Twobody:
                 index = bisect.bisect_left(self.rn, rr)
                 # index = max(0, index)
                 dr = max(self.res, (self.rn[index] - self.rn[index - 1]))
-                if dr > (self.res + 0.02):
+                if dr > (self.res + 0.001):
                     print("---", dr, self.rn[index], index)
                 delta = (rr - self.rn[index]) / dr
                 indices.append(index)
@@ -321,7 +321,7 @@ class Twobody:
         mtx = np.array([c0, c1, c2, c3])
 
         self.splcoeffs = np.transpose(mtx)
-        print("DEBUG: ", y_values[0], np.transpose(mtx)[0, :])
+        #print("DEBUG: ", y_values[0], np.transpose(mtx)[0, :])
 
     def get_expcoeffs(self):
         """Calculates coefficients of exponential function.
