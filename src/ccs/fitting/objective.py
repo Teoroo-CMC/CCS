@@ -21,6 +21,7 @@ from scipy.linalg import block_diag
 
 logger = logging.getLogger(__name__)
 
+
 class Objective:
     """Objective function for the ccs method."""
 
@@ -86,7 +87,7 @@ class Objective:
         while reduce:
             check = 0
             for ci in range(np.shape(self.sto)[1]):
-                if np.linalg.matrix_rank(self.sto[:, 0 : ci + 1]) < (ci + 1):
+                if np.linalg.matrix_rank(self.sto[:, 0: ci + 1]) < (ci + 1):
                     print("There is linear dependence in stochiometry matrix!")
                     print(
                         "    removing onebody term: "
@@ -133,7 +134,8 @@ class Objective:
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
-            sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
+            sol = self.solver(pp, qq, matrix(gg), matrix(hh),
+                              matrix(aa), matrix(bb))
             obj.append(float(self.eval_obj(sol["x"])))
 
         obj = np.asarray(obj)
@@ -147,16 +149,18 @@ class Objective:
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
-        opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb))
+        opt_sol = self.solver(pp, qq, matrix(
+            g_opt), matrix(hh), matrix(aa), matrix(bb))
 
         xx = np.array(opt_sol["x"])
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(
+            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
-                -3 * self.mm[-self.l_twb[0].Nconfs_forces : -1, :].dot(xx)
+                -3 * self.mm[-self.l_twb[0].Nconfs_forces: -1, :].dot(xx)
             )
             self.write_error_forces(model_forces, self.force_ref)
 
@@ -167,7 +171,6 @@ class Objective:
 
         x_unfolded = []
         for ii in range(self.np):
-            print(f"DEBUG: Current pair {self.l_twb[ii].name} has {(self.l_twb[ii].N)} knots and {(self.l_twb[ii].A)} coefficients.")
             self.l_twb[ii].get_spline_coeffs()
             self.l_twb[ii].get_expcoeffs()
             x_unfolded = np.hstack(
@@ -196,7 +199,8 @@ class Objective:
         self.mm = self.get_m()
 
         try:
-            self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+            self.model_energies = np.ravel(
+                self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
             error = self.model_energies - self.energy_ref
             mse = ((error) ** 2).mean()
         except:
@@ -285,7 +289,8 @@ class Objective:
         # Two-bodies
         ind = 0
         for ii in range(self.np):
-            self.l_twb[ii].curvatures = np.asarray(xx[ind : ind + self.cparams[ii]])
+            self.l_twb[ii].curvatures = np.asarray(
+                xx[ind: ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
             # Unfold the spline to an equdistant grid
             # self.l_twb[ii].dissolve_interval()
@@ -335,7 +340,8 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_x)
         fvv_x = np.hstack([*tmp])
         fvv_x = np.hstack(
-            (fvv_x, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+            (fvv_x, np.zeros(
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
         )
         mm = np.vstack((mm, fvv_x))
 
@@ -344,7 +350,8 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_y)
         fvv_y = np.hstack([*tmp])
         fvv_y = np.hstack(
-            (fvv_y, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+            (fvv_y, np.zeros(
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
         )
         mm = np.vstack((mm, fvv_y))
 
@@ -353,7 +360,8 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_z)
         fvv_z = np.hstack([*tmp])
         fvv_z = np.hstack(
-            (fvv_z, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+            (fvv_z, np.zeros(
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
         )
         mm = np.vstack((mm, fvv_z))
 
@@ -407,7 +415,8 @@ class Objective:
         footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
         np.savetxt(
             fname,
-            np.transpose([self.energy_ref, self.model_energies, error, Natoms]),
+            np.transpose(
+                [self.energy_ref, self.model_energies, error, Natoms]),
             header=header,
             footer=footer,
             fmt="%-15.5f",
@@ -448,36 +457,25 @@ class Objective:
         two_bodies_dict = OrderedDict()
         for k in range(self.np):
             two_body_dict = OrderedDict()
-            # From right to left aligned...
-            # REMOVE INNER PART WHICH IS ILL-DEFINE
-            two_body_dict["r_min"] = self.l_twb[k].rn[1]
+            two_body_dict["r_min"] = self.l_twb[k].rn[0]
             two_body_dict["r_cut"] = self.l_twb[k].Rcut
             two_body_dict["dr"] = self.l_twb[k].res
             r_values = list(np.array(self.l_twb[k].rn))
-            del r_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
-            # r_values.append(self.l_twb[k].Rcut)
             two_body_dict["r"] = list(r_values)
-            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
-            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
-            # INNER PART ALLREADY REMOVED HERE...
             two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
-            del a_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
             b_values.append(0)
-            del b_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
             c_values.append(0)
-            del c_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_c"] = c_values
             d_values = list(self.l_twb[k].splcoeffs[:, 3])
             d_values.append(0)
-            del d_values[0]  # REMOVE INNER PART WHICH IS ILL-DEFINED
             two_body_dict["spl_d"] = d_values
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 

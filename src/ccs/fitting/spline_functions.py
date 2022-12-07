@@ -21,6 +21,7 @@ from scipy.linalg import block_diag
 
 logger = logging.getLogger(__name__)
 
+
 class Twobody:
     """Twobody class that describes properties of an Atom pair."""
 
@@ -54,11 +55,13 @@ class Twobody:
         """
 
         self.name = name
-        self.Rcut = Rcut
+        self.Rmin = Rmin
         self.res = Resolution
         self.N = int(np.ceil((Rcut - Rmin) / self.res)) + 1
+        # TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE FIRST INTERVAL
+        # IN MAIN Rmin IS ADJUSTED THIS WAY, WE THEREFORE BUILD "UPWARDS" FROM Rmin.
         self.N_full = self.N
-        self.Rmin = self.Rcut - (self.N - 1) * self.res
+        self.Rcut = self.Rmin + (self.N - 1) * self.res
         self.rn_full = [i * self.res + self.Rmin for i in range(self.N)]
         self.rn = self.rn_full
         self.Swtype = Swtype
@@ -270,18 +273,18 @@ class Twobody:
         # Note, we are still working with a right-aligned spline...
         dr = -1.0
         x_values = np.array(self.rn)
-        # x_values = np.append(x_values, 0.0)
+        x_values = np.insert(x_values, 0, self.rn[0]-self.res)
 
         y_values = a_values
         y_0 = a_values[0] + dr * (
             b_values[0] + dr * (0.5 * c_values[0] + dr * d_values[0] / 6.0)
         )
         y_values = np.insert(y_values, 0, y_0)
-        # y_values = np.append(y_values, 0.0)
+        y_values = np.append(y_values, 0.0)
 
         left_deriv = (
             b_values[0] + dr * (c_values[0] + dr * d_values[0] / 2.0)
-        ) / self.res  #
+        ) / self.res  # We need to take the interval lenght into account here
         right_deriv = 0.0
 
         # The algebraic excersise starts here...
@@ -302,7 +305,8 @@ class Twobody:
             )
         )
         d0 = 6.0 / kk[0] * ((y_values[1] - y_values[0]) / kk[0] - left_deriv)
-        dn = 6.0 / kk[-1] * (right_deriv - (y_values[-1] - y_values[-2]) / kk[-1])
+        dn = 6.0 / kk[-1] * \
+            (right_deriv - (y_values[-1] - y_values[-2]) / kk[-1])
         dd = np.hstack((d0, dd, dn))
         mtx = 2.0 * np.identity(nn, dtype=float)
         for ii in range(nn - 1):
@@ -310,12 +314,14 @@ class Twobody:
             mtx[ii + 1, ii] = mu[ii]
         mm = linalg.solve(mtx, dd)
         c0 = y_values[:-1]
-        c1 = (y_values[1:] - y_values[:-1]) / kk - (2.0 * mm[:-1] + mm[1:]) / 6.0 * kk
+        c1 = (y_values[1:] - y_values[:-1]) / kk - \
+            (2.0 * mm[:-1] + mm[1:]) / 6.0 * kk
         c2 = mm[:-1] / 2.0
         c3 = (mm[1:] - mm[:-1]) / (6.0 * kk)
         mtx = np.array([c0, c1, c2, c3])
 
         self.splcoeffs = np.transpose(mtx)
+        print("DEBUG: ", y_values[0], np.transpose(mtx)[0, :])
 
     def get_expcoeffs(self):
         """Calculates coefficients of exponential function.
@@ -334,17 +340,10 @@ class Twobody:
             gamma (float):
 
         """
-        # NOTE WE SHOULD NOTE INCLUDE INNERMOST POINT WHICH IS IL-DEFINED!
-        # OLD CODE
-        # aa = self.splcoeffs[0, 0]
-        # bb = self.splcoeffs[0, 1]
-        # cc = self.splcoeffs[0, 2]
-        # r0 = self.rn[0]
-        # NEW CODE
-        aa = self.splcoeffs[1, 0]
-        bb = self.splcoeffs[1, 1]
-        cc = self.splcoeffs[1, 2]
-        r0 = self.rn[1]
+        aa = self.splcoeffs[0, 0]
+        bb = self.splcoeffs[0, 1]
+        cc = self.splcoeffs[0, 2]
+        r0 = self.rn[0]
 
         alpha = -cc / bb
         beta = alpha * r0 + np.log(cc / alpha**2)
