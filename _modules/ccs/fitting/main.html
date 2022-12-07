@@ -129,7 +129,8 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Train-set&quot;</span><span class="p">])</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">struct_data_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
+            <span class="n">struct_data_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
             <span class="n">struct_data</span> <span class="o">=</span> <span class="n">struct_data_full</span><span class="p">[</span><span class="s2">&quot;energies&quot;</span><span class="p">]</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">struct_data_forces</span> <span class="o">=</span> <span class="n">struct_data_full</span><span class="p">[</span><span class="s2">&quot;forces&quot;</span><span class="p">]</span>
@@ -145,7 +146,8 @@
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Test-set&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Train-set&quot;</span><span class="p">]</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Test-set&quot;</span><span class="p">])</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">struct_data_test_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
+            <span class="n">struct_data_test_full</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">json_file</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
             <span class="n">struct_data_test</span> <span class="o">=</span> <span class="n">struct_data_test_full</span><span class="p">[</span><span class="s2">&quot;energies&quot;</span><span class="p">]</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">struct_data_test_forces</span> <span class="o">=</span> <span class="n">struct_data_test_full</span><span class="p">[</span><span class="s2">&quot;forces&quot;</span><span class="p">]</span>
@@ -167,14 +169,16 @@
 
     <span class="c1"># If onebody is not given it is generated from structures.json</span>
     <span class="n">elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="p">[</span><span class="n">elements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">[</span><span class="s2">&quot;atoms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+    <span class="p">[</span><span class="n">elements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">vv</span><span class="p">[</span><span class="s2">&quot;atoms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
     <span class="n">elements</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">))</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating one-body information from training-set.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Added elements: &quot;</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="c1"># list is now redundant here, but kept for future reference</span>
+        <span class="c1"># list is now redundant here, but kept for future reference</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;Xx-Xx&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">]:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating two-body potentials from one-body information.&quot;</span><span class="p">)</span>
@@ -270,7 +274,8 @@
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">dftb_energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="s2">&quot;energy_dftb&quot;</span><span class="p">])</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Structure with no key energy_dftb at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">snum</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s2">&quot;Structure with no key energy_dftb at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">snum</span><span class="p">)</span>
                         <span class="k">raise</span>
                 <span class="k">if</span> <span class="s2">&quot;Q&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]:</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -309,7 +314,8 @@
                     <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">))</span>
                 <span class="p">)</span>
                 <span class="n">ref_energies</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;ewald_scaling&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;ewald_scaling&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -322,8 +328,10 @@
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Rmin&quot;</span><span class="p">]</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Rmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">min</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">list_dist</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">item</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
-                    <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Resolution&quot;</span><span class="p">]</span>
+                    <span class="nb">min</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">list_dist</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">item</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+                        <span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Resolution&quot;</span><span class="p">]</span>
+                    <span class="c1"># TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE FIRST INTERVAL</span>
+
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Rcut&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Rmax</span><span class="p">:</span>
@@ -357,7 +365,8 @@
 
             <span class="c1"># APPEND DATA</span>
             <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Rmin&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;Rcut&quot;</span><span class="p">]:</span>
-                <span class="n">atom_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Twobody</span><span class="p">(</span><span class="n">atmpair</span><span class="p">,</span> <span class="n">dist_mat</span><span class="p">,</span> <span class="n">dist_mat_forces</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">))</span>
+                <span class="n">atom_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Twobody</span><span class="p">(</span><span class="n">atmpair</span><span class="p">,</span> <span class="n">dist_mat</span><span class="p">,</span> <span class="n">dist_mat_forces</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">))</span>
 
     <span class="c1"># ADD ONEBODY DATA</span>
     <span class="n">atom_onebodies</span> <span class="o">=</span> <span class="p">[]</span>
