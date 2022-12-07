@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.8 (2022-12-07)
+### Fix
+* Add version to ccs initialisation ([`2880ba1`](https://github.com/Teoroo-CMC/CCS/commit/2880ba176fbb056a95040099ffc6877c7ad681ce))
+* Removed a bug related to the trimming of inner part of the spline before printing in left aligned format have been fixed. ([`21a2fba`](https://github.com/Teoroo-CMC/CCS/commit/21a2fba4b8b3c42eacd5873ba88dc1680841eb74))
+* Removed a bug related to the trimming of inner part of the spline before printing in left aligned format have been fixed. ([`64e34d6`](https://github.com/Teoroo-CMC/CCS/commit/64e34d63d8367f17f497194dbd9f194cac8684f1))
+
 ## v0.9.7 (2022-12-05)
 
 
