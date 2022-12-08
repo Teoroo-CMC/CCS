@@ -99,9 +99,9 @@ class Twobody:
                 l_i_minus_1 = indices[i - 1] - indices[i - 2]
             else:
                 l_i_minus_1 = 1
-            c_i = self.curvatures[i][0]  # / l_i  # DIVIDE OR MULTIPLY?
-            c_i_minus_1 = self.curvatures[i - 1][0] / l_i_minus_1
-            d_i = (c_i - c_i_minus_1)  # / l_i
+            c_i = self.curvatures[i][0] / (l_i)  # DIVIDE OR MULTIPLY?
+            c_i_minus_1 = self.curvatures[i - 1][0] / (l_i_minus_1)
+            d_i = (c_i - c_i_minus_1) / (l_i)
             for j in range(l_i):
                 c_tmp = c_i - j * d_i
                 tmp_curvatures.append(c_tmp)
@@ -109,7 +109,7 @@ class Twobody:
         tmp_curvatures.reverse()
 
         for i in range(len(indices)):
-            print(indices[i], *self.curvatures[i])
+            print(self.rn[i], *self.curvatures[i])
         for i in range(len(tmp_curvatures)):
             print(i, tmp_curvatures[i])
 
@@ -198,10 +198,10 @@ class Twobody:
                 index = bisect.bisect_left(self.rn, rr)
                 # index = max(0, index)
                 dr = max(self.res, (self.rn[index] - self.rn[index - 1]))
-                if dr > (self.res + 0.001):
-                    print("---", dr, self.rn[index], index)
                 delta = (rr - self.rn[index]) / dr
                 indices.append(index)
+                # INDEX IS SHIFTED IN A,B,C,D
+                # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
                 index = index - 1
                 aa_ind = self.A[index]
                 bb_ind = self.B[index] * delta
@@ -252,7 +252,7 @@ class Twobody:
 
         return vv_x, vv_y, vv_z
 
-    def get_spline_coeffs(self):
+    def get_spline_coeffs_old(self):
         """
         Spline coefficients for a spline with given 1st derivatives at its ends.
         The process turns the (internal) right-aligned spline table to a more common
@@ -321,7 +321,29 @@ class Twobody:
         mtx = np.array([c0, c1, c2, c3])
 
         self.splcoeffs = np.transpose(mtx)
-        #print("DEBUG: ", y_values[0], np.transpose(mtx)[0, :])
+        print(self.splcoeffs)
+
+    def get_spline_coeffs(self):
+        a_values = np.dot(self.A, self.curvatures)
+        b_values = np.dot(self.B, self.curvatures)
+        c_values = np.dot(self.C, self.curvatures)
+        d_values = np.dot(self.D, self.curvatures)
+
+        spl = []
+        for a, b, c, d in zip(a_values, b_values, c_values, d_values):
+            a_l = a-b+c/2.-d/6.
+            b_l = b-c+(3*d/6.)
+            b_l = b_l/self.res
+            c_l = c-d
+            c_l = (1/2.)*c_l/(self.res**2)
+            d_l = d
+            d_l = (1/6.)*d_l/(self.res**3)
+
+            spl.append([float(a_l), float(b_l), float(c_l), float(d_l)])
+        spl = np.array(spl)
+        #spl = np.delete(spl, 0, axis=0)
+
+        self.splcoeffs = spl
 
     def get_expcoeffs(self):
         """Calculates coefficients of exponential function.
