@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.10 (2022-12-08)
+### Documentation
+* Update README.md to improve installation guide ([`95f9c6c`](https://github.com/Teoroo-CMC/CCS/commit/95f9c6c3b49e3f63da5b7e8a2c5f0d3fd3be1dda))
+
 ## v0.9.9 (2022-12-08)
 ### Fix
 * Simplyfied the routine for shifting spline-table from rigth-aligned to left-aligned ([`0d06dca`](https://github.com/Teoroo-CMC/CCS/commit/0d06dca3c34df8f5e95a51e790f2ce89bdcbfc44))
