@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.9 (2022-12-08)
+### Fix
+* Simplyfied the routine for shifting spline-table from rigth-aligned to left-aligned ([`0d06dca`](https://github.com/Teoroo-CMC/CCS/commit/0d06dca3c34df8f5e95a51e790f2ce89bdcbfc44))
+* Simplyfied the routine for shifting spline-table from rigth-aligned to left-aligned ([`255f161`](https://github.com/Teoroo-CMC/CCS/commit/255f161706c1e6d7badf99060bdd713d846d06ce))
+
 ## v0.9.8 (2022-12-07)
 ### Fix
 * Add version to ccs initialisation ([`2880ba1`](https://github.com/Teoroo-CMC/CCS/commit/2880ba176fbb056a95040099ffc6877c7ad681ce))
