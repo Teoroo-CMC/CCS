@@ -87,8 +87,10 @@ python setup.py install
 --->
 ### Installing from source using poetry
 ```
-pip install poetry
-pip install git+https://github.com/Teoroo-CMC/CCS@master
+git clone https://github.com/Teoroo-CMC/CCS.git CCS
+cd CCS
+conda install poetry
+poetry install 
 ```
 ### Environment Variables
 Set the following environment variables:
