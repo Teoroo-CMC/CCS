@@ -95,21 +95,17 @@ class Twobody:
 
         for i in range(self.N - 1, 0, -1):
             l_i = indices[i] - indices[i - 1]
-            if i > 1:
-                l_i_minus_1 = indices[i - 1] - indices[i - 2]
-            else:
-                l_i_minus_1 = 1
-            c_i = self.curvatures[i][0] / (l_i)**2  # DIVIDE OR MULTIPLY?
-            c_i_minus_1 = self.curvatures[i - 1][0] / (l_i_minus_1)**2
+            c_i = self.curvatures[i][0]
+            c_i_minus_1 = self.curvatures[i - 1][0]
             d_i = (c_i - c_i_minus_1) / (l_i)
             for j in range(l_i):
-                c_tmp = c_i - j * d_i
+                c_tmp = c_i  # - j * d_i #THIS IS HARD TO UNDERSTAND WHY IT WORKS
                 tmp_curvatures.append(c_tmp)
         tmp_curvatures.append(*self.curvatures[0])
         tmp_curvatures.reverse()
 
         for i in range(len(indices)):
-            print(self.rn[i], *self.curvatures[i])
+            print(indices[i], *self.curvatures[i])
         for i in range(len(tmp_curvatures)):
             print(i, tmp_curvatures[i])
 
@@ -219,8 +215,7 @@ class Twobody:
                 rr = np.linalg.norm(rv)
                 if rr > 0 and rr < self.Rcut:
                     index = bisect.bisect_left(self.rn, rr)
-                    dr = max(self.res, (self.rn[index] - self.rn[index - 1]))
-                    delta = (rr - self.rn[index]) / dr
+                    delta = (rr - self.rn[index])
                     indices.append(index)
                     bb_ind = -self.B[index - 1]
                     dd_ind = -self.D[index - 1] * np.power(delta, 2) / 3.0

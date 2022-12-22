@@ -167,7 +167,7 @@ class Objective:
         self.write_error()
 
         # COMMENT: Unfold the spline to an equdistant grid
-        # self.unfold_intervals()
+        self.unfold_intervals()
 
         x_unfolded = []
         for ii in range(self.np):
