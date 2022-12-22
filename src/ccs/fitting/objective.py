@@ -110,7 +110,7 @@ class Objective:
         """Function to solve the objective with constraints."""
 
         # COMMENTS MERGING THE INTERVALS
-        # self.merge_intervals()
+        self.merge_intervals()
 
         # Reduce stoichiometry
         self.reduce_stoichiometry()
