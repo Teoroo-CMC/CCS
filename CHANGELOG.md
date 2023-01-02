@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.12 (2023-01-02)
+
+
 ## v0.9.11 (2022-12-16)
 ### Documentation
 * **README:** Added funding acknowledgement and authors ([`bf8277b`](https://github.com/Teoroo-CMC/CCS/commit/bf8277b97f7588a989b57996a4d47941bf47d699))
