@@ -73,18 +73,6 @@ Attributes
       :rtype: ndarray
 
 
-   .. py:method:: get_spline_coeffs_old()
-
-      Spline coefficients for a spline with given 1st derivatives at its ends.
-      The process turns the (internal) right-aligned spline table to a more common
-      left-aligned form.
-
-          Returns:
-
-              np.transpose(mtx): spline coefficients in matrix-form
-
-
-
    .. py:method:: get_spline_coeffs()
 
 

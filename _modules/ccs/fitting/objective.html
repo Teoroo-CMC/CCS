@@ -181,7 +181,7 @@
         <span class="sd">&quot;&quot;&quot;Function to solve the objective with constraints.&quot;&quot;&quot;</span>
 
         <span class="c1"># COMMENTS MERGING THE INTERVALS</span>
-        <span class="c1"># self.merge_intervals()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_intervals</span><span class="p">()</span>
 
         <span class="c1"># Reduce stoichiometry</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reduce_stoichiometry</span><span class="p">()</span>
@@ -238,7 +238,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">()</span>
 
         <span class="c1"># COMMENT: Unfold the spline to an equdistant grid</span>
-        <span class="c1"># self.unfold_intervals()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unfold_intervals</span><span class="p">()</span>
 
         <span class="n">x_unfolded</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
