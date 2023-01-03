@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.0 (2023-01-03)
+### Feature
+* Merge implementation of empty intervals in the splines ([`c8d0eff`](https://github.com/Teoroo-CMC/CCS/commit/c8d0eff7a841441fa0f0042468067feafc926ffb))
+
 ## v0.9.12 (2023-01-02)
 
 
