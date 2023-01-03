@@ -110,7 +110,7 @@ class Objective:
         """Function to solve the objective with constraints."""
 
         # COMMENTS MERGING THE INTERVALS
-        # self.merge_intervals()
+        self.merge_intervals()
 
         # Reduce stoichiometry
         self.reduce_stoichiometry()
@@ -167,7 +167,7 @@ class Objective:
         self.write_error()
 
         # COMMENT: Unfold the spline to an equdistant grid
-        # self.unfold_intervals()
+        self.unfold_intervals()
 
         x_unfolded = []
         for ii in range(self.np):

@@ -45,7 +45,7 @@ def _write(elem1, elem2, CCS_params, exp=True):
                 if i < (len(x) - 1):
                     print(
                         x[i] / Bohr,
-                        (x[i] + dx) / Bohr,
+                        (x[i+1]) / Bohr,
                         a[i] / Hartree,
                         b[i] * (Bohr) / Hartree,
                         c[i] * (Bohr**2) / Hartree,
@@ -72,7 +72,7 @@ def _write(elem1, elem2, CCS_params, exp=True):
                 if i < (len(x) - 1):
                     print(
                         x[i] / Bohr,
-                        (x[i] + dx) / Bohr,
+                        (x[i+1]) / Bohr,
                         a[i] / Hartree,
                         b[i] * (Bohr) / Hartree,
                         c[i] * (Bohr**2) / Hartree,
