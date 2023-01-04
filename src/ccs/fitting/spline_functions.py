@@ -34,6 +34,7 @@ class Twobody:
         Swtype="rep",
         Rmin=None,
         Resolution=0.1,
+        const_type="mono",
     ):
         """
         Constructs a Twobody object.
@@ -65,6 +66,7 @@ class Twobody:
         self.rn_full = [(i) * self.res + self.Rmin for i in range(self.N)]
         self.rn = self.rn_full
         self.Swtype = Swtype
+        self.const_type = const_type
         self.dismat = dismat
         self.Nconfs = np.shape(dismat)[0]
         self.distmat_forces = distmat_forces
@@ -76,6 +78,14 @@ class Twobody:
         self.curvatures = None
         self.splcoeffs = None
         self.expcoeffs = None
+        if self.const_type.lower() == 'mono':
+            print("    Applying monotonous constraints for pair: ", self.name)
+            logger.info(
+                f"Applying monotonous constraints for pair: {self.name}")
+        if self.const_type.lower() == 'simple':
+            print("    Applying simple constraints for pair: ", self.name)
+            logger.info(
+                f"Applying simple constraints for pair: {self.name}")
 
     def merge_intervals(self):
         self.indices.sort()
@@ -85,7 +95,10 @@ class Twobody:
         self.vv, _ = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z = self.get_v_forces()
-        print("Merging intervall. N reduced to: ", self.N)
+        print(
+            f"    Merging intervall for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
+        logger.info(
+            f"Merging intervall for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
 
     def dissolve_interval(self):
         tmp_curvatures = []
@@ -99,15 +112,10 @@ class Twobody:
             c_i_minus_1 = self.curvatures[i - 1][0]
             d_i = (c_i - c_i_minus_1) / (l_i)
             for j in range(l_i):
-                c_tmp = c_i  # - j * d_i #THIS IS HARD TO UNDERSTAND WHY IT WORKS
+                c_tmp = c_i - j * d_i
                 tmp_curvatures.append(c_tmp)
         tmp_curvatures.append(*self.curvatures[0])
         tmp_curvatures.reverse()
-
-        for i in range(len(indices)):
-            print(indices[i], *self.curvatures[i])
-        for i in range(len(tmp_curvatures)):
-            print(i, tmp_curvatures[i])
 
         self.curvatures = tmp_curvatures
         self.N = self.N_full
@@ -123,7 +131,10 @@ class Twobody:
             g_mono[ii, ii] = -1
             g_mono[ii, ii+1] = 1
         gg = block_diag(g_mono)
-        return gg
+        if self.const_type.lower() == 'mono':
+            return gg
+        if self.const_type.lower() == 'simple':
+            return a
 
     def switch_const(self, n_switch):
         g = copy.deepcopy(self.const)
@@ -145,12 +156,12 @@ class Twobody:
         bb = np.zeros((rows, cols), dtype=float)
         aa = np.zeros((rows, cols), dtype=float)
         dd = np.zeros((rows, cols), dtype=float)
-        dd[rows-1, -1] = -1 / dx[rows-1]
-        dd[rows-1, -2] = +1 / dx[rows-1]
+        #dd[rows-1, -1] = -1 / dx[rows-1]
+        #dd[rows-1, -2] = +1 / dx[rows-1]
 
         for i in range(1, rows):
             ii = rows-i-1
-            dd[ii] = (-cc[ii+1] + cc[ii])/dx[ii+1]
+            dd[ii+1] = (cc[ii+1] - cc[ii])/dx[ii+1]
             bb[ii] = bb[ii+1] - dx[ii+1]*cc[ii+1] + 0.5*(dx[ii+1]**2)*dd[ii+1]
             aa[ii] = aa[ii+1] - dx[ii+1]*bb[ii+1] + 0.5 * \
                 (dx[ii+1]**2)*cc[ii+1] - (1/6.)*(dx[ii+1]**3)*dd[ii+1]

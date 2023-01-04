@@ -1,7 +1,8 @@
 {
         "General": {
                 "interface": "CCS",
-                "ewald_scaling": 1.0
+                "ewald_scaling": 1.0,
+                "merging": "True"
         },
         "Train-set": "structures.json",
         "Test-set": "structures.json",

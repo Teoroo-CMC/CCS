@@ -66,7 +66,7 @@ def parse_cmdline_args(cmdlineargs=None):
     args = parser.parse_args(cmdlineargs)
 
     fmt = "%(asctime)s - %(name)s - %(levelname)s -       %(message)s"
-    logging.basicConfig(filename="ccs.log", format=fmt, level=args.loglvl)
+    logging.basicConfig(filename="CCS.log", format=fmt, level=args.loglvl)
 
     return args
 
