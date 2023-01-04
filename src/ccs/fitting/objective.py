@@ -110,7 +110,11 @@ class Objective:
         """Function to solve the objective with constraints."""
 
         # COMMENTS MERGING THE INTERVALS
-        self.merge_intervals()
+        try:
+            if self.merging == "True":
+                self.merge_intervals()
+        except:
+            pass
 
         # Reduce stoichiometry
         self.reduce_stoichiometry()
@@ -143,7 +147,8 @@ class Objective:
         opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
         logger.info(
-            "\n The best switch is : %s and mse : %s", nswitch_list[opt_sol_index], mse
+            "\n The best switch is : %s and mse : %s", *
+            nswitch_list[opt_sol_index], mse
         )
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
@@ -167,7 +172,11 @@ class Objective:
         self.write_error()
 
         # COMMENT: Unfold the spline to an equdistant grid
-        self.unfold_intervals()
+        try:
+            if self.merging == "True":
+                self.unfold_intervals()
+        except:
+            pass
 
         x_unfolded = []
         for ii in range(self.np):

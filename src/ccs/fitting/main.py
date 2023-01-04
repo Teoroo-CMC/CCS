@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def prepare_input(filename):
 
-    gen_params = {"interface": None, "ewald_scaling": 1.0}
+    gen_params = {"interface": None, "ewald_scaling": 1.0, 'merging': 'False'}
     struct_data_test = {}
 
     try:
@@ -89,11 +89,11 @@ def prepare_input(filename):
     if "Twobody" not in data.keys():
         if "DFTB" in data["General"]["interface"]:
             data["Twobody"] = {
-                "Xx-Xx": {"Rcut": 5.0, "Resolution": 0.1, "Swtype": "rep"}
+                "Xx-Xx": {"Rcut": 5.0, "Resolution": 0.1, "Swtype": "rep", "const_type": "Mono"}
             }
         if "CCS" in data["General"]["interface"]:
             data["Twobody"] = {
-                "Xx-Xx": {"Rcut": 8.0, "Resolution": 0.1, "Swtype": "sw"}
+                "Xx-Xx": {"Rcut": 8.0, "Resolution": 0.1, "Swtype": "sw", "const_type": "Mono"}
             }
 
     # If onebody is not given it is generated from structures.json
@@ -106,11 +106,14 @@ def prepare_input(filename):
     except:
         print("Generating one-body information from training-set.")
         print("    Added elements: ", elements)
+        logger.info("Generating one-body information from training-set.")
+        logger.info(f"    Added elements: {elements}")
         # list is now redundant here, but kept for future reference
         data["Onebody"] = list(elements)
 
     if "Xx-Xx" in data["Twobody"]:
         print("Generating two-body potentials from one-body information.")
+        logger.info("Generating two-body potentials from one-body information.")
 
     for atom_i in data["Onebody"]:
         for atom_j in data["Onebody"]:
@@ -126,8 +129,8 @@ def prepare_input(filename):
                         data["Twobody"]["Xx-Xx"]
                     )
                     print("    Adding pair: " + atom_i + "-" + atom_j)
+                    logger.info(f"Adding pair: {atom_i}-{atom_j}")
                 except:
-                    print("    Did not add pair: " + atom_i + "-" + atom_j)
                     pass
             if (
                 ("Xx-" + atom_i in data["Twobody"])
@@ -179,7 +182,7 @@ def parse(data, struct_data, struct_data_forces):
         atmpair_rev = atmpair_members[1] + "-" + atmpair_members[0]
 
         counter1 = counter1 + 1
-        logger.info("\n The atom pair is : %s" % (atmpair))
+        # logger.info("\n The atom pair is : %s" % (atmpair))
         list_dist = []
         for snum, vv in struct_data.items():
             try:
@@ -303,7 +306,6 @@ def parse(data, struct_data, struct_data_forces):
     for i, key in enumerate(data["Onebody"]):
         count = 0
         for _, vv in struct_data.items():
-            # print(vv['atoms'][key] )
             try:
                 sto[count][i] = vv["atoms"][key]
             except KeyError:
@@ -311,7 +313,7 @@ def parse(data, struct_data, struct_data_forces):
             count = count + 1
         atom_onebodies.append(Onebody(key, sto[:, i].flatten()))
 
-    with open("input_interpreted.json", "w") as f:
+    with open("CCS_input_interpreted.json", "w") as f:
         json.dump(data, f, indent=8)
 
     return (
