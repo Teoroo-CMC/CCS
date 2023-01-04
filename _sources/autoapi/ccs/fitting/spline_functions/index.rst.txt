@@ -36,7 +36,7 @@ Attributes
 
    
 
-.. py:class:: Twobody(name, dismat, distmat_forces, Rcut, Swtype='rep', Rmin=None, Resolution=0.1)
+.. py:class:: Twobody(name, dismat, distmat_forces, Rcut, Swtype='rep', Rmin=None, Resolution=0.1, const_type='mono')
 
    Twobody class that describes properties of an Atom pair.
 

@@ -99,7 +99,7 @@
 
 <div class="viewcode-block" id="prepare_input"><a class="viewcode-back" href="../../../autoapi/ccs/fitting/main/index.html#ccs.fitting.main.prepare_input">[docs]</a><span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 
-    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;merging&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
     <span class="n">struct_data_test</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -160,11 +160,11 @@
     <span class="k">if</span> <span class="s2">&quot;Twobody&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">if</span> <span class="s2">&quot;DFTB&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;Xx-Xx&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;rep&quot;</span><span class="p">}</span>
+                <span class="s2">&quot;Xx-Xx&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;rep&quot;</span><span class="p">,</span> <span class="s2">&quot;const_type&quot;</span><span class="p">:</span> <span class="s2">&quot;Mono&quot;</span><span class="p">}</span>
             <span class="p">}</span>
         <span class="k">if</span> <span class="s2">&quot;CCS&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;Xx-Xx&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">8.0</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;sw&quot;</span><span class="p">}</span>
+                <span class="s2">&quot;Xx-Xx&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Rcut&quot;</span><span class="p">:</span> <span class="mf">8.0</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;Swtype&quot;</span><span class="p">:</span> <span class="s2">&quot;sw&quot;</span><span class="p">,</span> <span class="s2">&quot;const_type&quot;</span><span class="p">:</span> <span class="s2">&quot;Mono&quot;</span><span class="p">}</span>
             <span class="p">}</span>
 
     <span class="c1"># If onebody is not given it is generated from structures.json</span>
@@ -177,11 +177,14 @@
     <span class="k">except</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating one-body information from training-set.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Added elements: &quot;</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating one-body information from training-set.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Added elements: </span><span class="si">{</span><span class="n">elements</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># list is now redundant here, but kept for future reference</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;Xx-Xx&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">]:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating two-body potentials from one-body information.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating two-body potentials from one-body information.&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">atom_i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">atom_j</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]:</span>
@@ -197,8 +200,8 @@
                         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">][</span><span class="s2">&quot;Xx-Xx&quot;</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Adding pair: &quot;</span> <span class="o">+</span> <span class="n">atom_i</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">atom_j</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adding pair: </span><span class="si">{</span><span class="n">atom_i</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">atom_j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Did not add pair: &quot;</span> <span class="o">+</span> <span class="n">atom_i</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">atom_j</span><span class="p">)</span>
                     <span class="k">pass</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="p">(</span><span class="s2">&quot;Xx-&quot;</span> <span class="o">+</span> <span class="n">atom_i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">])</span>
@@ -250,7 +253,7 @@
         <span class="n">atmpair_rev</span> <span class="o">=</span> <span class="n">atmpair_members</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">atmpair_members</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">counter1</span> <span class="o">=</span> <span class="n">counter1</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> The atom pair is : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">atmpair</span><span class="p">))</span>
+        <span class="c1"># logger.info(&quot;\n The atom pair is : %s&quot; % (atmpair))</span>
         <span class="n">list_dist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">snum</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
@@ -374,7 +377,6 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]):</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">struct_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># print(vv[&#39;atoms&#39;][key] )</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">sto</span><span class="p">[</span><span class="n">count</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vv</span><span class="p">[</span><span class="s2">&quot;atoms&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -382,7 +384,7 @@
             <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">atom_onebodies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Onebody</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sto</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;input_interpreted.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;CCS_input_interpreted.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span>
