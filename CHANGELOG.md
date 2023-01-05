@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.0 (2023-01-04)
+### Feature
+* Merging intervals featured completed ([`e1e8f9c`](https://github.com/Teoroo-CMC/CCS/commit/e1e8f9c32782407fa7e36fca0c0f2c908a844479))
+
 ## v0.10.0 (2023-01-03)
 ### Feature
 * Merge implementation of empty intervals in the splines ([`c8d0eff`](https://github.com/Teoroo-CMC/CCS/commit/c8d0eff7a841441fa0f0042468067feafc926ffb))
