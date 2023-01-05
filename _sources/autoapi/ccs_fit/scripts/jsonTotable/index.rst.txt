@@ -1,0 +1,40 @@
+:py:mod:`ccs_fit.scripts.jsonTotable`
+=====================================
+
+.. py:module:: ccs_fit.scripts.jsonTotable
+
+.. autoapi-nested-parse::
+
+   Functionality to derive spline table for LAMMPS
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs_fit.scripts.jsonTotable.asecalcTotable
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs_fit.scripts.jsonTotable.f
+
+
+.. py:function:: asecalcTotable(jsonfile, scale=10, table='CCS.table')
+
+
+.. py:data:: f
+   
+
+   
+

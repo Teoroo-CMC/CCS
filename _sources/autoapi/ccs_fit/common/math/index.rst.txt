@@ -1,0 +1,15 @@
+:py:mod:`ccs_fit.common.math`
+=============================
+
+.. py:module:: ccs_fit.common.math
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   ewald/index.rst
+
+

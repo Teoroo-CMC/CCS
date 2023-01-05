@@ -1,0 +1,18 @@
+:py:mod:`ccs_fit.fitting`
+=========================
+
+.. py:module:: ccs_fit.fitting
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   main/index.rst
+   main copy/index.rst
+   objective/index.rst
+   spline_functions/index.rst
+
+
