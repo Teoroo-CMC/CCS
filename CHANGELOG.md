@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.1 (2023-01-05)
+### Fix
+* Manually bump version number ([`007114e`](https://github.com/Teoroo-CMC/CCS/commit/007114e8a631e3291b2bce8372b4a39a06419a28))
+
 ## v0.11.0 (2023-01-04)
 ### Feature
 * Merging intervals featured completed ([`e1e8f9c`](https://github.com/Teoroo-CMC/CCS/commit/e1e8f9c32782407fa7e36fca0c0f2c908a844479))
