@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ccs"
+name = "ccs_fit"
 version = "0.10.0"
 description = "Fitting tools for repulsive two body interactions using curvature constrained splines."
 authors = [

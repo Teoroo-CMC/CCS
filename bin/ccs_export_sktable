@@ -10,8 +10,8 @@
 
 
 import sys
-from ccs.common.exceptions import ScriptError
-import ccs.scripts.ccs_export_sktable as ccs_export_sktable
+from ccs_fit.common.exceptions import ScriptError
+import ccs_fit.scripts.ccs_export_sktable as ccs_export_sktable
 
 
 try:

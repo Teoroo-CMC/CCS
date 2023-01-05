@@ -5,7 +5,7 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import ccs
+import ccs_fit
 
 def test_import():
-    assert ccs.__name__, "CCS not successfully imported!"
+    assert ccs_fit.__name__, "CCS fit not successfully imported!"
