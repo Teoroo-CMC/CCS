@@ -227,10 +227,12 @@ class Twobody:
                 if rr > 0 and rr < self.Rcut:
                     index = bisect.bisect_left(self.rn, rr)
                     delta = (rr - self.rn[index])
-                    indices.append(index)
-                    bb_ind = -self.B[index - 1]
-                    dd_ind = -self.D[index - 1] * np.power(delta, 2) / 3.0
-                    c_d = -self.C[index - 1] * delta
+                    # INDEX IS SHIFTED IN A,B,C,D
+                    # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
+                    index = index - 1
+                    bb_ind = -self.B[index]
+                    dd_ind = -self.D[index] * np.power(delta, 2) / 3.0
+                    c_d = -self.C[index] * delta
                     c_force = bb_ind + c_d + dd_ind
                     uu_x = uu_x + c_force * rv[0] / rr
                     uu_y = uu_y + c_force * rv[1] / rr

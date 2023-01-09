@@ -13,6 +13,7 @@ from sympy import true
 from tqdm import tqdm
 import itertools
 import random
+import os
 
 
 def pair_dist(atoms, R_c, ch1, ch2, counter):
@@ -36,7 +37,8 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         cell = atoms.get_cell()
         n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
         n_repeat = np.ceil(n_repeat).astype(int)
-        offsets = [*itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
+        offsets = [
+            *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
     except:
         cell = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         offsets = [[0, 0, 0]]
@@ -61,7 +63,8 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         norm_dist = np.linalg.norm(tmp, axis=1)
         dist_mask = norm_dist < R_c
         r_distance.extend(norm_dist[dist_mask].tolist())
-        forces["F" + str(counter) + "_" + str(id)] = np.asarray(tmp[dist_mask]).tolist()
+        forces["F" + str(counter) + "_" + str(id)
+               ] = np.asarray(tmp[dist_mask]).tolist()
 
     if ch1 == ch2:
         r_distance.sort()
@@ -117,7 +120,7 @@ def ccs_fetch(
     counter = -1
     c = OrderedDict()
     d = OrderedDict()
-    for row in tqdm(REF_DB.select(), total=len(DFT_DB), colour="#008080"):
+    for row in tqdm(REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"):
         counter = counter + 1
         if mask[counter]:
             struct = row.toatoms()
@@ -137,7 +140,8 @@ def ccs_fetch(
                 dict_species[elem] += 1
                 if mode == "CCS+Q":
                     struct.charges.append(charge_dict[elem])
-            atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
+            atom_pair = it.combinations_with_replacement(
+                dict_species.keys(), 2)
             if mode == "CCS+Q":
                 lattice = Lattice(struct.get_cell())
                 coords = struct.get_scaled_positions()
@@ -153,7 +157,8 @@ def ccs_fetch(
 
             cf = OrderedDict()
             for i in range(len(struct)):
-                cf["F" + str(counter) + "_" + str(i)] = {"force_dft": list(FREF[i, :])}
+                cf["F" + str(counter) + "_" + str(i)
+                   ] = {"force_dft": list(FREF[i, :])}
             ce["atoms"] = dict_species
             for (x, y) in atom_pair:
                 pair_distances, forces = pair_dist(struct, R_c, x, y, counter)
@@ -174,19 +179,30 @@ def ccs_fetch(
 
 
 def main():
-    print(
-        "--------------------------------------------------------------------------------"
-    )
-    print("  USAGE:  ccs_fetch MODE [...]  ")
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
     print("")
-    print("  The following modes and inputs are supported:")
+    print(txt)
+
+    try:
+        import art
+        txt = art.text2art('CCS:Fetch')
+        print(txt)
+    except:
+        pass
+
+    print("    USAGE:  ccs_fetch MODE [...]  ")
     print("")
-    print("      CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)")
+    print("    The following modes and inputs are supported:")
+    print("")
+    print("        CCS:   CutoffRadius(float) NumberOfSamples(int) DFT.db(string)")
     print(
-        "      CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)"
+        "        CCS+Q: CutoffRadius(float) NumberOfSamples(int) DFT.db(string) charge_dict(string)"
     )
     print(
-        "      DFTB:  CutoffRadius(float) NumberOfSamples(int) DFT.db(string) DFTB.db(string)"
+        "        DFTB:  CutoffRadius(float) NumberOfSamples(int) DFT.db(string) DFTB.db(string)"
     )
     print(" ")
 
@@ -223,11 +239,9 @@ def main():
         print("    DFT reference data base: ", DFT_DB)
         print("    Charge dictionary: ", charge_dict)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
         charge_dict = json.loads(charge_dict)
-        ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns, charge_dict=charge_dict)
+        ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c,
+                  Ns=Ns, charge_dict=charge_dict)
     if mode == "DFTB":
         DFTB_DB = sys.argv[5]
         print("    R_c set to: ", R_c)
@@ -235,10 +249,14 @@ def main():
         print("    DFT reference data base: ", DFT_DB)
         print("    DFTB reference data base: ", DFTB_DB)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
+
         ccs_fetch(mode=mode, DFT_DB=DFT_DB, R_c=R_c, Ns=Ns, DFTB_DB=DFTB_DB)
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print(txt)
+    print("")
 
 
 if __name__ == "__main__":

@@ -88,9 +88,9 @@ class Objective:
             check = 0
             for ci in range(np.shape(self.sto)[1]):
                 if np.linalg.matrix_rank(self.sto[:, 0: ci + 1]) < (ci + 1):
-                    print("There is linear dependence in stochiometry matrix!")
+                    print("    There is linear dependence in stochiometry matrix!")
                     print(
-                        "    removing onebody term: "
+                        "    Removing onebody term: "
                         + self.l_one[ci + n_redundant].name
                     )
                     self.sto = np.delete(self.sto, ci, 1)
@@ -133,7 +133,7 @@ class Objective:
         sol_list = []
 
         for n_switch_id in tqdm(
-            nswitch_list, desc="Finding optimum switch", colour="#800080"
+            nswitch_list, desc="    Finding optimum switch", colour="#800080"
         ):
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
@@ -146,10 +146,12 @@ class Objective:
         mse = np.min(obj)
         opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
-        logger.info(
-            "\n The best switch is : %s and mse : %s", *
-            nswitch_list[opt_sol_index], mse
-        )
+        # logger.info(
+        #     "\n The best switch is : %s with mse: %s", *
+        #     nswitch_list[opt_sol_index], mse
+        # )
+        print(
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} wtih mse: {mse} ")
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
@@ -288,7 +290,6 @@ class Objective:
         counter = -1
         if self.interface == "CCS+Q":
             counter = 0
-            print("Charge scaling squared: ", xx[-1])
             self.charge_scaling = xx[-1] ** 0.5
         for k in range(self.no):
             i = self.no - k - 1
@@ -430,6 +431,9 @@ class Objective:
             footer=footer,
             fmt="%-15.5f",
         )
+
+        print("    Final root mean square error in fit: ", (np.square(error/Natoms)).mean()
+              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]")
 
     def write_error_forces(self, mdl_for, ref_for, fname="error_forces.out"):
         """Prints the errors in a file.

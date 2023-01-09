@@ -52,7 +52,8 @@ def ccs_validate(
     f = open("CCS_validate.dat", "w")
     print("#Reference      Predicted      Error      No_of_atoms structure_no", file=f)
 
-    calc = CCS(CCS_params=CCS_params, charge=charge, q=q, charge_scaling=charge_scaling)
+    calc = CCS(CCS_params=CCS_params, charge=charge,
+               q=q, charge_scaling=charge_scaling)
 
     if Ns != "all":
         Ns = int(Ns)
@@ -74,11 +75,13 @@ def ccs_validate(
                 key = row.key
                 EDFTB = DFTB_DB.get("key=" + str(key)).energy
                 EREF = EDFT - EDFTB
-                sp_calculator = SinglePointCalculator(structure, energy=EDFTB + ECCS)
+                sp_calculator = SinglePointCalculator(
+                    structure, energy=EDFTB + ECCS)
                 structure.calc = sp_calculator
                 structure.get_potential_energy()
 
-            print(EREF, ECCS, np.abs(EREF - ECCS), len(structure), counter, file=f)
+            print(EREF, ECCS, np.abs(EREF - ECCS),
+                  len(structure), counter, file=f)
             try:
                 CCS_DB.write(structure, key=key)
             except:
@@ -86,24 +89,31 @@ def ccs_validate(
 
 
 def main():
-    print(
-        "--------------------------------------------------------------------------------"
-    )
-    print("  USAGE:  ccs_validate MODE [...] ")
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print("")
+    print(txt)
+
+    try:
+        import art
+        txt = art.text2art('CCS:Validate')
+        print(txt)
+    except:
+        pass
+
+    print("    USAGE:  ccs_validate MODE [...] ")
     print(" ")
-    print("  The following modes and inputs are supported:")
+    print("    The following modes and inputs are supported:")
     print("")
-    print("      CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+    print("        CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
     print(
-        "      CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)"
+        "       CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)"
     )
     print(
-        "      DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)"
+        "        DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)"
     )
     print("")
-    print(
-        "--------------------------------------------------------------------------------"
-    )
 
     try:
         assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supproted."
@@ -122,9 +132,7 @@ def main():
         print("    Number of samples: ", Ns)
         print("    DFT reference data base: ", DFT_data)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
+
         ccs_validate(mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data)
     if mode == "DFTB":
         DFTB_data = sys.argv[5]
@@ -132,9 +140,7 @@ def main():
         print("    DFT reference data base: ", DFT_data)
         print("    DFTB reference data base: ", DFTB_data)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
+
         ccs_validate(
             mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data, DFTB_DB=DFTB_data
         )
@@ -154,9 +160,7 @@ def main():
         print("    Charge dictionary: ", charge_dict)
         print("    Charge scaling: ", charge_scaling)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
+
         charge_dict = json.loads(charge_dict)
         ccs_validate(
             mode=mode,
