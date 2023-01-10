@@ -87,10 +87,14 @@ python setup.py install
 --->
 ### Installing from source using poetry
 ```
-git clone https://github.com/Teoroo-CMC/CCS.git CCS
-cd CCS
-conda install poetry
-poetry install 
+git clone https://github.com/Teoroo-CMC/CCS_fit.git ccs_fit
+cd ccs_fit
+
+# Install python package manager poetry (see https://python-poetry.org/docs/ for more explicit installation instructions)
+curl -sSL https://install.python-poetry.org | python3 -
+# You might have to add poetry to your PATH
+poetry --version # to see if poetry installed correctly
+poetry install # to install ccs_fit
 ```
 ### Environment Variables
 Set the following environment variables:
