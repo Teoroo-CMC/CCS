@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.7 (2023-01-11)
+### Fix
+* Added warning to CCS_regressor ([`da9a70d`](https://github.com/Teoroo-CMC/CCS/commit/da9a70d4899f6f8f8cd1f5a4aa01e909411adfb0))
+
 ## v0.11.6 (2023-01-11)
 
 
