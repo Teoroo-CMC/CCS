@@ -159,9 +159,9 @@
             <span class="n">check</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span> <span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">ci</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There is linear dependence in stochiometry matrix!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    There is linear dependence in stochiometry matrix!&quot;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;    removing onebody term: &quot;</span>
+                        <span class="s2">&quot;    Removing onebody term: &quot;</span>
                         <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">[</span><span class="n">ci</span> <span class="o">+</span> <span class="n">n_redundant</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">sto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="p">,</span> <span class="n">ci</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -204,7 +204,7 @@
         <span class="n">sol_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">n_switch_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
-            <span class="n">nswitch_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Finding optimum switch&quot;</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s2">&quot;#800080&quot;</span>
+            <span class="n">nswitch_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;    Finding optimum switch&quot;</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s2">&quot;#800080&quot;</span>
         <span class="p">):</span>
             <span class="p">[</span><span class="n">gg</span><span class="p">,</span> <span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_g</span><span class="p">(</span><span class="n">n_switch_id</span><span class="p">)</span>
             <span class="n">hh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -217,10 +217,12 @@
         <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="n">opt_sol_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">obj</span> <span class="o">==</span> <span class="n">mse</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> The best switch is : </span><span class="si">%s</span><span class="s2"> and mse : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">*</span>
-            <span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">],</span> <span class="n">mse</span>
-        <span class="p">)</span>
+        <span class="c1"># logger.info(</span>
+        <span class="c1">#     &quot;\n The best switch is : %s with mse: %s&quot;, *</span>
+        <span class="c1">#     nswitch_list[opt_sol_index], mse</span>
+        <span class="c1"># )</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;    The best switch is </span><span class="si">{</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">][:]</span><span class="si">}</span><span class="s2"> wtih mse: </span><span class="si">{</span><span class="n">mse</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 
         <span class="p">[</span><span class="n">g_opt</span><span class="p">,</span> <span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_g</span><span class="p">(</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">])</span>
         <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -359,7 +361,6 @@
         <span class="n">counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">:</span>
             <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Charge scaling squared: &quot;</span><span class="p">,</span> <span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">charge_scaling</span> <span class="o">=</span> <span class="n">xx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mf">0.5</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no</span><span class="p">):</span>
             <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span>
@@ -500,7 +501,10 @@
             <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
             <span class="n">footer</span><span class="o">=</span><span class="n">footer</span><span class="p">,</span>
             <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%-15.5f</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Final root mean square error in fit: &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">error</span><span class="o">/</span><span class="n">Natoms</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+              <span class="o">**</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot; (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Objective.write_error_forces"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.write_error_forces">[docs]</a>    <span class="k">def</span> <span class="nf">write_error_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdl_for</span><span class="p">,</span> <span class="n">ref_for</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;error_forces.out&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prints the errors in a file.</span>
