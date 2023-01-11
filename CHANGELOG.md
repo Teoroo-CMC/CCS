@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.9 (2023-01-11)
+### Documentation
+* **README:** Removed shield url in text ([`5dca9e7`](https://github.com/Teoroo-CMC/CCS/commit/5dca9e7ed4967087fa6b1d677003ef140b39fa39))
+
+## v0.11.8 (2023-01-11)
+### Fix
+* Fixed typo in regression.py ([`efa9464`](https://github.com/Teoroo-CMC/CCS/commit/efa94640260e1b30172e9e2c1eae138f5458a057))
+
 ## v0.11.7 (2023-01-11)
 ### Fix
 * Added warning to CCS_regressor ([`da9a70d`](https://github.com/Teoroo-CMC/CCS/commit/da9a70d4899f6f8f8cd1f5a4aa01e909411adfb0))
