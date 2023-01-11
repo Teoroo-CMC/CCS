@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.4 (2023-01-11)
+### Fix
+* Complete merge ([`65df0ee`](https://github.com/Teoroo-CMC/CCS/commit/65df0ee21eb434f769b8fd48ac0cc7c1bf40a95c))
+* Fixed typo in objective.py ([`c0240ac`](https://github.com/Teoroo-CMC/CCS/commit/c0240ac53c96130fc99bf07133f290f60b8ff0ef))
+* Added dependency to poetry lock ([`3caac56`](https://github.com/Teoroo-CMC/CCS/commit/3caac565de7dc4124378ca312744af1ceea39a78))
+* Fixed bugs regarding testing of existing files ([`e794c66`](https://github.com/Teoroo-CMC/CCS/commit/e794c66fc61c35807174b07abb6210848facaf38))
+
+### Documentation
+* Made examples compliant with recent changes ([`9d38851`](https://github.com/Teoroo-CMC/CCS/commit/9d3885140ef51032db58cdf7ee98f8ad8a0bba56))
+
 ## v0.11.3 (2023-01-11)
 
 
