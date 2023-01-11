@@ -5,7 +5,8 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import ccs_fit
+"""Common exceptions needed by the CCS project."""
 
-def test_import():
-    assert ccs_fit.__name__, "CCS fit not successfully imported!"
+
+class ScriptError(Exception):
+    """Exception thrown by the command line scripts."""

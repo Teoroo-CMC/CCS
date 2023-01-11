@@ -5,7 +5,17 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import ccs_fit
+from functools import wraps
+from time import time
 
-def test_import():
-    assert ccs_fit.__name__, "CCS fit not successfully imported!"
+
+def timing(func):
+    @wraps(func)
+    def wrap(*args, **kwargs):
+        time_start = time()
+        result = func(*args, **kwargs)
+        time_end = time()
+        print(f"func {func.__name__} took {time_end-time_start}")
+        return result
+
+    return wrap

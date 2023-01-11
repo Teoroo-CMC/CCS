@@ -1,0 +1,3 @@
+Input_files/S1/VASP/out.xyz   Input_files/S1/DFTB/results.tag
+Input_files/S2/VASP/out.xyz   Input_files/S2/DFTB/results.tag
+Input_files/S3/VASP/out.xyz   Input_files/S3/DFTB/results.tag

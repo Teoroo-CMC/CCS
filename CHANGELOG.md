@@ -2,6 +2,29 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.2 (2023-01-10)
+### Documentation
+* Updated install guidelines in README ([`361b688`](https://github.com/Teoroo-CMC/CCS/commit/361b6881939296e95947b0ca59721d6594d00f76))
+
+## v0.11.1 (2023-01-05)
+### Fix
+* Manually bump version number ([`007114e`](https://github.com/Teoroo-CMC/CCS/commit/007114e8a631e3291b2bce8372b4a39a06419a28))
+
+## v0.11.0 (2023-01-04)
+### Feature
+* Merging intervals featured completed ([`e1e8f9c`](https://github.com/Teoroo-CMC/CCS/commit/e1e8f9c32782407fa7e36fca0c0f2c908a844479))
+
+## v0.10.0 (2023-01-03)
+### Feature
+* Merge implementation of empty intervals in the splines ([`c8d0eff`](https://github.com/Teoroo-CMC/CCS/commit/c8d0eff7a841441fa0f0042468067feafc926ffb))
+
+## v0.9.12 (2023-01-02)
+
+
+## v0.9.11 (2022-12-16)
+### Documentation
+* **README:** Added funding acknowledgement and authors ([`bf8277b`](https://github.com/Teoroo-CMC/CCS/commit/bf8277b97f7588a989b57996a4d47941bf47d699))
+
 ## v0.9.10 (2022-12-08)
 ### Documentation
 * Update README.md to improve installation guide ([`95f9c6c`](https://github.com/Teoroo-CMC/CCS/commit/95f9c6c3b49e3f63da5b7e8a2c5f0d3fd3be1dda))

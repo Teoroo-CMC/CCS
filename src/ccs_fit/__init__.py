@@ -5,7 +5,14 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import ccs_fit
+# read version from installed package
+from importlib.metadata import version
 
-def test_import():
-    assert ccs_fit.__name__, "CCS fit not successfully imported!"
+#__version__ = version("ccs")
+
+# from ccs.ase_calculator.ccs_ase_calculator import CCS
+# from ccs.scripts.ccs_build_db import main as ccs_build_db
+# from ccs.scripts.ccs_export_sktable import main as ccs_export_sktable
+from ccs_fit.scripts.ccs_fetch import ccs_fetch as ccs_fetch
+from ccs_fit.fitting.main import twp_fit as ccs_fit
+# from ccs.scripts.ccs_validate import main as ccs_validate

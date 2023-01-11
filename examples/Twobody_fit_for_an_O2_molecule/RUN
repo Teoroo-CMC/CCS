@@ -1,3 +1,0 @@
-ccs_fit
-ccs_export_sktable CCS_params.json
-splvalue O-O.spl > t

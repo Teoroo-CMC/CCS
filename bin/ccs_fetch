@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #------------------------------------------------------------------------------#
 #  CCS: Curvature Constrained Splines                                          #
-#  Copyright (C) 2019 - 2022  CCS developers group                             #
+#  Copyright (C) 2019 - 2023  CCS developers group                             #
 #                                                                              #
 #  See the LICENSE file for terms of usage and distribution.                   #
 #------------------------------------------------------------------------------#
@@ -10,8 +10,8 @@
 
 
 import sys
-from ccs.common.exceptions import ScriptError
-import ccs.scripts.ccs_fetch as ccs_fetch
+from ccs_fit.common.exceptions import ScriptError
+import ccs_fit.scripts.ccs_fetch as ccs_fetch
 
 
 try:

@@ -5,7 +5,18 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import ccs_fit
+"""
+Conversion factory required by the CCS project.
+"""
 
-def test_import():
-    assert ccs_fit.__name__, "CCS fit not successfully imported!"
+from scipy.constants import value, angstrom
+
+# Bohr --> Angstrom
+Bohr__AA = value('Bohr radius')/angstrom  # 0.529177249 
+# Angstrom --> Bohr
+AA__Bohr = 1.0 / Bohr__AA
+
+# Hartree --> eV
+Hartree__eV = value('hartree-electron volt relationship') # 27.2113845
+# eV --> Hartree
+eV__Hartree = 1.0 / Hartree__eV
