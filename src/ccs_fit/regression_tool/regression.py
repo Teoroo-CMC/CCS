@@ -52,7 +52,7 @@ class CCS_regressor:
         self.N = N_new
         self.dx = dx_new
         self.C, self.D, self.B, self.A = self.spline_construction(self.N)
-        print("Merging intervall. N reduced to: ", self.N)
+        print("Merging interval. N reduced to: ", self.N)
 
     def rubber_band(self):
         pass
