@@ -96,18 +96,17 @@
     <span class="n">AUtoEvA</span> <span class="o">=</span> <span class="n">Hartree</span> <span class="o">/</span> <span class="n">Bohr</span>
 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;DFT data-base allready exists. Please delete the file or use another file name.&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;DFT database already exists. Please delete the file or use another file name.&quot;</span>
         <span class="p">)</span>
-        <span class="n">exit</span><span class="p">()</span>
+        
     <span class="n">DFT_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;DFTB data-base allready exists. Please delete the file or use another file name.&quot;</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;DFTB database already exists. Please delete the file or use another file name.&quot;</span>
             <span class="p">)</span>
-            <span class="n">exit</span><span class="p">()</span>
         <span class="n">DFTB_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -240,11 +239,8 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        DFTB: file_list(string) DFT.db(string) DFTB.db(string)&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CCS&quot;</span><span class="p">,</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">,</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">],</span> <span class="s2">&quot;Mode not supproted.&quot;</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">exit</span><span class="p">()</span>
-
+    <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CCS&quot;</span><span class="p">,</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">,</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">],</span> <span class="s2">&quot;Mode not supported.&quot;</span>
+    
     <span class="n">mode</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">file_list</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">DFT_data</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>

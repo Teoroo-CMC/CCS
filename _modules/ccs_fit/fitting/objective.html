@@ -222,7 +222,7 @@
         <span class="c1">#     nswitch_list[opt_sol_index], mse</span>
         <span class="c1"># )</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;    The best switch is </span><span class="si">{</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">][:]</span><span class="si">}</span><span class="s2"> wtih mse: </span><span class="si">{</span><span class="n">mse</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;    The best switch is </span><span class="si">{</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">][:]</span><span class="si">}</span><span class="s2"> with mse: </span><span class="si">{</span><span class="n">mse</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 
         <span class="p">[</span><span class="n">g_opt</span><span class="p">,</span> <span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_g</span><span class="p">(</span><span class="n">nswitch_list</span><span class="p">[</span><span class="n">opt_sol_index</span><span class="p">])</span>
         <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
