@@ -1,8 +1,11 @@
 # ------------------------------------------------------------------------------#
-#  CCS: Curvature Constrained Splines                                          #
-#  Copyright (C) 2019 - 2023  CCS developers group                             #
-#                                                                              #
-#  See the LICENSE file for terms of usage and distribution.                   #
+#  CCS: Curvature Constrained Splines                                           #
+#  Copyright (C) 2019 - 2023  CCS developers group                              #
+#                                                                               #
+#  See the LICENSE file for terms of usage and distribution.                    #
+#                                                                               #
+#  The code below is not well-tested, so use at your own disclosure.            #
+#                                                                               #
 # ------------------------------------------------------------------------------#
 
 import bisect
@@ -22,6 +25,7 @@ class CCS_regressor:
             self.dx = (self.xmax - self.xmin) * self.dx / np.sum(self.dx)
         self.eps = eps
         self.C, self.D, self.B, self.A = self.spline_construction(self.N)
+        print("WARNING: THE CCS_REGRESSOR HAS NOT BEEN TESTED, USE AT YOUR OWN DISCLOSURE")
 
     def merge_intervals(self, x):
         dx = self.dx
