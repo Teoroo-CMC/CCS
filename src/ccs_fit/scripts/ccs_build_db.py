@@ -25,18 +25,17 @@ def ccs_build_db(
     AUtoEvA = Hartree / Bohr
 
     if os.path.isfile(DFT_DB):
-        print(
-            "DFT data-base allready exists. Please delete the file or use another file name."
+        raise Exception(
+            "DFT database already exists. Please delete the file or use another file name."
         )
-        exit()
+        
     DFT_DB = db.connect(DFT_DB)
 
     if mode == "DFTB":
         if os.path.isfile(DFTB_DB):
-            print(
-                "DFTB data-base allready exists. Please delete the file or use another file name."
+            raise Exception(
+                "DFTB database already exists. Please delete the file or use another file name."
             )
-            exit()
         DFTB_DB = db.connect(DFTB_DB)
 
     try:
@@ -161,11 +160,8 @@ def main():
         "--------------------------------------------------------------------------------"
     )
 
-    try:
-        assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supproted."
-    except:
-        exit()
-
+    assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supported."
+    
     mode = sys.argv[1]
     file_list = sys.argv[2]
     DFT_data = sys.argv[3]
