@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.5 (2023-01-11)
+
+
 ## v0.11.4 (2023-01-11)
 ### Fix
 * Complete merge ([`65df0ee`](https://github.com/Teoroo-CMC/CCS/commit/65df0ee21eb434f769b8fd48ac0cc7c1bf40a95c))
