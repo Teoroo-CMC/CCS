@@ -151,7 +151,7 @@ class Objective:
         #     nswitch_list[opt_sol_index], mse
         # )
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} wtih mse: {mse} ")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse} ")
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
