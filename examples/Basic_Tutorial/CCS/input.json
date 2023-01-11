@@ -1,0 +1,17 @@
+{
+        "General": {
+                "interface": "CCS"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep"
+                },
+                "Cl-Na": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw"
+                }
+        }
+}

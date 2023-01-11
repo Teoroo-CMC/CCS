@@ -1,0 +1,33 @@
+{
+        "General": {
+                "interface": "CCS",
+                "ewald_scaling": 1.0,
+                "merging": "False"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "Cl-Na": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "Rmin": 1.031373437426244
+                },
+                "Cl-Cl": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "Rmin": 1.2326634553294729
+                },
+                "Na-Na": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "Rmin": 1.6640728440243107
+                }
+        },
+        "Onebody": [
+                "Cl",
+                "Na"
+        ]
+}

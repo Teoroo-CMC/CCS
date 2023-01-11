@@ -1,0 +1,77 @@
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
+INFO:ccs_fit.fitting.main:Generating one-body information from training-set.
+INFO:ccs_fit.fitting.main:    Added elements: ['O', 'Zn']
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-Zn
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: O-O
+INFO:ccs_fit.fitting.spline_functions:Applying monotonous constraints for pair: Zn-Zn
+DEBUG:ccs_fit.fitting.objective:The reference energy : 
+ [-1529.90762015, -1531.1362632, -1531.15534964, -1531.52778012, -1537.55479646, -1537.44478627, -1533.41834994, -1538.40910229, -1538.25053292, -1529.59695702, -1525.62681763, -1530.69375311, -1530.7968561, -1537.56037186, -1533.25724957, -1527.55831186, -1534.25691599, -1533.84957377] 
+ Number of pairs:3
+DEBUG:ccs_fit.fitting.objective:
+ Shape of M matrix is : (18, 166)
+INFO:ccs_fit.fitting.objective:positive definite:False
