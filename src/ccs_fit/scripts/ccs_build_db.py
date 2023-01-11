@@ -47,7 +47,7 @@ def ccs_build_db(
     f = open(file_list, "r")
 
     counter = 0
-    for lns in tqdm(f, total=L):
+    for lns in tqdm(f, total=L, desc="    Building data-bases",):
         counter += 1
         lns = lns.split()
         DFT_FOLDER = lns[0]
@@ -84,7 +84,7 @@ def ccs_build_db(
                     converged_indices.append(i)
                     previous_E = all_energies[i]
 
-            for i in tqdm(converged_indices):
+            for i in converged_indices:
                 counter += 1
                 structure_DFT = read(DFT_FOLDER, index=i)
                 EDFT = structure_DFT.get_potential_energy()
@@ -146,19 +146,27 @@ def ccs_build_db(
 
 
 def main():
-    print(
-        "--------------------------------------------------------------------------------"
-    )
-    print("  USAGE:  ccs_build_db MODE [...] ")
-    print(" ")
-    print("  The following modes and inputs are supported:")
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
     print("")
-    print("      CCS:  file_list(string) DFT.db(string) greedy(bool)")
-    print("      DFTB: file_list(string) DFT.db(string) DFTB.db(string)")
+    print(txt)
+
+    try:
+        import art
+        txt = art.text2art('CCS:Build DB')
+        print(txt)
+    except:
+        pass
+
+    print("    USAGE:  ccs_build_db MODE [...] ")
     print(" ")
-    print(
-        "--------------------------------------------------------------------------------"
-    )
+    print("    The following modes and inputs are supported:")
+    print("")
+    print("        CCS:  file_list(string) DFT.db(string) greedy(bool)")
+    print("        DFTB: file_list(string) DFT.db(string) DFTB.db(string)")
+    print(" ")
 
     assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supported."
     
@@ -171,19 +179,22 @@ def main():
         print("    DFT data base: ", DFT_data)
         print("    Greedy mode: ", greedy)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
+
         ccs_build_db(mode, DFT_DB=DFT_data, file_list=file_list, greedy=greedy)
     if mode == "DFTB":
         DFTB_data = sys.argv[4]
         print("    DFT data base: ", DFT_data)
         print("    DFTB data base: ", DFTB_data)
         print("")
-        print(
-            "--------------------------------------------------------------------------------"
-        )
-        ccs_build_db(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list)
+
+        ccs_build_db(mode, DFT_DB=DFT_data,
+                     DFTB_DB=DFTB_data, file_list=file_list)
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print(txt)
+    print("")
 
 
 if __name__ == "__main__":

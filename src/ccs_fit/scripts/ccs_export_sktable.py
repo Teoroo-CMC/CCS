@@ -1,4 +1,5 @@
 import sys
+import os
 import numpy as np
 import itertools as it
 from collections import OrderedDict, defaultdict
@@ -103,11 +104,31 @@ def write_dftb_spline(CCS_params_file):
 
 
 def main():
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print("")
+    print(txt)
+
+    try:
+        import art
+        txt = art.text2art('CCS:export sk-table')
+        print(txt)
+    except:
+        pass
+
     try:
         CCS_params_file = sys.argv[1]
     except:
         print("Please provide CCS params-file as first argument.")
         exit()
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print(txt)
+    print("")
 
     write_dftb_spline(CCS_params_file)
 

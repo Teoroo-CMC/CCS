@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.3 (2023-01-11)
+
+
+## v0.11.2 (2023-01-10)
+### Documentation
+* Updated install guidelines in README ([`361b688`](https://github.com/Teoroo-CMC/CCS/commit/361b6881939296e95947b0ca59721d6594d00f76))
+
 ## v0.11.1 (2023-01-05)
 ### Fix
 * Manually bump version number ([`007114e`](https://github.com/Teoroo-CMC/CCS/commit/007114e8a631e3291b2bce8372b4a39a06419a28))

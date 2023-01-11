@@ -104,15 +104,15 @@ def prepare_input(filename):
     try:
         data["Onebody"]
     except:
-        print("Generating one-body information from training-set.")
-        print("    Added elements: ", elements)
+        print("    Generating one-body information from training-set.")
+        print("        Added elements: ", elements)
         logger.info("Generating one-body information from training-set.")
         logger.info(f"    Added elements: {elements}")
         # list is now redundant here, but kept for future reference
         data["Onebody"] = list(elements)
 
     if "Xx-Xx" in data["Twobody"]:
-        print("Generating two-body potentials from one-body information.")
+        print("    Generating two-body potentials from one-body information.")
         logger.info("Generating two-body potentials from one-body information.")
 
     for atom_i in data["Onebody"]:
@@ -223,13 +223,13 @@ def parse(data, struct_data, struct_data_forces):
                     (np.asarray(ref_energies), np.asarray(dftb_energies))
                 )
                 ref_energies = energies[0] - energies[1]
-                if data["General"]["interface"] == "DFTB+":
-                    # convert energies from eV to Hartree and Ang to Bohr
-                    ref_energies = ref_energies * eV__Hartree
-                    list_dist = [
-                        [element / Bohr__AA for element in elements]
-                        for elements in list_dist
-                    ]
+                # if data["General"]["interface"] == "DFTB+":
+                #     # convert energies from eV to Hartree and Ang to Bohr
+                #     ref_energies = ref_energies * eV__Hartree
+                #     list_dist = [
+                #         [element / Bohr__AA for element in elements]
+                #         for elements in list_dist
+                #     ]
 
             if data["General"]["interface"] == "CCS2Q":
                 assert len(ref_energies) == len(ewald_energies)

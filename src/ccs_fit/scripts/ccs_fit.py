@@ -12,6 +12,7 @@ Functionality to fit curvature constraint splines.
 
 import logging
 import argparse
+import os
 
 from ccs_fit.fitting.main import twp_fit
 
@@ -33,8 +34,27 @@ def main(cmdlineargs=None):
 
     """
 
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print("")
+    print(txt)
+
+    try:
+        import art
+        txt = art.text2art('CCS:Fit')
+        print(txt)
+    except:
+        pass
+
     args = parse_cmdline_args(cmdlineargs)
     ccs_fit(args)
+
+    size = os.get_terminal_size()
+    c = size.columns
+    txt = "-"*c
+    print(txt)
+    print("")
 
 
 def parse_cmdline_args(cmdlineargs=None):
