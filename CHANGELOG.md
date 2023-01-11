@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.10 (2023-01-11)
+### Documentation
+* Removed redundant notebook examples ([`e5c5380`](https://github.com/Teoroo-CMC/CCS/commit/e5c5380f884fea89bab2178fe0f970c3d85af3ec))
+* Removed redundant example notebooks ([`f430b74`](https://github.com/Teoroo-CMC/CCS/commit/f430b74033dce897cf93b9cf93b6a6295a3b535c))
+
 ## v0.11.9 (2023-01-11)
 ### Documentation
 * **README:** Removed shield url in text ([`5dca9e7`](https://github.com/Teoroo-CMC/CCS/commit/5dca9e7ed4967087fa6b1d677003ef140b39fa39))
