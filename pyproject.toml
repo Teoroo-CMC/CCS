@@ -8,7 +8,8 @@ authors = [
     "Eddie Wadbro <eddie.wadbro@umu.se>"
     ]
 maintainers = [
-    "Jolla Kullgren <jolla.kullgren@kemi.uu.se>"
+    "Jolla Kullgren <jolla.kullgren@kemi.uu.se>",
+    "Thijs Smolders <thijs.smolders@kemi.uu.se>"
     ]
 license = "GPL-3"
 readme = "README.md"
@@ -48,3 +49,7 @@ upload_to_release = true                    # auto-create GitHub release
 upload_to_pypi = false                      # don't auto-upload to PyPI
 remove_dist = false                         # don't remove dists
 patch_without_tag = true                    # patch release by default
+
+[project.urls]
+"Homepage" = "https://github.com/Teoroo-CMC/CCS"
+"Documentation" = "https://teoroo-cmc.github.io/CCS/index.html"
