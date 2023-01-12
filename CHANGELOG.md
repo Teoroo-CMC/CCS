@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.15 (2023-01-12)
+### Documentation
+* Adding metadata to pyproject.toml ([`c35ac7a`](https://github.com/Teoroo-CMC/CCS/commit/c35ac7ac6c06f86fecf16fea345c15daf3542e93))
+
 ## v0.11.14 (2023-01-12)
 
 
