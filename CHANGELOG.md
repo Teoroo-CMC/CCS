@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.13 (2023-01-12)
+### Documentation
+* Updated installation guide with pip ([`65ca509`](https://github.com/Teoroo-CMC/CCS/commit/65ca50983042b185b737bd54c03db620a9591087))
+
 ## v0.11.12 (2023-01-12)
 
 
