@@ -85,6 +85,10 @@ cd CCS
 python setup.py install
 ```
 --->
+
+### (Recommended) installing from pip
+pip install ccs_fit
+
 ### Installing from source using poetry
 ```
 git clone https://github.com/Teoroo-CMC/CCS_fit.git ccs_fit
@@ -129,7 +133,7 @@ We provide tutorials in the [examples](examples/) folder. To run the example, go
 }
 
 ```
-The `CCS_input.json` file should provide at a minimum the block "Genaral" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
+The `CCS_input.json` file should provide at a minimum the block "General" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
 ```
 {
 "energies":{
