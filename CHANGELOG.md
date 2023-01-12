@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.11 (2023-01-12)
+
+
 ## v0.11.10 (2023-01-11)
 ### Documentation
 * Removed redundant notebook examples ([`e5c5380`](https://github.com/Teoroo-CMC/CCS/commit/e5c5380f884fea89bab2178fe0f970c3d85af3ec))
