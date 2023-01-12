@@ -13,6 +13,13 @@ maintainers = [
     ]
 license = "GPL-3"
 readme = "README.md"
+homepage = "https://github.com/Teoroo-CMC/CCS"
+repository = "https://github.com/Teoroo-CMC/CCS"
+documentation = "https://teoroo-cmc.github.io/CCS/index.html"
+keywords = ["Curvature", "Constrained", "Splines", "Two-Body", "Interatomic", "Repulsive", "Fitting"]
+classifiers = [
+	"Development Status :: 4 - Beta"
+]
 
 [tool.poetry.dependencies]
 python = ">=3.9"
