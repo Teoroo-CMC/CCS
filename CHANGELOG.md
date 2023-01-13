@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.18 (2023-01-13)
+
+
 ## v0.11.17 (2023-01-13)
 ### Documentation
 * Adding pymatgen and scikit-learn installation instructions to examples ([`8643266`](https://github.com/Teoroo-CMC/CCS/commit/86432662597d1c1d59ee7a895b548d48c9ba4dfe))
