@@ -94,7 +94,7 @@
 
 
 <div class="viewcode-block" id="Twobody"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Twobody">[docs]</a><span class="k">class</span> <span class="nc">Twobody</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Twobody class that describes properties of an Atom pair.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Twobody class that describes properties of an Atom pair.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -107,7 +107,7 @@
         <span class="n">Resolution</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">const_type</span><span class="o">=</span><span class="s2">&quot;mono&quot;</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs a Twobody object.</span>
 
 <span class="sd">        Input</span>
@@ -214,7 +214,7 @@
         <span class="k">return</span> <span class="n">g</span></div>
 
 <div class="viewcode-block" id="Twobody.spline_construction"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Twobody.spline_construction">[docs]</a>    <span class="k">def</span> <span class="nf">spline_construction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This function constructs the matrices A, B, C, D.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function constructs the matrices A, B, C, D.&quot;&quot;&quot;</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">rn</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">rn</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)])</span>
         <span class="c1">#dx = np.insert(dx, 0, self.res)</span>
 
@@ -240,7 +240,7 @@
         <span class="k">return</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">aa</span></div>
 
 <div class="viewcode-block" id="Twobody.get_v"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Twobody.get_v">[docs]</a>    <span class="k">def</span> <span class="nf">get_v</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs the v matrix.</span>
 
 <span class="sd">        Returns</span>
@@ -276,7 +276,7 @@
         <span class="k">return</span> <span class="n">vv</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Twobody.get_v_forces"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Twobody.get_v_forces">[docs]</a>    <span class="k">def</span> <span class="nf">get_v_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs the v matrix.</span>
 
 <span class="sd">        Returns:</span>
@@ -341,7 +341,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">splcoeffs</span> <span class="o">=</span> <span class="n">spl</span></div>
 
 <div class="viewcode-block" id="Twobody.get_expcoeffs"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Twobody.get_expcoeffs">[docs]</a>    <span class="k">def</span> <span class="nf">get_expcoeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculates coefficients of exponential function.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculates coefficients of exponential function.</span>
 
 <span class="sd">        Args:</span>
 
@@ -370,10 +370,10 @@
 
 
 <div class="viewcode-block" id="Onebody"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/spline_functions/index.html#ccs_fit.fitting.spline_functions.Onebody">[docs]</a><span class="k">class</span> <span class="nc">Onebody</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Onebody class that describes properties of an atom.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Onebody class that describes properties of an atom.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">stomat</span><span class="p">,</span> <span class="n">epsilon_supported</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Constructs a Onebody object.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs a Onebody object.</span>
 
 <span class="sd">        Args:</span>
 

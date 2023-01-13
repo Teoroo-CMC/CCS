@@ -94,7 +94,7 @@
 
 
 <div class="viewcode-block" id="Objective"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective">[docs]</a><span class="k">class</span> <span class="nc">Objective</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Objective function for the ccs method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Objective function for the ccs method.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -107,7 +107,7 @@
         <span class="n">ewald</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">ewald_forces</span><span class="o">=</span><span class="p">[],</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates Objective class object.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates Objective class object.</span>
 
 <span class="sd">        Args:</span>
 
@@ -178,7 +178,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cols_sto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sto</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Objective.solution"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.solution">[docs]</a>    <span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function to solve the objective with constraints.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to solve the objective with constraints.&quot;&quot;&quot;</span>
 
         <span class="c1"># COMMENTS MERGING THE INTERVALS</span>
         <span class="k">try</span><span class="p">:</span>
@@ -269,7 +269,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span><span class="p">,</span> <span class="n">mse</span><span class="p">,</span> <span class="n">xx</span></div>
 
 <div class="viewcode-block" id="Objective.predict"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Predict results.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict results.</span>
 
 <span class="sd">        Args:</span>
 
@@ -295,7 +295,7 @@
 
 <div class="viewcode-block" id="Objective.solver"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.solver">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">solver</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot;The solver for the objective.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The solver for the objective.</span>
 
 <span class="sd">        Args:</span>
 
@@ -340,7 +340,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">dissolve_interval</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Objective.eval_obj"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.eval_obj">[docs]</a>    <span class="k">def</span> <span class="nf">eval_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Mean squared error function.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mean squared error function.</span>
 
 <span class="sd">        Args:</span>
 
@@ -379,7 +379,7 @@
             <span class="c1"># self.l_twb[ii].get_expcoeffs()</span>
 
 <div class="viewcode-block" id="Objective.list_iterator"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.list_iterator">[docs]</a>    <span class="k">def</span> <span class="nf">list_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Iterates over the self.np attribute.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterates over the self.np attribute.&quot;&quot;&quot;</span>
 
         <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
@@ -395,7 +395,7 @@
         <span class="k">return</span> <span class="n">n_list</span></div>
 
 <div class="viewcode-block" id="Objective.get_m"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.get_m">[docs]</a>    <span class="k">def</span> <span class="nf">get_m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the M matrix.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the M matrix.</span>
 
 <span class="sd">        Returns:</span>
 
@@ -449,7 +449,7 @@
         <span class="k">return</span> <span class="n">mm</span></div>
 
 <div class="viewcode-block" id="Objective.get_g"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.get_g">[docs]</a>    <span class="k">def</span> <span class="nf">get_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_switch</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns constraints matrix.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns constraints matrix.</span>
 
 <span class="sd">        Args:</span>
 
@@ -474,7 +474,7 @@
         <span class="k">return</span> <span class="n">gg</span><span class="p">,</span> <span class="n">aa</span></div>
 
 <div class="viewcode-block" id="Objective.write_error"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.write_error">[docs]</a>    <span class="k">def</span> <span class="nf">write_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;CCS_error.out&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Prints the errors in a file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prints the errors in a file.</span>
 
 <span class="sd">        Args:</span>
 
@@ -507,7 +507,7 @@
               <span class="o">**</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot; (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Objective.write_error_forces"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/objective/index.html#ccs_fit.fitting.objective.Objective.write_error_forces">[docs]</a>    <span class="k">def</span> <span class="nf">write_error_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdl_for</span><span class="p">,</span> <span class="n">ref_for</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;error_forces.out&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Prints the errors in a file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prints the errors in a file.</span>
 
 <span class="sd">        Args:</span>
 
