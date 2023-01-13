@@ -16,7 +16,7 @@ The `CCS_fit` package is a tool to construct two-body potentials using the idea 
 ### Package Layout
 
 ```
-ccs-x.y.z
+ccs_fit-x.y.z
 ├── CHANGELOG.md
 ├── LICENSE
 ├── MANIFEST.in
@@ -59,7 +59,7 @@ ccs-x.y.z
 ```
 
 * `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.
-* `ccs_fit`             - The primary executable file for the ccs package.
+* `ccs_fit`             - The primary executable file for the ccs_fit package.
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.
 * `spline_functions.py` - A module for spline construction/evaluation/output. 
