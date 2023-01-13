@@ -1,4 +1,4 @@
-# CCS - Curvature Constrained Splines  
+# CCS_fit - Fitting using Curvature Constrained Splines  
 
 [![Latest Release](https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&color=brightgreen&sort=semver)](https://github.com/Teoroo-CMC/CCS/releases/latest)
 [![License](https://img.shields.io/github/license/teoroo-cmc/ccs)](https://opensource.org/licenses/LGPL-3.0)
@@ -11,7 +11,7 @@
 [![Coverage](codecov.io/gh/:vcsName/:user/:repo?flag=flag_name&token=a1b2c3d4e5)(https://github.com/Teoroo-CMC/CCS/actions)
 --->
 
-The `CCS` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
+The `CCS_fit` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
 ### Package Layout
 
