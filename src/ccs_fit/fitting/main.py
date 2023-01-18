@@ -223,13 +223,6 @@ def parse(data, struct_data, struct_data_forces):
                     (np.asarray(ref_energies), np.asarray(dftb_energies))
                 )
                 ref_energies = energies[0] - energies[1]
-                # if data["General"]["interface"] == "DFTB+":
-                #     # convert energies from eV to Hartree and Ang to Bohr
-                #     ref_energies = ref_energies * eV__Hartree
-                #     list_dist = [
-                #         [element / Bohr__AA for element in elements]
-                #         for elements in list_dist
-                #     ]
 
             if data["General"]["interface"] == "CCS2Q":
                 assert len(ref_energies) == len(ewald_energies)
@@ -286,11 +279,40 @@ def parse(data, struct_data, struct_data_forces):
                         list_dist_forces.append([0.0, 0.0, 0.0])
 
                 if counter1 == 1:
-                    try:
-                        ref_forces.append(ff["force_dft"])
-                    except KeyError:
-                        logger.critical(" Check force key in structure file")
-                        raise
+                    if data["General"]["interface"] == "CCS":
+                        try:
+                            ref_forces.append(ff["force_dft"])
+                        except KeyError:
+                            logger.critical(
+                                " Check force key in structure file")
+                            raise
+                    if "DFTB" in data["General"]["interface"]:
+                        try:
+                            ff_tmp = np.array(
+                                ff["force_dft"])-np.array(ff["force_dftb"])
+                            ref_forces.append(ff_tmp)
+                        except KeyError:
+                            logger.critical(
+                                " Check force key in structure file")
+                            raise
+                    if data["General"]["interface"] == "CCS+Q":
+                        try:
+                            ref_forces.append(ff["force_dft"])
+                            ewald_forces.append(ff["force_ewald"])
+                        except KeyError:
+                            logger.critical(
+                                " Check force key in structure file")
+                            raise
+                    if data["General"]["interface"] == "CCS+fQ":
+                        try:
+                            ff_tmp = np.array(
+                                ff["force_dft"]) - data["General"]["ewald_scaling"]*np.array(ff["force_ewald"])
+                            ref_forces.append(ff_tmp)
+                        except KeyError:
+                            logger.critical(
+                                " Check force key in structure file")
+                            raise
+
             dist_mat_forces = pd.DataFrame(list_dist_forces)
             dist_mat_forces = dist_mat_forces.fillna(0.0)
             dist_mat_forces = dist_mat_forces.values
@@ -364,8 +386,8 @@ def twp_fit(filename):
         ref_energies,
         ref_forces,
         data["General"],
-        ewald=ewald_energies,
-        ewald_forces=ewald_forces,
+        energy_ewald=ewald_energies,
+        force_ewald=ewald_forces,
     )
 
     # Solve QP problem

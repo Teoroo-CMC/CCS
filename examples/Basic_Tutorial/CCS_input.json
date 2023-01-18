@@ -1,0 +1,12 @@
+{
+        "General": {
+                "interface": "CCS"
+        },
+        "Twobody": {
+                "Ne-Ne": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.01,
+                        "Swtype": "sw"
+                }
+        }
+}

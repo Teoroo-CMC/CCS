@@ -20,23 +20,31 @@ def ccs_build_db(
     file_list=None,
     greedy=False,
     greed_threshold=0.0001,
+    overwrite=False,
+    verbose=False,
 ):
 
     AUtoEvA = Hartree / Bohr
 
     if os.path.isfile(DFT_DB):
-        print(
-            "DFT data-base allready exists. Please delete the file or use another file name."
-        )
-        exit()
+        if overwrite:
+            os.remove(DFT_DB)
+        else:
+            print(
+                "DFT data-base allready exists. Please delete the file or use another file name."
+            )
+            sys.exit()
     DFT_DB = db.connect(DFT_DB)
 
     if mode == "DFTB":
         if os.path.isfile(DFTB_DB):
-            print(
-                "DFTB data-base allready exists. Please delete the file or use another file name."
-            )
-            exit()
+            if overwrite:
+                os.remove(DFTB_DB)
+            else:
+                print(
+                    "DFTB data-base allready exists. Please delete the file or use another file name."
+                )
+                sys.exit()
         DFTB_DB = db.connect(DFTB_DB)
 
     try:
@@ -147,19 +155,37 @@ def ccs_build_db(
 
 
 def main():
-
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print("")
-    print(txt)
+    import argparse
 
     try:
+        size = os.get_terminal_size()
+        c = size.columns
+        txt = "-"*c
+        print("")
+        print(txt)
         import art
         txt = art.text2art('CCS:Build DB')
         print(txt)
     except:
         pass
+
+    parser = argparse.ArgumentParser(description='CCS fetching tool')
+    parser.add_argument("-m", "--mode",         type=str, metavar="",
+                        default='CCS',  help="Mode. Availble option: CCS, DFTB")
+    parser.add_argument("-d", "--DFT_DB", type=str, metavar="",
+                        default='DFT.db',  help="Name of DFT reference data-base")
+    parser.add_argument("-dd", "--DFTB_DB", type=str, metavar="",
+                        default=None,  help="Name of DFTB reference data-base")
+    parser.add_argument("-g", "--greedy", type=bool,  metavar="",
+                        default=False, help="Extract geometry optmization steps from OUTCAR")
+    parser.add_argument("-gt", "--greed_threshold", type=float, metavar="",
+                        default=0.0001, help="minimum energy difference between steps extracted using option -g")
+    parser.add_argument("-v", "--verbose",
+                        action="store_true", help="Verbose output")
+
+    args = parser.parse_args()
+
+    ccs_build_db(**vars(args))
 
     print("    USAGE:  ccs_build_db MODE [...] ")
     print(" ")
@@ -194,11 +220,14 @@ def main():
         ccs_build_db(mode, DFT_DB=DFT_data,
                      DFTB_DB=DFTB_data, file_list=file_list)
 
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print(txt)
-    print("")
+    try:
+        size = os.get_terminal_size()
+        c = size.columns
+        txt = "-"*c
+        print(txt)
+        print("")
+    except:
+        pass
 
 
 if __name__ == "__main__":

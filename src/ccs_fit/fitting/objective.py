@@ -33,8 +33,8 @@ class Objective:
         energy_ref,
         force_ref,
         gen_params,
-        ewald=[],
-        ewald_forces=[],
+        energy_ewald=[],
+        force_ewald=[],
     ):
         """Generates Objective class object.
 
@@ -61,9 +61,20 @@ class Objective:
         self.force_ref = np.array(
             [*self.force_ref_x, *self.force_ref_y, *self.force_ref_z]
         )
-
         self.ref = np.hstack((self.energy_ref, self.force_ref))
-        self.ewald = np.array(ewald).reshape(-1, 1)
+
+        # WHY DO I NEED TO FLATTEN?
+        self.ewald_energy = np.array(energy_ewald).reshape(-1, 1).flatten()
+        self.force_ewald_x = [x[0] for x in force_ewald]
+        self.force_ewald_y = [y[1] for y in force_ewald]
+        self.force_ewald_z = [z[2] for z in force_ewald]
+        self.force_ewald = np.array(
+            [*self.force_ewald_x, *self.force_ewald_y, *self.force_ewald_z]
+        )
+
+        # WHY DO I NEED TO FLATTEN?
+        self.ewald = np.hstack((self.ewald_energy, self.force_ewald)).flatten()
+
         self.charge_scaling = 0.0
 
         for kk, vv in gen_params.items():
@@ -167,7 +178,7 @@ class Objective:
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
-                -3 * self.mm[-self.l_twb[0].Nconfs_forces: -1, :].dot(xx)
+                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
             )
             self.write_error_forces(model_forces, self.force_ref)
 
@@ -222,7 +233,7 @@ class Objective:
         self.write_error(fname="error_test.out")
         return self.model_energies, error
 
-    @staticmethod
+    @ staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
         """The solver for the objective.
 
@@ -339,11 +350,6 @@ class Objective:
         vv = np.hstack([*tmp])
         mm = np.hstack((vv, self.sto))
 
-        Q = 0
-        if self.interface == "CCS+Q":
-            mm = np.hstack((mm, self.ewald))
-            Q = 1
-
         # Add force data
         tmp = []
         for ii in range(self.np):
@@ -351,7 +357,7 @@ class Objective:
         fvv_x = np.hstack([*tmp])
         fvv_x = np.hstack(
             (fvv_x, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         mm = np.vstack((mm, fvv_x))
 
@@ -361,7 +367,7 @@ class Objective:
         fvv_y = np.hstack([*tmp])
         fvv_y = np.hstack(
             (fvv_y, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         mm = np.vstack((mm, fvv_y))
 
@@ -371,9 +377,13 @@ class Objective:
         fvv_z = np.hstack([*tmp])
         fvv_z = np.hstack(
             (fvv_z, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1] + Q)))
+                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         mm = np.vstack((mm, fvv_z))
+
+        if self.interface == "CCS+Q":
+            # THIS IS A BIT AKWARD CAN IT BE FIXED?
+            mm = np.hstack((mm, np.atleast_2d(self.ewald).T))
 
         return mm
 
@@ -435,7 +445,7 @@ class Objective:
         print("    Final root mean square error in fit: ", (np.square(error/Natoms)).mean()
               ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]")
 
-    def write_error_forces(self, mdl_for, ref_for, fname="error_forces.out"):
+    def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
         """Prints the errors in a file.
 
         Args:
@@ -448,13 +458,12 @@ class Objective:
         """
         header = "{:<15}{:<15}{:<15}".format("Reference", "Predicted", "Error")
         error = abs(ref_for - mdl_for)
-        print(error)
         maxerror = max(abs(error))
         mse = ((error) ** 2).mean()
 
-        # footer = 'Maxerror = {:2.5E}'.format(maxerror)
-        # np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
-        #           footer=footer, fmt='%-15.5f')
+        footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
+        np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
+                   footer=footer, fmt='%-15.5f')
 
     def write_CCS_params(self):
 

@@ -74,7 +74,8 @@ class Twobody:
         self.C, self.D, self.B, self.A = self.spline_construction()
         self.vv, self.indices = self.get_v()
         self.const = self.get_const()
-        self.fvv_x, self.fvv_y, self.fvv_z = self.get_v_forces()
+        self.fvv_x, self.fvv_y, self.fvv_z, self.indices = self.get_v_forces(
+            self.indices)
         self.curvatures = None
         self.splcoeffs = None
         self.expcoeffs = None
@@ -145,7 +146,7 @@ class Twobody:
     def spline_construction(self):
         """This function constructs the matrices A, B, C, D."""
         dx = np.array([self.rn[i]-self.rn[i-1] for i in range(1, self.N)])
-        #dx = np.insert(dx, 0, self.res)
+        # dx = np.insert(dx, 0, self.res)
 
         rows = self.N - 1
         cols = self.N
@@ -156,8 +157,8 @@ class Twobody:
         bb = np.zeros((rows, cols), dtype=float)
         aa = np.zeros((rows, cols), dtype=float)
         dd = np.zeros((rows, cols), dtype=float)
-        #dd[rows-1, -1] = -1 / dx[rows-1]
-        #dd[rows-1, -2] = +1 / dx[rows-1]
+        # dd[rows-1, -1] = -1 / dx[rows-1]
+        # dd[rows-1, -2] = +1 / dx[rows-1]
 
         for i in range(1, rows):
             ii = rows-i-1
@@ -204,7 +205,7 @@ class Twobody:
 
         return vv, list(set(indices))
 
-    def get_v_forces(self):
+    def get_v_forces(self, indices):
         """
         Constructs the v matrix.
 
@@ -217,7 +218,6 @@ class Twobody:
         vv_y = np.zeros((self.Nconfs_forces, self.N))
         vv_z = np.zeros((self.Nconfs_forces, self.N))
 
-        indices = [0]
         for config in range(self.Nconfs_forces):
             uu_x = 0
             uu_y = 0
@@ -227,12 +227,15 @@ class Twobody:
                 if rr > 0 and rr < self.Rcut:
                     index = bisect.bisect_left(self.rn, rr)
                     delta = (rr - self.rn[index])
+                    indices.append(index)
                     # INDEX IS SHIFTED IN A,B,C,D
                     # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
+                    # NOTE THAT FORCE IS NOT NEGATIVE OF DERIVATIVE SINCE
+                    # WE ARE "MOVING" FROM END OF INTERVAL INWARDS!!!
                     index = index - 1
-                    bb_ind = -self.B[index]
-                    dd_ind = -self.D[index] * np.power(delta, 2) / 3.0
-                    c_d = -self.C[index] * delta
+                    bb_ind = self.B[index]
+                    dd_ind = self.D[index] * np.power(delta, 2) / 2.0
+                    c_d = self.C[index] * delta
                     c_force = bb_ind + c_d + dd_ind
                     uu_x = uu_x + c_force * rv[0] / rr
                     uu_y = uu_y + c_force * rv[1] / rr
@@ -241,8 +244,7 @@ class Twobody:
             vv_x[config, :] = uu_x
             vv_y[config, :] = uu_y
             vv_z[config, :] = uu_z
-
-        return vv_x, vv_y, vv_z
+        return vv_x, vv_y, vv_z, list(set(indices))
 
     def get_spline_coeffs(self):
         a_values = np.dot(self.A, self.curvatures)
