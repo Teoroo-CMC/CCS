@@ -135,13 +135,23 @@ class Objective:
 
         pp = matrix(np.transpose(self.mm).dot(self.mm))
         eigvals = np.linalg.eigvals(pp)
-
-        logger.info("positive definite:%s", np.all((eigvals > 0)))
-
         qq = -1 * matrix(np.transpose(self.mm).dot(self.ref))
         nswitch_list = self.list_iterator()
         obj = []
         sol_list = []
+
+        logger.info("positive definite:%s", np.all((eigvals > 0)))
+        logger.info("Condition number:%f", np.linalg.cond(pp))
+
+        #Evaluting the fittnes
+        mm_trimmed=self.mm
+        mm_trimmed=np.delete(mm_trimmed,0,1)
+        pp_trimmed=matrix(np.transpose(mm_trimmed).dot(mm_trimmed))
+        eigvals_trimmed = np.linalg.eigvals(pp_trimmed)   
+        print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
+
+
+            
 
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"

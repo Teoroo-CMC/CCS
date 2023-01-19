@@ -95,7 +95,7 @@ class Twobody:
         self.C, self.D, self.B, self.A = self.spline_construction()
         self.vv, _ = self.get_v()
         self.const = self.get_const()
-        self.fvv_x, self.fvv_y, self.fvv_z = self.get_v_forces()
+        self.fvv_x, self.fvv_y, self.fvv_z,_ = self.get_v_forces([])
         print(
             f"    Merging intervall for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
         logger.info(
@@ -136,6 +136,8 @@ class Twobody:
             return gg
         if self.const_type.lower() == 'simple':
             return a
+        if self.const_type.lower() == 'none':
+            return np.zeros((1,self.N))
 
     def switch_const(self, n_switch):
         g = copy.deepcopy(self.const)

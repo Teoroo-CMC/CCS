@@ -95,7 +95,6 @@ def ccs_fetch(
         To be added.
     """
     DFT_DB = db.connect(DFT_DB)
-    print(mode)
 
     if mode == "CCS":
         REF_DB = DFT_DB
