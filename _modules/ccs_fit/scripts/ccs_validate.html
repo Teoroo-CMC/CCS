@@ -84,13 +84,13 @@
 <div class="viewcode-block" id="ccs_validate"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_validate/index.html#ccs_fit.scripts.ccs_validate.ccs_validate">[docs]</a><span class="k">def</span> <span class="nf">ccs_validate</span><span class="p">(</span>
     <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">CCS_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">Ns</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-    <span class="n">DFT_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">Ns</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
+    <span class="n">DFT_DB</span><span class="o">=</span><span class="s2">&quot;DFT.db&quot;</span><span class="p">,</span>
     <span class="n">CCS_DB</span><span class="o">=</span><span class="s2">&quot;CCS_validate.db&quot;</span><span class="p">,</span>
     <span class="n">DFTB_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">charge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">charge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">charge_scaling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to verify database generation.</span>
@@ -117,16 +117,32 @@
 
     <span class="n">DFT_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">)</span>
     <span class="n">CCS_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">CCS_DB</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">:</span>
         <span class="n">DFTB_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">CCS_params</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CCS_params</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">CCS_params</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">charge_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">charge</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">charge</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;CCS_validate.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#Reference      Predicted      Error      No_of_atoms structure_no&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 
     <span class="n">calc</span> <span class="o">=</span> <span class="n">CCS</span><span class="p">(</span><span class="n">CCS_params</span><span class="o">=</span><span class="n">CCS_params</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="n">charge</span><span class="p">,</span>
-               <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">charge_scaling</span><span class="o">=</span><span class="n">charge_scaling</span><span class="p">)</span>
+               <span class="n">q</span><span class="o">=</span><span class="n">charge_dict</span><span class="p">,</span> <span class="n">charge_scaling</span><span class="o">=</span><span class="n">charge_scaling</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">Ns</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">Ns</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="n">Ns</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># CONVERT TO INTEGER INPUT FORMAT</span>
+
+    <span class="k">if</span> <span class="n">Ns</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">Ns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">Ns</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">))]</span>
         <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
@@ -160,88 +176,41 @@
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_validate/index.html#ccs_fit.scripts.ccs_validate.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
-    <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
 
     <span class="k">try</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">art</span>
         <span class="n">txt</span> <span class="o">=</span> <span class="n">art</span><span class="o">.</span><span class="n">text2art</span><span class="p">(</span><span class="s1">&#39;CCS:Validate&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    USAGE:  ccs_validate MODE [...] &quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    The following modes and inputs are supported:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;       CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)&quot;</span>
-    <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;        DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)&quot;</span>
-    <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;CCS fetching tool&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mode&quot;</span><span class="p">,</span>         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;CCS&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Mode. Availble option: CCS, CCS+Q, DFTB&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--DFT_DB&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;DFT.db&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of DFT reference data-base&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-dc&quot;</span><span class="p">,</span> <span class="s2">&quot;--CCS_DB&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;CCS_validate.db&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of data-base to store results&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--CCS_params&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;CCS_params.json&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;CCS_params.json file&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;--Ns&quot;</span><span class="p">,</span>  <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>  <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of structures to include&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verbose output&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-chg&quot;</span><span class="p">,</span> <span class="s2">&quot;--charge_dict&quot;</span><span class="p">,</span>      <span class="nb">type</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Specify atomic charges in json format, e.g.: </span><span class="se">\n</span><span class="s2"> </span><span class="se">\&#39;</span><span class="s2">{ </span><span class="se">\&quot;</span><span class="s2">Zn</span><span class="se">\&quot;</span><span class="s2"> : 2.0 , </span><span class="se">\&quot;</span><span class="s2">O</span><span class="se">\&quot;</span><span class="s2"> : -2.0 }</span><span class="se">\&#39;</span><span class="s2">  &quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-chg_s&quot;</span><span class="p">,</span> <span class="s2">&quot;--charge_scaling&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CCS&quot;</span><span class="p">,</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">,</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">],</span> <span class="s2">&quot;Mode not supproted.&quot;</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">exit</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
-    <span class="n">mode</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">CCS_params_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">Ns</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="n">DFT_data</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CCS_params_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">CCS_params</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Mode: &quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_data</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-        <span class="n">ccs_validate</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">CCS_params</span><span class="o">=</span><span class="n">CCS_params</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_data</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">:</span>
-        <span class="n">DFTB_data</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_data</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFTB reference data base: &quot;</span><span class="p">,</span> <span class="n">DFTB_data</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-        <span class="n">ccs_validate</span><span class="p">(</span>
-            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">CCS_params</span><span class="o">=</span><span class="n">CCS_params</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_data</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="n">DFTB_data</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;        NOTE: charge_dict should use double quotes to enclose property nanes. Example:&quot;</span>
-        <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;        </span><span class="se">\&#39;</span><span class="s1">{&quot;Zn&quot;:2.0,&quot;O&quot; : -2.0 } </span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-        <span class="n">charge_scaling</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">charge_scaling</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
-            <span class="n">charge_scaling</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="n">charge_scaling</span> <span class="o">==</span> <span class="s2">&quot;False&quot;</span><span class="p">:</span>
-            <span class="n">charge_scaling</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Number of samples: &quot;</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    DFT reference data base: &quot;</span><span class="p">,</span> <span class="n">DFT_data</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Charge dictionary: &quot;</span><span class="p">,</span> <span class="n">charge_dict</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Charge scaling: &quot;</span><span class="p">,</span> <span class="n">charge_scaling</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">)</span>
-        <span class="n">ccs_validate</span><span class="p">(</span>
-            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-            <span class="n">CCS_params</span><span class="o">=</span><span class="n">CCS_params</span><span class="p">,</span>
-            <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span>
-            <span class="n">DFT_DB</span><span class="o">=</span><span class="n">DFT_data</span><span class="p">,</span>
-            <span class="n">charge</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">q</span><span class="o">=</span><span class="n">charge_dict</span><span class="p">,</span>
-            <span class="n">charge_scaling</span><span class="o">=</span><span class="n">charge_scaling</span><span class="p">,</span>
-        <span class="p">)</span></div>
+    <span class="n">ccs_validate</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

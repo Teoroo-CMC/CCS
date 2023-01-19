@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CCS - Curvature Constrained Splines &mdash; CCS  documentation</title>
+  <title>CCS_fit - Fitting using Curvature Constrained Splines &mdash; CCS  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -60,7 +60,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">CCS - Curvature Constrained Splines</li>
+      <li class="breadcrumb-item active">CCS_fit - Fitting using Curvature Constrained Splines</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -70,8 +70,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="ccs-curvature-constrained-splines">
-<h1>CCS - Curvature Constrained Splines<a class="headerlink" href="#ccs-curvature-constrained-splines" title="Permalink to this heading"></a></h1>
+  <section id="ccs-fit-fitting-using-curvature-constrained-splines">
+<h1>CCS_fit - Fitting using Curvature Constrained Splines<a class="headerlink" href="#ccs-fit-fitting-using-curvature-constrained-splines" title="Permalink to this heading"></a></h1>
 <p><a class="reference external" href="https://github.com/Teoroo-CMC/CCS/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&amp;color=brightgreen&amp;sort=semver" /></a>
 <a class="reference external" href="https://opensource.org/licenses/LGPL-3.0"><img alt="License" src="https://img.shields.io/github/license/teoroo-cmc/ccs" /></a>
 <a class="reference external" href="https://doi.org/10.1016/j.cpc.2020.107602"><img alt="DOI" src="https://img.shields.io/badge/DOI-10.1016%2Fj.cpc.2020.107602-blue" /></a>
@@ -81,12 +81,12 @@
 [![codecov](https://codecov.io/gh/tblite/tblite/branch/main/graph/badge.svg?token=JXIE6myqNH)](https://codecov.io/gh/tblite/tblite) 
 [![Coverage](codecov.io/gh/:vcsName/:user/:repo?flag=flag_name&token=a1b2c3d4e5)(https://github.com/Teoroo-CMC/CCS/actions)
 --->
-<p>The <code class="docutils literal notranslate"><span class="pre">CCS</span></code> package is a tool to construct two-body potentials using the idea of curvature constrained splines.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CCS_fit</span></code> package is a tool to construct two-body potentials using the idea of curvature constrained splines.</p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
 <section id="package-layout">
 <h3>Package Layout<a class="headerlink" href="#package-layout" title="Permalink to this heading"></a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ccs-x.y.z
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ccs_fit-x.y.z
 ├── CHANGELOG.md
 ├── LICENSE
 ├── MANIFEST.in
@@ -130,7 +130,7 @@
 </div>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ccs_fetch</span></code>           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fit</span></code>             - The primary executable file for the ccs package.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fit</span></code>             - The primary executable file for the ccs_fit package.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">main.py</span></code>             - A module to parse input files.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">objective.py</span></code>        - A module which contains the objective function and solver.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">spline_functions.py</span></code> - A module for spline construction/evaluation/output.</p></li>

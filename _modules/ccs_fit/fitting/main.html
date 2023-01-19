@@ -294,13 +294,6 @@
                     <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dftb_energies</span><span class="p">))</span>
                 <span class="p">)</span>
                 <span class="n">ref_energies</span> <span class="o">=</span> <span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">energies</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="c1"># if data[&quot;General&quot;][&quot;interface&quot;] == &quot;DFTB+&quot;:</span>
-                <span class="c1">#     # convert energies from eV to Hartree and Ang to Bohr</span>
-                <span class="c1">#     ref_energies = ref_energies * eV__Hartree</span>
-                <span class="c1">#     list_dist = [</span>
-                <span class="c1">#         [element / Bohr__AA for element in elements]</span>
-                <span class="c1">#         for elements in list_dist</span>
-                <span class="c1">#     ]</span>
 
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS2Q&quot;</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_energies</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ewald_energies</span><span class="p">)</span>
@@ -357,11 +350,40 @@
                         <span class="n">list_dist_forces</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 
                 <span class="k">if</span> <span class="n">counter1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dft&quot;</span><span class="p">])</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
-                        <span class="k">raise</span>
+                    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dft&quot;</span><span class="p">])</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                                <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span>
+                    <span class="k">if</span> <span class="s2">&quot;DFTB&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">ff_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                <span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dft&quot;</span><span class="p">])</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dftb&quot;</span><span class="p">])</span>
+                            <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff_tmp</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                                <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span>
+                    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dft&quot;</span><span class="p">])</span>
+                            <span class="n">ewald_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_ewald&quot;</span><span class="p">])</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                                <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span>
+                    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS+fQ&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">ff_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                <span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_dft&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;ewald_scaling&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_ewald&quot;</span><span class="p">])</span>
+                            <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff_tmp</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                                <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span>
+
             <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">list_dist_forces</span><span class="p">)</span>
             <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">dist_mat_forces</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
             <span class="n">dist_mat_forces</span> <span class="o">=</span> <span class="n">dist_mat_forces</span><span class="o">.</span><span class="n">values</span>
@@ -435,8 +457,8 @@
         <span class="n">ref_energies</span><span class="p">,</span>
         <span class="n">ref_forces</span><span class="p">,</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">],</span>
-        <span class="n">ewald</span><span class="o">=</span><span class="n">ewald_energies</span><span class="p">,</span>
-        <span class="n">ewald_forces</span><span class="o">=</span><span class="n">ewald_forces</span><span class="p">,</span>
+        <span class="n">energy_ewald</span><span class="o">=</span><span class="n">ewald_energies</span><span class="p">,</span>
+        <span class="n">force_ewald</span><span class="o">=</span><span class="n">ewald_forces</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Solve QP problem</span>

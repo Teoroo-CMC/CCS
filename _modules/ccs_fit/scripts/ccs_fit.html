@@ -105,13 +105,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
-    <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
-
     <span class="k">try</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">art</span>
         <span class="n">txt</span> <span class="o">=</span> <span class="n">art</span><span class="o">.</span><span class="n">text2art</span><span class="p">(</span><span class="s1">&#39;CCS:Fit&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
@@ -122,10 +121,13 @@
     <span class="n">ccs_fit</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
     <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
-    <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">c</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="parse_cmdline_args"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fit/index.html#ccs_fit.scripts.ccs_fit.parse_cmdline_args">[docs]</a><span class="k">def</span> <span class="nf">parse_cmdline_args</span><span class="p">(</span><span class="n">cmdlineargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -140,7 +142,7 @@
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">USAGE</span><span class="p">)</span>
 
-    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Json file containing pairwise distances and energies&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Json file containing pairwise distances and energies. Defaults to structures.json&quot;</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Log level for debugging&quot;</span>

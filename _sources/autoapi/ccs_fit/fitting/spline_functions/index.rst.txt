@@ -65,7 +65,7 @@ Attributes
       :rtype: matrix
 
 
-   .. py:method:: get_v_forces()
+   .. py:method:: get_v_forces(indices)
 
       Constructs the v matrix.
 

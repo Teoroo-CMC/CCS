@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ccs_fit.scripts.ccs_fetch &mdash; CCS  documentation</title>
+  <title>ccs_fit.scripts.ccs_fetch_wF &mdash; CCS  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -59,7 +59,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">ccs_fit.scripts.ccs_fetch</li>
+      <li class="breadcrumb-item active">ccs_fit.scripts.ccs_fetch_wF</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -68,7 +68,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for ccs_fit.scripts.ccs_fetch</h1><div class="highlight"><pre>
+  <h1>Source code for ccs_fit.scripts.ccs_fetch_wF</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/python3.6</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -87,7 +87,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<div class="viewcode-block" id="pair_dist"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch/index.html#ccs_fit.pair_dist">[docs]</a><span class="k">def</span> <span class="nf">pair_dist</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span>
+<div class="viewcode-block" id="pair_dist"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch_wF/index.html#ccs_fit.scripts.ccs_fetch_wF.pair_dist">[docs]</a><span class="k">def</span> <span class="nf">pair_dist</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function returns pairwise distances between two types of atoms within a certain cuttoff</span>
 
@@ -144,8 +144,8 @@
     <span class="k">return</span> <span class="n">r_distance</span><span class="p">,</span> <span class="n">forces</span></div>
 
 
-<div class="viewcode-block" id="ccs_fetch"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch/index.html#ccs_fit.ccs_fetch">[docs]</a><span class="k">def</span> <span class="nf">ccs_fetch</span><span class="p">(</span>
-        <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_forces</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ccs_fetch"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch_wF/index.html#ccs_fit.scripts.ccs_fetch_wF.ccs_fetch">[docs]</a><span class="k">def</span> <span class="nf">ccs_fetch</span><span class="p">(</span>
+    <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">DFT_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">R_c</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">DFTB_DB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">include_forces</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to read files and output structures.json</span>
 
@@ -166,7 +166,8 @@
 <span class="sd">        To be added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">DFT_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFT_DB</span><span class="p">)</span>
-
+    <span class="nb">print</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS&quot;</span><span class="p">:</span>
         <span class="n">REF_DB</span> <span class="o">=</span> <span class="n">DFT_DB</span>
 
@@ -178,9 +179,6 @@
 
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">:</span>
         <span class="n">REF_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">Ns</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
-        <span class="n">Ns</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># CONVERT TO INTEGER INPUT FORMAT</span>
 
     <span class="k">if</span> <span class="n">Ns</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="n">Ns</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">REF_DB</span><span class="p">))]</span>
@@ -224,9 +222,9 @@
                     <span class="n">coords</span><span class="p">,</span>
                     <span class="n">site_properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="n">struct</span><span class="o">.</span><span class="n">charges</span><span class="p">},</span>
                 <span class="p">)</span>
-                <span class="n">Ew</span> <span class="o">=</span> <span class="n">ewald</span><span class="o">.</span><span class="n">EwaldSummation</span><span class="p">(</span><span class="n">ew_struct</span><span class="p">,</span> <span class="n">compute_forces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">Ew</span> <span class="o">=</span> <span class="n">ewald</span><span class="o">.</span><span class="n">EwaldSummation</span><span class="p">(</span><span class="n">ew_struct</span><span class="p">,</span><span class="n">compute_forces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">ES_energy</span> <span class="o">=</span> <span class="n">Ew</span><span class="o">.</span><span class="n">total_energy</span>
-                <span class="n">ES_forces</span> <span class="o">=</span> <span class="n">EW</span><span class="o">.</span><span class="n">forces</span>
+                <span class="n">ES_forces</span> <span class="o">=</span> <span class="n">Ew</span><span class="o">.</span><span class="n">forces</span>
                 <span class="n">ce</span><span class="p">[</span><span class="s2">&quot;ewald&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ES_energy</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">struct</span><span class="p">)):</span>
@@ -239,7 +237,7 @@
                 <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;CCS+Q&quot;</span><span class="p">:</span>
                     <span class="n">cf</span><span class="p">[</span><span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                        <span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;force_dft&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">FREF</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span> <span class="s2">&quot;force_ewald&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">ES_forces</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])}</span>
-
+  
             <span class="n">ce</span><span class="p">[</span><span class="s2">&quot;atoms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_species</span>
             <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">atom_pair</span><span class="p">:</span>
                 <span class="n">pair_distances</span><span class="p">,</span> <span class="n">forces</span> <span class="o">=</span> <span class="n">pair_dist</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
@@ -251,10 +249,9 @@
                         <span class="p">]</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="k">pass</span>
-                <span class="c1"># FORCES SHOULD BE DOUBLE COUNTED!</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="p">):</span>
-                    <span class="n">pair_distances</span><span class="p">,</span> <span class="n">forces</span> <span class="o">=</span> <span class="n">pair_dist</span><span class="p">(</span>
-                        <span class="n">struct</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+                <span class="c1">#FORCES SHOULD BE DOUBLE COUNTED!</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">y</span><span class="p">):</span>
+                    <span class="n">pair_distances</span><span class="p">,</span> <span class="n">forces</span> <span class="o">=</span> <span class="n">pair_dist</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">R_c</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>                
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">struct</span><span class="p">)):</span>
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">cf</span><span class="p">[</span><span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span>
@@ -262,7 +259,7 @@
                             <span class="p">]</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="s2">&quot;F&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
                         <span class="k">except</span><span class="p">:</span>
                             <span class="k">pass</span>
-
+                    
             <span class="n">d</span><span class="p">[</span><span class="s2">&quot;S&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ce</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">st</span><span class="p">[</span><span class="s2">&quot;energies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
@@ -272,7 +269,7 @@
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch/index.html#ccs_fit.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autoapi/ccs_fit/scripts/ccs_fetch_wF/index.html#ccs_fit.scripts.ccs_fetch_wF.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">argparse</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;CCS fetching tool&#39;</span><span class="p">)</span>
@@ -291,7 +288,7 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-chg&quot;</span><span class="p">,</span> <span class="s2">&quot;--charge_dict&quot;</span><span class="p">,</span>      <span class="nb">type</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Specify atomic charges in json format, e.g.: </span><span class="se">\n</span><span class="s2"> </span><span class="se">\&#39;</span><span class="s2">{ </span><span class="se">\&quot;</span><span class="s2">Zn</span><span class="se">\&quot;</span><span class="s2"> : 2.0 , </span><span class="se">\&quot;</span><span class="s2">O</span><span class="se">\&quot;</span><span class="s2"> : -2.0 }</span><span class="se">\&#39;</span><span class="s2">  &quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--include_forces&quot;</span><span class="p">,</span>  <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Include forces.&#39;</span><span class="p">)</span>
+                       <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Include forces.&#39;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
@@ -309,6 +306,7 @@
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
 
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">columns</span>
@@ -317,6 +315,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span></div>
+
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

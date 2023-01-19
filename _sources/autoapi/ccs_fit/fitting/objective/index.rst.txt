@@ -35,7 +35,7 @@ Attributes
 
    
 
-.. py:class:: Objective(l_twb, l_one, sto, energy_ref, force_ref, gen_params, ewald=[], ewald_forces=[])
+.. py:class:: Objective(l_twb, l_one, sto, energy_ref, force_ref, gen_params, energy_ewald=[], force_ewald=[])
 
    Objective function for the ccs method.
 
@@ -142,7 +142,7 @@ Attributes
       :type fname: str, optional
 
 
-   .. py:method:: write_error_forces(mdl_for, ref_for, fname='error_forces.out')
+   .. py:method:: write_error_forces(mdl_for, ref_for, fname='CCS_error_forces.out')
 
       Prints the errors in a file.
 

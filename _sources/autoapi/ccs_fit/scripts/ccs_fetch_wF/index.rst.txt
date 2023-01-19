@@ -1,7 +1,7 @@
-:py:mod:`ccs_fit.scripts.ccs_fetch`
-===================================
+:py:mod:`ccs_fit.scripts.ccs_fetch_wF`
+======================================
 
-.. py:module:: ccs_fit.scripts.ccs_fetch
+.. py:module:: ccs_fit.scripts.ccs_fetch_wF
 
 
 Module Contents
@@ -13,9 +13,9 @@ Functions
 
 .. autoapisummary::
 
-   ccs_fit.scripts.ccs_fetch.pair_dist
-   ccs_fit.scripts.ccs_fetch.ccs_fetch
-   ccs_fit.scripts.ccs_fetch.main
+   ccs_fit.scripts.ccs_fetch_wF.pair_dist
+   ccs_fit.scripts.ccs_fetch_wF.ccs_fetch
+   ccs_fit.scripts.ccs_fetch_wF.main
 
 
 
@@ -35,7 +35,7 @@ Functions
    :rtype: A list of distances
 
 
-.. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None, include_forces=False, verbose=False)
+.. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns=-1, DFTB_DB=None, charge_dict=None, include_forces=False, verbose=False)
 
    Function to read files and output structures.json
 
