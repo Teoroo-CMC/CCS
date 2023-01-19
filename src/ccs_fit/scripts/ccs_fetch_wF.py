@@ -74,7 +74,7 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
 
 
 def ccs_fetch(
-        mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None, include_forces=False, verbose=False):
+    mode=None, DFT_DB=None, R_c=6.0, Ns=-1, DFTB_DB=None, charge_dict=None,include_forces=False,verbose=False):
     """
     Function to read files and output structures.json
 
@@ -95,7 +95,8 @@ def ccs_fetch(
         To be added.
     """
     DFT_DB = db.connect(DFT_DB)
-
+    print(mode)
+    
     if mode == "CCS":
         REF_DB = DFT_DB
 
@@ -107,9 +108,6 @@ def ccs_fetch(
 
     if mode == "DFTB":
         REF_DB = db.connect(DFTB_DB)
-
-    if Ns == 'all':
-        Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
 
     if Ns > 0:
         mask = [a <= Ns for a in range(len(REF_DB))]
@@ -153,9 +151,9 @@ def ccs_fetch(
                     coords,
                     site_properties={"charge": struct.charges},
                 )
-                Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
+                Ew = ewald.EwaldSummation(ew_struct,compute_forces=True)
                 ES_energy = Ew.total_energy
-                ES_forces = EW.forces
+                ES_forces = Ew.forces
                 ce["ewald"] = ES_energy
 
             for i in range(len(struct)):
@@ -168,7 +166,7 @@ def ccs_fetch(
                 if mode == "CCS+Q":
                     cf["F" + str(counter) + "_" + str(i)
                        ] = {"force_dft": list(FREF[i, :]), "force_ewald": list(ES_forces[i, :])}
-
+  
             ce["atoms"] = dict_species
             for (x, y) in atom_pair:
                 pair_distances, forces = pair_dist(struct, R_c, x, y, counter)
@@ -180,10 +178,9 @@ def ccs_fetch(
                         ] = forces["F" + str(counter) + "_" + str(i)]
                     except:
                         pass
-                # FORCES SHOULD BE DOUBLE COUNTED!
-                if (x != y):
-                    pair_distances, forces = pair_dist(
-                        struct, R_c, y, x, counter)
+                #FORCES SHOULD BE DOUBLE COUNTED!
+                if(x != y):
+                    pair_distances, forces = pair_dist(struct, R_c, y, x, counter)                
                     for i in range(len(struct)):
                         try:
                             cf["F" + str(counter) + "_" + str(i)][
@@ -191,7 +188,7 @@ def ccs_fetch(
                             ] = forces["F" + str(counter) + "_" + str(i)]
                         except:
                             pass
-
+                    
             d["S" + str(counter + 1)] = ce
     st = OrderedDict()
     st["energies"] = d
@@ -220,7 +217,7 @@ def main():
     parser.add_argument("-chg", "--charge_dict",      type=json.loads, metavar="",
                         help="Specify atomic charges in json format, e.g.: \n \'{ \"Zn\" : 2.0 , \"O\" : -2.0 }\'  ")
     parser.add_argument("-f", "--include_forces",  action="store_true",
-                        help='Include forces.')
+                       help='Include forces.')
 
     args = parser.parse_args()
 
@@ -238,6 +235,7 @@ def main():
     except:
         pass
 
+
     try:
         size = os.get_terminal_size()
         c = size.columns
@@ -246,6 +244,7 @@ def main():
         print("")
     except:
         pass
+
 
 
 if __name__ == "__main__":

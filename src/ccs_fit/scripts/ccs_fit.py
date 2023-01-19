@@ -34,13 +34,12 @@ def main(cmdlineargs=None):
 
     """
 
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print("")
-    print(txt)
-
     try:
+        size = os.get_terminal_size()
+        c = size.columns
+        txt = "-"*c
+        print("")
+        print(txt)
         import art
         txt = art.text2art('CCS:Fit')
         print(txt)
@@ -51,10 +50,13 @@ def main(cmdlineargs=None):
     ccs_fit(args)
 
     size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print(txt)
-    print("")
+    try:
+        c = size.columns
+        txt = "-"*c
+        print(txt)
+        print("")
+    except:
+        pass
 
 
 def parse_cmdline_args(cmdlineargs=None):
@@ -69,7 +71,7 @@ def parse_cmdline_args(cmdlineargs=None):
 
     parser = argparse.ArgumentParser(description=USAGE)
 
-    msg = "Json file containing pairwise distances and energies"
+    msg = "Json file containing pairwise distances and energies. Defaults to structures.json"
     parser.add_argument("input", nargs="?", default=FILENAME, help=msg)
 
     msg = "Log level for debugging"

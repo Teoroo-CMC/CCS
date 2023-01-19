@@ -13,13 +13,13 @@ from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
 def ccs_validate(
     mode=None,
     CCS_params=None,
-    Ns="all",
-    DFT_DB=None,
+    Ns='all',
+    DFT_DB="DFT.db",
     CCS_DB="CCS_validate.db",
     DFTB_DB=None,
-    charge=False,
-    q=None,
+    charge_dict=None,
     charge_scaling=False,
+    verbose=False,
 ):
     """
     Function to verify database generation.
@@ -46,16 +46,32 @@ def ccs_validate(
 
     DFT_DB = db.connect(DFT_DB)
     CCS_DB = db.connect(CCS_DB)
+
     if mode == "DFTB":
         DFTB_DB = db.connect(DFTB_DB)
+
+    if isinstance(charge_dict, str):
+        charge_dict = json.loads(charge_dict)
+
+    if isinstance(CCS_params, str):
+        with open(CCS_params, "r") as f:
+            CCS_params = json.load(f)
+
+    if charge_dict is None:
+        charge = False
+    else:
+        charge = True
 
     f = open("CCS_validate.dat", "w")
     print("#Reference      Predicted      Error      No_of_atoms structure_no", file=f)
 
     calc = CCS(CCS_params=CCS_params, charge=charge,
-               q=q, charge_scaling=charge_scaling)
+               q=charge_dict, charge_scaling=charge_scaling)
 
-    if Ns != "all":
+    if Ns == 'all':
+        Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
+
+    if Ns > 0:
         Ns = int(Ns)
         mask = [a <= Ns for a in range(len(DFT_DB))]
         random.shuffle(mask)
@@ -89,88 +105,41 @@ def ccs_validate(
 
 
 def main():
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print("")
-    print(txt)
+    import argparse
 
     try:
+        size = os.get_terminal_size()
+        c = size.columns
+        txt = "-"*c
+        print("")
+        print(txt)
         import art
         txt = art.text2art('CCS:Validate')
         print(txt)
     except:
         pass
 
-    print("    USAGE:  ccs_validate MODE [...] ")
-    print(" ")
-    print("    The following modes and inputs are supported:")
-    print("")
-    print("        CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
-    print(
-        "       CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)"
-    )
-    print(
-        "        DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)"
-    )
-    print("")
+    parser = argparse.ArgumentParser(description='CCS fetching tool')
+    parser.add_argument("-m", "--mode",         type=str, metavar="",
+                        default='CCS',  help="Mode. Availble option: CCS, CCS+Q, DFTB")
+    parser.add_argument("-d", "--DFT_DB", type=str, metavar="",
+                        default='DFT.db',  help="Name of DFT reference data-base")
+    parser.add_argument("-dc", "--CCS_DB", type=str, metavar="",
+                        default='CCS_validate.db',  help="Name of data-base to store results")
+    parser.add_argument("-p", "--CCS_params", type=str, metavar="",
+                        default='CCS_params.json',  help="CCS_params.json file")
+    parser.add_argument("-n", "--Ns",  type=int,  metavar="",
+                        default=-1,  help="Number of structures to include")
+    parser.add_argument("-v", "--verbose",
+                        action="store_true", help="Verbose output")
+    parser.add_argument("-chg", "--charge_dict",      type=json.loads, metavar="",
+                        help="Specify atomic charges in json format, e.g.: \n \'{ \"Zn\" : 2.0 , \"O\" : -2.0 }\'  ")
+    parser.add_argument("-chg_s", "--charge_scaling",
+                        type=bool, metavar="", default=False)
 
-    try:
-        assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supproted."
-    except:
-        exit()
+    args = parser.parse_args()
 
-    mode = sys.argv[1]
-    CCS_params_file = sys.argv[2]
-    Ns = sys.argv[3]
-    DFT_data = sys.argv[4]
-    with open(CCS_params_file, "r") as f:
-        CCS_params = json.load(f)
-
-    print("    Mode: ", mode)
-    if mode == "CCS":
-        print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
-        print("")
-
-        ccs_validate(mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data)
-    if mode == "DFTB":
-        DFTB_data = sys.argv[5]
-        print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
-        print("    DFTB reference data base: ", DFTB_data)
-        print("")
-
-        ccs_validate(
-            mode=mode, CCS_params=CCS_params, Ns=Ns, DFT_DB=DFT_data, DFTB_DB=DFTB_data
-        )
-    if mode == "CCS+Q":
-        print(
-            "        NOTE: charge_dict should use double quotes to enclose property nanes. Example:"
-        )
-        print('        \'{"Zn":2.0,"O" : -2.0 } \'')
-        charge_dict = sys.argv[5]
-        charge_scaling = sys.argv[6]
-        if charge_scaling == "True":
-            charge_scaling = True
-        if charge_scaling == "False":
-            charge_scaling = False
-        print("    Number of samples: ", Ns)
-        print("    DFT reference data base: ", DFT_data)
-        print("    Charge dictionary: ", charge_dict)
-        print("    Charge scaling: ", charge_scaling)
-        print("")
-
-        charge_dict = json.loads(charge_dict)
-        ccs_validate(
-            mode=mode,
-            CCS_params=CCS_params,
-            Ns=Ns,
-            DFT_DB=DFT_data,
-            charge=True,
-            q=charge_dict,
-            charge_scaling=charge_scaling,
-        )
+    ccs_validate(**vars(args))
 
 
 if __name__ == "__main__":
