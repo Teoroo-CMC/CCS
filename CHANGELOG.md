@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.0 (2023-01-19)
+### Feature
+* Merging force fitting functionality into main ([`45e95ad`](https://github.com/Teoroo-CMC/CCS/commit/45e95ad82266e539acf2ca21303cb8724861421a))
+
+### Documentation
+* **README:** Change to reflect namechange to ccs_fit ([`6fd5920`](https://github.com/Teoroo-CMC/CCS/commit/6fd59201d82b85449daa231dec26f2bcdcb9fbe2))
+* **README:** Change to reflect namechange to ccs_fit ([`08e6421`](https://github.com/Teoroo-CMC/CCS/commit/08e6421fadb7a52479eb2dd5d2697c94001369a3))
+
 ## v0.11.18 (2023-01-13)
 
 
