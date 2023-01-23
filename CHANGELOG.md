@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.1 (2023-01-20)
+
+
 ## v0.12.0 (2023-01-19)
 ### Feature
 * Merging force fitting functionality into main ([`45e95ad`](https://github.com/Teoroo-CMC/CCS/commit/45e95ad82266e539acf2ca21303cb8724861421a))
