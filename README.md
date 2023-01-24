@@ -87,7 +87,9 @@ python setup.py install
 --->
 
 ### (Recommended) installing from pip
+```
 pip install ccs_fit
+```
 
 ### Installing from source using poetry
 ```
