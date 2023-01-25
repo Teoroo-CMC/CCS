@@ -6,7 +6,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"CCS"
+project = u"CCS_fit"
 copyright = u"2023, Jolla Kullgren"
 author = u"Jolla Kullgren"
 
