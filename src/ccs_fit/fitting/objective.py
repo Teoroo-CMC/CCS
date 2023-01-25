@@ -143,6 +143,7 @@ class Objective:
         logger.info("positive definite:%s", np.all((eigvals > 0)))
         logger.info("Condition number:%f", np.linalg.cond(pp))
 
+
         #Evaluting the fittnes
         mm_trimmed=self.mm
         mm_trimmed=np.delete(mm_trimmed,0,1)
@@ -151,7 +152,52 @@ class Objective:
         print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
 
 
-            
+        ##### START UNC ####
+        #Solving unconstrained problem
+        xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
+        xx=xx[0]
+        print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
+        self.assign_parameter_values(xx)
+
+        self.model_energies = np.ravel(
+            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.write_error(fname="UNC_error.out")
+
+        if self.l_twb[0].Nconfs_forces > 0:
+            model_forces = np.ravel(
+                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+            )
+            self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
+
+        try:
+            if self.merging == "True":
+                self.unfold_intervals()
+        except:
+            pass
+
+        x_unfolded = []
+        for ii in range(self.np):
+            self.l_twb[ii].get_spline_coeffs()
+            self.l_twb[ii].get_expcoeffs()
+            x_unfolded = np.hstack(
+                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+            )
+        for onb in self.l_one:
+            if onb.epsilon_supported:
+                x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+            else:
+                x_unfolded = np.hstack((x_unfolded, 0.0))
+        xx = x_unfolded
+
+        self.write_CCS_params(fname="UNC_params.json")
+
+        try:
+            if self.merging == "True":
+                self.merge_intervals()
+        except:
+            pass
+
+        ##### END UNC ####            
 
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
@@ -172,7 +218,7 @@ class Objective:
         #     nswitch_list[opt_sol_index], mse
         # )
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} wtih mse: {mse} ")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with MSE: {mse} ")
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
@@ -452,8 +498,8 @@ class Objective:
             fmt="%-15.5f",
         )
 
-        print("    Final root mean square error in fit: ", (np.square(error/Natoms)).mean()
-              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]")
+        print("    Final root mean square error in energy: ", (np.square(error/Natoms)).mean()
+              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]")
 
     def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
         """Prints the errors in a file.
@@ -475,7 +521,7 @@ class Objective:
         np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
                    footer=footer, fmt='%-15.5f')
 
-    def write_CCS_params(self):
+    def write_CCS_params(self,fname="CCS_params.json"):
 
         CCS_params = OrderedDict()
         CCS_params["Charge scaling factor"] = float(self.charge_scaling)
@@ -512,5 +558,5 @@ class Objective:
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 
         CCS_params["Two_body"] = two_bodies_dict
-        with open("CCS_params.json", "w") as f:
+        with open(fname, "w") as f:
             json.dump(CCS_params, f, indent=8)
