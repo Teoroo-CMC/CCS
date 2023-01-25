@@ -171,8 +171,12 @@ class Objective:
         #     "\n The best switch is : %s with mse: %s", *
         #     nswitch_list[opt_sol_index], mse
         # )
+        best_switch_r = np.around([nswitch_list[opt_sol_index][elem]*self.l_twb[elem].res+self.l_twb[elem].Rmin for elem in range(self.np)], decimals=2)
+        elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse} ")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
+
+        # [{' '.join(['{:2f}'.format(best_switch_r[elem]) for elem in range(self.np)])}]
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
@@ -338,7 +342,26 @@ class Objective:
             if self.l_twb[elem].Swtype == "att":
                 tmp.append([0])
             if self.l_twb[elem].Swtype == "sw":
-                tmp.append(self.l_twb[elem].indices)
+                if self.l_twb[elem].search_mode == "full":
+                    tmp.append(self.l_twb[elem].indices)
+                if self.l_twb[elem].search_mode == "range":
+                    range_center = self.l_twb[elem].range_center
+                    range_width = self.l_twb[elem].range_width
+                    Rmin = self.l_twb[elem].Rmin
+                    Rcut = self.l_twb[elem].Rcut
+                    res = self.l_twb[elem].res
+                    range_min = max(0, int((range_center - range_width - Rmin)/res))
+                    range_max = min(self.l_twb[elem].N, int((range_center + range_width - Rmin)/res))
+                    tmp.append(self.l_twb[elem].indices[range_min:range_max])
+                    print("Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
+                elif self.l_twb[elem].search_mode == "taper":
+                    try:
+                        tapered_indices = int(self.l_twb[elem].taper_width / self.l_twb[elem].res) # round off to nearest integer
+                        print("Possible switch indices reduced from {} to {} for element pair {}.".format(len(self.l_twb[elem].indices), tapered_indices, self.l_twb[elem].name)) 
+                        tmp.append(self.l_twb[elem].indices[-tapered_indices:])
+                    except:
+                        print("Tapering of element pair {} went wrong, now finding switch over entire range.".format(self.l_twb[elem].name))
+                        tmp.append(self.l_twb[elem].indices)
 
         n_list = list(itertools.product(*tmp))
 
