@@ -35,6 +35,10 @@ class Twobody:
         Rmin=None,
         Resolution=0.1,
         const_type="mono",
+        search_mode="full",
+        taper_width=0.5,
+        range_center=2.,
+        range_width=1.,
     ):
         """
         Constructs a Twobody object.
@@ -67,6 +71,10 @@ class Twobody:
         self.rn = self.rn_full
         self.Swtype = Swtype
         self.const_type = const_type
+        self.search_mode = search_mode
+        self.taper_width = taper_width
+        self.range_center = range_center
+        self.range_width = range_width
         self.dismat = dismat
         self.Nconfs = np.shape(dismat)[0]
         self.distmat_forces = distmat_forces
