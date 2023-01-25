@@ -1,0 +1,16 @@
+{
+        "General": {
+                "interface": "CCS",
+                "merging": "True",
+                "search_mode": "taper"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full"
+                }
+        }
+}
