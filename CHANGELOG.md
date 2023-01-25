@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.3 (2023-01-24)
+
+
 ## v0.12.2 (2023-01-24)
 ### Documentation
 * Fixed pip install command code block ([`672d361`](https://github.com/Teoroo-CMC/CCS/commit/672d3611473feb515ab22d67f5d503042f9093db))

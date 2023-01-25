@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ccs_fit"
-version = "0.12.2"
+version = "0.12.3"
 description = "Fitting tools for repulsive two body interactions using curvature constrained splines."
 authors = [
     "Akshay Krishna AK",
@@ -19,6 +19,9 @@ documentation = "https://teoroo-cmc.github.io/CCS/index.html"
 keywords = ["Curvature", "Constrained", "Splines", "Two-Body", "Interatomic", "Repulsive", "Fitting"]
 classifiers = [
 	"Development Status :: 4 - Beta"
+]
+packages = [
+    { include = "ccs_fit", from = "src" },
 ]
 
 [tool.poetry.dependencies]
