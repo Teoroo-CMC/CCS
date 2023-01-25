@@ -20,6 +20,9 @@ keywords = ["Curvature", "Constrained", "Splines", "Two-Body", "Interatomic", "R
 classifiers = [
 	"Development Status :: 4 - Beta"
 ]
+packages = [
+    { include = "ccs_fit", from = "src" },
+]
 
 [tool.poetry.dependencies]
 python = ">=3.9"
