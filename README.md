@@ -1,11 +1,13 @@
 # CCS_fit - Fitting using Curvature Constrained Splines  
 
-[![Latest Release](https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&color=brightgreen&sort=semver)](https://github.com/Teoroo-CMC/CCS/releases/latest)
+[![PyPI](https://img.shields.io/pypi/v/ccs_fit?color=g)](https://pypi.org/project/ccs-fit/)
 [![License](https://img.shields.io/github/license/teoroo-cmc/ccs)](https://opensource.org/licenses/LGPL-3.0)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cpc.2020.107602-blue)](https://doi.org/10.1016/j.cpc.2020.107602)
 [![Build](https://img.shields.io/github/actions/workflow/status/teoroo-cmc/CCS/ci-cd.yml)](https://github.com/Teoroo-CMC/CCS/actions)
+[![Documentation](https://img.shields.io/badge/Github%20Pages-CCS_fit-orange)](https://teoroo-cmc.github.io/CCS/)
 
 <!--- [![Build Status](https://github.com/tblite/tblite/workflows/CI/badge.svg)](https://github.com/tblite/tblite/actions)
+[![Latest Release](https://img.shields.io/github/v/release/teoroo-cmc/ccs?display_name=tag&color=brightgreen&sort=semver)](https://github.com/Teoroo-CMC/CCS/releases/latest)
 [![Documentation](https://img.shields.io/badge/Github%20Pages-Pages-blue)](https://teoroo-cmc.github.io/CCS/)
 [![codecov](https://codecov.io/gh/tblite/tblite/branch/main/graph/badge.svg?token=JXIE6myqNH)](https://codecov.io/gh/tblite/tblite) 
 [![Coverage](codecov.io/gh/:vcsName/:user/:repo?flag=flag_name&token=a1b2c3d4e5)(https://github.com/Teoroo-CMC/CCS/actions)
