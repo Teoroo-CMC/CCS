@@ -11,6 +11,15 @@
                         "Swtype": "sw",
                         "const_type": "Mono",
                         "search_mode": "full"
+                },
+                "Na-Cl": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "range",
+                        "range_center": 1.5,
+                        "range_width": 0.1
                 }
         }
 }

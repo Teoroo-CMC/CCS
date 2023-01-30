@@ -158,6 +158,7 @@ class Objective:
         xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
         xx=xx[0]
         print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
+        xx=xx.reshape(len(xx),1)
         self.assign_parameter_values(xx)
 
         self.model_energies = np.ravel(
