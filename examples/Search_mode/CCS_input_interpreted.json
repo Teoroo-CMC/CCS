@@ -8,6 +8,16 @@
         "Train-set": "structures.json",
         "Test-set": "structures.json",
         "Twobody": {
+                "Na-Cl": {
+                        "Rcut": 5.999316894273557,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "range",
+                        "range_center": 1.5,
+                        "range_width": 0.1,
+                        "Rmin": 0.9481274584866369
+                },
                 "Cl-Cl": {
                         "Rcut": 5.9952461720402495,
                         "Resolution": 0.05,
@@ -15,14 +25,6 @@
                         "const_type": "Mono",
                         "search_mode": "full",
                         "Rmin": 3.622683722305465
-                },
-                "Cl-Na": {
-                        "Rcut": 5.999316894273557,
-                        "Resolution": 0.05,
-                        "Swtype": "sw",
-                        "const_type": "Mono",
-                        "search_mode": "full",
-                        "Rmin": 0.9481274584866369
                 },
                 "Na-Na": {
                         "Rcut": 5.998517232425883,
