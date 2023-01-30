@@ -13,6 +13,7 @@ import logging
 from tqdm import tqdm
 import itertools
 import json
+import bisect
 from collections import OrderedDict
 import numpy as np
 from cvxopt import matrix, solvers
@@ -388,26 +389,24 @@ class Objective:
             if self.l_twb[elem].Swtype == "att":
                 tmp.append([0])
             if self.l_twb[elem].Swtype == "sw":
-                if self.l_twb[elem].search_mode == "full":
+                if self.l_twb[elem].search_mode.lower() == "full":
                     tmp.append(self.l_twb[elem].indices)
-                if self.l_twb[elem].search_mode == "range":
+                elif self.l_twb[elem].search_mode.lower() == "range":
                     range_center = self.l_twb[elem].range_center
                     range_width = self.l_twb[elem].range_width
                     Rmin = self.l_twb[elem].Rmin
                     Rcut = self.l_twb[elem].Rcut
                     res = self.l_twb[elem].res
-                    range_min = max(0, int((range_center - range_width - Rmin)/res))
-                    range_max = min(self.l_twb[elem].N, int((range_center + range_width - Rmin)/res))
+                    range_min = max(0, bisect.bisect_left(self.l_twb[elem].rn, (range_center - range_width)))
+                    range_max = min(self.l_twb[elem].N, bisect.bisect_left(self.l_twb[elem].rn, (range_center + range_width)))
+                    print(range_min, range_max)
                     tmp.append(self.l_twb[elem].indices[range_min:range_max])
                     print("Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
-                elif self.l_twb[elem].search_mode == "taper":
-                    try:
-                        tapered_indices = int(self.l_twb[elem].taper_width / self.l_twb[elem].res) # round off to nearest integer
-                        print("Possible switch indices reduced from {} to {} for element pair {}.".format(len(self.l_twb[elem].indices), tapered_indices, self.l_twb[elem].name)) 
-                        tmp.append(self.l_twb[elem].indices[-tapered_indices:])
-                    except:
-                        print("Tapering of element pair {} went wrong, now finding switch over entire range.".format(self.l_twb[elem].name))
-                        tmp.append(self.l_twb[elem].indices)
+                elif self.l_twb[elem].search_mode.lower() == "point":
+                    search_indices = [bisect.bisect_left(self.l_twb[elem].rn, search_point) for search_point in self.l_twb[elem].search_points]
+                    search_indices = np.unique(search_indices).tolist()
+                    print("Switch points located at {} to for element pair {} based on point search.".format('[' + ', '.join(["{:.2f}".format(self.l_twb[elem].rn[search_index]) for search_index in search_indices]) + '] Å', self.l_twb[elem].name)) 
+                    tmp.append([self.l_twb[elem].indices[search_index] for search_index in search_indices])
 
         n_list = list(itertools.product(*tmp))
 
