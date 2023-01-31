@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def prepare_input(filename):
 
-    gen_params = {"interface": None, "ewald_scaling": 1.0, 'merging': 'False'}
+    gen_params = {"interface": None, "ewald_scaling": 1.0, 'merging': 'False', 'do_unconstrained_fit': 'False'}
     struct_data_test = {}
 
     try:

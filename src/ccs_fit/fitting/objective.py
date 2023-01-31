@@ -150,56 +150,56 @@ class Objective:
         mm_trimmed=np.delete(mm_trimmed,0,1)
         pp_trimmed=matrix(np.transpose(mm_trimmed).dot(mm_trimmed))
         eigvals_trimmed = np.linalg.eigvals(pp_trimmed)   
-        print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
+        # print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
 
+        if self.do_unconstrained_fit == "True":
+            ##### START UNC ####
+            #Solving unconstrained problem
+            xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
+            xx=xx[0]
+            print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
+            xx=xx.reshape(len(xx),1)
+            self.assign_parameter_values(xx)
 
-        ##### START UNC ####
-        #Solving unconstrained problem
-        xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
-        xx=xx[0]
-        print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
-        xx=xx.reshape(len(xx),1)
-        self.assign_parameter_values(xx)
+            self.model_energies = np.ravel(
+                self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+            self.write_error(fname="UNC_error.out")
 
-        self.model_energies = np.ravel(
-            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
-        self.write_error(fname="UNC_error.out")
+            if self.l_twb[0].Nconfs_forces > 0:
+                model_forces = np.ravel(
+                    self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                )
+                self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
 
-        if self.l_twb[0].Nconfs_forces > 0:
-            model_forces = np.ravel(
-                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
-            )
-            self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
+            try:
+                if self.merging == "True":
+                    self.unfold_intervals()
+            except:
+                pass
 
-        try:
-            if self.merging == "True":
-                self.unfold_intervals()
-        except:
-            pass
+            x_unfolded = []
+            for ii in range(self.np):
+                self.l_twb[ii].get_spline_coeffs()
+                self.l_twb[ii].get_expcoeffs()
+                x_unfolded = np.hstack(
+                    (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+                )
+            for onb in self.l_one:
+                if onb.epsilon_supported:
+                    x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+                else:
+                    x_unfolded = np.hstack((x_unfolded, 0.0))
+            xx = x_unfolded
 
-        x_unfolded = []
-        for ii in range(self.np):
-            self.l_twb[ii].get_spline_coeffs()
-            self.l_twb[ii].get_expcoeffs()
-            x_unfolded = np.hstack(
-                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
-            )
-        for onb in self.l_one:
-            if onb.epsilon_supported:
-                x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
-            else:
-                x_unfolded = np.hstack((x_unfolded, 0.0))
-        xx = x_unfolded
+            self.write_CCS_params(fname="UNC_params.json")
 
-        self.write_CCS_params(fname="UNC_params.json")
+            try:
+                if self.merging == "True":
+                    self.merge_intervals()
+            except:
+                pass
 
-        try:
-            if self.merging == "True":
-                self.merge_intervals()
-        except:
-            pass
-
-        ##### END UNC ####            
+            ##### END UNC ####            
 
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
@@ -398,16 +398,17 @@ class Objective:
                     Rmin = self.l_twb[elem].Rmin
                     Rcut = self.l_twb[elem].Rcut
                     res = self.l_twb[elem].res
-                    range_min = max(0, bisect.bisect_left(self.l_twb[elem].rn, (range_center - range_width)))
-                    range_max = min(self.l_twb[elem].N, bisect.bisect_left(self.l_twb[elem].rn, (range_center + range_width)))
-                    print(range_min, range_max)
+                    range_min = max(0, bisect.bisect_left(self.l_twb[elem].rn, (range_center - range_width/2)))
+                    range_max = min(self.l_twb[elem].N, bisect.bisect_left(self.l_twb[elem].rn, (range_center + range_width/2)))
                     tmp.append(self.l_twb[elem].indices[range_min:range_max])
-                    print("Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
+                    print("    Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
                 elif self.l_twb[elem].search_mode.lower() == "point":
                     search_indices = [bisect.bisect_left(self.l_twb[elem].rn, search_point) for search_point in self.l_twb[elem].search_points]
                     search_indices = np.unique(search_indices).tolist()
-                    print("Switch points located at {} to for element pair {} based on point search.".format('[' + ', '.join(["{:.2f}".format(self.l_twb[elem].rn[search_index]) for search_index in search_indices]) + '] Å', self.l_twb[elem].name)) 
+                    print("    Switch points located at {} to for element pair {} based on point search.".format('[' + ', '.join(["{:.2f}".format(self.l_twb[elem].rn[search_index]) for search_index in search_indices]) + '] Å', self.l_twb[elem].name)) 
                     tmp.append([self.l_twb[elem].indices[search_index] for search_index in search_indices])
+                else:
+                    raise SyntaxError("Error: search mode not recognized! Please use one of the following recognized options; [\"full\", \"range\", \"point\"]")
 
         n_list = list(itertools.product(*tmp))
 
