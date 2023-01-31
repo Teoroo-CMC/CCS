@@ -3,36 +3,42 @@
                 "interface": "CCS",
                 "ewald_scaling": 1.0,
                 "merging": "True",
-                "search_mode": "taper"
+                "do_unconstrained_fit": "False"
         },
         "Train-set": "structures.json",
         "Test-set": "structures.json",
         "Twobody": {
+                "Cl-Cl": {
+                        "Rcut": 5.996904217643551,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "point",
+                        "search_points": [
+                                3.77
+                        ],
+                        "Rmin": 3.642683722305465
+                },
+                "Na-Na": {
+                        "Rcut": 5.999150763207656,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "point",
+                        "search_points": [
+                                3.97
+                        ],
+                        "Rmin": 3.8418749841087463
+                },
                 "Na-Cl": {
                         "Rcut": 5.999316894273557,
-                        "Resolution": 0.05,
+                        "Resolution": 0.01,
                         "Swtype": "sw",
                         "const_type": "Mono",
                         "search_mode": "range",
-                        "range_center": 1.5,
-                        "range_width": 0.1,
-                        "Rmin": 0.9481274584866369
-                },
-                "Cl-Cl": {
-                        "Rcut": 5.9952461720402495,
-                        "Resolution": 0.05,
-                        "Swtype": "sw",
-                        "const_type": "Mono",
-                        "search_mode": "full",
-                        "Rmin": 3.622683722305465
-                },
-                "Na-Na": {
-                        "Rcut": 5.998517232425883,
-                        "Resolution": 0.05,
-                        "Swtype": "sw",
-                        "const_type": "Mono",
-                        "search_mode": "full",
-                        "Rmin": 3.8218749841087463
+                        "range_center": 1.2,
+                        "range_width": 0.2,
+                        "Rmin": 0.968127458486637
                 }
         },
         "Onebody": [

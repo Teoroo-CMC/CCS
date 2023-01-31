@@ -1,25 +1,37 @@
 {
         "General": {
                 "interface": "CCS",
-                "merging": "True",
-                "search_mode": "taper"
+                "merging": "True"
         },
         "Twobody": {
-                "Xx-Xx": {
+                "Cl-Cl": {
                         "Rcut": 6.0,
-                        "Resolution": 0.05,
+                        "Resolution": 0.01,
                         "Swtype": "sw",
                         "const_type": "Mono",
-                        "search_mode": "full"
+                        "search_mode": "point",
+                        "search_points": [
+                                3.77
+                        ]
+                },
+                "Na-Na": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "point",
+                        "search_points": [
+                                3.97
+                        ]
                 },
                 "Na-Cl": {
                         "Rcut": 6.0,
-                        "Resolution": 0.05,
+                        "Resolution": 0.01,
                         "Swtype": "sw",
                         "const_type": "Mono",
                         "search_mode": "range",
-                        "range_center": 1.5,
-                        "range_width": 0.1
+                        "range_center": 1.2,
+                        "range_width": 0.2
                 }
         }
 }
