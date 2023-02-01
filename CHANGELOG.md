@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.5 (2023-02-01)
+### Documentation
+* Updated basic tutorial ([`f5c99b6`](https://github.com/Teoroo-CMC/CCS/commit/f5c99b6312a976e562abbc039f5161cb8bac2972))
+
 ## v0.12.4 (2023-01-30)
 ### Documentation
 * **README:** Updated shields ([`82a082a`](https://github.com/Teoroo-CMC/CCS/commit/82a082abedfebe8c6a172800e14c0a5580487e0e))
