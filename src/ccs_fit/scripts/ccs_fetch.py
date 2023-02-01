@@ -137,8 +137,8 @@ def ccs_fetch(
             if mode == "DFTB":
                 print("WRITE PETER")
                 key = str(row.id)
-                EDFT = DFT_DB.get("id=" + row.id).energy
-                FDFT = DFT_DB.get("id=" + row.id).forces
+                EDFT = DFT_DB.get("id=" + str(row.id)).energy
+                FDFT = DFT_DB.get("id=" + str(row.id)).forces
                 ce["energy_dft"] = EDFT
                 ce["energy_dftb"] = EREF
             dict_species = defaultdict(int)
