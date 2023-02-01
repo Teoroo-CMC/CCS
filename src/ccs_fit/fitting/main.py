@@ -109,7 +109,7 @@ def prepare_input(filename):
         logger.info("Generating one-body information from training-set.")
         logger.info(f"    Added elements: {elements}")
         # list is now redundant here, but kept for future reference
-        data["Onebody"] = list(elements)
+        data["Onebody"] = sorted(list(elements))
 
     if "Xx-Xx" in data["Twobody"]:
         print("    Generating two-body potentials from one-body information.")
