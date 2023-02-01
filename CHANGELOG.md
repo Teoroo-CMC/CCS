@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.1 (2023-02-01)
+
+
 ## v0.13.0 (2023-02-01)
 ### Feature
 * Merge branch 'search_optimise' ([`cb14905`](https://github.com/Teoroo-CMC/CCS/commit/cb149051cb0d770e0469e752db63539610c2e354))
