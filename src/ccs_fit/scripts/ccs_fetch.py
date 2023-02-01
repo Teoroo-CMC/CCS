@@ -131,7 +131,8 @@ def ccs_fetch(
             EREF = row.energy
             ce["energy_dft"] = EREF
             if mode == "DFTB":
-                #key = str(row.id)
+                print("WRITE PETER")
+                key = str(row.id)
                 EDFT = DFT_DB.get("id=" + row.id).energy
                 FDFT = DFT_DB.get("id=" + row.id).forces
                 ce["energy_dft"] = EDFT
