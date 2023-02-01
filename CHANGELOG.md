@@ -2,6 +2,27 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.0 (2023-02-01)
+### Feature
+* Merge branch 'search_optimise' ([`cb14905`](https://github.com/Teoroo-CMC/CCS/commit/cb149051cb0d770e0469e752db63539610c2e354))
+* Adding point input option for switch search ([`4d44e16`](https://github.com/Teoroo-CMC/CCS/commit/4d44e165bf3f2963530452fa9a5ba7b86986dd5c))
+* Adding switch point search based on predefined points ([`893bf06`](https://github.com/Teoroo-CMC/CCS/commit/893bf06e0cd92e75a500632171648de3541afb68))
+* **spline_functions:** Adding new attributes to twobody class to deal with more explicit switch searching algorithms ([`dea4e54`](https://github.com/Teoroo-CMC/CCS/commit/dea4e54e133f97e6f3ddd53fb4643ff0cb2cc8bf))
+* **objective.py:** Allowing more advanced switch search routines ([`cdf17df`](https://github.com/Teoroo-CMC/CCS/commit/cdf17df787a3451099fbc44b0b593fe4c7b00526))
+
+### Fix
+* Added sorting of elements ([`acafd63`](https://github.com/Teoroo-CMC/CCS/commit/acafd63cf5ea1ab53c7b67c2f6b2971750d9b884))
+
+### Documentation
+* Reinstating Basic Tutorial ([`96c50c9`](https://github.com/Teoroo-CMC/CCS/commit/96c50c9fa39081d325b72571410922e403832fa2))
+* Cleaning up search mode example ([`94a780a`](https://github.com/Teoroo-CMC/CCS/commit/94a780a5c04f7104cc401f23f16319273f9ceb03))
+* Added unconstrained fit notebook ([`05c26f7`](https://github.com/Teoroo-CMC/CCS/commit/05c26f70130df4951db9e921e8f86a3a776fd0ea))
+* Updated search mode tutorials ([`e71718c`](https://github.com/Teoroo-CMC/CCS/commit/e71718c03f15d50825bf000bac297a80449c124f))
+* Updated search mode example ([`67abef1`](https://github.com/Teoroo-CMC/CCS/commit/67abef1c12528e5b22a09cab279020b858cff421))
+* Updated example for search mode using predefined points ([`102922a`](https://github.com/Teoroo-CMC/CCS/commit/102922abaea187a9fdea349bec6b7cae2584186a))
+* **examples:** Adding example to deal with search mode options ([`06aacd4`](https://github.com/Teoroo-CMC/CCS/commit/06aacd46595bc1a1e6a97928c7a34a9b1fc41dd0))
+* **conf.py:** Updated title to CCS_fit ([`64b9069`](https://github.com/Teoroo-CMC/CCS/commit/64b9069b2a7f1531b2c27946dd4de6ef90aad533))
+
 ## v0.12.5 (2023-02-01)
 ### Documentation
 * Updated basic tutorial ([`f5c99b6`](https://github.com/Teoroo-CMC/CCS/commit/f5c99b6312a976e562abbc039f5161cb8bac2972))
