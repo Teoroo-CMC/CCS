@@ -94,7 +94,6 @@ def ccs_fetch(
     -------
         To be added.
     """
-    print("Starting CCS FETCH")
     DFT_DB = db.connect(DFT_DB)
 
     if mode == "CCS":
@@ -124,8 +123,6 @@ def ccs_fetch(
     d = OrderedDict()
     cf = OrderedDict()
 
-    print("Starting tqdm")
-
     for row in tqdm(REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"):
         counter = counter + 1
         if mask[counter]:
@@ -135,7 +132,6 @@ def ccs_fetch(
             EREF = row.energy
             ce["energy_dft"] = EREF
             if mode == "DFTB":
-                print("WRITE PETER")
                 key = str(row.id)
                 EDFT = DFT_DB.get("id=" + str(row.id)).energy
                 FDFT = DFT_DB.get("id=" + str(row.id)).forces
