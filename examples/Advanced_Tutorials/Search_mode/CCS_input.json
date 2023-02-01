@@ -11,8 +11,17 @@
                         "const_type": "Mono",
                         "search_mode": "point",
                         "search_points": [
-                                3.77
+                                3.92
                         ]
+                },
+                "Cl-Na": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "range",
+                        "range_center": 1.2,
+                        "range_width": 0.2
                 },
                 "Na-Na": {
                         "Rcut": 6.0,
@@ -21,17 +30,8 @@
                         "const_type": "Mono",
                         "search_mode": "point",
                         "search_points": [
-                                3.97
+                                3.92
                         ]
-                },
-                "Na-Cl": {
-                        "Rcut": 6.0,
-                        "Resolution": 0.01,
-                        "Swtype": "sw",
-                        "const_type": "Mono",
-                        "search_mode": "range",
-                        "range_center": 1.2,
-                        "range_width": 0.2
                 }
         }
 }

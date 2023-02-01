@@ -15,22 +15,11 @@
                         "const_type": "Mono",
                         "search_mode": "point",
                         "search_points": [
-                                3.77
+                                3.92
                         ],
                         "Rmin": 3.642683722305465
                 },
-                "Na-Na": {
-                        "Rcut": 5.999150763207656,
-                        "Resolution": 0.01,
-                        "Swtype": "sw",
-                        "const_type": "Mono",
-                        "search_mode": "point",
-                        "search_points": [
-                                3.97
-                        ],
-                        "Rmin": 3.8418749841087463
-                },
-                "Na-Cl": {
+                "Cl-Na": {
                         "Rcut": 5.999316894273557,
                         "Resolution": 0.01,
                         "Swtype": "sw",
@@ -39,6 +28,17 @@
                         "range_center": 1.2,
                         "range_width": 0.2,
                         "Rmin": 0.968127458486637
+                },
+                "Na-Na": {
+                        "Rcut": 5.999150763207656,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "point",
+                        "search_points": [
+                                3.92
+                        ],
+                        "Rmin": 3.8418749841087463
                 }
         },
         "Onebody": [
