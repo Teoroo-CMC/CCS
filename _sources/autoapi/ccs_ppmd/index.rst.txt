@@ -46,52 +46,42 @@ Attributes
 
 
 .. py:data:: PairLoop
-   
 
    
 
 .. py:data:: ParticleLoop
-   
 
    
 
 .. py:data:: State
-   
 
    
 
 .. py:data:: PositionDat
-   
 
    
 
 .. py:data:: ParticleDat
-   
 
    
 
 .. py:data:: ScalarArray
-   
 
    
 
 .. py:data:: Kernel
-   
 
    
 
 .. py:data:: GlobalArray
-   
 
    
 
 .. py:data:: Constant
-   
 
    
 
 .. py:data:: IntegratorRange
-   
 
    
 

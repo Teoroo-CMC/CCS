@@ -34,23 +34,22 @@ Attributes
 
 
 .. py:data:: FILENAME
-   :annotation: = CCS_input.json
+   :value: 'CCS_input.json'
 
    
 
 .. py:data:: USAGE
-   :annotation: = Multiline-String
+   :value: Multiline-String
 
     .. raw:: html
 
         <details><summary>Show Value</summary>
 
-    .. code-block:: text
-        :linenos:
+    .. code-block:: python
 
-        
+        """
         A tool to fit two body potentials using constrained cubic splines.
-
+        """
 
     .. raw:: html
 

@@ -35,7 +35,6 @@ Attributes
 
 
 .. py:data:: logg
-   
 
    
 
@@ -70,7 +69,6 @@ Attributes
    >>> To be added, Jolla.
 
    .. py:attribute:: implemented_properties
-      
 
       
 

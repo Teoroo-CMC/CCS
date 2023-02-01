@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ccs_fit.fitting.spline_functions &mdash; CCS  documentation</title>
+  <title>ccs_fit.fitting.spline_functions &mdash; CCS_fit  documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../../index.html" class="icon icon-home"> CCS
+            <a href="../../../../index.html" class="icon icon-home"> CCS_fit
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -70,7 +70,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">CCS</a>
+          <a href="../../../../index.html">CCS_fit</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -133,7 +133,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ccs_fit.fitting.spline_functions.Twobody">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ccs_fit.fitting.spline_functions.</span></span><span class="sig-name descname"><span class="pre">Twobody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dismat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distmat_forces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Swtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mono'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs_fit/fitting/spline_functions.html#Twobody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.fitting.spline_functions.Twobody" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ccs_fit.fitting.spline_functions.</span></span><span class="sig-name descname"><span class="pre">Twobody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dismat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distmat_forces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rcut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Swtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mono'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs_fit/fitting/spline_functions.html#Twobody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.fitting.spline_functions.Twobody" title="Permalink to this definition"></a></dt>
 <dd><p>Twobody class that describes properties of an Atom pair.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ccs_fit.fitting.spline_functions.Twobody.merge_intervals">

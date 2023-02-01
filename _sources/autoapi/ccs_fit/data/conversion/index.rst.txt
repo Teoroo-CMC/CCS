@@ -13,22 +13,18 @@ Module Contents
 ---------------
 
 .. py:data:: Bohr__AA
-   
 
    
 
 .. py:data:: AA__Bohr
-   
 
    
 
 .. py:data:: Hartree__eV
-   
 
    
 
 .. py:data:: eV__Hartree
-   
 
    
 

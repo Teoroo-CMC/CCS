@@ -32,11 +32,10 @@ Attributes
 
 
 .. py:data:: logger
-   
 
    
 
-.. py:class:: Twobody(name, dismat, distmat_forces, Rcut, Swtype='rep', Rmin=None, Resolution=0.1, const_type='mono')
+.. py:class:: Twobody(name, dismat, distmat_forces, Rcut, range_center=None, range_width=None, search_points=None, Swtype='rep', Rmin=None, Resolution=0.1, const_type='mono', search_mode='full')
 
    Twobody class that describes properties of an Atom pair.
 

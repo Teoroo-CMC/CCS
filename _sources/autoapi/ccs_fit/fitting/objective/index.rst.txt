@@ -31,7 +31,6 @@ Attributes
 
 
 .. py:data:: logger
-   
 
    
 
@@ -156,7 +155,7 @@ Attributes
       :type fname: str, optional
 
 
-   .. py:method:: write_CCS_params()
+   .. py:method:: write_CCS_params(fname='CCS_params.json')
 
 
 

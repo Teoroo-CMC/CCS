@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ccs_fit.fitting.main &mdash; CCS  documentation</title>
+  <title>ccs_fit.fitting.main &mdash; CCS_fit  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -28,7 +28,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> CCS
+            <a href="../../../index.html" class="icon icon-home"> CCS_fit
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -50,7 +50,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">CCS</a>
+          <a href="../../../index.html">CCS_fit</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -99,7 +99,7 @@
 
 <div class="viewcode-block" id="prepare_input"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/main/index.html#ccs_fit.fitting.main.prepare_input">[docs]</a><span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 
-    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;merging&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
+    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;merging&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;do_unconstrained_fit&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
     <span class="n">struct_data_test</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -180,7 +180,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating one-body information from training-set.&quot;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Added elements: </span><span class="si">{</span><span class="n">elements</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># list is now redundant here, but kept for future reference</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Onebody&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">elements</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="s2">&quot;Xx-Xx&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Twobody&quot;</span><span class="p">]:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Generating two-body potentials from one-body information.&quot;</span><span class="p">)</span>
