@@ -94,6 +94,7 @@ def ccs_fetch(
     -------
         To be added.
     """
+    print("Starting CCS FETCH")
     DFT_DB = db.connect(DFT_DB)
 
     if mode == "CCS":
@@ -122,6 +123,9 @@ def ccs_fetch(
     c = OrderedDict()
     d = OrderedDict()
     cf = OrderedDict()
+
+    print("Starting tqdm")
+
     for row in tqdm(REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"):
         counter = counter + 1
         if mask[counter]:
