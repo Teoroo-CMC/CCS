@@ -31,10 +31,14 @@ class Twobody:
         dismat,
         distmat_forces,
         Rcut,
+        range_center=None,
+        range_width=None,
+        search_points=None,
         Swtype="rep",
         Rmin=None,
         Resolution=0.1,
         const_type="mono",
+        search_mode="full",
     ):
         """
         Constructs a Twobody object.
@@ -53,6 +57,7 @@ class Twobody:
                 number of knots in the spline interval
             Rmin : float
                 optional, minimum value of the spline interval, default None
+            
         """
 
         self.name = name
@@ -65,8 +70,24 @@ class Twobody:
         self.Rcut = self.Rmin + (self.N - 1) * self.res
         self.rn_full = [(i) * self.res + self.Rmin for i in range(self.N)]
         self.rn = self.rn_full
+        if not range_center:
+            self.range_center = (Rmin+self.Rcut)/2
+        else:
+            self.range_center = range_center
+        if not range_width:
+            self.range_width = (self.Rcut-Rmin)
+        else:
+            self.range_width = range_width
+        if not search_points:
+            self.search_points = np.arange(Rmin, self.Rcut, self.res)
+        else:
+            self.search_points = search_points
         self.Swtype = Swtype
         self.const_type = const_type
+        self.search_mode = search_mode
+        self.range_center = range_center
+        self.range_width = range_width
+        self.search_points = search_points
         self.dismat = dismat
         self.Nconfs = np.shape(dismat)[0]
         self.distmat_forces = distmat_forces
@@ -96,10 +117,11 @@ class Twobody:
         self.vv, _ = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z,_ = self.get_v_forces([])
-        print(
-            f"    Merging intervall for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
+        if self.N_full > self.N:
+            print(
+                f"    Merging interval for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
         logger.info(
-            f"Merging intervall for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
+            f"Merging interval for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
 
     def dissolve_interval(self):
         tmp_curvatures = []

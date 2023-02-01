@@ -13,6 +13,7 @@ import logging
 from tqdm import tqdm
 import itertools
 import json
+import bisect
 from collections import OrderedDict
 import numpy as np
 from cvxopt import matrix, solvers
@@ -143,15 +144,62 @@ class Objective:
         logger.info("positive definite:%s", np.all((eigvals > 0)))
         logger.info("Condition number:%f", np.linalg.cond(pp))
 
+
         #Evaluting the fittnes
         mm_trimmed=self.mm
         mm_trimmed=np.delete(mm_trimmed,0,1)
         pp_trimmed=matrix(np.transpose(mm_trimmed).dot(mm_trimmed))
         eigvals_trimmed = np.linalg.eigvals(pp_trimmed)   
-        print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
+        # print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
 
+        if self.do_unconstrained_fit == "True":
+            ##### START UNC ####
+            #Solving unconstrained problem
+            xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
+            xx=xx[0]
+            print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
+            xx=xx.reshape(len(xx),1)
+            self.assign_parameter_values(xx)
 
-            
+            self.model_energies = np.ravel(
+                self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+            self.write_error(fname="UNC_error.out")
+
+            if self.l_twb[0].Nconfs_forces > 0:
+                model_forces = np.ravel(
+                    self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                )
+                self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
+
+            try:
+                if self.merging == "True":
+                    self.unfold_intervals()
+            except:
+                pass
+
+            x_unfolded = []
+            for ii in range(self.np):
+                self.l_twb[ii].get_spline_coeffs()
+                self.l_twb[ii].get_expcoeffs()
+                x_unfolded = np.hstack(
+                    (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+                )
+            for onb in self.l_one:
+                if onb.epsilon_supported:
+                    x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+                else:
+                    x_unfolded = np.hstack((x_unfolded, 0.0))
+            xx = x_unfolded
+
+            self.write_CCS_params(fname="UNC_params.json")
+
+            try:
+                if self.merging == "True":
+                    self.merge_intervals()
+            except:
+                pass
+
+            ##### END UNC ####            
 
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
@@ -171,8 +219,12 @@ class Objective:
         #     "\n The best switch is : %s with mse: %s", *
         #     nswitch_list[opt_sol_index], mse
         # )
+        best_switch_r = np.around([nswitch_list[opt_sol_index][elem]*self.l_twb[elem].res+self.l_twb[elem].Rmin for elem in range(self.np)], decimals=2)
+        elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse} ")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
+
+        # [{' '.join(['{:2f}'.format(best_switch_r[elem]) for elem in range(self.np)])}]
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
@@ -338,7 +390,25 @@ class Objective:
             if self.l_twb[elem].Swtype == "att":
                 tmp.append([0])
             if self.l_twb[elem].Swtype == "sw":
-                tmp.append(self.l_twb[elem].indices)
+                if self.l_twb[elem].search_mode.lower() == "full":
+                    tmp.append(self.l_twb[elem].indices)
+                elif self.l_twb[elem].search_mode.lower() == "range":
+                    range_center = self.l_twb[elem].range_center
+                    range_width = self.l_twb[elem].range_width
+                    Rmin = self.l_twb[elem].Rmin
+                    Rcut = self.l_twb[elem].Rcut
+                    res = self.l_twb[elem].res
+                    range_min = max(0, bisect.bisect_left(self.l_twb[elem].rn, (range_center - range_width/2)))
+                    range_max = min(self.l_twb[elem].N, bisect.bisect_left(self.l_twb[elem].rn, (range_center + range_width/2)))
+                    tmp.append(self.l_twb[elem].indices[range_min:range_max])
+                    print("    Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
+                elif self.l_twb[elem].search_mode.lower() == "point":
+                    search_indices = [bisect.bisect_left(self.l_twb[elem].rn, search_point) for search_point in self.l_twb[elem].search_points]
+                    search_indices = np.unique(search_indices).tolist()
+                    print("    Switch points located at {} to for element pair {} based on point search.".format('[' + ', '.join(["{:.2f}".format(self.l_twb[elem].rn[search_index]) for search_index in search_indices]) + '] Å', self.l_twb[elem].name)) 
+                    tmp.append([self.l_twb[elem].indices[search_index] for search_index in search_indices])
+                else:
+                    raise SyntaxError("Error: search mode not recognized! Please use one of the following recognized options; [\"full\", \"range\", \"point\"]")
 
         n_list = list(itertools.product(*tmp))
 
@@ -452,8 +522,8 @@ class Objective:
             fmt="%-15.5f",
         )
 
-        print("    Final root mean square error in fit: ", (np.square(error/Natoms)).mean()
-              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered!]")
+        print("    Final root mean square error in energy: ", (np.square(error/Natoms)).mean()
+              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]")
 
     def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
         """Prints the errors in a file.
@@ -475,7 +545,7 @@ class Objective:
         np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
                    footer=footer, fmt='%-15.5f')
 
-    def write_CCS_params(self):
+    def write_CCS_params(self,fname="CCS_params.json"):
 
         CCS_params = OrderedDict()
         CCS_params["Charge scaling factor"] = float(self.charge_scaling)
@@ -512,5 +582,5 @@ class Objective:
             two_bodies_dict[self.l_twb[k].name] = two_body_dict
 
         CCS_params["Two_body"] = two_bodies_dict
-        with open("CCS_params.json", "w") as f:
+        with open(fname, "w") as f:
             json.dump(CCS_params, f, indent=8)

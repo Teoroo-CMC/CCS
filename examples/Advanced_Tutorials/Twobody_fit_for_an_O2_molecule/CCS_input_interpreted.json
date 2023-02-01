@@ -1,0 +1,20 @@
+{
+        "General": {
+                "interface": "CCS",
+                "ewald_scaling": 1.0,
+                "merging": "True"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "O-O": {
+                        "Rcut": 2.38,
+                        "Resolution": 0.02,
+                        "Swtype": "sw",
+                        "Rmin": 0.9499
+                }
+        },
+        "Onebody": [
+                "O"
+        ]
+}
