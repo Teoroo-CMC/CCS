@@ -62,3 +62,10 @@ patch_without_tag = true                    # patch release by default
 [project.urls]
 "Homepage" = "https://github.com/Teoroo-CMC/CCS"
 "Documentation" = "https://teoroo-cmc.github.io/CCS/index.html"
+
+[tool.poetry.scripts]
+ccs_build_db = "ccs_fit.scripts.ccs_build_db:main"
+ccs_export_sktable = "ccs_fit.scripts.ccs_export_sktable:main"
+ccs_fetch = "ccs_fit.scripts.ccs_fetch:main"
+ccs_fit = "ccs_fit.scripts.ccs_fit:main"
+ccs_validate = "ccs_fit.scripts.ccs_validate:main"
