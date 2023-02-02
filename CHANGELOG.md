@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.4 (2023-02-02)
+### Documentation
+* Updated documentation example ([`9c5118a`](https://github.com/Teoroo-CMC/CCS/commit/9c5118ab58097eecacc65721afbbefc0ff71eb51))
+
 ## v0.13.3 (2023-02-02)
 
 
