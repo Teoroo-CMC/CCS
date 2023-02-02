@@ -5,7 +5,7 @@
 :maxdepth: 2
 :hidden:
 
-gen_ccs.ipynb
+Basic_Tutorial.ipynb
 changelog.md
 autoapi/index
 ```

@@ -1,0 +1,94 @@
+Traceback (most recent call last):
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+orig_cell = LJ.get_cell()
+orig_struc = LJ.copy()
+
+displacement_magnitude=0.02
+disp_steps=5
+rounds=2
+
+trainset_list="file_list" # List of strucutres to include in the database (see below)
+f = open(trainset_list, "w")
+counter=1
+for round in range(rounds):
+    for scale in np.linspace(0.95, 1.05, 6):
+        new_cell = orig_cell*scale
+        new_struc = orig_struc.copy()
+        new_struc.set_cell(new_cell)
+        new_struc.calc = calc
+        nrg = new_struc.get_potential_energy()
+        for i in range(disp_steps):
+            rattle_struc = new_struc.copy()
+            rattle_struc.rattle(displacement_magnitude*i, seed=counter)
+            rattle_struc.calc = calc
+            nrg = rattle_struc.get_potential_energy()
+            if nrg < -40: # We exclude structures that are unreasonably high in energy
+                xyz_file=f"CALCULATED_DATA/S{counter}.xyz"
+                write(xyz_file,rattle_struc)
+                print(xyz_file,file=f)
+                counter += 1
+
+f.close()
+       
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
+Cell [0;32mIn[2], line 25[0m
+[1;32m     23[0m [38;5;28;01mif[39;00m nrg [38;5;241m<[39m [38;5;241m-[39m[38;5;241m40[39m: [38;5;66;03m# We exclude structures that are unreasonably high in energy[39;00m
+[1;32m     24[0m     xyz_file[38;5;241m=[39m[38;5;124mf[39m[38;5;124m"[39m[38;5;124mCALCULATED_DATA/S[39m[38;5;132;01m{[39;00mcounter[38;5;132;01m}[39;00m[38;5;124m.xyz[39m[38;5;124m"[39m
+[0;32m---> 25[0m     [43mwrite[49m[43m([49m[43mxyz_file[49m[43m,[49m[43mrattle_struc[49m[43m)[49m
+[1;32m     26[0m     [38;5;28mprint[39m(xyz_file,file[38;5;241m=[39mf)
+[1;32m     27[0m     counter [38;5;241m+[39m[38;5;241m=[39m [38;5;241m1[39m
+
+File [0;32m~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:628[0m, in [0;36mwrite[0;34m(filename, images, format, parallel, append, **kwargs)[0m
+[1;32m    624[0m [38;5;28mformat[39m [38;5;241m=[39m [38;5;28mformat[39m [38;5;129;01mor[39;00m [38;5;124m'[39m[38;5;124mjson[39m[38;5;124m'[39m  [38;5;66;03m# default is json[39;00m
+[1;32m    626[0m io [38;5;241m=[39m get_ioformat([38;5;28mformat[39m)
+[0;32m--> 628[0m [38;5;28;01mreturn[39;00m [43m_write[49m[43m([49m[43mfilename[49m[43m,[49m[43m [49m[43mfd[49m[43m,[49m[43m [49m[38;5;28;43mformat[39;49m[43m,[49m[43m [49m[43mio[49m[43m,[49m[43m [49m[43mimages[49m[43m,[49m
+[1;32m    629[0m [43m              [49m[43mparallel[49m[38;5;241;43m=[39;49m[43mparallel[49m[43m,[49m[43m [49m[43mappend[49m[38;5;241;43m=[39;49m[43mappend[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/parallel.py:244[0m, in [0;36mparallel_function.<locals>.new_func[0;34m(*args, **kwargs)[0m
+[1;32m    238[0m [38;5;129m@functools[39m[38;5;241m.[39mwraps(func)
+[1;32m    239[0m [38;5;28;01mdef[39;00m [38;5;21mnew_func[39m([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[1;32m    240[0m     [38;5;28;01mif[39;00m (world[38;5;241m.[39msize [38;5;241m==[39m [38;5;241m1[39m [38;5;129;01mor[39;00m
+[1;32m    241[0m         args [38;5;129;01mand[39;00m [38;5;28mgetattr[39m(args[[38;5;241m0[39m], [38;5;124m'[39m[38;5;124mserial[39m[38;5;124m'[39m, [38;5;28;01mFalse[39;00m) [38;5;129;01mor[39;00m
+[1;32m    242[0m         [38;5;129;01mnot[39;00m kwargs[38;5;241m.[39mpop([38;5;124m'[39m[38;5;124mparallel[39m[38;5;124m'[39m, [38;5;28;01mTrue[39;00m)):
+[1;32m    243[0m         [38;5;66;03m# Disable:[39;00m
+[0;32m--> 244[0m         [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m    246[0m     ex [38;5;241m=[39m [38;5;28;01mNone[39;00m
+[1;32m    247[0m     result [38;5;241m=[39m [38;5;28;01mNone[39;00m
+
+File [0;32m~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:661[0m, in [0;36m_write[0;34m(filename, fd, format, io, images, parallel, append, **kwargs)[0m
+[1;32m    659[0m     [38;5;28;01mif[39;00m append:
+[1;32m    660[0m         mode [38;5;241m=[39m mode[38;5;241m.[39mreplace([38;5;124m'[39m[38;5;124mw[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124ma[39m[38;5;124m'[39m)
+[0;32m--> 661[0m     fd [38;5;241m=[39m [43mopen_with_compression[49m[43m([49m[43mfilename[49m[43m,[49m[43m [49m[43mmode[49m[43m)[49m
+[1;32m    662[0m     [38;5;66;03m# XXX remember to re-enable compressed open[39;00m
+[1;32m    663[0m     [38;5;66;03m# fd = io.open(filename, mode)[39;00m
+[1;32m    664[0m [38;5;28;01mreturn[39;00m io[38;5;241m.[39mwrite(fd, images, [38;5;241m*[39m[38;5;241m*[39mkwargs)
+
+File [0;32m~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:551[0m, in [0;36mopen_with_compression[0;34m(filename, mode)[0m
+[1;32m    548[0m     [38;5;28;01mreturn[39;00m lzma[38;5;241m.[39mopen(filename, mode)
+[1;32m    549[0m [38;5;28;01melse[39;00m:
+[1;32m    550[0m     [38;5;66;03m# Either None or unknown string[39;00m
+[0;32m--> 551[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mopen[39;49m[43m([49m[43mfilename[49m[43m,[49m[43m [49m[43mmode[49m[43m)[49m
+
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'CALCULATED_DATA/S1.xyz'
+FileNotFoundError: [Errno 2] No such file or directory: 'CALCULATED_DATA/S1.xyz'
+
