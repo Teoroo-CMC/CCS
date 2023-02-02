@@ -2,6 +2,19 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.2 (2023-02-02)
+### Fix
+* Fix typos ([`d1a5c4a`](https://github.com/Teoroo-CMC/CCS/commit/d1a5c4a5821f0d8f275b1b7bc971190aebb0cdc9))
+
+### Documentation
+* Cleaning up examples ([`aa0d50f`](https://github.com/Teoroo-CMC/CCS/commit/aa0d50f729383c8e100a94d0b5a61820b5597651))
+* Clean up examples ([`b034c32`](https://github.com/Teoroo-CMC/CCS/commit/b034c32b4fae3cc694b64f6070c1d764d1149990))
+* Clean up examples ([`6dd096e`](https://github.com/Teoroo-CMC/CCS/commit/6dd096e0f647f0f7439eb9eba0f225f9c48270a9))
+* Clean up examples ([`dd8aaaa`](https://github.com/Teoroo-CMC/CCS/commit/dd8aaaab7dd5a37e7594ae301c6e9887ec3a2b83))
+* Updated examples with CCS ([`1d9e3d7`](https://github.com/Teoroo-CMC/CCS/commit/1d9e3d79756290256bbd123471cfd84822570268))
+* Cleaned up basic tutorial ([`07a419e`](https://github.com/Teoroo-CMC/CCS/commit/07a419e1623d633b770016250895e4437b740fe9))
+* Cleaned up basic tutorial ([`6ade6cd`](https://github.com/Teoroo-CMC/CCS/commit/6ade6cd1082d41763ab8c7c577118db5849619a1))
+
 ## v0.13.1 (2023-02-01)
 
 
