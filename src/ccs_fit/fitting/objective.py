@@ -268,6 +268,11 @@ class Objective:
         xx = x_unfolded
 
         self.write_CCS_params()
+
+        if self.write_buck == "True":
+            self.gen_Buckingham()
+            # self.write_Buckingham()
+
         return self.model_energies, mse, xx
 
     def predict(self, xx):
@@ -584,3 +589,6 @@ class Objective:
         CCS_params["Two_body"] = two_bodies_dict
         with open(fname, "w") as f:
             json.dump(CCS_params, f, indent=8)
+
+    def gen_Buckingham(self):
+        print("Getting to generate a Buckingham potential from the spline data!") 
