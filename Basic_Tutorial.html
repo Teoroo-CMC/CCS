@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A simple, yet complete, tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne &mdash; CCS_fit  documentation</title>
+  <title>A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne &mdash; CCS_fit  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -42,9 +42,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">A simple, yet complete, tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#generate-training-data">Generate training data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-a-reference-database">Building a reference database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#generate-the-ccs-fit-input-file-structures-json">Generate the CCS_fit input file; structures.json</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fit-training-data-to-curvature-constrained-splines">Fit training data to Curvature Constrained Splines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#validate-your-potential">Validate your potential</a></li>
@@ -69,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">A simple, yet complete, tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne</li>
+      <li class="breadcrumb-item active">A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Basic_Tutorial.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -79,8 +77,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="a-simple-yet-complete-tutorial-on-how-use-the-ccs-fit-module-to-fit-two-body-interactions-for-solid-ne">
-<h1>A simple, yet complete, tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne<a class="headerlink" href="#a-simple-yet-complete-tutorial-on-how-use-the-ccs-fit-module-to-fit-two-body-interactions-for-solid-ne" title="Permalink to this heading"></a></h1>
+  <section id="a-simple-tutorial-on-how-use-the-ccs-fit-module-to-fit-two-body-interactions-for-solid-ne">
+<h1>A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne<a class="headerlink" href="#a-simple-tutorial-on-how-use-the-ccs-fit-module-to-fit-two-body-interactions-for-solid-ne" title="Permalink to this heading"></a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load in the relevant packages</span>
@@ -93,127 +91,11 @@
 <span class="kn">from</span> <span class="nn">ase.calculators.lj</span> <span class="kn">import</span> <span class="n">LennardJones</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="n">LJ</span><span class="o">=</span><span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;Ne&#39;</span><span class="p">,</span><span class="s1">&#39;fcc&#39;</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="mf">1.55</span><span class="p">)</span>
-<span class="n">LJ</span><span class="o">=</span><span class="n">LJ</span><span class="o">*</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">LennardJones</span><span class="p">()</span>
-<span class="n">LJ</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-
 <span class="n">Fit_on_forces</span><span class="o">=</span><span class="kc">True</span>  <span class="c1">#Enable/disable option for fitting CCS potential to atomic forces. </span>
 </pre></div>
 </div>
 </div>
 </div>
-<section id="generate-training-data">
-<h2>Generate training data<a class="headerlink" href="#generate-training-data" title="Permalink to this heading"></a></h2>
-<p>Curvature Constrained Splines can be fitted to a reference data-set with energies (and optionally forces) of pre-calculated structures. In this example we generate the reference data-set using a Lennard-Jones potential. We use a LJ bulk structure that we randomly rattle and scale.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orig_cell</span> <span class="o">=</span> <span class="n">LJ</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
-<span class="n">orig_struc</span> <span class="o">=</span> <span class="n">LJ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">displacement_magnitude</span><span class="o">=</span><span class="mf">0.02</span>
-<span class="n">disp_steps</span><span class="o">=</span><span class="mi">5</span>
-<span class="n">rounds</span><span class="o">=</span><span class="mi">2</span>
-
-<span class="n">trainset_list</span><span class="o">=</span><span class="s2">&quot;file_list&quot;</span> <span class="c1"># List of strucutres to include in the database (see below)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">trainset_list</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-<span class="n">counter</span><span class="o">=</span><span class="mi">1</span>
-<span class="k">for</span> <span class="nb">round</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
-        <span class="n">new_cell</span> <span class="o">=</span> <span class="n">orig_cell</span><span class="o">*</span><span class="n">scale</span>
-        <span class="n">new_struc</span> <span class="o">=</span> <span class="n">orig_struc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">new_struc</span><span class="o">.</span><span class="n">set_cell</span><span class="p">(</span><span class="n">new_cell</span><span class="p">)</span>
-        <span class="n">new_struc</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-        <span class="n">nrg</span> <span class="o">=</span> <span class="n">new_struc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">disp_steps</span><span class="p">):</span>
-            <span class="n">rattle_struc</span> <span class="o">=</span> <span class="n">new_struc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">rattle_struc</span><span class="o">.</span><span class="n">rattle</span><span class="p">(</span><span class="n">displacement_magnitude</span><span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">counter</span><span class="p">)</span>
-            <span class="n">rattle_struc</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-            <span class="n">nrg</span> <span class="o">=</span> <span class="n">rattle_struc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">nrg</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">40</span><span class="p">:</span> <span class="c1"># We exclude structures that are unreasonably high in energy</span>
-                <span class="n">xyz_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;CALCULATED_DATA/S</span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">.xyz&quot;</span>
-                <span class="n">write</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span><span class="n">rattle_struc</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-       
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">25</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="k">if</span> <span class="n">nrg</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">40</span><span class="p">:</span> <span class="c1"># We exclude structures that are unreasonably high in energy</span>
-<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="n">xyz_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;CALCULATED_DATA/S</span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">.xyz&quot;</span>
-<span class="ne">---&gt; </span><span class="mi">25</span>     <span class="n">write</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span><span class="n">rattle_struc</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="nb">print</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">27</span>     <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:628,</span> in <span class="ni">write</span><span class="nt">(filename, images, format, parallel, append, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">624</span> <span class="nb">format</span> <span class="o">=</span> <span class="nb">format</span> <span class="ow">or</span> <span class="s1">&#39;json&#39;</span>  <span class="c1"># default is json</span>
-<span class="g g-Whitespace">    </span><span class="mi">626</span> <span class="n">io</span> <span class="o">=</span> <span class="n">get_ioformat</span><span class="p">(</span><span class="nb">format</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">628</span> <span class="k">return</span> <span class="n">_write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">629</span>               <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="n">append</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/parallel.py:244,</span> in <span class="ni">parallel_function.&lt;locals&gt;.new_func</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span> <span class="k">def</span> <span class="nf">new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">240</span>     <span class="k">if</span> <span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span>
-<span class="g g-Whitespace">    </span><span class="mi">241</span>         <span class="n">args</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;serial&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span>
-<span class="g g-Whitespace">    </span><span class="mi">242</span>         <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;parallel&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span>
-<span class="g g-Whitespace">    </span><span class="mi">243</span>         <span class="c1"># Disable:</span>
-<span class="ne">--&gt; </span><span class="mi">244</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="n">ex</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">247</span>     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:661,</span> in <span class="ni">_write</span><span class="nt">(filename, fd, format, io, images, parallel, append, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">659</span>     <span class="k">if</span> <span class="n">append</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">660</span>         <span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">661</span>     <span class="n">fd</span> <span class="o">=</span> <span class="n">open_with_compression</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">662</span>     <span class="c1"># XXX remember to re-enable compressed open</span>
-<span class="g g-Whitespace">    </span><span class="mi">663</span>     <span class="c1"># fd = io.open(filename, mode)</span>
-<span class="g g-Whitespace">    </span><span class="mi">664</span> <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/ase/io/formats.py:551,</span> in <span class="ni">open_with_compression</span><span class="nt">(filename, mode)</span>
-<span class="g g-Whitespace">    </span><span class="mi">548</span>     <span class="k">return</span> <span class="n">lzma</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">549</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">550</span>     <span class="c1"># Either None or unknown string</span>
-<span class="ne">--&gt; </span><span class="mi">551</span>     <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;CALCULATED_DATA/S1.xyz&#39;
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="building-a-reference-database">
-<h2>Building a reference database<a class="headerlink" href="#building-a-reference-database" title="Permalink to this heading"></a></h2>
-<p>After generating the data, we collect it in an ASE database file. The <code class="docutils literal notranslate"><span class="pre">file_list</span></code> is a file containing a list of files to be collected into the data base.</p>
-<p>Example of a <code class="docutils literal notranslate"><span class="pre">file_list</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CALCULATED_DATA/S1.xyz
-CALCULATED_DATA/S2.xyz
-CALCULATED_DATA/S3.xyz
-CALCULATED_DATA/S4.xyz
-</pre></div>
-</div>
-<p>Any format supported by ASE can be read in.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ccs_fit.scripts.ccs_build_db</span> <span class="kn">import</span> <span class="n">ccs_build_db</span>
-
-<span class="n">ccs_build_db</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;CCS&quot;</span><span class="p">,</span><span class="n">DFT_DB</span><span class="o">=</span><span class="s2">&quot;LJ.db&quot;</span><span class="p">,</span><span class="n">file_list</span><span class="o">=</span><span class="s2">&quot;file_list&quot;</span><span class="p">,</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Building data-bases: 100%|█████████████████████████████████| 40/40 [00:00&lt;00:00, 239.37it/s]
-</pre></div>
-</div>
-</div>
-</div>
-</section>
 <section id="generate-the-ccs-fit-input-file-structures-json">
 <h2>Generate the CCS_fit input file; structures.json<a class="headerlink" href="#generate-the-ccs-fit-input-file-structures-json" title="Permalink to this heading"></a></h2>
 <p>The next commands fetch the training set data from the ASE database containing the LJ structures and the corresponding energies. The reference data is called <code class="docutils literal notranslate"><span class="pre">LJ.db</span></code> since the reference energies and forces are obtained from a Lennard Jones potential.</p>
@@ -226,7 +108,28 @@ CALCULATED_DATA/S4.xyz
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data: 100%|███████████████████████████████████████| 40/40 [00:00&lt;00:00, 101.91it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:   0%|          | 0/40 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:  20%|██        | 8/40 [00:00&lt;00:00, 78.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:  40%|████      | 16/40 [00:00&lt;00:00, 57.91it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:  57%|█████▊    | 23/40 [00:00&lt;00:00, 51.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:  78%|███████▊  | 31/40 [00:00&lt;00:00, 59.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data:  95%|█████████▌| 38/40 [00:00&lt;00:00, 52.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Fetching data: 100%|██████████| 40/40 [00:00&lt;00:00, 55.67it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -273,15 +176,269 @@ CALCULATED_DATA/S4.xyz
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Generating one-body information from training-set.
         Added elements:  [&#39;Ne&#39;]
-    Applying monotonous constraints for pair:  Ne-Ne
-    Merging interval for pair Ne-Ne. Number of knots reduced from 412 to 411. 
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch: 100%|█████████████████████████████| 411/411 [00:52&lt;00:00,  7.89it/s]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Applying monotonous constraints for pair:  Ne-Ne
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The best switch is (49,) with mse: 0.0030195, corresponding to distances of [1.39] Å for element pairs [&#39;Ne-Ne&#39;].
-    Final root mean square error in energy:  0.0005337231125796525  (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Merging interval for pair Ne-Ne. Number of knots reduced from 412 to 411. 
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   0%|          | 0/411 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   0%|          | 1/411 [00:00&lt;01:55,  3.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   0%|          | 2/411 [00:00&lt;01:53,  3.60it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   1%|          | 3/411 [00:00&lt;01:55,  3.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   1%|          | 4/411 [00:01&lt;01:55,  3.54it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   1%|          | 5/411 [00:01&lt;01:52,  3.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   1%|▏         | 6/411 [00:01&lt;01:48,  3.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   2%|▏         | 7/411 [00:01&lt;01:45,  3.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   2%|▏         | 8/411 [00:02&lt;01:41,  3.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   2%|▏         | 9/411 [00:02&lt;01:39,  4.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   2%|▏         | 10/411 [00:02&lt;01:36,  4.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   3%|▎         | 11/411 [00:02&lt;01:34,  4.23it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   3%|▎         | 12/411 [00:02&lt;01:27,  4.57it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   3%|▎         | 13/411 [00:03&lt;01:21,  4.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   3%|▎         | 14/411 [00:03&lt;01:17,  5.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   4%|▎         | 15/411 [00:03&lt;01:15,  5.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   4%|▍         | 16/411 [00:03&lt;01:13,  5.37it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   4%|▍         | 17/411 [00:03&lt;01:11,  5.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   4%|▍         | 18/411 [00:04&lt;01:10,  5.59it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   5%|▍         | 19/411 [00:04&lt;01:08,  5.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   5%|▍         | 20/411 [00:04&lt;01:06,  5.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   5%|▌         | 21/411 [00:04&lt;01:06,  5.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   5%|▌         | 22/411 [00:04&lt;01:05,  5.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   6%|▌         | 23/411 [00:04&lt;01:03,  6.07it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   6%|▌         | 24/411 [00:05&lt;01:02,  6.23it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   6%|▌         | 25/411 [00:05&lt;01:03,  6.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   6%|▋         | 26/411 [00:05&lt;01:05,  5.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   7%|▋         | 27/411 [00:05&lt;01:07,  5.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   7%|▋         | 28/411 [00:05&lt;01:09,  5.55it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   7%|▋         | 29/411 [00:05&lt;01:12,  5.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   7%|▋         | 30/411 [00:06&lt;01:15,  5.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   8%|▊         | 31/411 [00:06&lt;01:16,  4.95it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   8%|▊         | 32/411 [00:06&lt;01:15,  4.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   8%|▊         | 33/411 [00:06&lt;01:15,  5.03it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   8%|▊         | 34/411 [00:06&lt;01:14,  5.09it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   9%|▊         | 35/411 [00:07&lt;01:14,  5.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   9%|▉         | 36/411 [00:07&lt;01:15,  4.94it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   9%|▉         | 37/411 [00:07&lt;01:15,  4.97it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   9%|▉         | 38/411 [00:07&lt;01:13,  5.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:   9%|▉         | 39/411 [00:07&lt;01:13,  5.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  10%|▉         | 40/411 [00:08&lt;01:13,  5.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  10%|▉         | 41/411 [00:08&lt;01:14,  4.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  10%|█         | 42/411 [00:08&lt;01:13,  5.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  10%|█         | 43/411 [00:08&lt;01:13,  4.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  11%|█         | 44/411 [00:08&lt;01:14,  4.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  11%|█         | 45/411 [00:09&lt;01:14,  4.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  11%|█         | 46/411 [00:09&lt;01:15,  4.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  11%|█▏        | 47/411 [00:09&lt;01:15,  4.83it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  12%|█▏        | 48/411 [00:09&lt;01:14,  4.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  12%|█▏        | 49/411 [00:09&lt;01:12,  4.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  12%|█▏        | 50/411 [00:10&lt;01:11,  5.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  12%|█▏        | 51/411 [00:10&lt;01:12,  4.97it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  13%|█▎        | 52/411 [00:10&lt;01:12,  4.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  13%|█▎        | 53/411 [00:10&lt;01:11,  5.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  13%|█▎        | 54/411 [00:10&lt;01:09,  5.17it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  13%|█▎        | 55/411 [00:11&lt;01:08,  5.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  14%|█▎        | 56/411 [00:11&lt;01:09,  5.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  14%|█▍        | 57/411 [00:11&lt;01:11,  4.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  14%|█▍        | 58/411 [00:11&lt;01:10,  5.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  14%|█▍        | 59/411 [00:11&lt;01:09,  5.03it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  15%|█▍        | 60/411 [00:12&lt;01:08,  5.11it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Finding optimum switch:  15%|█▍        | 60/411 [00:12&lt;01:12,  4.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">#RUN FIT</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">ccs_fit</span> <span class="kn">import</span> <span class="n">ccs_fit</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">ccs_fit</span><span class="p">(</span><span class="s2">&quot;CCS_input.json&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~/work/CCS/CCS/src/ccs_fit/fitting/main.py:394,</span> in <span class="ni">twp_fit</span><span class="nt">(filename)</span>
+<span class="g g-Whitespace">    </span><span class="mi">382</span> <span class="n">nn</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">383</span>     <span class="n">atom_pairs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">384</span>     <span class="n">atom_onebodies</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>     <span class="n">force_ewald</span><span class="o">=</span><span class="n">ewald_forces</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span> <span class="c1"># Solve QP problem</span>
+<span class="ne">--&gt; </span><span class="mi">394</span> <span class="n">predicted_energies</span><span class="p">,</span> <span class="n">mse</span><span class="p">,</span> <span class="n">xx_unfolded</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">solution</span><span class="p">()</span>
+
+<span class="nn">File ~/work/CCS/CCS/src/ccs_fit/fitting/objective.py:210,</span> in <span class="ni">Objective.solution</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="n">hh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="ne">--&gt; </span><span class="mi">210</span>     <span class="n">sol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">matrix</span><span class="p">(</span><span class="n">gg</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">hh</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span>                       <span class="n">matrix</span><span class="p">(</span><span class="n">aa</span><span class="p">),</span> <span class="n">matrix</span><span class="p">(</span><span class="n">bb</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="n">obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_obj</span><span class="p">(</span><span class="n">sol</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])))</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+<span class="nn">File ~/work/CCS/CCS/src/ccs_fit/fitting/objective.py:330,</span> in <span class="ni">Objective.solver</span><span class="nt">(pp, qq, gg, hh, aa, bb, maxiter, tol)</span>
+<span class="g g-Whitespace">    </span><span class="mi">328</span>     <span class="n">sol</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">329</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">330</span>     <span class="n">sol</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">qq</span><span class="p">,</span> <span class="n">gg</span><span class="p">,</span> <span class="n">hh</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">332</span> <span class="k">return</span> <span class="n">sol</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/cvxopt/coneprog.py:4485,</span> in <span class="ni">qp</span><span class="nt">(P, q, G, h, A, b, solver, kktsolver, initvals, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4475</span>         <span class="n">pinfres</span><span class="p">,</span> <span class="n">dinfres</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">4477</span>     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">z</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4478</span>         <span class="s1">&#39;primal objective&#39;</span><span class="p">:</span> <span class="n">pcost</span><span class="p">,</span> <span class="s1">&#39;dual objective&#39;</span><span class="p">:</span> <span class="n">dcost</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4479</span>         <span class="s1">&#39;gap&#39;</span><span class="p">:</span> <span class="n">gap</span><span class="p">,</span> <span class="s1">&#39;relative gap&#39;</span><span class="p">:</span> <span class="n">relgap</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4482</span>         <span class="s1">&#39;residual as primal infeasibility certificate&#39;</span><span class="p">:</span> <span class="n">pinfres</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4483</span>         <span class="s1">&#39;residual as dual infeasibility certificate&#39;</span><span class="p">:</span> <span class="n">dinfres</span><span class="p">}</span>
+<span class="ne">-&gt; </span><span class="mi">4485</span> <span class="k">return</span> <span class="n">coneqp</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span>  <span class="n">b</span><span class="p">,</span> <span class="n">initvals</span><span class="p">,</span> <span class="n">kktsolver</span> <span class="o">=</span> <span class="n">kktsolver</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/cvxopt/coneprog.py:2256,</span> in <span class="ni">coneqp</span><span class="nt">(P, q, G, h, dims, A, b, initvals, kktsolver, xnewcopy, xdot, xaxpy, xscal, ynewcopy, ydot, yaxpy, yscal, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2244</span> <span class="n">misc</span><span class="o">.</span><span class="n">ssqr</span><span class="p">(</span><span class="n">lmbdasq</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2247</span> <span class="c1"># f3(x, y, z) solves</span>
+<span class="g g-Whitespace">   </span><span class="mi">2248</span> <span class="c1">#</span>
+<span class="g g-Whitespace">   </span><span class="mi">2249</span> <span class="c1">#    [ P   A&#39;  G&#39;    ] [ ux        ]   [ bx ]</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2253</span> <span class="c1"># On entry, x, y, z containg bx, by, bz.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2254</span> <span class="c1"># On exit, they contain ux, uy, uz.</span>
+<span class="ne">-&gt; </span><span class="mi">2256</span> <span class="k">try</span><span class="p">:</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">kktsolver</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2257</span> <span class="k">except</span> <span class="ne">ArithmeticError</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">2258</span>     <span class="k">if</span> <span class="n">iters</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/cvxopt/coneprog.py:1981,</span> in <span class="ni">coneqp.&lt;locals&gt;.kktsolver</span><span class="nt">(W)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1980</span> <span class="k">def</span> <span class="nf">kktsolver</span><span class="p">(</span><span class="n">W</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1981</span>     <span class="k">return</span> <span class="n">factor</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/ccs-fit-oj5MS1KF-py3.9/lib/python3.9/site-packages/cvxopt/misc.py:1460,</span> in <span class="ni">kkt_chol2.&lt;locals&gt;.factor</span><span class="nt">(W, H, Df)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1457</span>     <span class="n">base</span><span class="o">.</span><span class="n">syrk</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">F</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">],</span> <span class="n">trans</span> <span class="o">=</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">partial</span> <span class="o">=</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1458</span>         <span class="kc">True</span><span class="p">)</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1459</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="n">matrix</span><span class="p">:</span> 
+<span class="ne">-&gt; </span><span class="mi">1460</span>     <span class="n">lapack</span><span class="o">.</span><span class="n">potrf</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">])</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1461</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1462</span>     <span class="n">cholmod</span><span class="o">.</span><span class="n">numeric</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">],</span> <span class="n">F</span><span class="p">[</span><span class="s1">&#39;Sf&#39;</span><span class="p">])</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
 </div>
 </div>
@@ -298,9 +455,9 @@ CALCULATED_DATA/S4.xyz
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                    | 0/40 [00:00&lt;?, ?it/s]/home/thism292/anaconda3/envs/CCS_fit_search_mode/lib/python3.9/site-packages/ase/utils/__init__.py:62: FutureWarning: Please use atoms.cell.rank instead
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/40 [00:00&lt;?, ?it/s]/home/thism292/anaconda3/envs/CCS_fit/lib/python3.9/site-packages/ase/utils/__init__.py:62: FutureWarning: Please use atoms.cell.rank instead
   warnings.warn(warning)
-100%|███████████████████████████████████████████████████████████| 40/40 [00:01&lt;00:00, 31.26it/s]
+100%|██████████| 40/40 [00:01&lt;00:00, 29.38it/s]
 </pre></div>
 </div>
 </div>
@@ -356,10 +513,10 @@ CALCULATED_DATA/S4.xyz
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/261694d65a7b7c6682a32f7595a4fca962a1d773ad997e5ca1625b6aeb7fb4f9.png" src="_images/261694d65a7b7c6682a32f7595a4fca962a1d773ad997e5ca1625b6aeb7fb4f9.png" />
-<img alt="_images/fb0c7ba39df4aacace7b3d2db8f30a100a546b20abade988db96dcc8c67c6e47.png" src="_images/fb0c7ba39df4aacace7b3d2db8f30a100a546b20abade988db96dcc8c67c6e47.png" />
-<img alt="_images/74e831faa39b14ee7dd7ff3224622536c1da69daff91326949dc1f9a83bfe660.png" src="_images/74e831faa39b14ee7dd7ff3224622536c1da69daff91326949dc1f9a83bfe660.png" />
-<img alt="_images/216e6dbb169a9e174d9f1e246e23338b4bcbb9a2c883106e2469321b17c23308.png" src="_images/216e6dbb169a9e174d9f1e246e23338b4bcbb9a2c883106e2469321b17c23308.png" />
+<img alt="_images/971430295eb7eb283c429fb99eace35825ccc993413d1ffd3017fef659a19f13.png" src="_images/971430295eb7eb283c429fb99eace35825ccc993413d1ffd3017fef659a19f13.png" />
+<img alt="_images/98a10e14ede4412fa478de0e30ee956128a10f06f4f5c808967da50e8c709e9f.png" src="_images/98a10e14ede4412fa478de0e30ee956128a10f06f4f5c808967da50e8c709e9f.png" />
+<img alt="_images/ef59bba4ac83a2dba0e3b188ad5f179910109472b29149286b7b97fd13090a57.png" src="_images/ef59bba4ac83a2dba0e3b188ad5f179910109472b29149286b7b97fd13090a57.png" />
+<img alt="_images/23603dfd03fa702da9eed603ebfe10902bbffdcd8d8b163ffe18f832909cf98b.png" src="_images/23603dfd03fa702da9eed603ebfe10902bbffdcd8d8b163ffe18f832909cf98b.png" />
 <img alt="_images/808c6ce0f0b739d0593e810508f145d59a7ddedaf9465b89adbea2bd0161f208.png" src="_images/808c6ce0f0b739d0593e810508f145d59a7ddedaf9465b89adbea2bd0161f208.png" />
 </div>
 </div>
@@ -386,7 +543,6 @@ CALCULATED_DATA/S4.xyz
     <span class="n">rm</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 <span class="n">rm</span><span class="p">(</span><span class="s2">&quot;structures.json&quot;</span><span class="p">)</span>
 <span class="n">rm</span><span class="p">(</span><span class="s2">&quot;file_list&quot;</span><span class="p">)</span>
-<span class="n">rm</span><span class="p">(</span><span class="s2">&quot;LJ.db&quot;</span><span class="p">)</span>
 <span class="n">rm</span><span class="p">(</span><span class="s2">&quot;ccs.spl&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
