@@ -246,7 +246,7 @@ class Objective:
 
         self.write_error()
 
-        # COMMENT: Unfold the spline to an equdistant grid
+        # COMMENT: Unfold the spline to an equidistant grid
         try:
             if self.merging == "True":
                 self.unfold_intervals()

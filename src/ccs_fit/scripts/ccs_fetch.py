@@ -1,4 +1,3 @@
-#!/usr/bin/python3.6
 import math
 import sys
 import json
