@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.5 (2023-02-02)
+### Fix
+* Fixed basic tutorial for github pages ([`bf549c6`](https://github.com/Teoroo-CMC/CCS/commit/bf549c6a08f850e1bfa8503f724f70ce901c0756))
+
 ## v0.13.4 (2023-02-02)
 ### Documentation
 * Updated documentation example ([`9c5118a`](https://github.com/Teoroo-CMC/CCS/commit/9c5118ab58097eecacc65721afbbefc0ff71eb51))
