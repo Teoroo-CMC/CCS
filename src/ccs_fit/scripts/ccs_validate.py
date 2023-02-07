@@ -19,6 +19,7 @@ def ccs_validate(
     DFTB_DB=None,
     charge_dict=None,
     charge_scaling=False,
+    include_forces=False,
     verbose=False,
 ):
     """
@@ -63,7 +64,11 @@ def ccs_validate(
         charge = True
 
     f = open("CCS_validate.dat", "w")
-    print("#Reference      Predicted      Error      No_of_atoms structure_no", file=f)
+    print("{:^13s} {:^13s} {:^13s} {:^13s} {:^13s}".format("#Reference", "Predicted", "Error", "No_of_atoms", "structure_no"), file=f)
+
+    if include_forces:
+        f_force = open("CCS_validate_forces.dat", "w")
+        print("{:^13s} {:^13s} {:^13s} {:^13s}".format("#Reference", "Predicted", "Error", "structure_no"), file=f_force)
 
     calc = CCS(CCS_params=CCS_params, charge=charge,
                q=charge_dict, charge_scaling=charge_scaling)
@@ -78,30 +83,46 @@ def ccs_validate(
     else:
         mask = len(DFT_DB) * [True]
 
-    counter = -1
+    counter = 0
     for row in tqdm(DFT_DB.select(), total=len(DFT_DB), colour="#800000"):
-        counter += 1
         if mask[counter]:
             structure = row.toatoms()
-            EDFT = structure.get_total_energy()
+            EDFT = structure.get_potential_energy()
+            if include_forces:
+                FREF = structure.get_forces()
             EREF = EDFT
             structure.calc = calc
             ECCS = structure.get_potential_energy()
+            if include_forces:
+                FCCS = structure.get_forces()
             if mode == "DFTB":
                 key = row.key
                 EDFTB = DFTB_DB.get("key=" + str(key)).energy
                 EREF = EDFT - EDFTB
+                if include_forces:
+                    FDFTB= DFTB_DB.get("key=" + str(key)).forces
+                    FREF = [FREF[i]-FDFTB[i] for i in range(len(FREF))]
                 sp_calculator = SinglePointCalculator(
                     structure, energy=EDFTB + ECCS)
                 structure.calc = sp_calculator
                 structure.get_potential_energy()
 
-            print(EREF, ECCS, np.abs(EREF - ECCS),
-                  len(structure), counter, file=f)
+            print('{:13.8f} {:13.8f} {:13.8f} {:13d} {:13d}'.format(
+                    EREF, ECCS, np.abs(EREF - ECCS),
+                    len(structure), counter), file=f)
+            if include_forces:
+                FREF = [item for sublist in FREF for item in sublist]
+                FCCS = [item for sublist in FCCS for item in sublist]
+                for force_id, force_ref in enumerate(FREF):
+                    print('{:13.8f} {:13.8f} {:13.8f} {:13d}'.format(
+                        force_ref, FCCS[force_id], np.abs(force_ref - FCCS[force_id]), counter), file=f_force)
+
             try:
                 CCS_DB.write(structure, key=key)
             except:
                 CCS_DB.write(structure)
+        
+        counter += 1
 
 
 def main():
@@ -136,6 +157,8 @@ def main():
                         help="Specify atomic charges in json format, e.g.: \n \'{ \"Zn\" : 2.0 , \"O\" : -2.0 }\'  ")
     parser.add_argument("-chg_s", "--charge_scaling",
                         type=bool, metavar="", default=False)
+    parser.add_argument("-f", "--include_forces", type=bool, metavar="",
+                        default=False, help="Validation of the reproduced forces w.r.t. those they were fitted on.")
 
     args = parser.parse_args()
 
