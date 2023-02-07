@@ -269,10 +269,6 @@ class Objective:
 
         self.write_CCS_params()
 
-        if self.write_buck == "True":
-            self.gen_Buckingham()
-            # self.write_Buckingham()
-
         return self.model_energies, mse, xx
 
     def predict(self, xx):
