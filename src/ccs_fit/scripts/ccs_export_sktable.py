@@ -116,7 +116,7 @@ def main():
         txt = art.text2art('CCS:export sk-table')
         print(txt)
     except:
-        pass
+        print('CCS: export sk-table')
 
     try:
         CCS_params_file = sys.argv[1]
