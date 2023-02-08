@@ -158,4 +158,7 @@ Attributes
    .. py:method:: write_CCS_params(fname='CCS_params.json')
 
 
+   .. py:method:: gen_Buckingham()
+
+
 

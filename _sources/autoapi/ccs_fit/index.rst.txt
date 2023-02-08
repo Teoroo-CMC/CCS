@@ -25,9 +25,19 @@ Functions
 
 .. autoapisummary::
 
+   ccs_fit.ccs_build_db
+   ccs_fit.ccs_export_sktable
    ccs_fit.ccs_fetch
    ccs_fit.ccs_fit
+   ccs_fit.ccs_validate
+   ccs_fit.write_FF
 
+
+
+.. py:function:: ccs_build_db(mode=None, DFT_DB=None, DFTB_DB=None, file_list=None, greedy=False, greed_threshold=0.0001, overwrite=False, verbose=False)
+
+
+.. py:function:: ccs_export_sktable(CCS_params_file)
 
 
 .. py:function:: ccs_fetch(mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None, include_forces=False, verbose=False)
@@ -55,5 +65,28 @@ Functions
 
    :param filename: The input file (input.json).
    :type filename: str
+
+
+.. py:function:: ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB='DFT.db', CCS_DB='CCS_validate.db', DFTB_DB=None, charge_dict=None, charge_scaling=False, include_forces=False, verbose=False)
+
+   Function to verify database generation.
+   ---------------------------------------
+
+   Input
+   -----
+       mode : str
+           String describing which mode is used, supported modes are:
+               CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+               CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
+               DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
+
+   :rtype: What does it return Jolla?
+
+   Example usage
+   -------------
+       ccs_validate MODE [...]
+
+
+.. py:function:: write_FF(CCS_params_file)
 
 

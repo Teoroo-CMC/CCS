@@ -42,7 +42,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../Basic_Tutorial.html">A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Basic_Tutorial.html">Basic Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit</span></code></a><ul>
@@ -120,6 +120,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scripts/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scripts/ccs_build_db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts.ccs_build_db</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts/ccs_export_FF/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts.ccs_export_FF</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts/ccs_export_sktable/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts.ccs_export_sktable</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts/ccs_fetch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts.ccs_fetch</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts/ccs_fit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_fit.scripts.ccs_fit</span></code></a></li>
@@ -140,14 +141,36 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.ccs_build_db" title="ccs_fit.ccs_build_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_build_db</span></code></a>([mode, DFT_DB, DFTB_DB, file_list, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.ccs_export_sktable" title="ccs_fit.ccs_export_sktable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_export_sktable</span></code></a>(CCS_params_file)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.ccs_fetch" title="ccs_fit.ccs_fetch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_fetch</span></code></a>([mode, DFT_DB, R_c, Ns, DFTB_DB, ...])</p></td>
 <td><p>Function to read files and output structures.json</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.ccs_fit" title="ccs_fit.ccs_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_fit</span></code></a>(filename)</p></td>
 <td><p>Parses the input files and fits the reference data.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.ccs_validate" title="ccs_fit.ccs_validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ccs_validate</span></code></a>([mode, CCS_params, Ns, DFT_DB, CCS_DB, ...])</p></td>
+<td><p>Function to verify database generation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.write_FF" title="ccs_fit.write_FF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_FF</span></code></a>(CCS_params_file)</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs_fit.ccs_build_db">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.</span></span><span class="sig-name descname"><span class="pre">ccs_build_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">greedy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">greed_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ccs_fit/scripts/ccs_build_db.html#ccs_build_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.ccs_build_db" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs_fit.ccs_export_sktable">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.</span></span><span class="sig-name descname"><span class="pre">ccs_export_sktable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CCS_params_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ccs_fit.ccs_export_sktable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs_fit.ccs_fetch">
 <span class="sig-prename descclassname"><span class="pre">ccs_fit.</span></span><span class="sig-name descname"><span class="pre">ccs_fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_forces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ccs_fit/scripts/ccs_fetch.html#ccs_fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.ccs_fetch" title="Permalink to this definition"></a></dt>
@@ -185,6 +208,44 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs_fit.ccs_validate">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.</span></span><span class="sig-name descname"><span class="pre">ccs_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFT_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DFT.db'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CCS_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS_validate.db'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DFTB_DB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_forces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ccs_fit/scripts/ccs_validate.html#ccs_validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.ccs_validate" title="Permalink to this definition"></a></dt>
+<dd><section id="function-to-verify-database-generation">
+<h4>Function to verify database generation.<a class="headerlink" href="#function-to-verify-database-generation" title="Permalink to this heading"></a></h4>
+</section>
+<section id="id1">
+<h4>Input<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><dl class="simple">
+<dt>mode<span class="classifier">str</span></dt><dd><dl class="simple">
+<dt>String describing which mode is used, supported modes are:</dt><dd><p>CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)”)
+CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)”)
+DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)”)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>What does it return Jolla?</p>
+</dd>
+</dl>
+</section>
+<section id="example-usage">
+<h4>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>ccs_validate MODE […]</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs_fit.write_FF">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.</span></span><span class="sig-name descname"><span class="pre">write_FF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CCS_params_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ccs_fit/scripts/ccs_export_FF.html#write_FF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.write_FF" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 </section>

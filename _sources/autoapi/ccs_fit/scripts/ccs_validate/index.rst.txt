@@ -18,7 +18,7 @@ Functions
 
 
 
-.. py:function:: ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB='DFT.db', CCS_DB='CCS_validate.db', DFTB_DB=None, charge_dict=None, charge_scaling=False, verbose=False)
+.. py:function:: ccs_validate(mode=None, CCS_params=None, Ns='all', DFT_DB='DFT.db', CCS_DB='CCS_validate.db', DFTB_DB=None, charge_dict=None, charge_scaling=False, include_forces=False, verbose=False)
 
    Function to verify database generation.
    ---------------------------------------

@@ -6,7 +6,7 @@
    "id": "74f144dd",
    "metadata": {},
    "source": [
-    "# A simple tutorial on how use the CCS_fit module to fit two-body interactions for solid Ne"
+    "# Basic Tutorial"
    ]
   },
   {
@@ -84,8 +84,8 @@
     "    },\n",
     "    \"Twobody\": {\n",
     "                \"Ne-Ne\": {\n",
-    "                        \"Rcut\": 5.0,\n",
-    "                        \"Resolution\": 0.01,\n",
+    "                        \"Rcut\": 4.0,\n",
+    "                        \"Resolution\": 0.05,\n",
     "                        \"Swtype\": \"sw\",\n",
     "                        \"const_type\" : \"Mono\"\n",
     "                }\n",
@@ -271,6 +271,18 @@
    ]
   },
   {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4ea50a6a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ccs_fit.scripts.ccs_export_FF import write_FF\n",
+    "\n",
+    "write_FF(\"CCS_params.json\")"
+   ]
+  },
+  {
    "cell_type": "markdown",
    "id": "34edf9a9",
    "metadata": {},
@@ -323,7 +335,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.9.15"
+   "version": "3.9.15 (main, Nov 24 2022, 14:31:59) \n[GCC 11.2.0]"
   },
   "vscode": {
    "interpreter": {
