@@ -26,19 +26,22 @@ ccs_fit-x.y.z
 ├── bin
 │   ├── ccs_build_db
 │   ├── ccs_export_sktable
+|   ├── ccs_export_FF
 │   ├── ccs_fetch
 │   ├── ccs_fit
 │   └── ccs_validate
 ├── docs
 ├── examples
-│   ├── CCS
-│   ├── CCS_with_LAMMPS
-│   ├── DFTB_repulsive_fitting
-│   ├── Preparing_ASE_db_trainingsets
-│   ├── Simple_regressor
-│   ├── Twobody_fit_for_an_O2_molecule
-│   ├── Twobody_fit_for_solid_Ne
-│   └── ppmd_interfacing
+│   └── Basic_Tutorial
+│       ├── tutorial.ipynb
+│   └── Advanced_Tutorials
+│       ├── CCS
+│       ├── CCS_with_LAMMPS
+│       ├── DFTB_repulsive_fitting
+│       ├── ppmd_interfacing
+│       ├── Preparing_ASE_db_trainingsets
+│       ├── Search_mode
+│       └── Simple_regressor
 ├── logo.png
 ├── poetry.lock
 ├── pyproject.toml
@@ -53,6 +56,7 @@ ccs_fit-x.y.z
 │       ├── regression_tool
 │       └── scripts
 │           ├── ccs_build_db.py
+│           ├── ccs_export_FF.py
 │           ├── ccs_export_sktable.py
 │           ├── ccs_fetch.py
 │           ├── ccs_fit.py
@@ -60,8 +64,12 @@ ccs_fit-x.y.z
 └── tests
 ```
 
-* `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.
+* `ccs_build_db`        - Routine that builds an ASE-database.
+* `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database.
 * `ccs_fit`             - The primary executable file for the ccs_fit package.
+* `ccs_export_sktable`  - Export the spline in a dftbplus-compatible layout.
+* `ccs_export_FF'       - Fit the spline to commonly employed force fields; Buckingham, Morse and Lennard Jones.
+* `ccs_validate'        - Validation of the energies and forces of the fit compared to the training set.
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.
 * `spline_functions.py` - A module for spline construction/evaluation/output. 
@@ -70,7 +78,6 @@ ccs_fit-x.y.z
 ### Prerequisites
 
 You need to install the following softwares
-
 ```
 pip install numpy
 pip install scipy
@@ -104,6 +111,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 poetry --version # to see if poetry installed correctly
 poetry install # to install ccs_fit
 ```
+<---
 ### Environment Variables
 Set the following environment variables:
 ```
@@ -113,7 +121,7 @@ $export PATH=<path-to-CCS-bin>:$PATH
 Within a conda virtual environment, you can update the path by using:
 conda develop <path-to-CCS-package>
 ```
-
+-->
 
 ## Tutorials
 
