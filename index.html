@@ -96,19 +96,22 @@
 ├── bin
 │   ├── ccs_build_db
 │   ├── ccs_export_sktable
+|   ├── ccs_export_FF
 │   ├── ccs_fetch
 │   ├── ccs_fit
 │   └── ccs_validate
 ├── docs
 ├── examples
-│   ├── CCS
-│   ├── CCS_with_LAMMPS
-│   ├── DFTB_repulsive_fitting
-│   ├── Preparing_ASE_db_trainingsets
-│   ├── Simple_regressor
-│   ├── Twobody_fit_for_an_O2_molecule
-│   ├── Twobody_fit_for_solid_Ne
-│   └── ppmd_interfacing
+│   └── Basic_Tutorial
+│       ├── tutorial.ipynb
+│   └── Advanced_Tutorials
+│       ├── CCS
+│       ├── CCS_with_LAMMPS
+│       ├── DFTB_repulsive_fitting
+│       ├── ppmd_interfacing
+│       ├── Preparing_ASE_db_trainingsets
+│       ├── Search_mode
+│       └── Simple_regressor
 ├── logo.png
 ├── poetry.lock
 ├── pyproject.toml
@@ -123,6 +126,7 @@
 │       ├── regression_tool
 │       └── scripts
 │           ├── ccs_build_db.py
+│           ├── ccs_export_FF.py
 │           ├── ccs_export_sktable.py
 │           ├── ccs_fetch.py
 │           ├── ccs_fit.py
@@ -131,8 +135,12 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fetch</span></code>           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database with DFT-data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_build_db</span></code>        - Routine that builds an ASE-database.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_fetch</span></code>           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ccs_fit</span></code>             - The primary executable file for the ccs_fit package.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ccs_export_sktable</span></code>  - Export the spline in a dftbplus-compatible layout.</p></li>
+<li><p>`ccs_export_FF’       - Fit the spline to commonly employed force fields; Buckingham, Morse and Lennard Jones.</p></li>
+<li><p>`ccs_validate’        - Validation of the energies and forces of the fit compared to the training set.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">main.py</span></code>             - A module to parse input files.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">objective.py</span></code>        - A module which contains the objective function and solver.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">spline_functions.py</span></code> - A module for spline construction/evaluation/output.</p></li>
@@ -141,7 +149,6 @@
 ### Prerequisites
 
 You need to install the following softwares
-
 ```
 pip install numpy
 pip install scipy
@@ -177,6 +184,7 @@ python setup.py install
 <span class="n">poetry</span> <span class="n">install</span> <span class="c1"># to install ccs_fit</span>
 </pre></div>
 </div>
+<p>&lt;—</p>
 </section>
 <section id="environment-variables">
 <h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading"></a></h3>
@@ -188,6 +196,7 @@ Within a conda virtual environment, you can update the path by using:
 conda develop &lt;path-to-CCS-package&gt;
 </pre></div>
 </div>
+<p>–&gt;</p>
 </section>
 </section>
 <section id="tutorials">
