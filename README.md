@@ -111,7 +111,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 poetry --version # to see if poetry installed correctly
 poetry install # to install ccs_fit
 ```
-<---
+<!---
 ### Environment Variables
 Set the following environment variables:
 ```
@@ -121,7 +121,7 @@ $export PATH=<path-to-CCS-bin>:$PATH
 Within a conda virtual environment, you can update the path by using:
 conda develop <path-to-CCS-package>
 ```
--->
+--->
 
 ## Tutorials
 
