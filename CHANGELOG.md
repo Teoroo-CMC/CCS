@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.1 (2023-02-08)
+### Documentation
+* **Basic_Tutorial:** Adding FF fitting to basic example ([`7399fe8`](https://github.com/Teoroo-CMC/CCS/commit/7399fe85f86a517a6860064d2afb08abe817590f))
+
 ## v0.14.0 (2023-02-08)
 ### Feature
 * **__init__.py:** Adding script functions to ccs_fit namespace ([`88f6e95`](https://github.com/Teoroo-CMC/CCS/commit/88f6e95ce5caf99dbab51247dd995b33b6f1c3d3))
