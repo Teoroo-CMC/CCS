@@ -68,8 +68,8 @@ ccs_fit-x.y.z
 * `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database.
 * `ccs_fit`             - The primary executable file for the ccs_fit package.
 * `ccs_export_sktable`  - Export the spline in a dftbplus-compatible layout.
-* `ccs_export_FF'       - Fit the spline to commonly employed force fields; Buckingham, Morse and Lennard Jones.
-* `ccs_validate'        - Validation of the energies and forces of the fit compared to the training set.
+* `ccs_export_FF`       - Fit the spline to commonly employed force fields; Buckingham, Morse and Lennard Jones.
+* `ccs_validate`        - Validation of the energies and forces of the fit compared to the training set.
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.
 * `spline_functions.py` - A module for spline construction/evaluation/output. 
