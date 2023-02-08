@@ -2,6 +2,24 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.0 (2023-02-08)
+### Feature
+* **__init__.py:** Adding script functions to ccs_fit namespace ([`88f6e95`](https://github.com/Teoroo-CMC/CCS/commit/88f6e95ce5caf99dbab51247dd995b33b6f1c3d3))
+* **ccs_validate.py:** Add force validation option ([`1ca5c0e`](https://github.com/Teoroo-CMC/CCS/commit/1ca5c0eeef5e43f7621eefa46c82484066b64fce))
+* Adding executable for force field fitting ([`cd8b883`](https://github.com/Teoroo-CMC/CCS/commit/cd8b8834eb48886a94e50870492b466dac1166e8))
+* Adding fitting of standard Force Field parameters ([`51de91b`](https://github.com/Teoroo-CMC/CCS/commit/51de91b04c22d793253e83edea1ba35c100f1b89))
+* Fitting FF ([`fe9e645`](https://github.com/Teoroo-CMC/CCS/commit/fe9e645378bd5ecfeeec42cddb28641fa3849685))
+
+### Fix
+* Corrected adding calculator to ccs_fit namespace ([`fa56e34`](https://github.com/Teoroo-CMC/CCS/commit/fa56e345fc343a90cd447c48deef6febb8a53f48))
+* Fixed executable for FF fitting ([`a6c6440`](https://github.com/Teoroo-CMC/CCS/commit/a6c6440eab34211996899ba30ce272f002bd540a))
+* Add nice command line intro ([`4b84dea`](https://github.com/Teoroo-CMC/CCS/commit/4b84dea33d541bcc7b5640d24d430ea9360b4675))
+
+### Documentation
+* **Basic_Tutorial:** Adding FF fitting to basic example ([`c8f099c`](https://github.com/Teoroo-CMC/CCS/commit/c8f099c2d5e34f0cd14cc755db51945167ba19f0))
+* Adding force fitting to examples ([`88370e6`](https://github.com/Teoroo-CMC/CCS/commit/88370e61620317c8d7462cc9e10392e12236c026))
+* Change title of basic tutorial in docs ([`0e2aabe`](https://github.com/Teoroo-CMC/CCS/commit/0e2aabe4be25e2fdfcee24ac39a4a3a6c483411b))
+
 ## v0.13.5 (2023-02-02)
 ### Fix
 * Fixed basic tutorial for github pages ([`bf549c6`](https://github.com/Teoroo-CMC/CCS/commit/bf549c6a08f850e1bfa8503f724f70ce901c0756))
