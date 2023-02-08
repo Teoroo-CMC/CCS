@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.4 (2023-02-08)
+
+
 ## v0.14.3 (2023-02-08)
 ### Documentation
 * **README:** Fixed overview ([`1667fc9`](https://github.com/Teoroo-CMC/CCS/commit/1667fc948a5660acecb3bd04cbdb497c964ea435))
