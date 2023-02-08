@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.2 (2023-02-08)
+### Documentation
+* **README:** Update README to reflect new features ([`99bd3a1`](https://github.com/Teoroo-CMC/CCS/commit/99bd3a1cd841ac2434bb94a4353427e87feb57a7))
+
 ## v0.14.1 (2023-02-08)
 ### Documentation
 * **Basic_Tutorial:** Adding FF fitting to basic example ([`7399fe8`](https://github.com/Teoroo-CMC/CCS/commit/7399fe85f86a517a6860064d2afb08abe817590f))
