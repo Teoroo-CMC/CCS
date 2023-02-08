@@ -10,7 +10,7 @@ from importlib.metadata import version
 
 #__version__ = version("ccs")
 
-from ccs_fit.ase_calculator.ccs_ase_calculator import CCS_calc
+from ccs_fit.ase_calculator.ccs_ase_calculator import CCS as CCS_calc
 from ccs_fit.scripts.ccs_build_db import ccs_build_db
 from ccs_fit.scripts.ccs_export_sktable import write_dftb_spline as ccs_export_sktable
 from ccs_fit.scripts.ccs_fetch import ccs_fetch as ccs_fetch
