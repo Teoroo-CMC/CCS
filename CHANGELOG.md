@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.6 (2023-02-09)
+### Documentation
+* Add (not so great) ZnO example ([`9d77bee`](https://github.com/Teoroo-CMC/CCS/commit/9d77bee9babd9b81db5f3db377ee95df27d4d7af))
+
 ## v0.14.5 (2023-02-09)
 
 
