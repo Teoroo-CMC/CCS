@@ -33,7 +33,7 @@ ccs_fit-x.y.z
 ├── docs
 ├── examples
 │   └── Basic_Tutorial
-│       ├── tutorial.ipynb
+│       └── tutorial.ipynb
 │   └── Advanced_Tutorials
 │       ├── CCS
 │       ├── CCS_with_LAMMPS
