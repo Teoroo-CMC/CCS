@@ -150,10 +150,12 @@
 
 <span class="sd">    Input</span>
 <span class="sd">    -----</span>
-<span class="sd">        args : list</span>
-<span class="sd">            list of filenames</span>
+<span class="sd">        mode : string</span>
+<span class="sd">            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB]</span>
+<span class="sd">        DFT_DB : string</span>
+<span class="sd">            optional: target database</span>
 <span class="sd">        R_c : float</span>
-<span class="sd">            optional: Distance cut-off. Defaults to 7.0.</span>
+<span class="sd">            optional: Distance cut-off. Defaults to 6.0.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -276,11 +278,11 @@
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;CCS fetching tool&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--mode&quot;</span><span class="p">,</span>         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;CCS&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Mode. Availble option: CCS, CCS+Q, DFTB&quot;</span><span class="p">)</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;CCS&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Mode. Available options: CCS, CCS+Q, DFTB&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--DFT_DB&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;DFT.db&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of DFT reference data-base&quot;</span><span class="p">)</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;DFT.db&#39;</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of DFT reference database&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-dd&quot;</span><span class="p">,</span> <span class="s2">&quot;--DFTB_DB&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-                        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of DFTB reference data-base&quot;</span><span class="p">)</span>
+                        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of DFTB reference database&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--R_c&quot;</span><span class="p">,</span>    <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
                         <span class="n">default</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Cut-off radius&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;--Ns&quot;</span><span class="p">,</span>  <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>  <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
