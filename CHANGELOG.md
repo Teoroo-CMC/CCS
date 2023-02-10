@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.8 (2023-02-10)
+### Documentation
+* Adding comments for potential force weighting ([`748bbdb`](https://github.com/Teoroo-CMC/CCS/commit/748bbdb50dac8de25fe1ff20ba9386048c392f5b))
+
 ## v0.14.7 (2023-02-10)
 ### Documentation
 * **README:** Add python version shield ([`7da132d`](https://github.com/Teoroo-CMC/CCS/commit/7da132df6b220d4f3eff886910276e1975502b17))
