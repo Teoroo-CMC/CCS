@@ -79,10 +79,12 @@ def ccs_fetch(
 
     Input
     -----
-        args : list
-            list of filenames
+        mode : string
+            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB]
+        DFT_DB : string
+            optional: target database
         R_c : float
-            optional: Distance cut-off. Defaults to 7.0.
+            optional: Distance cut-off. Defaults to 6.0.
 
     Returns
     -------
@@ -205,11 +207,11 @@ def main():
 
     parser = argparse.ArgumentParser(description='CCS fetching tool')
     parser.add_argument("-m", "--mode",         type=str, metavar="",
-                        default='CCS',  help="Mode. Availble option: CCS, CCS+Q, DFTB")
+                        default='CCS',  help="Mode. Available options: CCS, CCS+Q, DFTB")
     parser.add_argument("-d", "--DFT_DB", type=str, metavar="",
-                        default='DFT.db',  help="Name of DFT reference data-base")
+                        default='DFT.db',  help="Name of DFT reference database")
     parser.add_argument("-dd", "--DFTB_DB", type=str, metavar="",
-                        default=None,  help="Name of DFTB reference data-base")
+                        default=None,  help="Name of DFTB reference database")
     parser.add_argument("-r", "--R_c",    type=float, metavar="",
                         default=6.0,  help="Cut-off radius")
     parser.add_argument("-n", "--Ns",  type=int,  metavar="",

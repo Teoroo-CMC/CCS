@@ -62,7 +62,7 @@ class Objective:
         self.force_ref = np.array(
             [*self.force_ref_x, *self.force_ref_y, *self.force_ref_z]
         )
-        self.ref = np.hstack((self.energy_ref, self.force_ref))
+        self.ref = np.hstack((self.energy_ref, self.force_ref)) # If you want to change the weighting of the forces, you can do so here! [TJAMS]
 
         # WHY DO I NEED TO FLATTEN?
         self.ewald_energy = np.array(energy_ewald).reshape(-1, 1).flatten()
@@ -440,6 +440,7 @@ class Objective:
             (fvv_x, np.zeros(
                 (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
+        ### This is where one could scale the forces by a scalar, do for x, y and z! Don't forget to also scale the target forces! [TJAMS]
         mm = np.vstack((mm, fvv_x))
 
         tmp = []
