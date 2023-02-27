@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.9 (2023-02-27)
+### Documentation
+* Updated the output of the merging interval routine ([`6ef3084`](https://github.com/Teoroo-CMC/CCS/commit/6ef30847260f86c6516547f454f6acd9ace312eb))
+
 ## v0.14.8 (2023-02-10)
 ### Documentation
 * Adding comments for potential force weighting ([`748bbdb`](https://github.com/Teoroo-CMC/CCS/commit/748bbdb50dac8de25fe1ff20ba9386048c392f5b))
