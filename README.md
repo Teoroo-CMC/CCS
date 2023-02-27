@@ -218,4 +218,4 @@ This project has received funding from the European Union's Horizon 2020 researc
 This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgement
-We thank all the members of  [TEOROO-group](http://www.teoroo.kemi.uu.se/) at Uppsala University, Sweden.
+We want to thank Pavlin Mitev, Christof Köhler, Matthew Wolf, Kersti Hermansson, Bálint Aradi and Tammo van der Heide, and all the members of the [TEOROO-group](http://www.teoroo.kemi.uu.se/) at Uppsala University, Sweden for fruitful discussions and general support.

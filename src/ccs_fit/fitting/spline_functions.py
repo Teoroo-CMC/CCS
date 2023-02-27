@@ -119,9 +119,9 @@ class Twobody:
         self.fvv_x, self.fvv_y, self.fvv_z,_ = self.get_v_forces([])
         if self.N_full > self.N:
             print(
-                f"    Merging interval for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
+                f"    Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. ")
         logger.info(
-            f"Merging interval for pair {self.name}. Number of knots reduced from {self.N_full} to {self.N}. ")
+            f"Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. ")
 
     def dissolve_interval(self):
         tmp_curvatures = []
