@@ -14,7 +14,7 @@
 [![Coverage](codecov.io/gh/:vcsName/:user/:repo?flag=flag_name&token=a1b2c3d4e5)(https://github.com/Teoroo-CMC/CCS/actions)
 --->
 
-![](correlation.gif)
+![](logo.gif)
 
 The `CCS_fit` package is a tool to construct two-body potentials using the idea of curvature constrained splines.
 ## Getting Started
