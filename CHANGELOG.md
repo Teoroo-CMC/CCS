@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.10 (2023-03-01)
+### Documentation
+* New logo! ([`1667953`](https://github.com/Teoroo-CMC/CCS/commit/166795390c42ae1225330d6f31c193cf4d9257dd))
+* New logogit add logo.png ! ([`32cced5`](https://github.com/Teoroo-CMC/CCS/commit/32cced5ff8e6875078a524184946a37b6dab0657))
+* Adding logo generating notebook to this branch ([`aa30db2`](https://github.com/Teoroo-CMC/CCS/commit/aa30db27cb9a162517223a3f92887b52144860c1))
+* Trying gif as logo ([`251e408`](https://github.com/Teoroo-CMC/CCS/commit/251e408d22767051fb53d265cdaff0879d8260a3))
+* Add gif for logo ([`205a3ad`](https://github.com/Teoroo-CMC/CCS/commit/205a3ad777d0b3845a839a0ef84c2fa021ea0dba))
+
 ## v0.14.9 (2023-02-27)
 ### Documentation
 * Updated the output of the merging interval routine ([`6ef3084`](https://github.com/Teoroo-CMC/CCS/commit/6ef30847260f86c6516547f454f6acd9ace312eb))
