@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.11 (2023-03-01)
+### Documentation
+* Add funding from eSSENCE ([`6a89c54`](https://github.com/Teoroo-CMC/CCS/commit/6a89c54908b9ca154de940e0673d199c3e25a252))
+
 ## v0.14.10 (2023-03-01)
 ### Documentation
 * New logo! ([`1667953`](https://github.com/Teoroo-CMC/CCS/commit/166795390c42ae1225330d6f31c193cf4d9257dd))
