@@ -214,7 +214,7 @@ CCS_params.json CCS_error.out ccs.log
 * **Thijs Smolders**
 
 ## Funding
-This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 957189.
+This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 957189, and the Swedish National Strategic e-Science programme eSSENCE.
 
 ## License
 This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
