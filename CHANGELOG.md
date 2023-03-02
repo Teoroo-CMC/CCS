@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.12 (2023-03-02)
+### Documentation
+* Delete correlation gif which has been replaced ([`e1de6d7`](https://github.com/Teoroo-CMC/CCS/commit/e1de6d7804f4084d844c09dea2477268b93ffbb1))
+
 ## v0.14.11 (2023-03-01)
 ### Documentation
 * Add funding from eSSENCE ([`6a89c54`](https://github.com/Teoroo-CMC/CCS/commit/6a89c54908b9ca154de940e0673d199c3e25a252))
