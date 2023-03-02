@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.15 (2023-03-02)
+### Documentation
+* Adding materials for kickstarting a ccs fit ([`f303357`](https://github.com/Teoroo-CMC/CCS/commit/f3033577e96bab86f1b773c47e6c8d8a1bcc3b11))
+
 ## v0.14.14 (2023-03-02)
 ### Documentation
 * **LJ.db:** Adding LJ.db to basic example ([`caaa664`](https://github.com/Teoroo-CMC/CCS/commit/caaa664eed5c2de85fdbbd6a8530c038f82c1ca0))

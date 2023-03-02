@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ccs_fit"
-version = "0.14.14"
+version = "0.14.15"
 description = "Fitting tools for repulsive two body interactions using curvature constrained splines."
 authors = [
     "Akshay Krishna AK",
