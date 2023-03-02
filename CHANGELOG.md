@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.13 (2023-03-02)
+
+
 ## v0.14.12 (2023-03-02)
 ### Documentation
 * Delete correlation gif which has been replaced ([`e1de6d7`](https://github.com/Teoroo-CMC/CCS/commit/e1de6d7804f4084d844c09dea2477268b93ffbb1))
