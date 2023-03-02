@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.14 (2023-03-02)
+### Documentation
+* **LJ.db:** Adding LJ.db to basic example ([`caaa664`](https://github.com/Teoroo-CMC/CCS/commit/caaa664eed5c2de85fdbbd6a8530c038f82c1ca0))
+
 ## v0.14.13 (2023-03-02)
 
 
