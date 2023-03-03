@@ -101,9 +101,9 @@ class Twobody:
         self.splcoeffs = None
         self.expcoeffs = None
         if self.const_type.lower() == 'mono':
-            print("    Applying monotonous constraints for pair: ", self.name)
+            print("    Applying monotonic constraints for pair: ", self.name)
             logger.info(
-                f"Applying monotonous constraints for pair: {self.name}")
+                f"Applying monotonic constraints for pair: {self.name}")
         if self.const_type.lower() == 'simple':
             print("    Applying simple constraints for pair: ", self.name)
             logger.info(
