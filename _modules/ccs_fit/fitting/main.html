@@ -378,6 +378,12 @@
                             <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
                                 <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
                             <span class="k">raise</span>
+                    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS2Q&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">ref_forces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">[</span><span class="s2">&quot;force_ewald&quot;</span><span class="p">])</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                                <span class="s2">&quot; Check force key in structure file&quot;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CCS+fQ&quot;</span><span class="p">:</span>
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">ff_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
