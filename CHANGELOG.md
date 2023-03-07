@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.0 (2023-03-07)
+### Feature
+* Adding ridge regression ([`c3f3b96`](https://github.com/Teoroo-CMC/CCS/commit/c3f3b961e83c09a29d033da41333929ac4f889c1))
+
 ## v0.15.1 (2023-03-07)
 ### Fix
 * **ccs_export_FF:** Remove Greek symbols ([`c0b2595`](https://github.com/Teoroo-CMC/CCS/commit/c0b259576badcf371b67a89d45e468fea6900a52))
