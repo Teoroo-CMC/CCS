@@ -276,6 +276,59 @@
 
             <span class="c1">##### END UNC ####            </span>
 
+            <span class="c1">### Ridge regression</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_ridge_regression</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+                <span class="n">ridge</span><span class="o">=</span><span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ridge_alpha</span><span class="p">,</span><span class="n">fit_intercept</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="c1">##### START RIDGE ####</span>
+                <span class="c1">#Solving unconstrained problem</span>
+                <span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">)</span>
+                <span class="n">ridge_pred</span><span class="o">=</span><span class="n">ridge</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    MSE from ridge regression: &quot;</span><span class="p">,</span> <span class="p">((</span><span class="n">ridge_pred</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">&quot;Regularization (alpha): &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ridge_alpha</span>   <span class="p">)</span>
+                <span class="n">xx</span><span class="o">=</span><span class="n">ridge</span><span class="o">.</span><span class="n">coef_</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assign_parameter_values</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">model_energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;RIDGE_error.out&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">model_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mm</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Nconfs_forces</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write_error_forces</span><span class="p">(</span><span class="n">model_forces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_ref</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;RIDGE_error_forces.out&quot;</span><span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">merging</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">unfold_intervals</span><span class="p">()</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="n">x_unfolded</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">get_spline_coeffs</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">get_expcoeffs</span><span class="p">()</span>
+                    <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l_twb</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">curvatures</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+                    <span class="p">)</span>
+                <span class="k">for</span> <span class="n">onb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_one</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">onb</span><span class="o">.</span><span class="n">epsilon_supported</span><span class="p">:</span>
+                        <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">onb</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">x_unfolded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_unfolded</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+                <span class="n">xx</span> <span class="o">=</span> <span class="n">x_unfolded</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_CCS_params</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;RIDGE_params.json&quot;</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">merging</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">merge_intervals</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="c1">##### END RIDGE ####            </span>
+
+
         <span class="k">for</span> <span class="n">n_switch_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">nswitch_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;    Finding optimum switch&quot;</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s2">&quot;#800080&quot;</span>
         <span class="p">):</span>
