@@ -222,7 +222,7 @@ class Objective:
         best_switch_r = np.around([nswitch_list[opt_sol_index][elem]*self.l_twb[elem].res+self.l_twb[elem].Rmin for elem in range(self.np)], decimals=2)
         elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with mse: {mse}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
 
         # [{' '.join(['{:2f}'.format(best_switch_r[elem]) for elem in range(self.np)])}]
 
@@ -524,8 +524,8 @@ class Objective:
             fmt="%-15.5f",
         )
 
-        print("    Final root mean square error in energy: ", (np.square(error/Natoms)).mean()
-              ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]")
+        # print("    Final root mean square error in energy: ", (np.square(error/Natoms)).mean()
+        #      ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]")
 
     def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
         """Prints the errors in a file.

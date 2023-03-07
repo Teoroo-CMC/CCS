@@ -303,6 +303,12 @@ def parse(data, struct_data, struct_data_forces):
                             logger.critical(
                                 " Check force key in structure file")
                             raise
+                    if data["General"]["interface"] == "CCS2Q":
+                        try:
+                            ref_forces.append(ff["force_ewald"])
+                        except KeyError:
+                            logger.critical(
+                                " Check force key in structure file")
                     if data["General"]["interface"] == "CCS+fQ":
                         try:
                             ff_tmp = np.array(
