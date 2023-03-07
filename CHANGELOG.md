@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.15.0 (2023-03-07)
+### Feature
+* Adding forces to mode CCS2Q ([`57deedb`](https://github.com/Teoroo-CMC/CCS/commit/57deedbde7ec79cda61679d13a163e220321b980))
+
 ## v0.14.16 (2023-03-03)
 
 
