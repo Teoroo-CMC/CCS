@@ -109,7 +109,7 @@ def write_FF(CCS_params_file):
     f_Mor = open("Morse.dat", "w")
 
     print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "A", "B", "C"), file=f_Buck)
-    print("{:^8s} {:^8s} {:^20s} {:^20s}\n".format("Element", "Element", "ε", "σ"), file=f_LJ)
+    print("{:^8s} {:^8s} {:^20s} {:^20s}\n".format("Element", "Element", "epsilon", "sigma"), file=f_LJ)
     print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "D_e", "a", "r_e", "C"), file=f_Mor)
     
     for pair in CCS_params["Two_body"]:
