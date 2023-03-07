@@ -1,0 +1,40 @@
+{
+        "General": {
+                "interface": "CCS",
+                "ewald_scaling": 1.0,
+                "merging": "True",
+                "do_unconstrained_fit": "False"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "O-O": {
+                        "Rcut": 5.999995141563063,
+                        "Resolution": 0.5,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full",
+                        "Rmin": 2.0127416997969516
+                },
+                "O-Zn": {
+                        "Rcut": 5.999999689147987,
+                        "Resolution": 0.5,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full",
+                        "Rmin": 1.186837249462861
+                },
+                "Zn-Zn": {
+                        "Rcut": 5.999966913655773,
+                        "Resolution": 0.5,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full",
+                        "Rmin": 1.8713203435596424
+                }
+        },
+        "Onebody": [
+                "O",
+                "Zn"
+        ]
+}

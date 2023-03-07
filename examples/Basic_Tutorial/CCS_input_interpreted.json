@@ -1,0 +1,22 @@
+{
+        "General": {
+                "interface": "CCS",
+                "ewald_scaling": 1.0,
+                "merging": "True",
+                "do_unconstrained_fit": "False"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "Ne-Ne": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.01,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "Rmin": 0.8965640027264121
+                }
+        },
+        "Onebody": [
+                "Ne"
+        ]
+}
