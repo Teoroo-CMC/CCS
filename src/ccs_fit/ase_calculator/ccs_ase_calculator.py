@@ -165,6 +165,7 @@ class CCS(Calculator):
 
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
+            self.atoms.wrap()
             n_repeat = self.rc * np.linalg.norm(np.linalg.inv(cell), axis=0)
             n_repeat = np.ceil(n_repeat).astype(int)
             offsets = [*it.product(*[np.arange(-n, n + 1) for n in n_repeat])]
@@ -208,7 +209,7 @@ class CCS(Calculator):
                 dist_mask = (norm_dist < self.rc) & (norm_dist > 0)
                 xy_distances.extend(norm_dist[dist_mask].tolist())
                 # Sometimes there are no distances to append
-
+                # Force calculation
                 try:
                     forces[id, :] += np.sum(
                         (
@@ -222,6 +223,16 @@ class CCS(Calculator):
                     )
                 except:
                     pass
+
+                # Stress calculation
+                id2s = [i for i, x in enumerate(dist_mask) if x]
+                if norm_dist != []:
+                    for id2 in id2s:
+                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_dist = dist[id2, :]
+                        cur_stress = np.outer(cur_f, cur_dist)
+                        # print(cur_f, cur_dist, cur_stress)
+                        stresses[id, :, :] += cur_stress
 
             energy += 0.5 * sum(map(self.pair[x + y].eval_energy, xy_distances))
 

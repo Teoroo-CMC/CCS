@@ -201,6 +201,59 @@ class Objective:
 
             ##### END UNC ####            
 
+            ### Ridge regression
+
+            if self.do_ridge_regression == "True":
+                from sklearn import linear_model
+                ridge=linear_model.Ridge(alpha=self.ridge_alpha,fit_intercept=False)
+                ##### START RIDGE ####
+                #Solving unconstrained problem
+                ridge.fit(self.mm,self.ref)
+                ridge_pred=ridge.predict(self.mm)
+                print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_alpha   )
+                xx=ridge.coef_
+                self.assign_parameter_values(xx)
+
+                self.model_energies = np.ravel(
+                    self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+                self.write_error(fname="RIDGE_error.out")
+
+                if self.l_twb[0].Nconfs_forces > 0:
+                    model_forces = np.ravel(
+                        self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                    )
+                    self.write_error_forces(model_forces, self.force_ref,fname="RIDGE_error_forces.out")
+
+                try:
+                    if self.merging == "True":
+                        self.unfold_intervals()
+                except:
+                    pass
+
+                x_unfolded = []
+                for ii in range(self.np):
+                    self.l_twb[ii].get_spline_coeffs()
+                    self.l_twb[ii].get_expcoeffs()
+                    x_unfolded = np.hstack(
+                        (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+                    )
+                for onb in self.l_one:
+                    if onb.epsilon_supported:
+                        x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+                    else:
+                        x_unfolded = np.hstack((x_unfolded, 0.0))
+                xx = x_unfolded
+
+                self.write_CCS_params(fname="RIDGE_params.json")
+
+            try:
+                if self.merging == "True":
+                    self.merge_intervals()
+            except:
+                pass
+        ##### END RIDGE ####            
+
+
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
         ):
