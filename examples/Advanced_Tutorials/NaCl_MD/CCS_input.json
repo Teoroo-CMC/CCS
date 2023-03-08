@@ -1,0 +1,15 @@
+{
+        "General": {
+                "interface": "CCS",
+                "merging": "True",
+                "do_ridge_regression": "False"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 5.5,
+                        "Resolution": 0.25,
+                        "Swtype": "sw",
+                        "const_type": "Mono"
+                }
+        }
+}
