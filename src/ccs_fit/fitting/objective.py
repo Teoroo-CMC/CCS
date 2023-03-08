@@ -205,12 +205,12 @@ class Objective:
 
             if self.do_ridge_regression == "True":
                 from sklearn import linear_model
-                ridge=linear_model.Ridge(alpha=self.ridge_alpha,fit_intercept=False)
+                ridge=linear_model.Ridge(alpha=self.ridge_lambda,fit_intercept=False)
                 ##### START RIDGE ####
-                #Solving unconstrained problem
+                #Solving ridge regression problem
                 ridge.fit(self.mm,self.ref)
                 ridge_pred=ridge.predict(self.mm)
-                print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_alpha   )
+                print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_lambda)
                 xx=ridge.coef_
                 self.assign_parameter_values(xx)
 
