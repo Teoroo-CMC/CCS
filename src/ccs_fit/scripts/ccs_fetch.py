@@ -156,7 +156,7 @@ def ccs_fetch(
                 )
                 Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
                 ES_energy = Ew.total_energy
-                ES_forces = EW.forces
+                ES_forces = Ew.forces
                 ce["ewald"] = ES_energy
 
             for i in range(len(struct)):
