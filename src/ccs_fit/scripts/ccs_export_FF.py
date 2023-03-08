@@ -149,19 +149,18 @@ def write_FF(CCS_params_file):
     write_dense_spline(CCS_params_file)
 
 def main():
-
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-"*c
-    print("")
-    print(txt)
-
     try:
+        size = os.get_terminal_size()
+        c = size.columns
+        txt = "-"*c
+        print("")
+        print(txt)
         import art
-        txt = art.text2art('Exporting Force Field parameters for Buckingham, Morse and Lennard Jones potentials.')
+        txt = art.text2art('CCS:Exporting  FF  params')
         print(txt)
     except:
-        print('Exporting Force Field parameters for Buckingham, Morse and Lennard Jones potentials.')
+        print("Generating force field parameters to CCS.")
+
 
     try:
         CCS_params_file = sys.argv[1]
