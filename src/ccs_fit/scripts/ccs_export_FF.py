@@ -9,6 +9,7 @@ from ase.units import Bohr, Hartree
 from scipy.optimize import curve_fit
 from scipy.constants import epsilon_0
 import matplotlib.pyplot as plt
+from ccs_fit.ase_calculator.ccs_ase_calculator import spline_table
 
 def Buckingham(r, A, B, C):
     return A*np.exp(-B*r) - C/(r**6)
@@ -20,10 +21,13 @@ def Lennard_Jones(r, eps, sigma):
     sig_r6 = (sigma/r)**6
     return 4*eps*(sig_r6**2 - sig_r6)
 
-def Morse(r, De, a, re, C):
-    return De*(1-np.exp(-a*(r-re)))**2 + C 
+def Morse(r, De, a, re):
+    return De*((1-np.exp(-a*(r-re)))**2-1)
 
-def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, exp=True):
+def Pedone(r, De, a, re, C):
+    return De*((1-np.exp(-a*(r-re)))**2-1) + C/r**12
+
+def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
     elem1 = elem1
     elem2 = elem2
     no_pair = False
@@ -69,35 +73,59 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, exp=True):
                 spl_to_fit.append(val)
             elif cur_r >= Rcut:
                 spl_to_fit.append(0)
-    
-        def Lennard_Jones(r, eps, sigma):
-            sig_r6 = (sigma/r)**6
-            return 4*eps*(sig_r6**2 - sig_r6)
-
-        def Morse(r, De, a, re, C):
-            return De*(1-np.exp(-a*(r-re)))**2 + C 
 
         popt_Buck, pcov = curve_fit(Buckingham, r, spl_to_fit, maxfev=5000)
-        popt_Mor, pcov = curve_fit(Morse, r, spl_to_fit, p0=[2,1,1,0], bounds=[[0, 0, 0, -np.inf],[np.inf, np.inf, np.inf, np.inf]], maxfev=5000)
+        popt_Mor, pcov = curve_fit(Morse, r, spl_to_fit, p0=[2,1,1], maxfev=5000)
         popt_LJ, pcov = curve_fit(Lennard_Jones, r, spl_to_fit, p0=[1,1], maxfev=5000)
+        popt_Ped, pcov = curve_fit(Pedone, r, spl_to_fit, p0=[popt_Mor[0], popt_Mor[1], popt_Mor[2], 1], maxfev=5000)
+
         print("Buckingham fit (not optimised) for element pair {}-{};     V(r) = {:.2f}*exp(-{:.2f}*r) -({:.2f})/r^6.".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]))
         print("Lennard Jones fit (not optimised) for element pair {}-{};  V(r) = 4*{:.2f}*(({:.2f}/r)^12 - ({:.2f}/r)^6)".format(elem1, elem2, popt_LJ[0], popt_LJ[1], popt_LJ[1]))
-        print("Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*(1-np.exp(-{:.2f}*(r-{:.2f})))^2 + {:.2f}".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2], popt_Mor[3]))
-
-
+        print("Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1)".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]))
+        print("Pedone fit (not optimised) for element pair {}-{};         V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1) + {:.2f}/r^12".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]))
+        
         print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]), file=f_Buck)
         print("{:^8s} {:^8s} {:20.10f} {:20.10f}".format(elem1, elem2, popt_LJ[0], popt_LJ[1]), file=f_LJ)
-        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2], popt_Mor[3]), file=f_Mor)
+        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]), file=f_Mor)
+        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), file=f_Ped)
 
-
-        plt.plot(r, spl_to_fit, 'r', label='CCS')
         plt.plot(r, Buckingham(r, popt_Buck[0], popt_Buck[1], popt_Buck[2]), 'b', label = 'Buck')
-        plt.plot(r, Morse(r, popt_Mor[0], popt_Mor[1], popt_Mor[2], popt_Mor[3]), color='orange', label='Morse')
+        plt.plot(r, Morse(r, popt_Mor[0], popt_Mor[1], popt_Mor[2]), color='orange', label='Morse')
         plt.plot(r, Lennard_Jones(r, popt_LJ[0], popt_LJ[1]), color='magenta', label='LJ')
+        plt.plot(r, Pedone(r, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), color="green", label="Pedone")
+        plt.plot(r, spl_to_fit, 'r--', label='CCS')
         plt.xlabel("Interatomic distance (Å)")
         plt.ylabel("Potential energy (eV)")
         plt.legend()
         plt.show()
+
+def write_dense_spline(jsonfile, scale=10, table="CCS.table", format="lammps"):
+    json_file = open(jsonfile)
+    CCS_params = json.load(json_file)
+    energy = []
+    force = []
+    tags = {}
+    filename = "CCS." + format
+    with open(filename, "w") as f:
+        for pair in CCS_params["Two_body"].keys():
+            elem1, elem2 = pair.split("-")
+            tb = spline_table(elem1, elem2, CCS_params)
+            rmin=CCS_params["Two_body"][pair]["r_min"]
+            dr = CCS_params["Two_body"][pair]["dr"] / scale
+            r = np.arange(rmin, tb.Rcut + dr, dr)
+            tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
+            f.write("\n {}".format(pair))
+            f.write("\n N {} R {} {} \n".format(len(r), rmin, tb.Rcut))
+            [
+                f.write(
+                    "\n {} {} {} {}".format(
+                        index + 1, elem, tb.eval_energy(elem), -1 * tb.eval_force(elem)
+                    )
+                )
+                for index, elem in enumerate(r)
+            ]
+
+    return tags
 
 def write_FF(CCS_params_file):
 
@@ -107,15 +135,18 @@ def write_FF(CCS_params_file):
     f_Buck = open("Buckingham.dat", "w")
     f_LJ = open("Lennard_Jones.dat", "w")
     f_Mor = open("Morse.dat", "w")
+    f_Ped = open("Pedone.dat", "w")
 
     print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "A", "B", "C"), file=f_Buck)
     print("{:^8s} {:^8s} {:^20s} {:^20s}\n".format("Element", "Element", "epsilon", "sigma"), file=f_LJ)
-    print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "D_e", "a", "r_e", "C"), file=f_Mor)
+    print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "D_e", "a", "r_e"), file=f_Mor)
+    print("{:^8s} {:^8s} {:^20s} {:^20s} {:^20s} {:^20s}\n".format("Element", "Element", "D_e", "a", "r_e", "C"), file=f_Ped)
     
     for pair in CCS_params["Two_body"]:
         elem = pair.split("-")
-        _write(elem[0], elem[1], CCS_params, exp=True, f_Buck=f_Buck, f_LJ=f_LJ, f_Mor=f_Mor)
+        _write(elem[0], elem[1], CCS_params, exp=True, f_Buck=f_Buck, f_LJ=f_LJ, f_Mor=f_Mor, f_Ped=f_Ped)
 
+    write_dense_spline(CCS_params_file)
 
 def main():
 
