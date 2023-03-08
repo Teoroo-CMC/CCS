@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.1 (2023-03-08)
+### Documentation
+* Adding NaCl MD tutorial ([`8db22cf`](https://github.com/Teoroo-CMC/CCS/commit/8db22cf71d633bd70b380dcfbbd06dd655b7e40f))
+
 ## v0.16.0 (2023-03-07)
 ### Feature
 * Adding ridge regression ([`c3f3b96`](https://github.com/Teoroo-CMC/CCS/commit/c3f3b961e83c09a29d033da41333929ac4f889c1))
