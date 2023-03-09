@@ -1,0 +1,20 @@
+{
+        "General": {
+                "interface": "CCS",
+                "merging": "True"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "const_type": "Mono"
+                },
+                "Cl-Na": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.02,
+                        "Swtype": "sw",
+                        "const_type": "Mono"
+                }
+        }
+}

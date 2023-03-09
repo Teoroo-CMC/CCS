@@ -1,0 +1,14 @@
+{
+        "General": {
+                "interface": "CCS+Q",
+                "merging": "True"
+        },
+        "Twobody": {
+                "Xx-Xx": {
+                        "Rcut": 5.5,
+                        "Resolution": 0.25,
+                        "Swtype": "sw",
+                        "const_type": "Mono"
+                }
+        }
+}

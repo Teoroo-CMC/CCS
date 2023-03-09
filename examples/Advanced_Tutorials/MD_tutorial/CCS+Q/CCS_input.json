@@ -1,0 +1,29 @@
+{
+        "General": {
+                "interface": "CCS+Q",
+                "merging": "True"
+        },
+        "Twobody": {
+                "Cl-Cl": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "const_type": "Mono"
+                },
+                "Cl-Na": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono"
+                },
+                "Na-Na": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "range",
+                        "range_center": 5.5,
+                        "range_width": 0.5
+                }
+        }
+}
