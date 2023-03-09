@@ -2,6 +2,18 @@
 
 <!--next-version-placeholder-->
 
+## v0.17.0 (2023-03-09)
+### Feature
+* Adding dense spline table and Pedone fit to export_FF ([`10411d6`](https://github.com/Teoroo-CMC/CCS/commit/10411d688141dbee4185a351195b13cbed0aef68))
+* Fix ridge regression implementation ([`eb0bf99`](https://github.com/Teoroo-CMC/CCS/commit/eb0bf99fbe614afbaed42ba30b8f753ef06fbdd6))
+
+### Fix
+* Fixed art print ([`d00eff7`](https://github.com/Teoroo-CMC/CCS/commit/d00eff718964ba9dc440013e98ae55d06f25f95e))
+* Fixed typo in Ewald call ([`ae57db4`](https://github.com/Teoroo-CMC/CCS/commit/ae57db4d521bef2b3d23c4258f2b60c974b94ea4))
+
+### Documentation
+* Updating MD tutorials ([`981008e`](https://github.com/Teoroo-CMC/CCS/commit/981008e6b25c8ba2846e73b45066370c3a7c9c75))
+
 ## v0.16.1 (2023-03-08)
 ### Documentation
 * Adding NaCl MD tutorial ([`8db22cf`](https://github.com/Teoroo-CMC/CCS/commit/8db22cf71d633bd70b380dcfbbd06dd655b7e40f))
