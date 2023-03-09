@@ -16,7 +16,9 @@ Functions
    ccs_fit.scripts.ccs_export_FF.Buckingham
    ccs_fit.scripts.ccs_export_FF.Lennard_Jones
    ccs_fit.scripts.ccs_export_FF.Morse
+   ccs_fit.scripts.ccs_export_FF.Pedone
    ccs_fit.scripts.ccs_export_FF._write
+   ccs_fit.scripts.ccs_export_FF.write_dense_spline
    ccs_fit.scripts.ccs_export_FF.write_FF
    ccs_fit.scripts.ccs_export_FF.main
 
@@ -28,10 +30,16 @@ Functions
 .. py:function:: Lennard_Jones(r, eps, sigma)
 
 
-.. py:function:: Morse(r, De, a, re, C)
+.. py:function:: Morse(r, De, a, re)
 
 
-.. py:function:: _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, exp=True)
+.. py:function:: Pedone(r, De, a, re, C)
+
+
+.. py:function:: _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True)
+
+
+.. py:function:: write_dense_spline(jsonfile, scale=10, table='CCS.table', format='lammps')
 
 
 .. py:function:: write_FF(CCS_params_file)
