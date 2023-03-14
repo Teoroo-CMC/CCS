@@ -123,6 +123,7 @@ def ccs_fetch(
     c = OrderedDict()
     d = OrderedDict()
     cf = OrderedDict()
+
     for row in tqdm(REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"):
         counter = counter + 1
         if mask[counter]:
@@ -132,9 +133,9 @@ def ccs_fetch(
             EREF = row.energy
             ce["energy_dft"] = EREF
             if mode == "DFTB":
-                key = str(row.key)
-                EDFT = DFT_DB.get("key=" + key).energy
-                FDFT = DFT_DB.get("key=" + key).forces
+                key = str(row.id)
+                EDFT = DFT_DB.get("id=" + str(row.id)).energy
+                FDFT = DFT_DB.get("id=" + str(row.id)).forces
                 ce["energy_dft"] = EDFT
                 ce["energy_dftb"] = EREF
             dict_species = defaultdict(int)
