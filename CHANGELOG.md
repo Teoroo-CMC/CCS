@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.17.1 (2023-03-14)
+### Documentation
+* Updated basic tutorial for presentation ([`9269571`](https://github.com/Teoroo-CMC/CCS/commit/92695717d9d89e3c0f512529bfdf7c965206f559))
+* Updated basic tutorial for presentation ([`766900d`](https://github.com/Teoroo-CMC/CCS/commit/766900d2274f9d1fbf0cb742b7e4e95e808d0480))
+* Removing large files ([`7b819bc`](https://github.com/Teoroo-CMC/CCS/commit/7b819bc171ce407a432da943f1457101bd5da3d3))
+* Adding ZnO to examples ([`4e540a5`](https://github.com/Teoroo-CMC/CCS/commit/4e540a520ac904110fe1c552d4673880982a6348))
+
 ## v0.17.0 (2023-03-09)
 ### Feature
 * Adding dense spline table and Pedone fit to export_FF ([`10411d6`](https://github.com/Teoroo-CMC/CCS/commit/10411d688141dbee4185a351195b13cbed0aef68))
