@@ -6,7 +6,7 @@
         "Twobody": {
                 "Ne-Ne": {
                         "Rcut": 5.0,
-                        "Resolution": 0.01,
+                        "Resolution": 0.02,
                         "Swtype": "sw",
                         "const_type": "Mono"
                 }

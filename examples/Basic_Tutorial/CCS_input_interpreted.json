@@ -3,17 +3,18 @@
                 "interface": "CCS",
                 "ewald_scaling": 1.0,
                 "merging": "True",
-                "do_unconstrained_fit": "False"
+                "do_unconstrained_fit": "False",
+                "do_ridge_regression": "False"
         },
         "Train-set": "structures.json",
         "Test-set": "structures.json",
         "Twobody": {
                 "Ne-Ne": {
                         "Rcut": 5.0,
-                        "Resolution": 0.01,
+                        "Resolution": 0.02,
                         "Swtype": "sw",
                         "const_type": "Mono",
-                        "Rmin": 0.8965640027264121
+                        "Rmin": 0.7652691027186324
                 }
         },
         "Onebody": [
