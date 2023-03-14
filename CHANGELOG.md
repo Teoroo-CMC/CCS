@@ -2,6 +2,19 @@
 
 <!--next-version-placeholder-->
 
+## v0.18.0 (2023-03-14)
+### Feature
+* New fetch ([`6c3485a`](https://github.com/Teoroo-CMC/CCS/commit/6c3485a9e762fd78db9e7c2ed7c5a66927999913))
+* Removed key check ([`fe08e63`](https://github.com/Teoroo-CMC/CCS/commit/fe08e6365d7a0e99c96f709392b1c1586dd8a11d))
+* Removed key check ([`8452c06`](https://github.com/Teoroo-CMC/CCS/commit/8452c063d0e98e2b7fb61671c151ce656088064d))
+
+### Fix
+* Remove print statements ([`81f709b`](https://github.com/Teoroo-CMC/CCS/commit/81f709b641693e943a763126a0878475f08b4d25))
+* Add more print statements ([`18fa1f2`](https://github.com/Teoroo-CMC/CCS/commit/18fa1f2c37ba5149a81474b922253415d3afbb39))
+* Add more print statements ([`733b01d`](https://github.com/Teoroo-CMC/CCS/commit/733b01d93b0ca36d71b19a91e5d8170b7ae2d2f2))
+* Add pyproject 0.13.2 ([`e51bcdd`](https://github.com/Teoroo-CMC/CCS/commit/e51bcdd69c5519846d9796b0c0ded238e47e5c9e))
+* Add pyproject 0.13.2 ([`345d55e`](https://github.com/Teoroo-CMC/CCS/commit/345d55e27dd5941523ca908426c6a6074f84edc7))
+
 ## v0.17.1 (2023-03-14)
 ### Documentation
 * Updated basic tutorial for presentation ([`9269571`](https://github.com/Teoroo-CMC/CCS/commit/92695717d9d89e3c0f512529bfdf7c965206f559))
