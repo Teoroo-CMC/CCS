@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.18.1 (2023-03-14)
+
+
 ## v0.18.0 (2023-03-14)
 ### Feature
 * New fetch ([`6c3485a`](https://github.com/Teoroo-CMC/CCS/commit/6c3485a9e762fd78db9e7c2ed7c5a66927999913))
