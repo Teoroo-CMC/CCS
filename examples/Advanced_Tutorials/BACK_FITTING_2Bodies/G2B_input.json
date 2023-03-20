@@ -1,0 +1,13 @@
+{
+        "Charge scaling factor": 0.0,
+        "One_body": {
+                "Ne": 0.01167963158958527
+        },
+        "Two_body": {
+                "Ne-Ne": {
+                        "r_min": 0.0,
+                        "r_cut": 12.0,
+                        "V_func": "20.0*exp(-2.0*(r_ij-2.0)) + (1/(r_ij**6))"
+                }
+        }
+}
