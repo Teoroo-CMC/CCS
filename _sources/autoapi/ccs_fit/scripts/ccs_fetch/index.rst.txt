@@ -42,7 +42,7 @@ Functions
    Input
    -----
        mode : string
-           To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB]
+           To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB,PRUNED_CCS]
        DFT_DB : string
            optional: target database
        R_c : float

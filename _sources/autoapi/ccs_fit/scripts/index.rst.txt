@@ -16,6 +16,7 @@ Submodules
    ccs_export_sktable/index.rst
    ccs_fetch/index.rst
    ccs_fit/index.rst
+   ccs_prune/index.rst
    ccs_validate/index.rst
    jsonTotable/index.rst
 

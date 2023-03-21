@@ -1,0 +1,43 @@
+:py:mod:`ccs_fit.scripts.ccs_prune`
+===================================
+
+.. py:module:: ccs_fit.scripts.ccs_prune
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ccs_fit.scripts.ccs_prune.ccs_prune
+   ccs_fit.scripts.ccs_prune.main
+
+
+
+.. py:function:: ccs_prune(mode=None, CCS_params=None, Ns='all', DFT_DB='DFT.db', CCS_DB='CCS_pruned.db', DFTB_DB=None, charge_dict=None, charge_scaling=False, include_forces=False, verbose=False)
+
+   Function to verify database generation.
+   ---------------------------------------
+
+   Input
+   -----
+       mode : str
+           String describing which mode is used, supported modes are:
+               CCS:   CCS_params_file(string) NumberOfSamples(int) DFT.db(string)")
+               CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
+               DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
+
+   :rtype: What does it return Jolla?
+
+   Example usage
+   -------------
+       ccs_validate MODE [...]
+
+
+.. py:function:: main()
+
+

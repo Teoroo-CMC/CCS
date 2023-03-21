@@ -103,7 +103,7 @@
 
 <div class="viewcode-block" id="prepare_input"><a class="viewcode-back" href="../../../autoapi/ccs_fit/fitting/main/index.html#ccs_fit.fitting.main.prepare_input">[docs]</a><span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 
-    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;merging&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;do_unconstrained_fit&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;do_ridge_regression&#39;</span><span class="p">:</span> <span class="s1">&#39;False&#39;</span><span class="p">}</span>
+    <span class="n">gen_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ewald_scaling&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;merging&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">,</span> <span class="s2">&quot;do_unconstrained_fit&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">,</span> <span class="s2">&quot;do_ridge_regression&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">,</span> <span class="s2">&quot;iterative_fit&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">}</span>
     <span class="n">struct_data_test</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -141,11 +141,23 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">struct_data_forces</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot; Reference file with pairwise distances missing&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot; Reference file with pairwise distances (default: structures.json) missing&quot;</span><span class="p">)</span>
         <span class="k">raise</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Reference file not in json format&quot;</span><span class="p">)</span>
         <span class="k">raise</span>
+
+    <span class="c1">##### BLOCK TO IMPLEMENT ITERATIVE FITTING!!!!</span>
+
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;General&quot;</span><span class="p">][</span><span class="s2">&quot;iterative_fit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aye, iterative fitting is ONNN, let&#39;s go baby!&quot;</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">ccs_fit.fitting.iterative_fitting</span> <span class="kn">import</span> <span class="n">prune_dataset</span>
+        <span class="n">prune_dataset</span><span class="p">()</span>
+
+
+    <span class="c1">#####</span>
+
     <span class="k">if</span> <span class="s2">&quot;Test-set&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Test-set&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Train-set&quot;</span><span class="p">]</span>
     <span class="k">try</span><span class="p">:</span>
