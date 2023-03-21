@@ -1,0 +1,26 @@
+{
+        "General": {
+                "interface": "CCS",
+                "merging": "True"
+        },
+        "Twobody": {
+                "Ca-O": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "const_type": "Mono"
+                },
+                "O-O": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono"
+                },
+                "Ti-O": {
+                        "Rcut": 6.0,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "const_type": "Mono"
+                }
+        }
+}

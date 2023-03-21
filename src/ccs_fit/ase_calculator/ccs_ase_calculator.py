@@ -137,7 +137,7 @@ class CCS(Calculator):
     >>> To be added, Jolla.
     """
 
-    implemented_properties = {"stress", "energy", "forces"}
+    implemented_properties = {"energy", "forces"} # stress
 
     def __init__(
         self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs
@@ -240,6 +240,7 @@ class CCS(Calculator):
             ewa = ew(self.atoms, self.q)
             energy = energy + ewa.total_energy
             forces = forces + ewa.forces
+
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy

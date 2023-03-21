@@ -80,7 +80,7 @@ def ccs_fetch(
     Input
     -----
         mode : string
-            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB]
+            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB,PRUNED_CCS]
         DFT_DB : string
             optional: target database
         R_c : float
@@ -109,6 +109,9 @@ def ccs_fetch(
     if mode == "DFTB":
         REF_DB = db.connect(DFTB_DB)
 
+    if mode == "PRUNED_CCS":
+        REF_DB = db.connect(DFTB_DB)
+
     if Ns == 'all':
         Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
 
@@ -129,13 +132,15 @@ def ccs_fetch(
         if mask[counter]:
             struct = row.toatoms()
             ce = OrderedDict()
-            FREF = row.forces
+            if include_forces:
+                FREF = row.forces
             EREF = row.energy
             ce["energy_dft"] = EREF
             if mode == "DFTB":
                 key = str(row.id)
                 EDFT = DFT_DB.get("id=" + str(row.id)).energy
-                FDFT = DFT_DB.get("id=" + str(row.id)).forces
+                if include_forces:
+                    FDFT = DFT_DB.get("id=" + str(row.id)).forces
                 ce["energy_dft"] = EDFT
                 ce["energy_dftb"] = EREF
             dict_species = defaultdict(int)
@@ -160,16 +165,17 @@ def ccs_fetch(
                 ES_forces = Ew.forces
                 ce["ewald"] = ES_energy
 
-            for i in range(len(struct)):
-                if mode == "CCS":
-                    cf["F" + str(counter) + "_" + str(i)
-                       ] = {"force_dft": list(FREF[i, :])}
-                if mode == "DFTB":
-                    cf["F" + str(counter) + "_" + str(i)
-                       ] = {"force_dft": list(FDFT[i, :]), "force_dftb": list(FREF[i, :])}
-                if mode == "CCS+Q":
-                    cf["F" + str(counter) + "_" + str(i)
-                       ] = {"force_dft": list(FREF[i, :]), "force_ewald": list(ES_forces[i, :])}
+            if include_forces:
+                for i in range(len(struct)):
+                    if mode == "CCS":
+                        cf["F" + str(counter) + "_" + str(i)
+                           ] = {"force_dft": list(FREF[i, :])}
+                    if mode == "DFTB":
+                        cf["F" + str(counter) + "_" + str(i)
+                           ] = {"force_dft": list(FDFT[i, :]), "force_dftb": list(FREF[i, :])}
+                    if mode == "CCS+Q":
+                        cf["F" + str(counter) + "_" + str(i)
+                           ] = {"force_dft": list(FREF[i, :]), "force_ewald": list(ES_forces[i, :])}
 
             ce["atoms"] = dict_species
             for (x, y) in atom_pair:

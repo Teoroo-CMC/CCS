@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def prepare_input(filename):
 
-    gen_params = {"interface": None, "ewald_scaling": 1.0, 'merging': 'False', 'do_unconstrained_fit': 'False', 'do_ridge_regression': 'False'}
+    gen_params = {"interface": None, "ewald_scaling": 1.0, "merging": "False", "do_unconstrained_fit": "False", "do_ridge_regression": "False", "iterative_fit": "False"}
     struct_data_test = {}
 
     try:
@@ -66,11 +66,23 @@ def prepare_input(filename):
             except:
                 struct_data_forces = {}
     except FileNotFoundError:
-        logger.critical(" Reference file with pairwise distances missing")
+        logger.critical(" Reference file with pairwise distances (default: structures.json) missing")
         raise
     except ValueError:
         logger.critical("Reference file not in json format")
         raise
+
+    ##### BLOCK TO IMPLEMENT ITERATIVE FITTING!!!!
+
+    if data["General"]["iterative_fit"] == "True":
+        print("Aye, iterative fitting is ONNN, let's go baby!")
+
+        from ccs_fit.fitting.iterative_fitting import prune_dataset
+        prune_dataset()
+
+
+    #####
+
     if "Test-set" not in data:
         data["Test-set"] = data["Train-set"]
     try:
