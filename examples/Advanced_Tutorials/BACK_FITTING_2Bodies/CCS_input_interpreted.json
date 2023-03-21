@@ -1,0 +1,31 @@
+{
+        "General": {
+                "interface": "CCS+Q",
+                "ewald_scaling": 1.0,
+                "merging": "True",
+                "do_unconstrained_fit": "False",
+                "do_ridge_regression": "False"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "Ba-O": {
+                        "Rcut": 11.999985947327776,
+                        "Resolution": 0.5,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "Rmin": 2.0299586999272106
+                },
+                "O-O": {
+                        "Rcut": 11.999524069501245,
+                        "Resolution": 0.5,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "Rmin": 3.1336419288442756
+                }
+        },
+        "Onebody": [
+                "Ba",
+                "O"
+        ]
+}
