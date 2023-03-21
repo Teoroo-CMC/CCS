@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.19.0 (2023-03-21)
+### Feature
+* First attempt at adding a pruning feature ([`0722c74`](https://github.com/Teoroo-CMC/CCS/commit/0722c74e52d1833bb44add585b39714427cf0fd0))
+
+### Fix
+* **ccs_validate:** Adding linear calculator to fix empty database entries ([`66c5ee2`](https://github.com/Teoroo-CMC/CCS/commit/66c5ee2e40e050e0108716980ae503fb3d2778e2))
+* Do more include_forces checks ([`13d3cb7`](https://github.com/Teoroo-CMC/CCS/commit/13d3cb70a03530c1eb3ff106b1e8aa9592e6b3bd))
+
+### Documentation
+* Adding iterative fitting tutorial ([`2cb50eb`](https://github.com/Teoroo-CMC/CCS/commit/2cb50ebc1851520b4a6723cd6e159e482e020418))
+
 ## v0.18.4 (2023-03-21)
 
 
