@@ -1,0 +1,33 @@
+{
+        "General": {
+                "interface": "DFTB",
+                "ewald_scaling": 1.0,
+                "merging": "True",
+                "do_unconstrained_fit": "False",
+                "do_ridge_regression": "False",
+                "iterative_fit": "False"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "Ca-O": {
+                        "Rcut": 5.999997579899299,
+                        "Resolution": 0.05,
+                        "Swtype": "rep",
+                        "const_type": "Mono",
+                        "Rmin": 0.7903863379373245
+                },
+                "O-O": {
+                        "Rcut": 5.999987174490813,
+                        "Resolution": 0.05,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "Rmin": 1.2329479232153011
+                }
+        },
+        "Onebody": [
+                "Ca",
+                "O",
+                "Ti"
+        ]
+}

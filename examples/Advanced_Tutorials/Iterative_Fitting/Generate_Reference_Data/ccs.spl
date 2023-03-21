@@ -1,0 +1,6 @@
+DEBUG:matplotlib:matplotlib data path: /home/thism292/anaconda3/envs/CCS_fiterative/lib/python3.9/site-packages/matplotlib/mpl-data
+DEBUG:matplotlib:CONFIGDIR=/home/thism292/.config/matplotlib
+DEBUG:matplotlib:interactive is False
+DEBUG:matplotlib:platform is linux
+DEBUG:matplotlib:CACHEDIR=/home/thism292/.cache/matplotlib
+DEBUG:matplotlib.font_manager:Using fontManager instance from /home/thism292/.cache/matplotlib/fontlist-v330.json
