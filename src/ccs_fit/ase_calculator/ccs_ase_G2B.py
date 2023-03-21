@@ -42,8 +42,8 @@ class G2B_pair:
         if self.no_pair:
             self.Rmin = 0.0
             self.Rcut = 0.0
-            self.V_func  = "0.0"
-            self.F_func = "0.0"
+            self.V_func  = None
+            self.F_func = None
 
         else:
             self.Rmin = G2B_params["Two_body"][pair]["r_min"]
@@ -54,20 +54,26 @@ class G2B_pair:
             self.F_func = sympy.diff(-self.V_func, r_ij)
 
     def eval_energy(self, r):
-        if r >= self.Rmin and r <= self.rcut:
-            val = 0.0
+        if self.no_pair:
+            val=0.0
         else:
-            f_eval=self.V_func.subs({'r_ij':2})
-            val=f_eval.evalf()    
-        return val
+            if r >= self.Rmin and r <= self.rcut:
+                f_eval=self.V_func.subs({'r_ij':2})
+                val=f_eval.evalf()    
+            else:
+                val = 0.0
+        return float(val)
 
     def eval_force(self, r):
-        if r >= self.Rmin and r <= self.rcut:
-            val = 0.0
+        if self.no_pair:
+            val=0.0
         else:
-            f_eval=self.F_func.subs({'r_ij':2})
-            val=f_eval.evalf()    
-        return val
+            if r >= self.Rmin and r <= self.rcut:
+                f_eval=self.F_func.subs({'r_ij':2})
+                val=f_eval.evalf()    
+            else:
+                val = 0.0
+        return float(val)
 
 def ew(atoms, q):
 
