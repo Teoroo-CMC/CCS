@@ -6,6 +6,8 @@ import json
 import random
 from ase.calculators.singlepoint import SinglePointCalculator
 from tqdm import tqdm
+import time
+from ase.calculators.mixing import LinearCombinationCalculator
 
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
 
@@ -70,8 +72,10 @@ def ccs_validate(
         f_force = open("CCS_validate_forces.dat", "w")
         print("{:^13s} {:^13s} {:^13s} {:^13s}".format("#Reference", "Predicted", "Error", "structure_no"), file=f_force)
 
-    calc = CCS(CCS_params=CCS_params, charge=charge,
+    CCS_calc = CCS(CCS_params=CCS_params, charge=charge,
                q=charge_dict, charge_scaling=charge_scaling)
+
+    calc = LinearCombinationCalculator([CCS_calc], [1])
 
     if Ns == 'all':
         Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
@@ -106,7 +110,7 @@ def ccs_validate(
                     structure, energy=EDFTB + ECCS)
                 structure.calc = sp_calculator
                 structure.get_potential_energy()
-
+                
             print('{:13.8f} {:13.8f} {:13.8f} {:13d} {:13d}'.format(
                     EREF, ECCS, np.abs(EREF - ECCS),
                     len(structure), counter), file=f)
@@ -117,11 +121,19 @@ def ccs_validate(
                     print('{:13.8f} {:13.8f} {:13.8f} {:13d}'.format(
                         force_ref, FCCS[force_id], np.abs(force_ref - FCCS[force_id]), counter), file=f_force)
 
-            try:
-                CCS_DB.write(structure, key=key)
-            except:
-                CCS_DB.write(structure)
-        
+        #     try:
+        #         CCS_DB.write(structure, key=key)
+        #         print("key found")
+        #     except:
+        #         print(counter)
+        #         print(structure.get_potential_energy())
+        #         print(structure.get_forces())
+        #         print(dir(structure))
+        #         # print(structure.results["energy"])
+        #         print(" ")
+        #         CCS_DB.write(structure)
+            CCS_DB.write(structure)
+
         counter += 1
 
 
