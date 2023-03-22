@@ -161,4 +161,10 @@ Attributes
    .. py:method:: gen_Buckingham()
 
 
+   .. py:method:: unconstrained_fit()
+
+
+   .. py:method:: ridge_regresssion()
+
+
 
