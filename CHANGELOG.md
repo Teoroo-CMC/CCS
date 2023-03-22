@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.19.1 (2023-03-22)
+
+
 ## v0.19.0 (2023-03-21)
 ### Feature
 * First attempt at adding a pruning feature ([`0722c74`](https://github.com/Teoroo-CMC/CCS/commit/0722c74e52d1833bb44add585b39714427cf0fd0))
