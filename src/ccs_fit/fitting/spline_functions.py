@@ -324,6 +324,10 @@ class Twobody:
         self.expcoeffs = [alpha, beta, gamma]
 
 
+
+
+
+
 class Onebody:
     """Onebody class that describes properties of an atom."""
 

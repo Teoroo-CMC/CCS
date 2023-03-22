@@ -45,7 +45,7 @@ class Objective:
             l_one (list): list of Onebody class objects
             sto (ndarray): array containing number of atoms of each type
             energy_ref (ndarray): reference energies
-            ge_params (dict) : options
+            ge_params (dict) : optionself.sto, s
             ewald (list, optional) : ewald energy values for CCS+Q
 
         """
@@ -54,6 +54,8 @@ class Objective:
         self.l_one = l_one
         self.sto = sto
         self.sto_full = self.sto
+
+        # print(self.sto, self.sto_full)
 
         self.energy_ref = energy_ref
         self.force_ref_x = [x[0] for x in force_ref]
@@ -153,106 +155,10 @@ class Objective:
         # print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
 
         if self.do_unconstrained_fit == "True":
-            ##### START UNC ####
-            #Solving unconstrained problem
-            xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
-            xx=xx[0]
-            print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
-            xx=xx.reshape(len(xx),1)
-            self.assign_parameter_values(xx)
+            self.unconstrained_fit()
 
-            self.model_energies = np.ravel(
-                self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
-            self.write_error(fname="UNC_error.out")
-
-            if self.l_twb[0].Nconfs_forces > 0:
-                model_forces = np.ravel(
-                    self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
-                )
-                self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
-
-            try:
-                if self.merging == "True":
-                    self.unfold_intervals()
-            except:
-                pass
-
-            x_unfolded = []
-            for ii in range(self.np):
-                self.l_twb[ii].get_spline_coeffs()
-                self.l_twb[ii].get_expcoeffs()
-                x_unfolded = np.hstack(
-                    (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
-                )
-            for onb in self.l_one:
-                if onb.epsilon_supported:
-                    x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
-                else:
-                    x_unfolded = np.hstack((x_unfolded, 0.0))
-            xx = x_unfolded
-
-            self.write_CCS_params(fname="UNC_params.json")
-
-            try:
-                if self.merging == "True":
-                    self.merge_intervals()
-            except:
-                pass
-
-            ##### END UNC ####            
-
-            ### Ridge regression
-
-            if self.do_ridge_regression == "True":
-                from sklearn import linear_model
-                ridge=linear_model.Ridge(alpha=self.ridge_lambda,fit_intercept=False)
-                ##### START RIDGE ####
-                #Solving ridge regression problem
-                ridge.fit(self.mm,self.ref)
-                ridge_pred=ridge.predict(self.mm)
-                print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_lambda)
-                xx=ridge.coef_
-                self.assign_parameter_values(xx)
-
-                self.model_energies = np.ravel(
-                    self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
-                self.write_error(fname="RIDGE_error.out")
-
-                if self.l_twb[0].Nconfs_forces > 0:
-                    model_forces = np.ravel(
-                        self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
-                    )
-                    self.write_error_forces(model_forces, self.force_ref,fname="RIDGE_error_forces.out")
-
-                try:
-                    if self.merging == "True":
-                        self.unfold_intervals()
-                except:
-                    pass
-
-                x_unfolded = []
-                for ii in range(self.np):
-                    self.l_twb[ii].get_spline_coeffs()
-                    self.l_twb[ii].get_expcoeffs()
-                    x_unfolded = np.hstack(
-                        (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
-                    )
-                for onb in self.l_one:
-                    if onb.epsilon_supported:
-                        x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
-                    else:
-                        x_unfolded = np.hstack((x_unfolded, 0.0))
-                xx = x_unfolded
-
-                self.write_CCS_params(fname="RIDGE_params.json")
-
-            try:
-                if self.merging == "True":
-                    self.merge_intervals()
-            except:
-                pass
-        ##### END RIDGE ####            
-
+        if self.do_ridge_regression == "True":
+            self.ridge_regresssion()
 
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
@@ -622,10 +528,14 @@ class Objective:
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
             two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
             two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
+            if two_body_dict["exp_a"]<0:
+                print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
+            if b_values[0]<0:
+                print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. AS A RESULT, THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
             b_values.append(0)
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
@@ -642,3 +552,99 @@ class Objective:
 
     def gen_Buckingham(self):
         print("Getting to generate a Buckingham potential from the spline data!") 
+
+    def unconstrained_fit(self):
+        #Solving unconstrained problem
+        xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
+        xx=xx[0]
+        print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
+        xx=xx.reshape(len(xx),1)
+        self.assign_parameter_values(xx)
+
+        self.model_energies = np.ravel(
+            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.write_error(fname="UNC_error.out")
+
+        if self.l_twb[0].Nconfs_forces > 0:
+            model_forces = np.ravel(
+                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+            )
+            self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
+
+        try:
+            if self.merging == "True":
+                self.unfold_intervals()
+        except:
+            pass
+
+        x_unfolded = []
+        for ii in range(self.np):
+            self.l_twb[ii].get_spline_coeffs()
+            self.l_twb[ii].get_expcoeffs()
+            x_unfolded = np.hstack(
+                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+            )
+        for onb in self.l_one:
+            if onb.epsilon_supported:
+                x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+            else:
+                x_unfolded = np.hstack((x_unfolded, 0.0))
+        xx = x_unfolded
+
+        self.write_CCS_params(fname="UNC_params.json")
+
+        try:
+            if self.merging == "True":
+                self.merge_intervals()
+        except:
+            pass
+
+    def ridge_regresssion(self):
+        #Solving ridge regression problem
+
+        from sklearn import linear_model
+
+        ridge=linear_model.Ridge(alpha=self.ridge_lambda,fit_intercept=False)
+        ridge.fit(self.mm,self.ref)
+        ridge_pred=ridge.predict(self.mm)
+        print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_lambda)
+        xx=ridge.coef_
+        self.assign_parameter_values(xx)
+
+        self.model_energies = np.ravel(
+            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.write_error(fname="RIDGE_error.out")
+
+        if self.l_twb[0].Nconfs_forces > 0:
+            model_forces = np.ravel(
+                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+            )
+            self.write_error_forces(model_forces, self.force_ref,fname="RIDGE_error_forces.out")
+
+        try:
+            if self.merging == "True":
+                self.unfold_intervals()
+        except:
+            pass
+
+        x_unfolded = []
+        for ii in range(self.np):
+            self.l_twb[ii].get_spline_coeffs()
+            self.l_twb[ii].get_expcoeffs()
+            x_unfolded = np.hstack(
+                (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
+            )
+        for onb in self.l_one:
+            if onb.epsilon_supported:
+                x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
+            else:
+                x_unfolded = np.hstack((x_unfolded, 0.0))
+        xx = x_unfolded
+
+        self.write_CCS_params(fname="RIDGE_params.json")
+
+        try:
+            if self.merging == "True":
+                self.merge_intervals()
+        except:
+            pass
