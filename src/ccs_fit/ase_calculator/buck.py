@@ -39,58 +39,27 @@ class spline_table:
                 self.rcut = 0.0
                 self.no_pair = True
         if self.no_pair:
-            self.a = [0.0]
-            self.b = [0.0]
-            self.c = [0.0]
-            self.d = [0.0]
-            self.aa = 0.0
-            self.bb = 0.0
-            self.cc = 0.0
-            self.Rmin = 0.0
+            self.A = [0.0]
+            self.B = [0.0]
+            self.C = [0.0]
             self.Rcut = 0.0
-            self.dx = 1.0
-            self.x = [0.0]
-            self.exp = False
         else:
-            self.Rmin = CCS_params["Two_body"][pair]["r_min"]
             self.Rcut = CCS_params["Two_body"][pair]["r_cut"]
-            self.a = CCS_params["Two_body"][pair]["spl_a"]
-            self.b = CCS_params["Two_body"][pair]["spl_b"]
-            self.c = CCS_params["Two_body"][pair]["spl_c"]
-            self.d = CCS_params["Two_body"][pair]["spl_d"]
-            self.aa = CCS_params["Two_body"][pair]["exp_a"]
-            self.bb = CCS_params["Two_body"][pair]["exp_b"]
-            self.cc = CCS_params["Two_body"][pair]["exp_c"]
-            self.exp = False
-            self.x = CCS_params["Two_body"][pair]["r"]
-            self.dx = CCS_params["Two_body"][pair]["dr"]
+            self.A = CCS_params["Two_body"][pair]["A"]
+            self.B = CCS_params["Two_body"][pair]["B"]
+            self.C = CCS_params["Two_body"][pair]["C"]
 
     def eval_energy(self, r):
-        index = int(np.floor((r - self.Rmin) / self.dx))
-
-        if r >= self.Rmin and r <= self.rcut:
-            dr = r - self.x[index]
-            f0 = self.a[index] + dr * (
-                self.b[index] + dr * (self.c[index] + (self.d[index] * dr))
-            )
-            return float(f0)
-        elif r < self.Rmin:
-            val = np.exp(-self.aa * r + self.bb) + self.cc
+        if r <= self.rcut:
+            val = self.A*np.exp(-self.B*r) - self.C/r**6
             return val
         else:
             val = 0.0
             return val
 
     def eval_force(self, r):
-
-        index = int(np.floor((r - self.Rmin) / self.dx))
-
-        if r >= self.Rmin and r <= self.rcut:
-            dr = r - self.x[index]
-            f1 = self.b[index] + dr * (2 * self.c[index] + (3 * self.d[index] * dr))
-            return f1
-        elif r < self.Rmin:
-            val = -self.aa * np.exp(-self.aa * r + self.bb)
+        if r <= self.rcut:
+            val = -self.A*self.B*np.exp(-self.B*r) + 6*self.C/r**7
             return val
         else:
             val = 0.0
@@ -115,7 +84,7 @@ def ew(atoms, q):
     return Ew
 
 
-class CCS(Calculator):
+class Buck(Calculator):
     """
     CCS calculator
 
@@ -137,7 +106,7 @@ class CCS(Calculator):
     >>> To be added, Jolla.
     """
 
-    implemented_properties = {"energy", "forces", "stress"}
+    implemented_properties = {"energy", "forces"} # stress
 
     def __init__(
         self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs
@@ -230,7 +199,7 @@ class CCS(Calculator):
                     for id2 in id2s:
                         cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
                         cur_dist = dist[id2, :]
-                        cur_stress = 0.5*np.outer(cur_f, cur_dist)
+                        cur_stress = np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)
                         stresses[id, :, :] += cur_stress
 
