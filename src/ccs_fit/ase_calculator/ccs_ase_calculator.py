@@ -87,11 +87,11 @@ class spline_table:
 
         if r >= self.Rmin and r <= self.rcut:
             dr = r - self.x[index]
-            f1 = self.b[index] + dr * (2 * self.c[index] + (3 * self.d[index] * dr))
-            return f1
+            val = self.b[index] + dr * (2 * self.c[index] + (3 * self.d[index] * dr))
+            return -val
         elif r < self.Rmin:
             val = -self.aa * np.exp(-self.aa * r + self.bb)
-            return val
+            return -val
         else:
             val = 0.0
             return val
@@ -121,20 +121,6 @@ class CCS(Calculator):
 
     Curvature constrained splines calculator compatible with the ASE
     format.
-
-    Parameters
-    ----------
-    input_file : XXX
-        To be added, Jolla.
-
-    Returns
-    -------
-    What does it return actually, Jolla?
-
-
-    Examples
-    --------
-    >>> To be added, Jolla.
     """
 
     implemented_properties = {"energy", "forces", "stress"}
@@ -157,6 +143,7 @@ class CCS(Calculator):
         Calculator.__init__(self, **kwargs)
 
     def calculate(self, atoms=None, properties=["energy"], system_changes=all_changes):
+        print("Warning: stress tensor calculation not fully tested")
         Calculator.calculate(self, atoms, properties, system_changes)
         self.species = list(set(self.atoms.get_chemical_symbols()))
         self.pair = dict()
@@ -204,7 +191,7 @@ class CCS(Calculator):
             pos2 = np.array(pos2)
             pos2 = np.reshape(pos2, (-1, 3))
             for p1, id in zip(pos1, index1):
-                dist = pos2 - p1
+                dist = p1 - pos2
                 norm_dist = np.linalg.norm(dist, axis=1)
                 dist_mask = (norm_dist < self.rc) & (norm_dist > 0)
                 xy_distances.extend(norm_dist[dist_mask].tolist())
