@@ -59,15 +59,6 @@ Attributes
    Curvature constrained splines calculator compatible with the ASE
    format.
 
-   :param input_file: To be added, Jolla.
-   :type input_file: XXX
-
-   :rtype: What does it return actually, Jolla?
-
-   .. rubric:: Examples
-
-   >>> To be added, Jolla.
-
    .. py:attribute:: implemented_properties
 
       
