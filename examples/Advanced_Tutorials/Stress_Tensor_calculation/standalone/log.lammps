@@ -1,0 +1,80 @@
+LAMMPS (29 Sep 2021 - Update 2)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+units           real
+atom_style      atomic
+
+# data file with one atom type
+read_data       IN.data
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4.5998373 4.5998373 2.9592136)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  6 atoms
+  read_data CPU = 0.001 seconds
+
+pair_style      table spline 1000
+
+#pair coefficients
+pair_coeff      1 1  CCS.table O-O 5.99
+pair_coeff      1 2  CCS.table O-Zn 5.99
+WARNING: 1 of 941 force values in table O-Zn are inconsistent with -dE/dr.
+WARNING:  Should only be flagged at inflection points (src/pair_table.cpp:465)
+pair_coeff      2 2  CCS.table Zn-Zn 5.99
+
+neighbor 2.0 bin
+
+#fix             1 all nvt temp 300.0 300.0 200.0
+
+#velocity        all create 300 432567 dist uniform loop geom mom yes
+#timestep        2.0
+
+#thermo          100
+#dump            2 all custom 100 dump.spce id type x y z fx fy fz
+
+pair_write       1 2 500 r  1.2999991089415996 5.9999991089416 table.txt table
+Creating table file table.txt with DATE: 2023-03-22
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.99
+  ghost atom cutoff = 7.99
+  binsize = 3.995, bins = 2 2 1
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair table, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+thermo_style custom  step pe etotal  epair eangle fmax fnorm
+run             0
+WARNING: No fixes defined, atoms won't move (src/verlet.cpp:55)
+Per MPI rank memory allocation (min/avg/max) = 2.971 | 2.971 | 2.971 Mbytes
+Step PotEng TotEng E_pair E_angle Fmax Fnorm 
+       0    3.5375424    3.5375424    3.5375424            0    2.1774726     6.158822 
+Loop time of 5.15e-07 on 1 procs for 0 steps with 6 atoms
+
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 5.15e-07   |            |       |100.00
+
+Nlocal:        6.00000 ave           6 max           6 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:        798.000 ave         798 max         798 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:        620.000 ave         620 max         620 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 620
+Ave neighs/atom = 103.33333
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:00
