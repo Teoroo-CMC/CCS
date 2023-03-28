@@ -80,7 +80,6 @@ def prepare_input(filename):
         from ccs_fit.fitting.iterative_fitting import prune_dataset
         prune_dataset()
 
-
     #####
 
     if "Test-set" not in data:

@@ -534,8 +534,8 @@ class Objective:
             a_values.append(0)
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
-            if b_values[0]<0:
-                print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. AS A RESULT, THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+            if b_values[0]>0:
+                print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. THIS INDICATES THAT THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
             b_values.append(0)
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
