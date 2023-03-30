@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.20.1 (2023-03-30)
+
+
 ## v0.20.0 (2023-03-28)
 ### Feature
 * **ccs_ase_calculator:** Working implementation of stress tensor ([`4e61924`](https://github.com/Teoroo-CMC/CCS/commit/4e619240fb10bdc89e5d89a93fbc6befb6f52abe))
