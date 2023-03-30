@@ -41,24 +41,25 @@ class G2B_pair:
                 self.no_pair = True
         if self.no_pair:
             self.Rmin = 0.0
-            self.Rcut = 0.0
+            self.rcut = 0.0
             self.V_func  = None
             self.F_func = None
 
         else:
-            self.Rmin = G2B_params["Two_body"][pair]["r_min"]
-            self.Rcut = G2B_params["Two_body"][pair]["r_cut"]
+            self.rcut = G2B_params["Two_body"][pair]["r_cut"]
             func = G2B_params["Two_body"][pair]["V_func"]
             self.V_func = sympy.sympify(func)
             r_ij = sympy.Symbol('r_ij')
-            self.F_func = sympy.diff(-self.V_func, r_ij)
+            self.F_func = sympy.diff(self.V_func, r_ij) 
+            #print(self.F_func)
+            #print(self.V_func)
 
     def eval_energy(self, r):
         if self.no_pair:
             val=0.0
         else:
-            if r >= self.Rmin and r <= self.rcut:
-                f_eval=self.V_func.subs({'r_ij':2})
+            if r <= self.rcut:
+                f_eval=self.V_func.subs({'r_ij':r})
                 val=f_eval.evalf()    
             else:
                 val = 0.0
@@ -68,8 +69,8 @@ class G2B_pair:
         if self.no_pair:
             val=0.0
         else:
-            if r >= self.Rmin and r <= self.rcut:
-                f_eval=self.F_func.subs({'r_ij':2})
+            if r <= self.rcut:
+                f_eval=self.F_func.subs({'r_ij':r})
                 val=f_eval.evalf()    
             else:
                 val = 0.0
@@ -129,7 +130,7 @@ class G2B(Calculator):
         self.eps = G2B_params["One_body"]
         if charge_scaling:
             for key in self.q:
-                self.q[key] *= self.CCS_params["Charge scaling factor"]
+                self.q[key] *= self.G2B_params["Charge scaling factor"]
 
         Calculator.__init__(self, **kwargs)
 
