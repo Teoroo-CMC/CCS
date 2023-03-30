@@ -116,7 +116,7 @@ def ccs_fetch(
         Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
 
     if Ns > 0:
-        mask = [a <= Ns for a in range(len(REF_DB))]
+        mask = [a <= Ns-1 for a in range(len(REF_DB))]
         random.shuffle(mask)
     else:
         mask = len(REF_DB) * [True]
