@@ -5,7 +5,7 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import logging
+# import logging
 import numpy as np
 import itertools as it
 from collections import OrderedDict, defaultdict
@@ -19,8 +19,8 @@ try:
 except:
     pass
 
-logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
-logg = logging.getLogger(__name__)
+# logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
+# logg = logging.getLogger(__name__)
 
 
 class spline_table:

@@ -5,7 +5,7 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-import logging
+# import logging
 import sympy
 import numpy as np
 import itertools as it
@@ -20,8 +20,8 @@ try:
 except:
     pass
 
-logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
-logg = logging.getLogger(__name__)
+# logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
+# logg = logging.getLogger(__name__)
 
 
 class G2B_pair:
