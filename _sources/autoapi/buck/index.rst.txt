@@ -26,18 +26,6 @@ Functions
 
 
 
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   buck.logg
-
-
-.. py:data:: logg
-
-   
-
 .. py:class:: spline_table(elem1, elem2, CCS_params, exp=True)
 
    .. py:method:: eval_energy(r)

@@ -26,18 +26,6 @@ Functions
 
 
 
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   ccs_ase_G2B.logg
-
-
-.. py:data:: logg
-
-   
-
 .. py:class:: G2B_pair(elem1, elem2, G2B_params, exp=True)
 
    .. py:method:: eval_energy(r)
