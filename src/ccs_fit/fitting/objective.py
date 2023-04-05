@@ -18,7 +18,7 @@ from collections import OrderedDict
 import numpy as np
 from cvxopt import matrix, solvers
 from scipy.linalg import block_diag
-
+from math import isnan
 
 logger = logging.getLogger(__name__)
 
@@ -526,8 +526,15 @@ class Objective:
             r_values = list(np.array(self.l_twb[k].rn))
             two_body_dict["r"] = list(r_values)
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
-            two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
-            two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
+            if not isnan(self.l_twb[k].expcoeffs[1]):
+                two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
+            else: 
+                print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+                two_body_dict["exp_b"] = 0
+            if not isnan(self.l_twb[k].expcoeffs[2]):
+                two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[1]
+            else: 
+                two_body_dict["exp_c"] = 0
             if two_body_dict["exp_a"]<0:
                 print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
