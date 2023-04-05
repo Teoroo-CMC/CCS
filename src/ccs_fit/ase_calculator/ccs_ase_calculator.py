@@ -143,7 +143,6 @@ class CCS(Calculator):
         Calculator.__init__(self, **kwargs)
 
     def calculate(self, atoms=None, properties=["energy"], system_changes=all_changes):
-        print("Warning: stress tensor calculation not fully tested")
         Calculator.calculate(self, atoms, properties, system_changes)
         self.species = list(set(self.atoms.get_chemical_symbols()))
         self.pair = dict()
