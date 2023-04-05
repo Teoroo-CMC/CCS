@@ -18,7 +18,8 @@ Functions
    ccs_fit.scripts.ccs_export_FF.Morse
    ccs_fit.scripts.ccs_export_FF.Pedone
    ccs_fit.scripts.ccs_export_FF._write
-   ccs_fit.scripts.ccs_export_FF.write_dense_spline
+   ccs_fit.scripts.ccs_export_FF.write_LAMMPS
+   ccs_fit.scripts.ccs_export_FF.write_GULP
    ccs_fit.scripts.ccs_export_FF.write_FF
    ccs_fit.scripts.ccs_export_FF.main
 
@@ -39,7 +40,15 @@ Functions
 .. py:function:: _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True)
 
 
-.. py:function:: write_dense_spline(jsonfile, scale=10, table='CCS.table', format='lammps')
+.. py:function:: write_LAMMPS(jsonfile, scale=50, format='lammps')
+
+
+.. py:function:: write_GULP(jsonfile, scale=50, format='GULP')
+
+   spline <cubic> <reverse> <intra/inter> <bond/x12/x13/x14/mol/o14/g14> <kcal/kjmol> <type_of_bond>
+   atom1 atom2 <shift> <rmin> rmax <1*flag>
+   energy_1 distance_1
+   energy_2 distance_2
 
 
 .. py:function:: write_FF(CCS_params_file)

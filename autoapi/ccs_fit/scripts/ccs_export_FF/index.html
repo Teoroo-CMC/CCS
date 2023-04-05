@@ -60,12 +60,12 @@
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../timing/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timing</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../regression/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">regression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ccs_ppmd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ppmd</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../buck/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">buck</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../ccs_ase_calculator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ase_calculator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../ccs_ase_G2B/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ase_G2B</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../buck/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">buck</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../timing/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timing</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ccs_ppmd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ccs_ppmd</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../regression/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">regression</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -120,13 +120,16 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF._write" title="ccs_fit.scripts.ccs_export_FF._write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_write</span></code></a>(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.write_dense_spline" title="ccs_fit.scripts.ccs_export_FF.write_dense_spline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_dense_spline</span></code></a>(jsonfile[, scale, table, format])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.write_LAMMPS" title="ccs_fit.scripts.ccs_export_FF.write_LAMMPS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_LAMMPS</span></code></a>(jsonfile[, scale, format])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.write_FF" title="ccs_fit.scripts.ccs_export_FF.write_FF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_FF</span></code></a>(CCS_params_file)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.write_GULP" title="ccs_fit.scripts.ccs_export_FF.write_GULP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_GULP</span></code></a>(jsonfile[, scale, format])</p></td>
+<td><p>spline &lt;cubic&gt; &lt;reverse&gt; &lt;intra/inter&gt; &lt;bond/x12/x13/x14/mol/o14/g14&gt; &lt;kcal/kjmol&gt; &lt;type_of_bond&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.write_FF" title="ccs_fit.scripts.ccs_export_FF.write_FF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_FF</span></code></a>(CCS_params_file)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.main" title="ccs_fit.scripts.ccs_export_FF.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ccs_fit.scripts.ccs_export_FF.main" title="ccs_fit.scripts.ccs_export_FF.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -157,9 +160,18 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="ccs_fit.scripts.ccs_export_FF.write_dense_spline">
-<span class="sig-prename descclassname"><span class="pre">ccs_fit.scripts.ccs_export_FF.</span></span><span class="sig-name descname"><span class="pre">write_dense_spline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jsonfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CCS.table'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lammps'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs_fit/scripts/ccs_export_FF.html#write_dense_spline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.scripts.ccs_export_FF.write_dense_spline" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ccs_fit.scripts.ccs_export_FF.write_LAMMPS">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.scripts.ccs_export_FF.</span></span><span class="sig-name descname"><span class="pre">write_LAMMPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jsonfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lammps'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs_fit/scripts/ccs_export_FF.html#write_LAMMPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.scripts.ccs_export_FF.write_LAMMPS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ccs_fit.scripts.ccs_export_FF.write_GULP">
+<span class="sig-prename descclassname"><span class="pre">ccs_fit.scripts.ccs_export_FF.</span></span><span class="sig-name descname"><span class="pre">write_GULP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jsonfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GULP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ccs_fit/scripts/ccs_export_FF.html#write_GULP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ccs_fit.scripts.ccs_export_FF.write_GULP" title="Permalink to this definition"></a></dt>
+<dd><p>spline &lt;cubic&gt; &lt;reverse&gt; &lt;intra/inter&gt; &lt;bond/x12/x13/x14/mol/o14/g14&gt; &lt;kcal/kjmol&gt; &lt;type_of_bond&gt;
+atom1 atom2 &lt;shift&gt; &lt;rmin&gt; rmax &lt;1*flag&gt;
+energy_1 distance_1
+energy_2 distance_2</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ccs_fit.scripts.ccs_export_FF.write_FF">
