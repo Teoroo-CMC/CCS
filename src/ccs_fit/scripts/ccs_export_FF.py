@@ -99,7 +99,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
         plt.legend()
         plt.show()
 
-def write_dense_spline(jsonfile, scale=10, table="CCS.table", format="lammps"):
+def write_LAMMPS(jsonfile, scale=50, format="lammps"):
     json_file = open(jsonfile)
     CCS_params = json.load(json_file)
     energy = []
@@ -110,7 +110,7 @@ def write_dense_spline(jsonfile, scale=10, table="CCS.table", format="lammps"):
         for pair in CCS_params["Two_body"].keys():
             elem1, elem2 = pair.split("-")
             tb = spline_table(elem1, elem2, CCS_params)
-            rmin=CCS_params["Two_body"][pair]["r_min"]
+            rmin = np.min([0.5, CCS_params["Two_body"][pair]["r_min"]])
             dr = CCS_params["Two_body"][pair]["dr"] / scale
             r = np.arange(rmin, tb.Rcut + dr, dr)
             tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
@@ -127,11 +127,47 @@ def write_dense_spline(jsonfile, scale=10, table="CCS.table", format="lammps"):
 
     return tags
 
+def write_GULP(jsonfile, scale=50, format="GULP"):
+    """
+    spline <cubic> <reverse> <intra/inter> <bond/x12/x13/x14/mol/o14/g14> <kcal/kjmol> <type_of_bond>
+    atom1 atom2 <shift> <rmin> rmax <1*flag>
+    energy_1 distance_1
+    energy_2 distance_2
+    """
+    json_file = open(jsonfile)
+    CCS_params = json.load(json_file)
+    tags = {}
+    filename = "CCS." + format
+    with open(filename, "w") as f:
+        for pair in CCS_params["Two_body"].keys():
+            elem1, elem2 = pair.split("-")
+            tb = spline_table(elem1, elem2, CCS_params)
+            rmin= np.min([0.5, CCS_params["Two_body"][pair]["r_min"]])
+            dr = CCS_params["Two_body"][pair]["dr"] / scale
+            r = np.arange(rmin, tb.Rcut + dr, dr)
+            tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
+            f.write("\n spline reverse")
+            f.write("\n {} {} 0 {} {}".format(elem1, elem2, rmin, tb.Rcut + dr))
+            [
+                f.write(
+                    "\n {} {}".format(
+                        elem, tb.eval_energy(elem)
+                    )
+                )
+                for index, elem in enumerate(r)
+            ]
+
+    return tags
+
 def write_FF(CCS_params_file):
 
     with open(CCS_params_file, "r") as f:
         CCS_params = json.load(f)
 
+    print("Writing LAMMPS and GULP splines.")
+    write_LAMMPS(CCS_params_file)
+    write_GULP(CCS_params_file)
+    
     f_Buck = open("Buckingham.dat", "w")
     f_LJ = open("Lennard_Jones.dat", "w")
     f_Mor = open("Morse.dat", "w")
@@ -145,8 +181,6 @@ def write_FF(CCS_params_file):
     for pair in CCS_params["Two_body"]:
         elem = pair.split("-")
         _write(elem[0], elem[1], CCS_params, exp=True, f_Buck=f_Buck, f_LJ=f_LJ, f_Mor=f_Mor, f_Ped=f_Ped)
-
-    write_dense_spline(CCS_params_file)
 
 def main():
     try:
