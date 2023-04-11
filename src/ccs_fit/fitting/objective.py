@@ -532,7 +532,7 @@ class Objective:
                 print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
                 two_body_dict["exp_b"] = 0
             if not isnan(self.l_twb[k].expcoeffs[2]):
-                two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[1]
+                two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
             else: 
                 two_body_dict["exp_c"] = 0
             if two_body_dict["exp_a"]<0:
