@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.1 (2023-04-13)
+### Fix
+* **ccs_validate:** Adding deepcopy to make sure that dicts are not muted globally ([`b39924f`](https://github.com/Teoroo-CMC/CCS/commit/b39924f781878093d332562d823a3d043027ab12))
+* **objective.py:** Bug in assignment of exp_c ([`e9db52e`](https://github.com/Teoroo-CMC/CCS/commit/e9db52e6e639acedd828da466eac3b38e36f0f7a))
+
 ## v0.21.0 (2023-04-05)
 ### Feature
 * Adding exporting of GULP and LAMMPS splines ([`01f9e97`](https://github.com/Teoroo-CMC/CCS/commit/01f9e97c7e6f38cb7852d478d8d5053f6de6ff37))
