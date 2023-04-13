@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.0 (2023-04-05)
+### Feature
+* Adding exporting of GULP and LAMMPS splines ([`01f9e97`](https://github.com/Teoroo-CMC/CCS/commit/01f9e97c7e6f38cb7852d478d8d5053f6de6ff37))
+
 ## v0.20.3 (2023-04-03)
 
 
