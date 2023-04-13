@@ -38,7 +38,7 @@ def ccs_validate(
 
     Returns
     -------
-        What does it return Jolla?
+        To be specified. 
 
     Example usage
     -------------
@@ -54,11 +54,13 @@ def ccs_validate(
         DFTB_DB = db.connect(DFTB_DB)
 
     if isinstance(charge_dict, str):
-        charge_dict = json.loads(charge_dict)
+        charge_dict_orig = json.loads(charge_dict)
+        charge_dict = charge_dict_orig.deepcopy() # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
 
     if isinstance(CCS_params, str):
         with open(CCS_params, "r") as f:
-            CCS_params = json.load(f)
+            CCS_params_orig = json.load(f)
+            CCS_params = CCS_params_orig.deepcopy() # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
 
     if charge_dict is None:
         charge = False
