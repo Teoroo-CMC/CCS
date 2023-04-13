@@ -8,6 +8,7 @@ from ase.calculators.singlepoint import SinglePointCalculator
 from tqdm import tqdm
 import time
 from ase.calculators.mixing import LinearCombinationCalculator
+from copy import deepcopy
 
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
 
@@ -55,12 +56,12 @@ def ccs_validate(
 
     if isinstance(charge_dict, str):
         charge_dict_orig = json.loads(charge_dict)
-        charge_dict = charge_dict_orig.deepcopy() # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
+        charge_dict = deepcopy(charge_dict_orig) # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
 
     if isinstance(CCS_params, str):
         with open(CCS_params, "r") as f:
             CCS_params_orig = json.load(f)
-            CCS_params = CCS_params_orig.deepcopy() # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
+            CCS_params = deepcopy(CCS_params_orig) # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
 
     if charge_dict is None:
         charge = False
