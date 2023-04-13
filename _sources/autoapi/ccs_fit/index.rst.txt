@@ -82,7 +82,7 @@ Functions
                CCS+Q: CCS_params_file(string) NumberOfSamples(int) DFT.db(string) charge_dict(string) charge_scaling(bool)")
                DFTB:  CCS_params_file(string) NumberOfSamples(int) DFT.db(string) DFTB.db(string)")
 
-   :rtype: What does it return Jolla?
+   :rtype: To be specified.
 
    Example usage
    -------------

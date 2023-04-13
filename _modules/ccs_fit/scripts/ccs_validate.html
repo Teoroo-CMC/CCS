@@ -113,7 +113,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        What does it return Jolla?</span>
+<span class="sd">        To be specified. </span>
 
 <span class="sd">    Example usage</span>
 <span class="sd">    -------------</span>
@@ -129,11 +129,13 @@
         <span class="n">DFTB_DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DFTB_DB</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">)</span>
+        <span class="n">charge_dict_orig</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">charge_dict</span><span class="p">)</span>
+        <span class="n">charge_dict</span> <span class="o">=</span> <span class="n">charge_dict_orig</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span> <span class="c1"># Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">CCS_params</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CCS_params</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">CCS_params</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">CCS_params_orig</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">CCS_params</span> <span class="o">=</span> <span class="n">CCS_params_orig</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">()</span> <span class="c1"># Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired</span>
 
     <span class="k">if</span> <span class="n">charge_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">charge</span> <span class="o">=</span> <span class="kc">False</span>
