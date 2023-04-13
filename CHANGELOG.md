@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.2 (2023-04-13)
+### Fix
+* **ccs_validate:** Adding deepcopy to make sure that dicts are not muted globally ([`6003e62`](https://github.com/Teoroo-CMC/CCS/commit/6003e626fac96960b8294f3bfc0093d998738d1c))
+
 ## v0.21.1 (2023-04-13)
 ### Fix
 * **ccs_validate:** Adding deepcopy to make sure that dicts are not muted globally ([`b39924f`](https://github.com/Teoroo-CMC/CCS/commit/b39924f781878093d332562d823a3d043027ab12))
