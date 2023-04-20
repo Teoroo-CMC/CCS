@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.3 (2023-04-20)
+### Fix
+* **ccs_fetch:** Sorting elements alphabetically dict_species ([`822f5cd`](https://github.com/Teoroo-CMC/CCS/commit/822f5cd2745d30dcdd8a84cca5d334d9b439c94e))
+
 ## v0.21.2 (2023-04-13)
 ### Fix
 * **ccs_validate:** Adding deepcopy to make sure that dicts are not muted globally ([`6003e62`](https://github.com/Teoroo-CMC/CCS/commit/6003e626fac96960b8294f3bfc0093d998738d1c))
