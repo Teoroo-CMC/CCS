@@ -149,6 +149,7 @@ def ccs_fetch(
                 dict_species[elem] += 1
                 if mode == "CCS+Q":
                     struct.charges.append(charge_dict[elem])
+            dict_species = {key: value for key, value in sorted(dict_species.items())}
             atom_pair = it.combinations_with_replacement(
                 dict_species.keys(), 2)
             if mode == "CCS+Q":
