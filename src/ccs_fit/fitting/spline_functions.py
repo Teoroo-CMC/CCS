@@ -61,14 +61,14 @@ class Twobody:
         """
 
         self.name = name
-        self.Rmin = Rmin
         self.res = Resolution
         self.N = int(np.ceil((Rcut - Rmin) / self.res)) + 1
         # TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE FIRST INTERVAL
         # IN MAIN Rmin IS ADJUSTED THIS WAY, WE THEREFORE BUILD "UPWARDS" FROM Rmin.
         self.N_full = self.N
-        self.Rcut = self.Rmin + (self.N - 1) * self.res
-        self.rn_full = [(i) * self.res + self.Rmin for i in range(self.N)]
+        self.Rcut = Rcut # self.Rmin + (self.N - 1) * self.res
+        self.Rmin = self.Rcut - (self.N - 1) * self.res
+        self.rn_full = [self.Rcut - (i) * self.res for i in reversed(range(self.N))]
         self.rn = self.rn_full
         if not range_center:
             self.range_center = (Rmin+self.Rcut)/2

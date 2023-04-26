@@ -188,10 +188,23 @@ class Objective:
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
+        try:
+            if self.separate_wall_opt == "True":
+                [aa, bb] = self.get_constrained_aa_bb(g_opt)
+        except:
+            pass
+
+        print(bb)
         opt_sol = self.solver(pp, qq, matrix(
             g_opt), matrix(hh), matrix(aa), matrix(bb))
 
         xx = np.array(opt_sol["x"])
+        try:
+            if self.separate_wall_opt == "True":
+                pass
+        except:
+            self.write_xx(xx)
+        
         self.assign_parameter_values(xx)
 
         self.model_energies = np.ravel(
@@ -452,6 +465,39 @@ class Objective:
             gg = block_diag(gg, -1)
 
         return gg, aa
+
+    def get_constrained_aa_bb(self, gg):
+
+        bb_copy = self.read_xx()
+        aa = np.zeros((len(bb_copy), gg.shape[1]))
+        min_ind = (gg.shape[1] - len(bb_copy)) - 2
+        for i in range(len(bb_copy)):
+            aa[i,i+min_ind] = 1
+
+        bb = bb_copy.copy()
+        return [aa, bb]          
+
+    def read_xx(self):
+        print("Reading xx.json")
+        file = open("xx.json")
+        bb_copy = np.array(json.load(file))
+        
+        ### trimming part
+        trim_counter = 0
+        if self.interface == "CCS+Q":
+            trim_counter += 1
+        for k in range(self.no):
+            i = self.no - k - 1
+            if self.l_one[i].epsilon_supported:
+                trim_counter += 1
+        
+        print("Trim counter: {}".format(trim_counter))
+        return bb_copy[1:-trim_counter]
+
+    def write_xx(self, xx):
+        np.savetxt("xx.txt", xx, fmt='%.10e', delimiter=' ', newline=', ')
+        file = open("xx.json", "w")
+        json.dump(xx.tolist(), file)
 
     def write_error(self, fname="CCS_error.out"):
         """Prints the errors in a file.

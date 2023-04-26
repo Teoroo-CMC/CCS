@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def prepare_input(filename):
 
-    gen_params = {"interface": None, "ewald_scaling": 1.0, "merging": "False", "do_unconstrained_fit": "False", "do_ridge_regression": "False", "iterative_fit": "False"}
+    gen_params = {"interface": None, "ewald_scaling": 1.0, "merging": "False", "do_unconstrained_fit": "False", "do_ridge_regression": "False", "iterative_fit": "False", "separate_wall_fit": "False"}
     struct_data_test = {}
 
     try:
@@ -265,10 +265,10 @@ def parse(data, struct_data, struct_data_forces):
             except:
                 values["Rmin"] = (
                     min([item for sublist in list_dist for item in sublist if item > 0]
-                        ) - 0.5 * values["Resolution"]
+                        ) # - 0.5 * values["Resolution"]
                     # TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE FIRST INTERVAL
 
-                )
+               )
 
             if values["Rcut"] > Rmax:
                 values["Rcut"] = Rmax
