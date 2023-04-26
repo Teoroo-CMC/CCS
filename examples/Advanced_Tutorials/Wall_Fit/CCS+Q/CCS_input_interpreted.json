@@ -1,0 +1,29 @@
+{
+        "General": {
+                "interface": "CCS+Q",
+                "ewald_scaling": 1.0,
+                "merging": "False",
+                "do_unconstrained_fit": "False",
+                "do_ridge_regression": "False",
+                "iterative_fit": "False",
+                "separate_wall_fit": "False",
+                "separate_wall_opt": "True"
+        },
+        "Train-set": "structures.json",
+        "Test-set": "structures.json",
+        "Twobody": {
+                "Ne-Ne": {
+                        "Rcut": 4.999999979919462,
+                        "Resolution": 0.02,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full",
+                        "range_width": 0.1,
+                        "range_center": 1.39,
+                        "Rmin": 0.5663367631145906
+                }
+        },
+        "Onebody": [
+                "Ne"
+        ]
+}

@@ -1,0 +1,18 @@
+{
+        "General": {
+                "interface": "CCS+Q",
+                "merging": "False",
+                "separate_wall_opt": "True"
+        },
+        "Twobody": {
+                "Ne-Ne": {
+                        "Rcut": 5.0,
+                        "Resolution": 0.02,
+                        "Swtype": "sw",
+                        "const_type": "Mono",
+                        "search_mode": "full",
+                        "range_width": 0.1,
+                        "range_center": 1.39
+                }
+        }
+}
