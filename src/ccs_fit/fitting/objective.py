@@ -192,21 +192,21 @@ class Objective:
             if self.separate_wall_opt == "True":
                 [aa, bb] = self.get_constrained_aa_bb(g_opt)
         except:
+            print("Failed to build constrained aa and bb matrices.")
             pass
 
-        print(bb)
         opt_sol = self.solver(pp, qq, matrix(
             g_opt), matrix(hh), matrix(aa), matrix(bb))
 
         xx = np.array(opt_sol["x"])
+        self.assign_parameter_values(xx)
+
         try:
             if self.separate_wall_opt == "True":
                 pass
         except:
-            self.write_xx(xx)
+            self.write_xx()
         
-        self.assign_parameter_values(xx)
-
         self.model_energies = np.ravel(
             self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
 
@@ -468,36 +468,51 @@ class Objective:
 
     def get_constrained_aa_bb(self, gg):
 
-        bb_copy = self.read_xx()
-        aa = np.zeros((len(bb_copy), gg.shape[1]))
-        min_ind = (gg.shape[1] - len(bb_copy)) - 2
-        for i in range(len(bb_copy)):
-            aa[i,i+min_ind] = 1
+        fixed_c = self.read_xx()
 
-        bb = bb_copy.copy()
+        # print(type(fixed_c))
+        # print(fixed_c)
+
+        tmp_aa = []
+        tmp_bb = []
+        for elem in range(self.np):
+            new_width = self.l_twb[elem].N
+            fixed_curv_tmp = fixed_c[self.l_twb[elem].name][1:] # Remove the first value which is ill-defined
+            new_height = len(fixed_curv_tmp)
+
+            # Approach 2
+            block_1 = np.zeros((new_height, new_width-new_height))
+            block_2 = np.eye(new_height)
+            tmp_aa.append(np.hstack([block_1, block_2]))
+            tmp_bb.extend(fixed_curv_tmp)
+
+        aa = block_diag(*tmp_aa)
+        bb = np.array(tmp_bb)
+
+        print(bb)
+
+        aa = np.hstack([aa, np.zeros((aa.shape[0], self.cols_sto))])
+        if self.interface == "CCS+Q":
+            aa = np.hstack([aa, np.zeros((aa.shape[0], 1))])
+
         return [aa, bb]          
 
     def read_xx(self):
         print("Reading xx.json")
         file = open("xx.json")
-        bb_copy = np.array(json.load(file))
-        
-        ### trimming part
-        trim_counter = 0
-        if self.interface == "CCS+Q":
-            trim_counter += 1
-        for k in range(self.no):
-            i = self.no - k - 1
-            if self.l_one[i].epsilon_supported:
-                trim_counter += 1
-        
-        print("Trim counter: {}".format(trim_counter))
-        return bb_copy[1:-trim_counter]
+        bb_copy = json.load(file)        
+        return bb_copy
 
-    def write_xx(self, xx):
-        np.savetxt("xx.txt", xx, fmt='%.10e', delimiter=' ', newline=', ')
+    def write_xx(self):
+
+        xx_dict = {}
+        for ii in range(self.np):
+            flat_list = [item for sublist in self.l_twb[ii].curvatures.tolist() for item in sublist] 
+            xx_dict[self.l_twb[ii].name] = flat_list
+
+        # np.savetxt("xx.txt", xx, fmt='%.10e', delimiter=' ', newline=', ')
         file = open("xx.json", "w")
-        json.dump(xx.tolist(), file)
+        json.dump(xx_dict, file)
 
     def write_error(self, fname="CCS_error.out"):
         """Prints the errors in a file.
