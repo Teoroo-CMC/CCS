@@ -6,7 +6,7 @@
                 "do_unconstrained_fit": "False",
                 "do_ridge_regression": "False",
                 "iterative_fit": "False",
-                "separate_wall_fit": "True"
+                "separate_wall_opt": "True"
         },
         "Train-set": "structures.json",
         "Test-set": "structures.json",
@@ -19,7 +19,7 @@
                         "search_mode": "full",
                         "range_width": 0.1,
                         "range_center": 1.39,
-                        "Rmin": 0.7151053734636533
+                        "Rmin": 0.5840042368652734
                 }
         },
         "Onebody": [

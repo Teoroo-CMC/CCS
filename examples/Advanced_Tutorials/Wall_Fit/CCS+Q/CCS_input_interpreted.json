@@ -6,7 +6,6 @@
                 "do_unconstrained_fit": "False",
                 "do_ridge_regression": "False",
                 "iterative_fit": "False",
-                "separate_wall_fit": "False",
                 "separate_wall_opt": "True"
         },
         "Train-set": "structures.json",
@@ -15,7 +14,7 @@
                 "Ne-Ne": {
                         "Rcut": 4.999999979919462,
                         "Resolution": 0.02,
-                        "Swtype": "rep",
+                        "Swtype": "sw",
                         "const_type": "Mono",
                         "search_mode": "full",
                         "range_width": 0.1,

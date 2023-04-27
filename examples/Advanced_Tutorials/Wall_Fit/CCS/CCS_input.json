@@ -2,7 +2,7 @@
         "General": {
                 "interface": "CCS",
                 "merging": "False",
-                "separate_wall_fit": "True"
+                "separate_wall_opt": "True"
         },
         "Twobody": {
                 "Ne-Ne": {
