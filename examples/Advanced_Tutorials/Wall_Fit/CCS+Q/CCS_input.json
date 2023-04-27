@@ -8,7 +8,7 @@
                 "Ne-Ne": {
                         "Rcut": 5.0,
                         "Resolution": 0.02,
-                        "Swtype": "sw",
+                        "Swtype": "rep",
                         "const_type": "Mono",
                         "search_mode": "full",
                         "range_width": 0.1,

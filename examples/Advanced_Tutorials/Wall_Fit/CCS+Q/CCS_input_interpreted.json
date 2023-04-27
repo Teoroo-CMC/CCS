@@ -15,7 +15,7 @@
                 "Ne-Ne": {
                         "Rcut": 4.999999979919462,
                         "Resolution": 0.02,
-                        "Swtype": "sw",
+                        "Swtype": "rep",
                         "const_type": "Mono",
                         "search_mode": "full",
                         "range_width": 0.1,
