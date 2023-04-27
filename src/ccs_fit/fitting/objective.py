@@ -191,6 +191,8 @@ class Objective:
         try:
             if self.separate_wall_opt == "True":
                 [aa, bb] = self.get_constrained_aa_bb(g_opt)
+            else:
+                self.write_xx()
         except:
             print("Failed to build constrained aa and bb matrices.")
             pass
@@ -202,11 +204,11 @@ class Objective:
         self.assign_parameter_values(xx)
 
         try:
-            if self.separate_wall_opt == "True":
-                pass
+            if self.separate_wall_opt == "False":
+                self.write_xx()
         except:
-            self.write_xx()
-        
+            pass
+
         self.model_energies = np.ravel(
             self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
 
@@ -489,8 +491,6 @@ class Objective:
         aa = block_diag(*tmp_aa)
         bb = np.array(tmp_bb)
 
-        print(bb)
-
         aa = np.hstack([aa, np.zeros((aa.shape[0], self.cols_sto))])
         if self.interface == "CCS+Q":
             aa = np.hstack([aa, np.zeros((aa.shape[0], 1))])
@@ -498,7 +498,6 @@ class Objective:
         return [aa, bb]          
 
     def read_xx(self):
-        print("Reading xx.json")
         file = open("xx.json")
         bb_copy = json.load(file)        
         return bb_copy
