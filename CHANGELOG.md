@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.4 (2023-05-23)
+### Fix
+* Fixed error for systems with no PBC ([`d5e01fb`](https://github.com/Teoroo-CMC/CCS/commit/d5e01fbed141e1c2933401834f605dc730c2cac7))
+
 ## v0.21.3 (2023-04-20)
 ### Fix
 * **ccs_fetch:** Sorting elements alphabetically dict_species ([`822f5cd`](https://github.com/Teoroo-CMC/CCS/commit/822f5cd2745d30dcdd8a84cca5d334d9b439c94e))
