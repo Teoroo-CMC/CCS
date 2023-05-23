@@ -8,6 +8,7 @@ import numpy as np
 from ase import Atoms
 from ase import io
 import ase.db as db
+from ase.cell import Cell
 from sympy import true
 from tqdm import tqdm
 import itertools
@@ -38,8 +39,11 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         n_repeat = np.ceil(n_repeat).astype(int)
         offsets = [
             *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
+        print("cell, ", type(cell), cell)
+        print("offsets, ", type(offsets), offsets)
+
     except:
-        cell = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         offsets = [[0, 0, 0]]
 
     mask1 = [atom == ch1 for atom in atoms.get_chemical_symbols()]
