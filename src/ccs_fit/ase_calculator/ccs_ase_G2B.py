@@ -140,7 +140,7 @@ class G2B(Calculator):
         self.pair = dict()
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = G2B_pair(a, b, self.G2B_params)
-            if self.pair[a + b].rcut < self.rc:
+            if self.pair[a + b].rcut > self.rc:
                 self.rc=self.pair[a + b].rcut
 
         if self.atoms.number_of_lattice_vectors == 3:
