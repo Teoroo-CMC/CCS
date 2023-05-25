@@ -39,8 +39,6 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         n_repeat = np.ceil(n_repeat).astype(int)
         offsets = [
             *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
-        print("cell, ", type(cell), cell)
-        print("offsets, ", type(offsets), offsets)
 
     except:
         cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
