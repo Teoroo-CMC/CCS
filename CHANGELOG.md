@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.6 (2023-05-25)
+### Fix
+* **ccs_fetch:** Removed redundant print statements ([`60d39d9`](https://github.com/Teoroo-CMC/CCS/commit/60d39d9607472f61b079e5f9d4976c1229857b5c))
+
 ## v0.21.5 (2023-05-25)
 
 
