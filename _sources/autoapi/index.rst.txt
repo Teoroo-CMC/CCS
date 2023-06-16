@@ -7,10 +7,10 @@ This page contains auto-generated API reference documentation [#f1]_.
    :titlesonly:
 
    /autoapi/ccs_fit/index
-   /autoapi/ccs_ase_G2B/index
-   /autoapi/ccs_ase_calculator/index
-   /autoapi/buck/index
    /autoapi/ccs_ppmd/index
+   /autoapi/ccs_ase_calculator/index
+   /autoapi/ccs_ase_G2B/index
+   /autoapi/buck/index
    /autoapi/timing/index
    /autoapi/regression/index
 
