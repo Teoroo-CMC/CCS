@@ -7,13 +7,13 @@ run-name: ${{ github.actor}} updated the CCS package
 
 on: 
   push:
-    paths: 
-      - '!*README.md'
-      - '!examples/*'
+    paths:
+      - 'src/*'
+      - 'pyproject.toml' 
   pull_request:
     paths:
-      - '!*README.md'
-      - '!examples/*'
+      - 'src/*'
+      - 'pyproject.toml' 
 
 jobs:
   # This workflow contains a single job called "ci"
