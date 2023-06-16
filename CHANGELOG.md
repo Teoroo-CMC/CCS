@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.7 (2023-06-16)
+### Documentation
+* Small change to README to check ci-cd change ([`12e0f92`](https://github.com/Teoroo-CMC/CCS/commit/12e0f92bf7df35971b57ae8bf21d3dcf88306301))
+
 ## v0.21.6 (2023-05-25)
 ### Fix
 * **ccs_fetch:** Removed redundant print statements ([`60d39d9`](https://github.com/Teoroo-CMC/CCS/commit/60d39d9607472f61b079e5f9d4976c1229857b5c))
