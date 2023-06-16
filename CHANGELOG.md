@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.21.8 (2023-06-16)
+
+
 ## v0.21.7 (2023-06-16)
 ### Documentation
 * Small change to README to check ci-cd change ([`12e0f92`](https://github.com/Teoroo-CMC/CCS/commit/12e0f92bf7df35971b57ae8bf21d3dcf88306301))
