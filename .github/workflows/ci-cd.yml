@@ -5,7 +5,15 @@ name: ci-cd
 
 run-name: ${{ github.actor}} updated the CCS package
 
-on: [push, pull_request]
+on: 
+  push:
+    paths: 
+      - '!*README.md'
+      - '!examples/*'
+  pull_request:
+    paths:
+      - '!*README.md'
+      - '!examples/*'
 
 jobs:
   # This workflow contains a single job called "ci"
