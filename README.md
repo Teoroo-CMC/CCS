@@ -128,7 +128,7 @@ conda develop <path-to-CCS-package>
 
 ## Tutorials
 
-We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `CCS_input.json` for O2 is shown below:
+We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `CCS_input.json` for O$_2$ is shown below:
 ```
 {
         "General": {
