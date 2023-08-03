@@ -8,10 +8,10 @@ This page contains auto-generated API reference documentation [#f1]_.
 
    /autoapi/ccs_fit/index
    /autoapi/ccs_ppmd/index
+   /autoapi/timing/index
+   /autoapi/buck/index
    /autoapi/ccs_ase_calculator/index
    /autoapi/ccs_ase_G2B/index
-   /autoapi/buck/index
-   /autoapi/timing/index
    /autoapi/regression/index
 
 .. [#f1] Created with `sphinx-autoapi <https://github.com/readthedocs/sphinx-autoapi>`_
