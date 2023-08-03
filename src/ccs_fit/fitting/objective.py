@@ -529,20 +529,20 @@ class Objective:
             if not isnan(self.l_twb[k].expcoeffs[1]):
                 two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
             else: 
-                print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+                # print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
                 two_body_dict["exp_b"] = 0
             if not isnan(self.l_twb[k].expcoeffs[2]):
                 two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
             else: 
                 two_body_dict["exp_c"] = 0
             if two_body_dict["exp_a"]<0:
-                print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
+                # print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
-            if b_values[0]>0:
-                print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. THIS INDICATES THAT THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+            # if b_values[0]>0:
+                # print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. THIS INDICATES THAT THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
             b_values.append(0)
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
