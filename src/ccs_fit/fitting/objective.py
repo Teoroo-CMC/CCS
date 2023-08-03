@@ -535,7 +535,7 @@ class Objective:
                 two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
             else: 
                 two_body_dict["exp_c"] = 0
-            if two_body_dict["exp_a"]<0:
+            # if two_body_dict["exp_a"]<0:
                 # print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
