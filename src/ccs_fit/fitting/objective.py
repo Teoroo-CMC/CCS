@@ -180,6 +180,16 @@ class Objective:
         # )
         best_switch_r = np.around([nswitch_list[opt_sol_index][elem]*self.l_twb[elem].res+self.l_twb[elem].Rmin for elem in range(self.np)], decimals=2)
         elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
+
+        best_switch_dict = {}
+        for i, elem_pair, in enumerate(elem_pairs):
+            best_switch_dict[elem_pair] =  best_switch_r[i]
+
+        results_dict = {"rmse": mse**0.5, "best_switches": best_switch_dict}
+        
+        with open("rmse.json", "w") as outfile:
+            json.dump(results_dict, outfile)
+
         print(
             f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
 
