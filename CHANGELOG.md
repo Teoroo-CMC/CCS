@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.22.0 (2023-08-07)
+### Feature
+* Adding rmse.json output ([`be6d5bc`](https://github.com/Teoroo-CMC/CCS/commit/be6d5bc4c8690378537ebebe330c7f6d03c80479))
+
 ## v0.21.9 (2023-08-03)
 
 
