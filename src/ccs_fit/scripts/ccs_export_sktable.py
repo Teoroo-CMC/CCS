@@ -40,7 +40,7 @@ def _write(elem1, elem2, CCS_params, exp=True):
 
         with open(f"{elem1}-{elem2}.spl", "w") as f:
             print("Spline", file=f)
-            print(len(x), (Rcut + dx) / Bohr, file=f)
+            print(len(x), (Rcut + dx), file=f)
             print(aa * Bohr, bb + np.log(1 / Hartree), cc / Hartree, file=f)
             for i in range(len(x)):
                 if i < (len(x) - 1):
