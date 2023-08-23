@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.22.1 (2023-08-23)
+### Fix
+* Fixed export FF script to account for crashes ([`6b8d1a1`](https://github.com/Teoroo-CMC/CCS/commit/6b8d1a19686e48710bc29cf9da3b3ca45f794b7b))
+* **ccs_export_sktable.py:** Removed redundant AA to Bohr conversion ([`a829f9c`](https://github.com/Teoroo-CMC/CCS/commit/a829f9c8cf8e9075c28c92475de4098255ae7405))
+
 ## v0.22.0 (2023-08-07)
 ### Feature
 * Adding rmse.json output ([`be6d5bc`](https://github.com/Teoroo-CMC/CCS/commit/be6d5bc4c8690378537ebebe330c7f6d03c80479))
