@@ -74,25 +74,38 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
             elif cur_r >= Rcut:
                 spl_to_fit.append(0)
 
-        popt_Buck, pcov = curve_fit(Buckingham, r, spl_to_fit, maxfev=5000)
-        popt_Mor, pcov = curve_fit(Morse, r, spl_to_fit, p0=[2,1,1], maxfev=5000)
-        popt_LJ, pcov = curve_fit(Lennard_Jones, r, spl_to_fit, p0=[1,1], maxfev=5000)
-        popt_Ped, pcov = curve_fit(Pedone, r, spl_to_fit, p0=[popt_Mor[0], popt_Mor[1], popt_Mor[2], 1], maxfev=5000)
+        try:
+            popt_Buck, pcov = curve_fit(Buckingham, r, spl_to_fit, maxfev=5000)
+            print("Buckingham fit (not optimised) for element pair {}-{};     V(r) = {:.2f}*exp(-{:.2f}*r) -({:.2f})/r^6.".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]))
+            print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]), file=f_Buck)
+            plt.plot(r, Buckingham(r, popt_Buck[0], popt_Buck[1], popt_Buck[2]), 'b', label = 'Buck')
+        except:
+            print("Buckingham potential not found within max iteration bound.")
 
-        print("Buckingham fit (not optimised) for element pair {}-{};     V(r) = {:.2f}*exp(-{:.2f}*r) -({:.2f})/r^6.".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]))
-        print("Lennard Jones fit (not optimised) for element pair {}-{};  V(r) = 4*{:.2f}*(({:.2f}/r)^12 - ({:.2f}/r)^6)".format(elem1, elem2, popt_LJ[0], popt_LJ[1], popt_LJ[1]))
-        print("Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1)".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]))
-        print("Pedone fit (not optimised) for element pair {}-{};         V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1) + {:.2f}/r^12".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]))
+        try:
+            popt_LJ, pcov = curve_fit(Lennard_Jones, r, spl_to_fit, p0=[1,1], maxfev=5000)
+            print("Lennard Jones fit (not optimised) for element pair {}-{};  V(r) = 4*{:.2f}*(({:.2f}/r)^12 - ({:.2f}/r)^6)".format(elem1, elem2, popt_LJ[0], popt_LJ[1], popt_LJ[1]))
+            print("{:^8s} {:^8s} {:20.10f} {:20.10f}".format(elem1, elem2, popt_LJ[0], popt_LJ[1]), file=f_LJ)
+            plt.plot(r, Lennard_Jones(r, popt_LJ[0], popt_LJ[1]), color='magenta', label='LJ')
+        except:
+            print("Lennard-Jones potential not found within max iteration bound.")
         
-        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]), file=f_Buck)
-        print("{:^8s} {:^8s} {:20.10f} {:20.10f}".format(elem1, elem2, popt_LJ[0], popt_LJ[1]), file=f_LJ)
-        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]), file=f_Mor)
-        print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), file=f_Ped)
-
-        plt.plot(r, Buckingham(r, popt_Buck[0], popt_Buck[1], popt_Buck[2]), 'b', label = 'Buck')
-        plt.plot(r, Morse(r, popt_Mor[0], popt_Mor[1], popt_Mor[2]), color='orange', label='Morse')
-        plt.plot(r, Lennard_Jones(r, popt_LJ[0], popt_LJ[1]), color='magenta', label='LJ')
-        plt.plot(r, Pedone(r, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), color="green", label="Pedone")
+        try:
+            popt_Mor, pcov = curve_fit(Morse, r, spl_to_fit, p0=[2,1,1], maxfev=5000)
+            print("Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1)".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]))
+            print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]), file=f_Mor)
+            plt.plot(r, Morse(r, popt_Mor[0], popt_Mor[1], popt_Mor[2]), color='orange', label='Morse')
+        except:
+            print("Morse potential not found within max iteration bound.")
+        
+        try:
+            popt_Ped, pcov = curve_fit(Pedone, r, spl_to_fit, p0=[popt_Mor[0], popt_Mor[1], popt_Mor[2], 1], maxfev=1)
+            print("Pedone fit (not optimised) for element pair {}-{};         V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1) + {:.2f}/r^12".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]))
+            print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), file=f_Ped)
+            plt.plot(r, Pedone(r, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), color="green", label="Pedone")
+        except:
+            print("Pedone potential not found within max iteration bound.")
+        
         plt.plot(r, spl_to_fit, 'r--', label='CCS')
         plt.xlabel("Interatomic distance (Å)")
         plt.ylabel("Potential energy (eV)")
