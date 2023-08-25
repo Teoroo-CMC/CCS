@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.22.2 (2023-08-25)
+### Fix
+* Update ccs_ase_G2B.py ([`e34b03b`](https://github.com/Teoroo-CMC/CCS/commit/e34b03b19f4e804483ed3e0d09241f1320687785))
+
 ## v0.22.1 (2023-08-23)
 ### Fix
 * Fixed export FF script to account for crashes ([`6b8d1a1`](https://github.com/Teoroo-CMC/CCS/commit/6b8d1a19686e48710bc29cf9da3b3ca45f794b7b))
