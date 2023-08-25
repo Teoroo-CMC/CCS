@@ -6,6 +6,7 @@
 # ------------------------------------------------------------------------------#
 
 # import logging
+import copy
 import sympy
 import numpy as np
 import itertools as it
@@ -125,7 +126,7 @@ class G2B(Calculator):
         self.charge = charge
         self.species = None
         self.pair = None
-        self.q = q
+        self.q = copy.deepcopy(q)
         self.G2B_params = G2B_params
         self.eps = G2B_params["One_body"]
         if charge_scaling:
@@ -142,7 +143,7 @@ class G2B(Calculator):
             self.pair[a + b] = G2B_pair(a, b, self.G2B_params)
             if self.pair[a + b].rcut > self.rc:
                 self.rc=self.pair[a + b].rcut
-
+                
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
             self.atoms.wrap()
