@@ -6,6 +6,7 @@
 # ------------------------------------------------------------------------------#
 
 # import logging
+import copy
 import numpy as np
 import itertools as it
 from collections import OrderedDict, defaultdict
@@ -148,6 +149,8 @@ class CCS(Calculator):
         self.pair = dict()
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = spline_table(a, b, self.CCS_params)
+            if self.pair[a + b].rcut > self.rc:
+                self.rc=self.pair[a + b].rcut
 
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
