@@ -35,6 +35,11 @@ jobs:
     - name: Check-out repository
       uses: actions/checkout@v3
 
+    - name: black formatting
+      uses: psf/black@stable
+      with:
+        options: "--check --verbose"
+
     - name: flake8 lint
       uses: py-actions/flake8@v2
 
