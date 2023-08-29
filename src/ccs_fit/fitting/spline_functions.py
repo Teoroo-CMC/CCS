@@ -57,7 +57,7 @@ class Twobody:
                 number of knots in the spline interval
             Rmin : float
                 optional, minimum value of the spline interval, default None
-            
+
         """
 
         self.name = name
@@ -71,11 +71,11 @@ class Twobody:
         self.rn_full = [(i) * self.res + self.Rmin for i in range(self.N)]
         self.rn = self.rn_full
         if not range_center:
-            self.range_center = (Rmin+self.Rcut)/2
+            self.range_center = (Rmin + self.Rcut) / 2
         else:
             self.range_center = range_center
         if not range_width:
-            self.range_width = (self.Rcut-Rmin)
+            self.range_width = self.Rcut - Rmin
         else:
             self.range_width = range_width
         if not search_points:
@@ -96,18 +96,17 @@ class Twobody:
         self.vv, self.indices = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z, self.indices = self.get_v_forces(
-            self.indices)
+            self.indices
+        )
         self.curvatures = None
         self.splcoeffs = None
         self.expcoeffs = None
-        if self.const_type.lower() == 'mono':
+        if self.const_type.lower() == "mono":
             print("    Applying monotonic constraints for pair: ", self.name)
-            logger.info(
-                f"Applying monotonic constraints for pair: {self.name}")
-        if self.const_type.lower() == 'simple':
+            logger.info(f"Applying monotonic constraints for pair: {self.name}")
+        if self.const_type.lower() == "simple":
             print("    Applying simple constraints for pair: ", self.name)
-            logger.info(
-                f"Applying simple constraints for pair: {self.name}")
+            logger.info(f"Applying simple constraints for pair: {self.name}")
 
     def merge_intervals(self):
         self.indices.sort()
@@ -116,12 +115,14 @@ class Twobody:
         self.C, self.D, self.B, self.A = self.spline_construction()
         self.vv, _ = self.get_v()
         self.const = self.get_const()
-        self.fvv_x, self.fvv_y, self.fvv_z,_ = self.get_v_forces([])
+        self.fvv_x, self.fvv_y, self.fvv_z, _ = self.get_v_forces([])
         if self.N_full > self.N:
             print(
-                f"    Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. ")
+                f"    Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. "
+            )
         logger.info(
-            f"Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. ")
+            f"Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. "
+        )
 
     def dissolve_interval(self):
         tmp_curvatures = []
@@ -152,14 +153,14 @@ class Twobody:
         g_mono[0, 1] = 1
         for ii in range(1, self.N - 1):
             g_mono[ii, ii] = -1
-            g_mono[ii, ii+1] = 1
+            g_mono[ii, ii + 1] = 1
         gg = block_diag(g_mono)
-        if self.const_type.lower() == 'mono':
+        if self.const_type.lower() == "mono":
             return gg
-        if self.const_type.lower() == 'simple':
+        if self.const_type.lower() == "simple":
             return a
-        if self.const_type.lower() == 'none':
-            return np.zeros((1,self.N))
+        if self.const_type.lower() == "none":
+            return np.zeros((1, self.N))
 
     def switch_const(self, n_switch):
         g = copy.deepcopy(self.const)
@@ -169,7 +170,7 @@ class Twobody:
 
     def spline_construction(self):
         """This function constructs the matrices A, B, C, D."""
-        dx = np.array([self.rn[i]-self.rn[i-1] for i in range(1, self.N)])
+        dx = np.array([self.rn[i] - self.rn[i - 1] for i in range(1, self.N)])
         # dx = np.insert(dx, 0, self.res)
 
         rows = self.N - 1
@@ -185,11 +186,19 @@ class Twobody:
         # dd[rows-1, -2] = +1 / dx[rows-1]
 
         for i in range(1, rows):
-            ii = rows-i-1
-            dd[ii+1] = (cc[ii+1] - cc[ii])/dx[ii+1]
-            bb[ii] = bb[ii+1] - dx[ii+1]*cc[ii+1] + 0.5*(dx[ii+1]**2)*dd[ii+1]
-            aa[ii] = aa[ii+1] - dx[ii+1]*bb[ii+1] + 0.5 * \
-                (dx[ii+1]**2)*cc[ii+1] - (1/6.)*(dx[ii+1]**3)*dd[ii+1]
+            ii = rows - i - 1
+            dd[ii + 1] = (cc[ii + 1] - cc[ii]) / dx[ii + 1]
+            bb[ii] = (
+                bb[ii + 1]
+                - dx[ii + 1] * cc[ii + 1]
+                + 0.5 * (dx[ii + 1] ** 2) * dd[ii + 1]
+            )
+            aa[ii] = (
+                aa[ii + 1]
+                - dx[ii + 1] * bb[ii + 1]
+                + 0.5 * (dx[ii + 1] ** 2) * cc[ii + 1]
+                - (1 / 6.0) * (dx[ii + 1] ** 3) * dd[ii + 1]
+            )
 
         return cc, dd, bb, aa
 
@@ -214,7 +223,7 @@ class Twobody:
             uu = 0
             for rr in distances:
                 index = bisect.bisect_left(self.rn, rr)
-                delta = (rr - self.rn[index])  # / self.res
+                delta = rr - self.rn[index]  # / self.res
                 indices.append(index)
                 # INDEX IS SHIFTED IN A,B,C,D
                 # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
@@ -250,7 +259,7 @@ class Twobody:
                 rr = np.linalg.norm(rv)
                 if rr > 0 and rr < self.Rcut:
                     index = bisect.bisect_left(self.rn, rr)
-                    delta = (rr - self.rn[index])
+                    delta = rr - self.rn[index]
                     indices.append(index)
                     # INDEX IS SHIFTED IN A,B,C,D
                     # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
@@ -278,18 +287,18 @@ class Twobody:
         r_values = self.rn
 
         spl = []
-        for i in range(self.N-1):
+        for i in range(self.N - 1):
             a_r = a_values[i]
             b_r = b_values[i]
             c_r = c_values[i]
             d_r = d_values[i]
-            dr = (r_values[i+1]-r_values[i])
-            a_l = a_r - b_r*dr + (c_r/2.)*dr**2 - (d_r/6.)*dr**3
-            b_l = b_r - c_r*dr + (3*d_r/6.)*dr**2
-            c_l = c_r - d_r*dr
+            dr = r_values[i + 1] - r_values[i]
+            a_l = a_r - b_r * dr + (c_r / 2.0) * dr**2 - (d_r / 6.0) * dr**3
+            b_l = b_r - c_r * dr + (3 * d_r / 6.0) * dr**2
+            c_l = c_r - d_r * dr
             d_l = d_r
-            c_l = (1/2.)*c_l
-            d_l = (1/6.)*d_l
+            c_l = (1 / 2.0) * c_l
+            d_l = (1 / 6.0) * d_l
             spl.append([float(a_l), float(b_l), float(c_l), float(d_l)])
         spl = np.array(spl)
 

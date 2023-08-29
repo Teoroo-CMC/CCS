@@ -25,7 +25,9 @@ class CCS_regressor:
             self.dx = (self.xmax - self.xmin) * self.dx / np.sum(self.dx)
         self.eps = eps
         self.C, self.D, self.B, self.A = self.spline_construction(self.N)
-        print("WARNING: THE CCS_REGRESSOR HAS NOT BEEN TESTED, USE AT YOUR OWN DISCLOSURE")
+        print(
+            "WARNING: THE CCS_REGRESSOR HAS NOT BEEN TESTED, USE AT YOUR OWN DISCLOSURE"
+        )
 
     def merge_intervals(self, x):
         dx = self.dx

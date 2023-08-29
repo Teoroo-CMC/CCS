@@ -8,7 +8,7 @@
 # read version from installed package
 from importlib.metadata import version
 
-#__version__ = version("ccs")
+# __version__ = version("ccs")
 
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS as CCS_calc
 from ccs_fit.scripts.ccs_build_db import ccs_build_db

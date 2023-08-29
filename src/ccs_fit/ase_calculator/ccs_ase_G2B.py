@@ -43,39 +43,40 @@ class G2B_pair:
         if self.no_pair:
             self.Rmin = 0.0
             self.rcut = 0.0
-            self.V_func  = None
+            self.V_func = None
             self.F_func = None
 
         else:
             self.rcut = G2B_params["Two_body"][pair]["r_cut"]
             func = G2B_params["Two_body"][pair]["V_func"]
             self.V_func = sympy.sympify(func)
-            r_ij = sympy.Symbol('r_ij')
-            self.F_func = sympy.diff(self.V_func, r_ij) 
-            #print(self.F_func)
-            #print(self.V_func)
+            r_ij = sympy.Symbol("r_ij")
+            self.F_func = sympy.diff(self.V_func, r_ij)
+            # print(self.F_func)
+            # print(self.V_func)
 
     def eval_energy(self, r):
         if self.no_pair:
-            val=0.0
+            val = 0.0
         else:
             if r <= self.rcut:
-                f_eval=self.V_func.subs({'r_ij':r})
-                val=f_eval.evalf()    
+                f_eval = self.V_func.subs({"r_ij": r})
+                val = f_eval.evalf()
             else:
                 val = 0.0
         return float(val)
 
     def eval_force(self, r):
         if self.no_pair:
-            val=0.0
+            val = 0.0
         else:
             if r <= self.rcut:
-                f_eval=self.F_func.subs({'r_ij':r})
-                val=f_eval.evalf()    
+                f_eval = self.F_func.subs({"r_ij": r})
+                val = f_eval.evalf()
             else:
                 val = 0.0
         return float(val)
+
 
 def ew(atoms, q):
 
@@ -142,8 +143,8 @@ class G2B(Calculator):
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = G2B_pair(a, b, self.G2B_params)
             if self.pair[a + b].rcut > self.rc:
-                self.rc=self.pair[a + b].rcut
-                
+                self.rc = self.pair[a + b].rcut
+
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
             self.atoms.wrap()
@@ -209,7 +210,11 @@ class G2B(Calculator):
                 id2s = [i for i, x in enumerate(dist_mask) if x]
                 if norm_dist != []:
                     for id2 in id2s:
-                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_f = (
+                            self.pair[x + y].eval_force(norm_dist[id2])
+                            * dist[id2, :]
+                            / norm_dist[id2]
+                        )
                         cur_dist = dist[id2, :]
                         cur_stress = np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)

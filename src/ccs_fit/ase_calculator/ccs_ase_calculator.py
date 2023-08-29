@@ -150,7 +150,7 @@ class CCS(Calculator):
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = spline_table(a, b, self.CCS_params)
             if self.pair[a + b].rcut > self.rc:
-                self.rc=self.pair[a + b].rcut
+                self.rc = self.pair[a + b].rcut
 
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
@@ -217,9 +217,13 @@ class CCS(Calculator):
                 id2s = [i for i, x in enumerate(dist_mask) if x]
                 if norm_dist != []:
                     for id2 in id2s:
-                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_f = (
+                            self.pair[x + y].eval_force(norm_dist[id2])
+                            * dist[id2, :]
+                            / norm_dist[id2]
+                        )
                         cur_dist = dist[id2, :]
-                        cur_stress = 0.5*np.outer(cur_f, cur_dist)
+                        cur_stress = 0.5 * np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)
                         stresses[id, :, :] += cur_stress
 
@@ -229,7 +233,6 @@ class CCS(Calculator):
             ewa = ew(self.atoms, self.q)
             energy = energy + ewa.total_energy
             forces = forces + ewa.forces
-
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy

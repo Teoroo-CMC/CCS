@@ -53,7 +53,11 @@ def ccs_build_db(
     f = open(file_list, "r")
 
     counter = 0
-    for lns in tqdm(f, total=L, desc="    Building data-bases",):
+    for lns in tqdm(
+        f,
+        total=L,
+        desc="    Building data-bases",
+    ):
         counter += 1
         lns = lns.split()
         DFT_FOLDER = lns[0]
@@ -157,28 +161,58 @@ def main():
     try:
         size = os.get_terminal_size()
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print("")
         print(txt)
         import art
-        txt = art.text2art('CCS:Build DB')
+
+        txt = art.text2art("CCS:Build DB")
         print(txt)
     except:
         pass
 
-    parser = argparse.ArgumentParser(description='CCS fetching tool')
-    parser.add_argument("-m", "--mode",         type=str, metavar="",
-                        default='CCS',  help="Mode. Availble option: CCS, DFTB")
-    parser.add_argument("-d", "--DFT_DB", type=str, metavar="",
-                        default='DFT.db',  help="Name of DFT reference data-base")
-    parser.add_argument("-dd", "--DFTB_DB", type=str, metavar="",
-                        default=None,  help="Name of DFTB reference data-base")
-    parser.add_argument("-g", "--greedy", type=bool,  metavar="",
-                        default=False, help="Extract geometry optmization steps from OUTCAR")
-    parser.add_argument("-gt", "--greed_threshold", type=float, metavar="",
-                        default=0.0001, help="minimum energy difference between steps extracted using option -g")
-    parser.add_argument("-v", "--verbose",
-                        action="store_true", help="Verbose output")
+    parser = argparse.ArgumentParser(description="CCS fetching tool")
+    parser.add_argument(
+        "-m",
+        "--mode",
+        type=str,
+        metavar="",
+        default="CCS",
+        help="Mode. Availble option: CCS, DFTB",
+    )
+    parser.add_argument(
+        "-d",
+        "--DFT_DB",
+        type=str,
+        metavar="",
+        default="DFT.db",
+        help="Name of DFT reference data-base",
+    )
+    parser.add_argument(
+        "-dd",
+        "--DFTB_DB",
+        type=str,
+        metavar="",
+        default=None,
+        help="Name of DFTB reference data-base",
+    )
+    parser.add_argument(
+        "-g",
+        "--greedy",
+        type=bool,
+        metavar="",
+        default=False,
+        help="Extract geometry optmization steps from OUTCAR",
+    )
+    parser.add_argument(
+        "-gt",
+        "--greed_threshold",
+        type=float,
+        metavar="",
+        default=0.0001,
+        help="minimum energy difference between steps extracted using option -g",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
 
     args = parser.parse_args()
 
@@ -193,7 +227,7 @@ def main():
     print(" ")
 
     assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supported."
-    
+
     mode = sys.argv[1]
     file_list = sys.argv[2]
     DFT_data = sys.argv[3]
@@ -211,13 +245,12 @@ def main():
         print("    DFTB data base: ", DFTB_data)
         print("")
 
-        ccs_build_db(mode, DFT_DB=DFT_data,
-                     DFTB_DB=DFTB_data, file_list=file_list)
+        ccs_build_db(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list)
 
     try:
         size = os.get_terminal_size()
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print(txt)
         print("")
     except:

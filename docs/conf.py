@@ -6,9 +6,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"CCS_fit"
-copyright = u"2023, Jolla Kullgren"
-author = u"Jolla Kullgren"
+project = "CCS_fit"
+copyright = "2023, Jolla Kullgren"
+author = "Jolla Kullgren"
 
 # -- General configuration ---------------------------------------------------
 

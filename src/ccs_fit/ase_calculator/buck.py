@@ -51,7 +51,7 @@ class spline_table:
 
     def eval_energy(self, r):
         if r <= self.rcut:
-            val = self.A*np.exp(-self.B*r) - self.C/r**6
+            val = self.A * np.exp(-self.B * r) - self.C / r**6
             return val
         else:
             val = 0.0
@@ -59,7 +59,7 @@ class spline_table:
 
     def eval_force(self, r):
         if r <= self.rcut:
-            val = -self.A*self.B*np.exp(-self.B*r) + 6*self.C/r**7
+            val = -self.A * self.B * np.exp(-self.B * r) + 6 * self.C / r**7
             return val
         else:
             val = 0.0
@@ -106,7 +106,7 @@ class Buck(Calculator):
     >>> To be added, Jolla.
     """
 
-    implemented_properties = {"energy", "forces"} # stress
+    implemented_properties = {"energy", "forces"}  # stress
 
     def __init__(
         self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs
@@ -197,7 +197,11 @@ class Buck(Calculator):
                 id2s = [i for i, x in enumerate(dist_mask) if x]
                 if norm_dist != []:
                     for id2 in id2s:
-                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_f = (
+                            self.pair[x + y].eval_force(norm_dist[id2])
+                            * dist[id2, :]
+                            / norm_dist[id2]
+                        )
                         cur_dist = dist[id2, :]
                         cur_stress = np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)
@@ -209,7 +213,6 @@ class Buck(Calculator):
             ewa = ew(self.atoms, self.q)
             energy = energy + ewa.total_energy
             forces = forces + ewa.forces
-
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy

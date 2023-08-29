@@ -27,10 +27,10 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
         for pair in CCS_params["Two_body"].keys():
             elem1, elem2 = pair.split("-")
             tb = spline_table(elem1, elem2, CCS_params)
-            rmin=CCS_params["Two_body"][pair]["r_min"]
+            rmin = CCS_params["Two_body"][pair]["r_min"]
             dr = CCS_params["Two_body"][pair]["dr"] / scale
             r = np.arange(rmin, tb.Rcut + dr, dr)
-            tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
+            tags[pair] = dict({"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
             f.write("\n {}".format(pair))
             f.write("\n N {} R {} {} \n".format(len(r), rmin, tb.Rcut))
             [
@@ -43,7 +43,6 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
             ]
 
     return tags
-
 
 
 if __name__ == "__main__":

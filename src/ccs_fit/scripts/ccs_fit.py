@@ -37,11 +37,12 @@ def main(cmdlineargs=None):
     try:
         size = os.get_terminal_size()
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print("")
         print(txt)
         import art
-        txt = art.text2art('CCS:Fit')
+
+        txt = art.text2art("CCS:Fit")
         print(txt)
     except:
         pass
@@ -52,7 +53,7 @@ def main(cmdlineargs=None):
     size = os.get_terminal_size()
     try:
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print(txt)
         print("")
     except:

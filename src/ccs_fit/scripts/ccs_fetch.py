@@ -37,8 +37,7 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         cell = atoms.get_cell()
         n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
         n_repeat = np.ceil(n_repeat).astype(int)
-        offsets = [
-            *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
+        offsets = [*itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
 
     except:
         cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
@@ -64,8 +63,7 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         norm_dist = np.linalg.norm(tmp, axis=1)
         dist_mask = norm_dist < R_c
         r_distance.extend(norm_dist[dist_mask].tolist())
-        forces["F" + str(counter) + "_" + str(id)
-               ] = np.asarray(tmp[dist_mask]).tolist()
+        forces["F" + str(counter) + "_" + str(id)] = np.asarray(tmp[dist_mask]).tolist()
 
     if ch1 == ch2:
         r_distance.sort()
@@ -75,7 +73,15 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
 
 
 def ccs_fetch(
-        mode=None, DFT_DB=None, R_c=6.0, Ns='all', DFTB_DB=None, charge_dict=None, include_forces=False, verbose=False):
+    mode=None,
+    DFT_DB=None,
+    R_c=6.0,
+    Ns="all",
+    DFTB_DB=None,
+    charge_dict=None,
+    include_forces=False,
+    verbose=False,
+):
     """
     Function to read files and output structures.json
 
@@ -114,11 +120,11 @@ def ccs_fetch(
     if mode == "PRUNED_CCS":
         REF_DB = db.connect(DFTB_DB)
 
-    if Ns == 'all':
+    if Ns == "all":
         Ns = -1  # CONVERT TO INTEGER INPUT FORMAT
 
     if Ns > 0:
-        mask = [a <= Ns-1 for a in range(len(REF_DB))]
+        mask = [a <= Ns - 1 for a in range(len(REF_DB))]
         random.shuffle(mask)
     else:
         mask = len(REF_DB) * [True]
@@ -129,7 +135,9 @@ def ccs_fetch(
     d = OrderedDict()
     cf = OrderedDict()
 
-    for row in tqdm(REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"):
+    for row in tqdm(
+        REF_DB.select(), total=len(DFT_DB), desc="    Fetching data", colour="#008080"
+    ):
         counter = counter + 1
         if mask[counter]:
             struct = row.toatoms()
@@ -152,8 +160,7 @@ def ccs_fetch(
                 if mode == "CCS+Q":
                     struct.charges.append(charge_dict[elem])
             dict_species = {key: value for key, value in sorted(dict_species.items())}
-            atom_pair = it.combinations_with_replacement(
-                dict_species.keys(), 2)
+            atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
             if mode == "CCS+Q":
                 lattice = Lattice(struct.get_cell())
                 coords = struct.get_scaled_positions()
@@ -171,14 +178,19 @@ def ccs_fetch(
             if include_forces:
                 for i in range(len(struct)):
                     if mode == "CCS":
-                        cf["F" + str(counter) + "_" + str(i)
-                           ] = {"force_dft": list(FREF[i, :])}
+                        cf["F" + str(counter) + "_" + str(i)] = {
+                            "force_dft": list(FREF[i, :])
+                        }
                     if mode == "DFTB":
-                        cf["F" + str(counter) + "_" + str(i)
-                           ] = {"force_dft": list(FDFT[i, :]), "force_dftb": list(FREF[i, :])}
+                        cf["F" + str(counter) + "_" + str(i)] = {
+                            "force_dft": list(FDFT[i, :]),
+                            "force_dftb": list(FREF[i, :]),
+                        }
                     if mode == "CCS+Q":
-                        cf["F" + str(counter) + "_" + str(i)
-                           ] = {"force_dft": list(FREF[i, :]), "force_ewald": list(ES_forces[i, :])}
+                        cf["F" + str(counter) + "_" + str(i)] = {
+                            "force_dft": list(FREF[i, :]),
+                            "force_ewald": list(ES_forces[i, :]),
+                        }
 
             ce["atoms"] = dict_species
             for (x, y) in atom_pair:
@@ -192,9 +204,8 @@ def ccs_fetch(
                     except:
                         pass
                 # FORCES SHOULD BE DOUBLE COUNTED!
-                if (x != y):
-                    pair_distances, forces = pair_dist(
-                        struct, R_c, y, x, counter)
+                if x != y:
+                    pair_distances, forces = pair_dist(struct, R_c, y, x, counter)
                     for i in range(len(struct)):
                         try:
                             cf["F" + str(counter) + "_" + str(i)][
@@ -207,7 +218,7 @@ def ccs_fetch(
     st = OrderedDict()
     st["energies"] = d
     if include_forces:
-        st['forces'] = cf
+        st["forces"] = cf
     with open("structures.json", "w") as f:
         json.dump(st, f, indent=8)
 
@@ -215,23 +226,53 @@ def ccs_fetch(
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(description='CCS fetching tool')
-    parser.add_argument("-m", "--mode",         type=str, metavar="",
-                        default='CCS',  help="Mode. Available options: CCS, CCS+Q, DFTB")
-    parser.add_argument("-d", "--DFT_DB", type=str, metavar="",
-                        default='DFT.db',  help="Name of DFT reference database")
-    parser.add_argument("-dd", "--DFTB_DB", type=str, metavar="",
-                        default=None,  help="Name of DFTB reference database")
-    parser.add_argument("-r", "--R_c",    type=float, metavar="",
-                        default=6.0,  help="Cut-off radius")
-    parser.add_argument("-n", "--Ns",  type=int,  metavar="",
-                        default=-1,  help="Number of structures to include")
-    parser.add_argument("-v", "--verbose",
-                        action="store_true", help="Verbose output")
-    parser.add_argument("-chg", "--charge_dict",      type=json.loads, metavar="",
-                        help="Specify atomic charges in json format, e.g.: \n \'{ \"Zn\" : 2.0 , \"O\" : -2.0 }\'  ")
-    parser.add_argument("-f", "--include_forces",  action="store_true",
-                        help='Include forces.')
+    parser = argparse.ArgumentParser(description="CCS fetching tool")
+    parser.add_argument(
+        "-m",
+        "--mode",
+        type=str,
+        metavar="",
+        default="CCS",
+        help="Mode. Available options: CCS, CCS+Q, DFTB",
+    )
+    parser.add_argument(
+        "-d",
+        "--DFT_DB",
+        type=str,
+        metavar="",
+        default="DFT.db",
+        help="Name of DFT reference database",
+    )
+    parser.add_argument(
+        "-dd",
+        "--DFTB_DB",
+        type=str,
+        metavar="",
+        default=None,
+        help="Name of DFTB reference database",
+    )
+    parser.add_argument(
+        "-r", "--R_c", type=float, metavar="", default=6.0, help="Cut-off radius"
+    )
+    parser.add_argument(
+        "-n",
+        "--Ns",
+        type=int,
+        metavar="",
+        default=-1,
+        help="Number of structures to include",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    parser.add_argument(
+        "-chg",
+        "--charge_dict",
+        type=json.loads,
+        metavar="",
+        help='Specify atomic charges in json format, e.g.: \n \'{ "Zn" : 2.0 , "O" : -2.0 }\'  ',
+    )
+    parser.add_argument(
+        "-f", "--include_forces", action="store_true", help="Include forces."
+    )
 
     args = parser.parse_args()
 
@@ -240,11 +281,12 @@ def main():
     try:
         size = os.get_terminal_size()
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print("")
         print(txt)
         import art
-        txt = art.text2art('CCS:Fetch')
+
+        txt = art.text2art("CCS:Fetch")
         print(txt)
     except:
         pass
@@ -252,7 +294,7 @@ def main():
     try:
         size = os.get_terminal_size()
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print(txt)
         print("")
     except:

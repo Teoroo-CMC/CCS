@@ -46,7 +46,7 @@ def _write(elem1, elem2, CCS_params, exp=True):
                 if i < (len(x) - 1):
                     print(
                         x[i] / Bohr,
-                        (x[i+1]) / Bohr,
+                        (x[i + 1]) / Bohr,
                         a[i] / Hartree,
                         b[i] * (Bohr) / Hartree,
                         c[i] * (Bohr**2) / Hartree,
@@ -73,7 +73,7 @@ def _write(elem1, elem2, CCS_params, exp=True):
                 if i < (len(x) - 1):
                     print(
                         x[i] / Bohr,
-                        (x[i+1]) / Bohr,
+                        (x[i + 1]) / Bohr,
                         a[i] / Hartree,
                         b[i] * (Bohr) / Hartree,
                         c[i] * (Bohr**2) / Hartree,
@@ -107,16 +107,17 @@ def main():
 
     size = os.get_terminal_size()
     c = size.columns
-    txt = "-"*c
+    txt = "-" * c
     print("")
     print(txt)
 
     try:
         import art
-        txt = art.text2art('CCS:export sk-table')
+
+        txt = art.text2art("CCS:export sk-table")
         print(txt)
     except:
-        print('CCS: export sk-table')
+        print("CCS: export sk-table")
 
     try:
         CCS_params_file = sys.argv[1]
@@ -126,7 +127,7 @@ def main():
 
     size = os.get_terminal_size()
     c = size.columns
-    txt = "-"*c
+    txt = "-" * c
     print(txt)
     print("")
 
