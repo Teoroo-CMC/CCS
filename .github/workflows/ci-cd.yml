@@ -39,6 +39,7 @@ jobs:
       uses: psf/black@stable
       with:
         options: "--check --verbose"
+        jupyter: true
 
     - name: flake8 lint
       uses: py-actions/flake8@v2
