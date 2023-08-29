@@ -35,6 +35,12 @@ jobs:
     - name: Check-out repository
       uses: actions/checkout@v3
 
+    - name: Install poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install package
+      run: poetry install
+
     - name: black formatting
       uses: psf/black@stable
       with:
@@ -44,11 +50,8 @@ jobs:
     - name: flake8 lint
       uses: py-actions/flake8@v2
 
-    - name: Install poetry
-      uses: snok/install-poetry@v1
-
-    - name: Install package
-      run: poetry install
+    - name: pyright checking
+      uses: jakebailey/pyright-action@v1
 
     - name: Test with pytest
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
