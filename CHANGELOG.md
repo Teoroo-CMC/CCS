@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.22.3 (2023-08-29)
+### Fix
+* Adding deepcopy of q to avoid it being modified internally ([`afe48ce`](https://github.com/Teoroo-CMC/CCS/commit/afe48ce017f28f8dd26f732e3d747649ef7c90ec))
+
 ## v0.22.2 (2023-08-25)
 ### Fix
 * Update ccs_ase_G2B.py ([`e34b03b`](https://github.com/Teoroo-CMC/CCS/commit/e34b03b19f4e804483ed3e0d09241f1320687785))
