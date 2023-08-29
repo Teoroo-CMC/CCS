@@ -134,7 +134,7 @@ class CCS(Calculator):
         self.charge = charge
         self.species = None
         self.pair = None
-        self.q = q
+        self.q = copy.deepcopy(q)
         self.CCS_params = CCS_params
         self.eps = CCS_params["One_body"]
         if charge_scaling:
