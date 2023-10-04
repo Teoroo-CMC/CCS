@@ -191,6 +191,9 @@ class Twobody:
             aa[ii] = aa[ii+1] - dx[ii+1]*bb[ii+1] + 0.5 * \
                 (dx[ii+1]**2)*cc[ii+1] - (1/6.)*(dx[ii+1]**3)*dd[ii+1]
 
+        dd[0]=(cc[0])/dx[1]
+        dd[0,0]=-1/dx[1]
+        
         return cc, dd, bb, aa
 
     def get_v(self):
