@@ -2,6 +2,9 @@
 
 <!--next-version-placeholder-->
 
+## v0.22.4 (2023-10-04)
+
+
 ## v0.22.3 (2023-08-29)
 ### Fix
 * Adding deepcopy of q to avoid it being modified internally ([`afe48ce`](https://github.com/Teoroo-CMC/CCS/commit/afe48ce017f28f8dd26f732e3d747649ef7c90ec))
