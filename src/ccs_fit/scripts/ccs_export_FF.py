@@ -112,23 +112,25 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
         plt.legend()
         plt.show()
 
-def write_LAMMPS(jsonfile, scale=50, format="lammps"):
+def write_LAMMPS(jsonfile, scale=50, format="lammps", rmin=0.5):
     json_file = open(jsonfile)
     CCS_params = json.load(json_file)
-    energy = []
-    force = []
     tags = {}
     filename = "CCS." + format
     with open(filename, "w") as f:
         for pair in CCS_params["Two_body"].keys():
             elem1, elem2 = pair.split("-")
             tb = spline_table(elem1, elem2, CCS_params)
-            rmin = np.min([0.6, CCS_params["Two_body"][pair]["r_min"]])
+            r_min = CCS_params["Two_body"][pair]["r_min"]
             dr = CCS_params["Two_body"][pair]["dr"] / scale
-            r = np.arange(rmin, tb.Rcut + dr, dr)
-            tags[pair]=dict({'Rmin':rmin,'Rcut':tb.Rcut,'dr':dr,'N':len(r)})
+            if rmin < r_min:
+                dr_steps = int(np.floor((r_min - rmin) / dr))
+                r_min -= dr_steps * dr
+
+            r = np.arange(r_min, tb.Rcut + dr, dr)
+            tags[pair] = dict({"Rmin": r_min, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
             f.write("\n {}".format(pair))
-            f.write("\n N {} R {} {} \n".format(len(r), rmin, tb.Rcut))
+            f.write("\n N {} R {} {} \n".format(len(r), r_min, tb.Rcut))
             [
                 f.write(
                     "\n {} {} {} {}".format(
