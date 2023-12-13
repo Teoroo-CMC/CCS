@@ -99,7 +99,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
             print("Morse potential not found within max iteration bound.")
         
         try:
-            popt_Ped, pcov = curve_fit(Pedone, r, spl_to_fit, p0=[popt_Mor[0], popt_Mor[1], popt_Mor[2], 1], maxfev=1)
+            popt_Ped, pcov = curve_fit(Pedone, r, spl_to_fit, p0=[popt_Mor[0], popt_Mor[1], popt_Mor[2], 1], maxfev=5000)
             print("Pedone fit (not optimised) for element pair {}-{};         V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1) + {:.2f}/r^12".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]))
             print("{:^8s} {:^8s} {:20.10f} {:20.10f} {:20.10f} {:20.10f}".format(elem1, elem2, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), file=f_Ped)
             plt.plot(r, Pedone(r, popt_Ped[0], popt_Ped[1], popt_Ped[2], popt_Ped[3]), color="green", label="Pedone")
