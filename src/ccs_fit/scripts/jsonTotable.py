@@ -36,7 +36,7 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
             [
                 f.write(
                     "\n {} {} {} {}".format(
-                        index + 1, elem, tb.eval_energy(elem), -1 * tb.eval_force(elem)
+                        index + 1, elem, tb.eval_energy(elem), tb.eval_force(elem)
                     )
                 )
                 for index, elem in enumerate(r)
