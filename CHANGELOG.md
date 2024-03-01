@@ -1,6 +1,9 @@
 # Changelog
 
 <!--next-version-placeholder-->
+## v1.0.0 (XXX)
+### Changes:
+- correct LAMMPS table generation
 
 ## v0.22.5 (2024-02-16)
 
