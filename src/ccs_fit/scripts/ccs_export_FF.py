@@ -1,23 +1,14 @@
 import sys
 import os
 import numpy as np
-import itertools as it
-from collections import OrderedDict, defaultdict
-from numpy import linalg as LA
 import json
-from ase.units import Bohr, Hartree
 from scipy.optimize import curve_fit
-from scipy.constants import epsilon_0
 import matplotlib.pyplot as plt
 from ccs_fit.ase_calculator.ccs_ase_calculator import spline_table
 
 
 def Buckingham(r, A, B, C):
     return A * np.exp(-B * r) - C / (r**6)
-
-
-# def Buckingham_Coulomb(r, q1, q2, A, B, C):
-#     return A*np.exp(-B*r) - C/(r**6) + q1*q2/(4*np.pi*epsilon_0*r)
 
 
 def Lennard_Jones(r, eps, sigma):
