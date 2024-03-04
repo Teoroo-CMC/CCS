@@ -24,19 +24,16 @@ def Pedone(r, De, a, re, C):
     return De * ((1 - np.exp(-a * (r - re))) ** 2 - 1) + C / r**12
 
 
-def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
+def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped):
     elem1 = elem1
     elem2 = elem2
     no_pair = False
     try:
         pair = elem1 + "-" + elem2
-        rcut = CCS_params["Two_body"][pair]["r_cut"]
     except:
         try:
             pair = elem2 + "-" + elem1
-            rcut = CCS_params["Two_body"][pair]["r_cut"]
         except:
-            rcut = 0.0
             no_pair = True
     if no_pair:
         pass
@@ -50,7 +47,6 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
         aa = CCS_params["Two_body"][pair]["exp_a"]
         bb = CCS_params["Two_body"][pair]["exp_b"]
         cc = CCS_params["Two_body"][pair]["exp_c"]
-        exp = False
         x = CCS_params["Two_body"][pair]["r"]
         dx = CCS_params["Two_body"][pair]["dr"]
 
@@ -70,7 +66,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
                 spl_to_fit.append(0)
 
         try:
-            popt_Buck, pcov = curve_fit(Buckingham, r, spl_to_fit, maxfev=5000)
+            popt_Buck = curve_fit(Buckingham, r, spl_to_fit, maxfev=5000)
             print(
                 "Buckingham fit (not optimised) for element pair {}-{};     V(r) = {:.2f}*exp(-{:.2f}*r) -({:.2f})/r^6.".format(
                     elem1, elem2, popt_Buck[0], popt_Buck[1], popt_Buck[2]
@@ -92,9 +88,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
             print("Buckingham potential not found within max iteration bound.")
 
         try:
-            popt_LJ, pcov = curve_fit(
-                Lennard_Jones, r, spl_to_fit, p0=[1, 1], maxfev=5000
-            )
+            popt_LJ = curve_fit(Lennard_Jones, r, spl_to_fit, p0=[1, 1], maxfev=5000)
             print(
                 "Lennard Jones fit (not optimised) for element pair {}-{};  V(r) = 4*{:.2f}*(({:.2f}/r)^12 - ({:.2f}/r)^6)".format(
                     elem1, elem2, popt_LJ[0], popt_LJ[1], popt_LJ[1]
@@ -113,7 +107,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
             print("Lennard-Jones potential not found within max iteration bound.")
 
         try:
-            popt_Mor, pcov = curve_fit(Morse, r, spl_to_fit, p0=[2, 1, 1], maxfev=5000)
+            popt_Mor = curve_fit(Morse, r, spl_to_fit, p0=[2, 1, 1], maxfev=5000)
             print(
                 "Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1)".format(
                     elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]
@@ -135,7 +129,7 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped, exp=True):
             print("Morse potential not found within max iteration bound.")
 
         try:
-            popt_Ped, pcov = curve_fit(
+            popt_Ped = curve_fit(
                 Pedone,
                 r,
                 spl_to_fit,
@@ -221,10 +215,7 @@ def write_GULP(jsonfile, scale=50, format="GULP"):
             tags[pair] = dict({"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
             f.write("\n spline reverse")
             f.write("\n {} {} 0 {} {}".format(elem1, elem2, rmin, tb.Rcut + dr))
-            [
-                f.write("\n {} {}".format(elem, tb.eval_energy(elem)))
-                for index, elem in enumerate(r)
-            ]
+            [f.write("\n {} {}".format(elem, tb.eval_energy(elem))) for elem in r]
 
     return tags
 
