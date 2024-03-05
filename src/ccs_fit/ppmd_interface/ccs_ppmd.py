@@ -35,7 +35,6 @@ IntegratorRange = method.IntegratorRange
 
 
 def steepest_descent(A, constants):
-
     sd_kernel_code = """
     P.i[0] += alpha*F.i[0];
     P.i[1] += alpha*F.i[1];
@@ -50,7 +49,6 @@ def steepest_descent(A, constants):
 
 
 def newtonic(A, constants):
-
     N_kernel_code = """
     double dx = 4.0*abs((P.i[0]- P_old.i[0])/(F_old.i[0]-F.i[0]));
     double dy = 4.0*abs((P.i[1]- P_old.i[1])/(F_old.i[1]-F.i[1]));
@@ -109,7 +107,6 @@ class FIRE:
         self.F5 = self.FIRE_LOOP_5(A)
 
     def FIRE_LOOP_1(self, A):
-
         kernel_code = """
         P_old.i[0]=P.i[0];
         P_old.i[1]=P.i[1];
@@ -140,7 +137,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_2(self, A):
-
         kernel_code = """
         const double norm = sqrt(F_sq[0]);
         F_norm.i[0] = F.i[0]/norm; 
@@ -167,7 +163,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_3(self, A):
-
         kernel_code = """
         const double norm = sqrt(V_sq[0]);
         V.i[0] = V.i[0]*(1.0-a[0]) + a[0]*F_norm.i[0]*norm;
@@ -192,7 +187,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_4(self, A):
-
         kernel_code = """
         V.i[0] += dt[0]*F.i[0]*14.39964547842567;
         V.i[1] += dt[0]*F.i[1]*14.39964547842567;
@@ -222,7 +216,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_5(self, A):
-
         kernel_code = """
         const double norm = sqrt(dr_norm[0]);
         if(norm < dr_max){
@@ -313,7 +306,6 @@ class FIRE:
 
 class CCS:
     def __init__(self, A, atoms, q=None, CCS_params="CCS_params.json"):
-
         A.Etot = GlobalArray(ncomp=1, dtype=c_double)
 
         with open(CCS_params, "r") as f:
@@ -527,7 +519,6 @@ class CCS:
         self.onebody = one_body_E
 
     def eval(self, A, pos=None):
-
         # if pos is None:
         #     pos=copy( A.pos.view)
 

@@ -64,7 +64,8 @@ class Objective:
         self.force_ref = np.array(
             [*self.force_ref_x, *self.force_ref_y, *self.force_ref_z]
         )
-        self.ref = np.hstack((self.energy_ref, self.force_ref)) # If you want to change the weighting of the forces, you can do so here! [TJAMS]
+        # If you want to change the weighting of the forces, you can do so here! [TJAMS]
+        self.ref = np.hstack((self.energy_ref, self.force_ref))
 
         # WHY DO I NEED TO FLATTEN?
         self.ewald_energy = np.array(energy_ewald).reshape(-1, 1).flatten()
@@ -101,7 +102,7 @@ class Objective:
         while reduce:
             check = 0
             for ci in range(np.shape(self.sto)[1]):
-                if np.linalg.matrix_rank(self.sto[:, 0: ci + 1]) < (ci + 1):
+                if np.linalg.matrix_rank(self.sto[:, 0 : ci + 1]) < (ci + 1):
                     print("    There is linear dependence in stochiometry matrix!")
                     print(
                         "    Removing onebody term: "
@@ -141,17 +142,15 @@ class Objective:
         qq = -1 * matrix(np.transpose(self.mm).dot(self.ref))
         nswitch_list = self.list_iterator()
         obj = []
-        sol_list = []
 
         logger.info("positive definite:%s", np.all((eigvals > 0)))
         logger.info("Condition number:%f", np.linalg.cond(pp))
 
-
-        #Evaluting the fittnes
-        mm_trimmed=self.mm
-        mm_trimmed=np.delete(mm_trimmed,0,1)
-        pp_trimmed=matrix(np.transpose(mm_trimmed).dot(mm_trimmed))
-        eigvals_trimmed = np.linalg.eigvals(pp_trimmed)   
+        # Evaluting the fittnes
+        mm_trimmed = self.mm
+        mm_trimmed = np.delete(mm_trimmed, 0, 1)
+        # pp_trimmed = matrix(np.transpose(mm_trimmed).dot(mm_trimmed))
+        # eigvals_trimmed = np.linalg.eigvals(pp_trimmed)
         # print(f"    Condition number is: {np.linalg.cond(pp_trimmed)} ( {len(eigvals_trimmed)} {np.abs(max(eigvals_trimmed))} {np.abs(min(eigvals_trimmed))})")
 
         if self.do_unconstrained_fit == "True":
@@ -166,8 +165,7 @@ class Objective:
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
-            sol = self.solver(pp, qq, matrix(gg), matrix(hh),
-                              matrix(aa), matrix(bb))
+            sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
             obj.append(float(self.eval_obj(sol["x"])))
 
         obj = np.asarray(obj)
@@ -178,38 +176,47 @@ class Objective:
         #     "\n The best switch is : %s with mse: %s", *
         #     nswitch_list[opt_sol_index], mse
         # )
-        best_switch_r = np.around([nswitch_list[opt_sol_index][elem]*self.l_twb[elem].res+self.l_twb[elem].Rmin for elem in range(self.np)], decimals=2)
+        best_switch_r = np.around(
+            [
+                nswitch_list[opt_sol_index][elem] * self.l_twb[elem].res
+                + self.l_twb[elem].Rmin
+                for elem in range(self.np)
+            ],
+            decimals=2,
+        )
         elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
 
         best_switch_dict = {}
-        for i, elem_pair, in enumerate(elem_pairs):
-            best_switch_dict[elem_pair] =  best_switch_r[i]
+        for (
+            i,
+            elem_pair,
+        ) in enumerate(elem_pairs):
+            best_switch_dict[elem_pair] = best_switch_r[i]
 
         results_dict = {"rmse": mse**0.5, "best_switches": best_switch_dict}
-        
+
         with open("rmse.json", "w") as outfile:
             json.dump(results_dict, outfile)
 
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}.")
+            f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}."
+        )
 
         # [{' '.join(['{:2f}'.format(best_switch_r[elem]) for elem in range(self.np)])}]
 
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
-        opt_sol = self.solver(pp, qq, matrix(
-            g_opt), matrix(hh), matrix(aa), matrix(bb))
+        opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb))
 
         xx = np.array(opt_sol["x"])
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(
-            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
-                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                self.mm[-3 * self.l_twb[0].Nconfs_forces :, :].dot(xx)
             )
             self.write_error_forces(model_forces, self.force_ref)
 
@@ -253,19 +260,16 @@ class Objective:
         self.mm = self.get_m()
 
         try:
-            self.model_energies = np.ravel(
-                self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+            self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
             error = self.model_energies - self.energy_ref
-            mse = ((error) ** 2).mean()
         except:
             self.model_energies = []
             error = []
-            mse = 0
 
         self.write_error(fname="error_test.out")
         return self.model_energies, error
 
-    @ staticmethod
+    @staticmethod
     def solver(pp, qq, gg, hh, aa, bb, maxiter=300, tol=(1e-10, 1e-10, 1e-10)):
         """The solver for the objective.
 
@@ -342,8 +346,7 @@ class Objective:
         # Two-bodies
         ind = 0
         for ii in range(self.np):
-            self.l_twb[ii].curvatures = np.asarray(
-                xx[ind: ind + self.cparams[ii]])
+            self.l_twb[ii].curvatures = np.asarray(xx[ind : ind + self.cparams[ii]])
             ind = ind + self.cparams[ii]
             # Unfold the spline to an equdistant grid
             # self.l_twb[ii].dissolve_interval()
@@ -368,17 +371,64 @@ class Objective:
                     Rmin = self.l_twb[elem].Rmin
                     Rcut = self.l_twb[elem].Rcut
                     res = self.l_twb[elem].res
-                    range_min = max(0, bisect.bisect_left(self.l_twb[elem].rn, (range_center - range_width/2)))
-                    range_max = min(self.l_twb[elem].N, bisect.bisect_left(self.l_twb[elem].rn, (range_center + range_width/2)))
+                    range_min = max(
+                        0,
+                        bisect.bisect_left(
+                            self.l_twb[elem].rn, (range_center - range_width / 2)
+                        ),
+                    )
+                    range_max = min(
+                        self.l_twb[elem].N,
+                        bisect.bisect_left(
+                            self.l_twb[elem].rn, (range_center + range_width / 2)
+                        ),
+                    )
                     tmp.append(self.l_twb[elem].indices[range_min:range_max])
-                    print("    Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(self.l_twb[elem].name, len(self.l_twb[elem].indices[range_min:range_max]), max(Rmin, int((range_center - range_width - Rmin)/res)*res + Rmin), min(Rcut, int((range_center + range_width - Rmin)/res)*res + Rmin)))
+                    print(
+                        "    Range search turned on for element pair {}; {} possible switch indices in range of {:.2f}-{:.2f} Å.".format(
+                            self.l_twb[elem].name,
+                            len(self.l_twb[elem].indices[range_min:range_max]),
+                            max(
+                                Rmin,
+                                int((range_center - range_width - Rmin) / res) * res
+                                + Rmin,
+                            ),
+                            min(
+                                Rcut,
+                                int((range_center + range_width - Rmin) / res) * res
+                                + Rmin,
+                            ),
+                        )
+                    )
                 elif self.l_twb[elem].search_mode.lower() == "point":
-                    search_indices = [bisect.bisect_left(self.l_twb[elem].rn, search_point) for search_point in self.l_twb[elem].search_points]
+                    search_indices = [
+                        bisect.bisect_left(self.l_twb[elem].rn, search_point)
+                        for search_point in self.l_twb[elem].search_points
+                    ]
                     search_indices = np.unique(search_indices).tolist()
-                    print("    Switch points located at {} to for element pair {} based on point search.".format('[' + ', '.join(["{:.2f}".format(self.l_twb[elem].rn[search_index]) for search_index in search_indices]) + '] Å', self.l_twb[elem].name)) 
-                    tmp.append([self.l_twb[elem].indices[search_index] for search_index in search_indices])
+                    print(
+                        "    Switch points located at {} to for element pair {} based on point search.".format(
+                            "["
+                            + ", ".join(
+                                [
+                                    "{:.2f}".format(self.l_twb[elem].rn[search_index])
+                                    for search_index in search_indices
+                                ]
+                            )
+                            + "] Å",
+                            self.l_twb[elem].name,
+                        )
+                    )
+                    tmp.append(
+                        [
+                            self.l_twb[elem].indices[search_index]
+                            for search_index in search_indices
+                        ]
+                    )
                 else:
-                    raise SyntaxError("Error: search mode not recognized! Please use one of the following recognized options; [\"full\", \"range\", \"point\"]")
+                    raise SyntaxError(
+                        'Error: search mode not recognized! Please use one of the following recognized options; ["full", "range", "point"]'
+                    )
 
         n_list = list(itertools.product(*tmp))
 
@@ -406,8 +456,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_x)
         fvv_x = np.hstack([*tmp])
         fvv_x = np.hstack(
-            (fvv_x, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
+            (fvv_x, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         ### This is where one could scale the forces by a scalar, do for x, y and z! Don't forget to also scale the target forces! [TJAMS]
         mm = np.vstack((mm, fvv_x))
@@ -417,8 +466,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_y)
         fvv_y = np.hstack([*tmp])
         fvv_y = np.hstack(
-            (fvv_y, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
+            (fvv_y, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         mm = np.vstack((mm, fvv_y))
 
@@ -427,8 +475,7 @@ class Objective:
             tmp.append(self.l_twb[ii].fvv_z)
         fvv_z = np.hstack([*tmp])
         fvv_z = np.hstack(
-            (fvv_z, np.zeros(
-                (self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
+            (fvv_z, np.zeros((self.l_twb[ii].Nconfs_forces, np.shape(self.sto)[1])))
         )
         mm = np.vstack((mm, fvv_z))
 
@@ -486,15 +533,15 @@ class Objective:
         footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
         np.savetxt(
             fname,
-            np.transpose(
-                [self.energy_ref, self.model_energies, error, Natoms]),
+            np.transpose([self.energy_ref, self.model_energies, error, Natoms]),
             header=header,
             footer=footer,
             fmt="%-15.5f",
         )
 
-        # print("    Final root mean square error in energy: ", (np.square(error/Natoms)).mean()
-        #      ** 0.5, " (eV/atoms) [NOTE: Only elements specified in Onebody are considered in atom count!]")
+        # print("    Final root mean square error in energy: ",
+        # (np.square(error/Natoms)).mean()** 0.5, " (eV/atoms)
+        # [NOTE: Only elements specified in Onebody are considered in atom count!]")
 
     def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
         """Prints the errors in a file.
@@ -513,11 +560,15 @@ class Objective:
         mse = ((error) ** 2).mean()
 
         footer = "MSE = {:2.5E}\nMaxerror = {:2.5E}".format(mse, maxerror)
-        np.savetxt(fname, np.transpose([ref_for, mdl_for, error]), header=header,
-                   footer=footer, fmt='%-15.5f')
+        np.savetxt(
+            fname,
+            np.transpose([ref_for, mdl_for, error]),
+            header=header,
+            footer=footer,
+            fmt="%-15.5f",
+        )
 
-    def write_CCS_params(self,fname="CCS_params.json"):
-
+    def write_CCS_params(self, fname="CCS_params.json"):
         CCS_params = OrderedDict()
         CCS_params["Charge scaling factor"] = float(self.charge_scaling)
 
@@ -538,21 +589,24 @@ class Objective:
             two_body_dict["exp_a"] = self.l_twb[k].expcoeffs[0]
             if not isnan(self.l_twb[k].expcoeffs[1]):
                 two_body_dict["exp_b"] = self.l_twb[k].expcoeffs[1]
-            else: 
-                # print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+            else:
+                # print("WARNING: THE EXPONENTIAL FOR PAIR {} IS POORLY RESOLVED,
+                # PROCEED WITH CAUTION!".format(self.l_twb[k].name))
                 two_body_dict["exp_b"] = 0
             if not isnan(self.l_twb[k].expcoeffs[2]):
                 two_body_dict["exp_c"] = self.l_twb[k].expcoeffs[2]
-            else: 
+            else:
                 two_body_dict["exp_c"] = 0
             # if two_body_dict["exp_a"]<0:
-                # print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!!!!!")
+            # print("STRONG WARNING: THE EXPONENTIAL WALL IS ACTUALLY ATTRACTIVE!!!")
             a_values = list(self.l_twb[k].splcoeffs[:, 0])
             a_values.append(0)
             two_body_dict["spl_a"] = a_values
             b_values = list(self.l_twb[k].splcoeffs[:, 1])
-            # if b_values[0]>0:
-                # print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL REPULSIVE. THIS INDICATES THAT THE INTERACTION IS MOST LIKELY POORLY RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
+            # if b_values[0]>0:
+            # print("WARNING: THE PAIR {} IS ONLY SAMPLED IN A REGION WHERE IT IS STILL
+            # REPULSIVE. THIS INDICATES THAT THE INTERACTION IS MOST LIKELY POORLY
+            # RESOLVED, PROCEED WITH CAUTION!".format(self.l_twb[k].name))
             b_values.append(0)
             two_body_dict["spl_b"] = b_values
             c_values = list(self.l_twb[k].splcoeffs[:, 2])
@@ -568,25 +622,29 @@ class Objective:
             json.dump(CCS_params, f, indent=8)
 
     def gen_Buckingham(self):
-        print("Getting to generate a Buckingham potential from the spline data!") 
+        print("Getting to generate a Buckingham potential from the spline data!")
 
     def unconstrained_fit(self):
-        #Solving unconstrained problem
-        xx=np.linalg.lstsq(self.mm,self.ref,rcond=None)
-        xx=xx[0]
-        print("    MSE of unconstrained problem is: ", ((self.mm.dot(xx)   - self.ref)**2).mean()    )
-        xx=xx.reshape(len(xx),1)
+        # Solving unconstrained problem
+        xx = np.linalg.lstsq(self.mm, self.ref, rcond=None)
+        xx = xx[0]
+        print(
+            "    MSE of unconstrained problem is: ",
+            ((self.mm.dot(xx) - self.ref) ** 2).mean(),
+        )
+        xx = xx.reshape(len(xx), 1)
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(
-            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
         self.write_error(fname="UNC_error.out")
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
-                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                self.mm[-3 * self.l_twb[0].Nconfs_forces :, :].dot(xx)
             )
-            self.write_error_forces(model_forces, self.force_ref,fname="UNC_error_forces.out")
+            self.write_error_forces(
+                model_forces, self.force_ref, fname="UNC_error_forces.out"
+            )
 
         try:
             if self.merging == "True":
@@ -617,26 +675,32 @@ class Objective:
             pass
 
     def ridge_regresssion(self):
-        #Solving ridge regression problem
+        # Solving ridge regression problem
 
         from sklearn import linear_model
 
-        ridge=linear_model.Ridge(alpha=self.ridge_lambda,fit_intercept=False)
-        ridge.fit(self.mm,self.ref)
-        ridge_pred=ridge.predict(self.mm)
-        print("    MSE from ridge regression: ", ((ridge_pred - self.ref)**2).mean(), "Regularization (alpha): ",self.ridge_lambda)
-        xx=ridge.coef_
+        ridge = linear_model.Ridge(alpha=self.ridge_lambda, fit_intercept=False)
+        ridge.fit(self.mm, self.ref)
+        ridge_pred = ridge.predict(self.mm)
+        print(
+            "    MSE from ridge regression: ",
+            ((ridge_pred - self.ref) ** 2).mean(),
+            "Regularization (alpha): ",
+            self.ridge_lambda,
+        )
+        xx = ridge.coef_
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(
-            self.mm[0: self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
         self.write_error(fname="RIDGE_error.out")
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
-                self.mm[-3*self.l_twb[0].Nconfs_forces:, :].dot(xx)
+                self.mm[-3 * self.l_twb[0].Nconfs_forces :, :].dot(xx)
             )
-            self.write_error_forces(model_forces, self.force_ref,fname="RIDGE_error_forces.out")
+            self.write_error_forces(
+                model_forces, self.force_ref, fname="RIDGE_error_forces.out"
+            )
 
         try:
             if self.merging == "True":

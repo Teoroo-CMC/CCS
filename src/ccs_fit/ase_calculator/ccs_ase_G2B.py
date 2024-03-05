@@ -5,13 +5,11 @@
 #  See the LICENSE file for terms of usage and distribution.                   #
 # ------------------------------------------------------------------------------#
 
-# import logging
 import copy
 import sympy
 import numpy as np
 import itertools as it
-from collections import OrderedDict, defaultdict
-from numpy import linalg as LA
+from collections import defaultdict
 from ase.calculators.calculator import Calculator, all_changes
 from ase.constraints import full_3x3_to_voigt_6_stress
 
@@ -21,12 +19,9 @@ try:
 except:
     pass
 
-# logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
-# logg = logging.getLogger(__name__)
-
 
 class G2B_pair:
-    def __init__(self, elem1, elem2, G2B_params, exp=True):
+    def __init__(self, elem1, elem2, G2B_params):
         self.elem1 = elem1
         self.elem2 = elem2
         self.no_pair = False
@@ -43,43 +38,40 @@ class G2B_pair:
         if self.no_pair:
             self.Rmin = 0.0
             self.rcut = 0.0
-            self.V_func  = None
+            self.V_func = None
             self.F_func = None
 
         else:
             self.rcut = G2B_params["Two_body"][pair]["r_cut"]
             func = G2B_params["Two_body"][pair]["V_func"]
             self.V_func = sympy.sympify(func)
-            r_ij = sympy.Symbol('r_ij')
-            self.F_func = sympy.diff(self.V_func, r_ij) 
-            #print(self.F_func)
-            #print(self.V_func)
+            r_ij = sympy.Symbol("r_ij")
+            self.F_func = sympy.diff(self.V_func, r_ij)
 
     def eval_energy(self, r):
         if self.no_pair:
-            val=0.0
+            val = 0.0
         else:
             if r <= self.rcut:
-                f_eval=self.V_func.subs({'r_ij':r})
-                val=f_eval.evalf()    
+                f_eval = self.V_func.subs({"r_ij": r})
+                val = f_eval.evalf()
             else:
                 val = 0.0
         return float(val)
 
     def eval_force(self, r):
         if self.no_pair:
-            val=0.0
+            val = 0.0
         else:
             if r <= self.rcut:
-                f_eval=self.F_func.subs({'r_ij':r})
-                val=f_eval.evalf()    
+                f_eval = self.F_func.subs({"r_ij": r})
+                val = f_eval.evalf()
             else:
                 val = 0.0
         return float(val)
 
-def ew(atoms, q):
 
-    #   structure = AseAtomsAdaptor.get_structure(atoms)
+def ew(atoms, q):
     atoms.charges = []
     for a in atoms.get_chemical_symbols():
         atoms.charges.append(q[a])
@@ -142,8 +134,8 @@ class G2B(Calculator):
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = G2B_pair(a, b, self.G2B_params)
             if self.pair[a + b].rcut > self.rc:
-                self.rc=self.pair[a + b].rcut
-                
+                self.rc = self.pair[a + b].rcut
+
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
             self.atoms.wrap()
@@ -209,7 +201,11 @@ class G2B(Calculator):
                 id2s = [i for i, x in enumerate(dist_mask) if x]
                 if norm_dist != []:
                     for id2 in id2s:
-                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_f = (
+                            self.pair[x + y].eval_force(norm_dist[id2])
+                            * dist[id2, :]
+                            / norm_dist[id2]
+                        )
                         cur_dist = dist[id2, :]
                         cur_stress = np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)

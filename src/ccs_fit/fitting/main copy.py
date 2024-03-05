@@ -21,13 +21,11 @@ from ccs.fitting.objective import Objective
 from ccs.fitting.spline_functions import Twobody
 from ccs.fitting.spline_functions import Onebody
 from ccs.data.conversion import Bohr__AA, eV__Hartree
-from ccs.debugging_tools.timing import timing
 
 logger = logging.getLogger(__name__)
 
 
 def prepare_input(filename):
-
     gen_params = {"interface": None, "ewald_scaling": 1.0}
     struct_data_test = {}
 
@@ -155,14 +153,12 @@ def prepare_input(filename):
 
 # @timing
 def parse(data, struct_data, struct_data_forces):
-
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
     counter1 = 0
     ref_forces = []
-    dftb_forces = []
     ewald_forces = []
 
     # ADD ENERGY-DATA
@@ -221,7 +217,6 @@ def parse(data, struct_data, struct_data_forces):
 
             if data["General"]["interface"] == "CCS2Q":
                 assert len(ref_energies) == len(ewald_energies)
-                columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(ewald_energies))
                 )
@@ -229,7 +224,6 @@ def parse(data, struct_data, struct_data_forces):
 
             if data["General"]["interface"] == "CCS+fQ":
                 assert len(ref_energies) == len(ewald_energies)
-                columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(ewald_energies))
                 )
@@ -261,7 +255,7 @@ def parse(data, struct_data, struct_data_forces):
             # ADD FORCE-DATA
 
             list_dist_forces = []
-            for fnum, ff in struct_data_forces.items():
+            for ff in struct_data_forces.values():
                 try:
                     list_dist_forces.append(ff[atmpair])
                 except KeyError:
@@ -290,7 +284,6 @@ def parse(data, struct_data, struct_data_forces):
     for i, key in enumerate(data["Onebody"]):
         count = 0
         for _, vv in struct_data.items():
-            # print(vv['atoms'][key] )
             try:
                 sto[count][i] = vv["atoms"][key]
             except KeyError:
@@ -375,13 +368,14 @@ def twp_fit(filename):
     )
 
     # Solve QP problem
-    predicted_energies, mse, xx_unfolded = nn.solution()
+    # predicted_energies, mse, xx_unfolded = nn.solution()
 
     # Perform prediction
     # NEEDS TO BE UPDATED TO HANDLE MERGING AND DISSOLVING INTERVALS!!!
     # if struct_data_test != {}:
-    #     atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, _ = parse(
+    #     atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies,
+    #     ewald_forces, _ = parse(
     #         data, struct_data_test, struct_data_test_forces)
-    #     nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
-    #                         ewald=ewald_energies, ewald_forces=ewald_forces)
+    #     nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces,
+    # data['General'], ewald=ewald_energies, ewald_forces=ewald_forces)
     #     predicted_energies, error = nn_test.predict(xx_unfolded)

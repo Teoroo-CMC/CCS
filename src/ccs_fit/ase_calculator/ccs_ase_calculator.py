@@ -9,8 +9,7 @@
 import copy
 import numpy as np
 import itertools as it
-from collections import OrderedDict, defaultdict
-from numpy import linalg as LA
+from collections import defaultdict
 from ase.calculators.calculator import Calculator, all_changes
 from ase.constraints import full_3x3_to_voigt_6_stress
 
@@ -20,12 +19,9 @@ try:
 except:
     pass
 
-# logging.basicConfig(filename="ccs.spl", level=logging.DEBUG)
-# logg = logging.getLogger(__name__)
-
 
 class spline_table:
-    def __init__(self, elem1, elem2, CCS_params, exp=True):
+    def __init__(self, elem1, elem2, CCS_params):
         self.elem1 = elem1
         self.elem2 = elem2
         self.no_pair = False
@@ -83,7 +79,6 @@ class spline_table:
             return val
 
     def eval_force(self, r):
-
         index = int(np.floor((r - self.Rmin) / self.dx))
 
         if r >= self.Rmin and r <= self.rcut:
@@ -99,7 +94,6 @@ class spline_table:
 
 
 def ew(atoms, q):
-
     #   structure = AseAtomsAdaptor.get_structure(atoms)
     atoms.charges = []
     for a in atoms.get_chemical_symbols():
@@ -150,7 +144,7 @@ class CCS(Calculator):
         for a, b in it.product(self.species, self.species):
             self.pair[a + b] = spline_table(a, b, self.CCS_params)
             if self.pair[a + b].rcut > self.rc:
-                self.rc=self.pair[a + b].rcut
+                self.rc = self.pair[a + b].rcut
 
         if self.atoms.number_of_lattice_vectors == 3:
             cell = atoms.get_cell()
@@ -217,9 +211,13 @@ class CCS(Calculator):
                 id2s = [i for i, x in enumerate(dist_mask) if x]
                 if norm_dist != []:
                     for id2 in id2s:
-                        cur_f = self.pair[x + y].eval_force(norm_dist[id2])*dist[id2, :]/norm_dist[id2]
+                        cur_f = (
+                            self.pair[x + y].eval_force(norm_dist[id2])
+                            * dist[id2, :]
+                            / norm_dist[id2]
+                        )
                         cur_dist = dist[id2, :]
-                        cur_stress = 0.5*np.outer(cur_f, cur_dist)
+                        cur_stress = 0.5 * np.outer(cur_f, cur_dist)
                         # print(cur_f, cur_dist, cur_stress)
                         stresses[id, :, :] += cur_stress
 
@@ -229,7 +227,6 @@ class CCS(Calculator):
             ewa = ew(self.atoms, self.q)
             energy = energy + ewa.total_energy
             forces = forces + ewa.forces
-
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy

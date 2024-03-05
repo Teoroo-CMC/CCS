@@ -12,7 +12,6 @@ Common neighbor list routines used by the CCS project.
 
 import numpy as np
 from ase.neighborlist import NeighborList
-
 from ccs_fit.data.conversion import AA__Bohr
 
 
