@@ -50,6 +50,7 @@ python-semantic-release = ">=9.1.1"
 pyright = ">=1.1.352"
 flake8 = ">=7.0.0"
 black = ">=24.2.0"
+black-nb = ">=0.7"
 flake8-bugbear = ">=24.2.6"
 
 [build-system]
