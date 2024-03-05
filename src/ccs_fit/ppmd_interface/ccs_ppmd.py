@@ -42,7 +42,8 @@ def steepest_descent(A, constants):
     """
     sd_kernel = Kernel("SD", sd_kernel_code, constants)
     SD = ParticleLoop(
-        kernel=sd_kernel, dat_dict={"F": A.force(access.READ), "P": A.pos(access.INC)}
+        kernel=sd_kernel,
+        dat_dict={"F": A.force(access.READ), "P": A.pos(access.INC)},
     )
 
     return SD
@@ -281,7 +282,8 @@ class FIRE:
                 self.F4.execute()
                 self.F5.execute()
             MaxF = (
-                np.max(np.linalg.norm(A.force[0 : A.npart], axis=1)) * internal_to_ev()
+                np.max(np.linalg.norm(A.force[0 : A.npart], axis=1))
+                * internal_to_ev()
             )
             if A.domain.comm.rank == 0 and it % 1 == 0:
                 print(
@@ -298,7 +300,9 @@ class FIRE:
                     "    Total time for opimization: ",
                     t2 - t1,
                     " s, Max force:",
-                    np.max(np.linalg.norm(A.force.view * internal_to_ev(), axis=1)),
+                    np.max(
+                        np.linalg.norm(A.force.view * internal_to_ev(), axis=1)
+                    ),
                     "ev/Å",
                 )
                 break
@@ -369,12 +373,20 @@ class CCS:
                 cnt += 1
                 try:
                     try:
-                        tmp_Rcut = CCS_params["Two_body"][Z_i + "-" + Z_j]["r_cut"]
-                        tmp_Rmin = CCS_params["Two_body"][Z_i + "-" + Z_j]["r_min"]
+                        tmp_Rcut = CCS_params["Two_body"][Z_i + "-" + Z_j][
+                            "r_cut"
+                        ]
+                        tmp_Rmin = CCS_params["Two_body"][Z_i + "-" + Z_j][
+                            "r_min"
+                        ]
                         tmp_A = CCS_params["Two_body"][Z_i + "-" + Z_j]["spl_a"]
                     except:
-                        tmp_Rcut = CCS_params["Two_body"][Z_j + "-" + Z_i]["r_cut"]
-                        tmp_Rmin = CCS_params["Two_body"][Z_j + "-" + Z_i]["r_min"]
+                        tmp_Rcut = CCS_params["Two_body"][Z_j + "-" + Z_i][
+                            "r_cut"
+                        ]
+                        tmp_Rmin = CCS_params["Two_body"][Z_j + "-" + Z_i][
+                            "r_min"
+                        ]
                         tmp_A = CCS_params["Two_body"][Z_j + "-" + Z_i]["spl_a"]
                 except:
                     tmp_Rcut = 0.0
@@ -594,7 +606,10 @@ def optimize(A, atoms, CCS, Type="LBGS", Fmax=0.05):
     )
     atoms.positions = A.pos[0 : A.npart]
     calculator = SinglePointCalculator(
-        atoms, energy=A.Etot[0], free_energy=A.Etot[0], forces=A.force[0 : A.npart]
+        atoms,
+        energy=A.Etot[0],
+        free_energy=A.Etot[0],
+        forces=A.force[0 : A.npart],
     )
 
     atoms.calc = calculator

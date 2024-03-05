@@ -138,7 +138,10 @@ def ccs_build_db(
             f2.close
 
             calculator = SinglePointCalculator(
-                structure_DFTB, energy=EDFTB, free_energy=EDFTB, forces=DFTB_forces
+                structure_DFTB,
+                energy=EDFTB,
+                free_energy=EDFTB,
+                forces=DFTB_forces,
             )
 
             structure_DFTB.calc = calculator
@@ -206,7 +209,9 @@ def main():
         default=0.0001,
         help="minimum energy difference between steps extracted using option -g",
     )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Verbose output"
+    )
 
     args = parser.parse_args()
 
@@ -239,7 +244,9 @@ def main():
         print("    DFTB data base: ", DFTB_data)
         print("")
 
-        ccs_build_db(mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list)
+        ccs_build_db(
+            mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list
+        )
 
     try:
         size = os.get_terminal_size()

@@ -112,7 +112,12 @@ class G2B(Calculator):
     implemented_properties = {"stress", "energy", "forces"}
 
     def __init__(
-        self, G2B_params=None, charge=None, q=None, charge_scaling=False, **kwargs
+        self,
+        G2B_params=None,
+        charge=None,
+        q=None,
+        charge_scaling=False,
+        **kwargs
     ):
         self.rc = 7.0  # SET THIS MAX OF ANY PAIR
         self.charge = charge
@@ -127,7 +132,9 @@ class G2B(Calculator):
 
         Calculator.__init__(self, **kwargs)
 
-    def calculate(self, atoms=None, properties=["energy"], system_changes=all_changes):
+    def calculate(
+        self, atoms=None, properties=["energy"], system_changes=all_changes
+    ):
         Calculator.calculate(self, atoms, properties, system_changes)
         self.species = list(set(self.atoms.get_chemical_symbols()))
         self.pair = dict()
@@ -188,7 +195,10 @@ class G2B(Calculator):
                         (
                             dist[dist_mask].T
                             * list(
-                                map(self.pair[x + y].eval_force, norm_dist[dist_mask])
+                                map(
+                                    self.pair[x + y].eval_force,
+                                    norm_dist[dist_mask],
+                                )
                             )
                             / norm_dist[dist_mask]
                         ).T,
@@ -224,5 +234,7 @@ class G2B(Calculator):
 
         if self.atoms.number_of_lattice_vectors == 3:
             stresses = full_3x3_to_voigt_6_stress(stresses)
-            self.results["stress"] = stresses.sum(axis=0) / self.atoms.get_volume()
+            self.results["stress"] = (
+                stresses.sum(axis=0) / self.atoms.get_volume()
+            )
             self.results["stresses"] = stresses / self.atoms.get_volume()
