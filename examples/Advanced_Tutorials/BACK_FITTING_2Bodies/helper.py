@@ -96,9 +96,7 @@ class fit_task:
             Vofr.append(f_eval.evalf())
         return Vofr
 
-    def init_training(
-        self, min_scale=0.0, max_scale=1e12, vol_scan=None, scan=True
-    ):
+    def init_training(self, min_scale=0.0, max_scale=1e12, vol_scan=None, scan=True):
         calc = G2B(
             G2B_params=self.G2B_input,
             charge=True,
@@ -110,9 +108,7 @@ class fit_task:
         self.E0 = self.train_cell.get_potential_energy() / len(self.train_cell)
         orig_cell = self.train_cell.get_cell()
         orig_struc = self.train_cell.copy()
-        print(
-            "Energy widow: ", self.E0, " - ", self.E0 + self.Espan, " eV/atom"
-        )
+        print("Energy widow: ", self.E0, " - ", self.E0 + self.Espan, " eV/atom")
 
         vols = []
         Es = []
@@ -127,9 +123,7 @@ class fit_task:
             counter = 0
             for scale in np.arange(0.8, 1.30, 0.01):
                 new_struct = self.train_cell.copy()
-                new_struct.set_cell(
-                    self.train_cell.cell * scale, scale_atoms=True
-                )
+                new_struct.set_cell(self.train_cell.cell * scale, scale_atoms=True)
                 new_struct.calc = self.train_cell.calc
                 nrg = new_struct.get_potential_energy() / len(new_struct)
                 if nrg - Emax < 0 and self.min_scale == 0.0:
@@ -145,9 +139,7 @@ class fit_task:
                         nrg,
                     )
                 vols.append(
-                    (scale**3)
-                    * self.train_cell.get_volume()
-                    / len(self.train_cell)
+                    (scale**3) * self.train_cell.get_volume() / len(self.train_cell)
                 )
                 Es.append(nrg)
 
@@ -164,14 +156,11 @@ class fit_task:
         # APPEND SCRAMBELED STRUCTURES TO THE TRAININGSET
         while counter < size:
             scale = (
-                np.random.random() * (self.max_scale - self.min_scale)
-                + self.min_scale
+                np.random.random() * (self.max_scale - self.min_scale) + self.min_scale
             )
             new_struct = self.train_cell.copy()
             new_struct.set_cell(self.train_cell.cell * scale, scale_atoms=True)
-            new_struct = simple_shake(
-                new_struct, self.Espan * self.damping * scale
-            )
+            new_struct = simple_shake(new_struct, self.Espan * self.damping * scale)
             new_struct.calc = self.train_cell.calc
             F = new_struct.get_forces()
             E = new_struct.get_potential_energy()
@@ -289,9 +278,7 @@ class fit_task:
         )
         plt.show()
 
-        fig, ax = plt.subplots(
-            figsize=(6, 6)
-        )  # set the figure size to 6x6 inches
+        fig, ax = plt.subplots(figsize=(6, 6))  # set the figure size to 6x6 inches
         ax.set_xlabel("Energy (eV/atom)")
         ax.set_ylabel("Error (meV/atom)")
         # ax.set_ylim(-2,2)
@@ -304,31 +291,19 @@ class fit_task:
         plt.show()
 
     def check_sampling(self):
-        fig, ax = plt.subplots(
-            figsize=(6, 6)
-        )  # set the figure size to 6x6 inches
+        fig, ax = plt.subplots(figsize=(6, 6))  # set the figure size to 6x6 inches
 
         ax.set_xlabel(r"Volume (Å$^3$/atom)")
         ax.set_ylabel("Energy (eV/atom)")
         ax.set_ylim(self.E0 - 0.1, self.E0 + self.Espan + 0.1)
         ax.set_xlim(
-            self.min_scale**3
-            * self.train_cell.get_volume()
-            / len(self.train_cell)
-            - 1,
-            self.max_scale**3
-            * self.train_cell.get_volume()
-            / len(self.train_cell)
-            + 1,
+            self.min_scale**3 * self.train_cell.get_volume() / len(self.train_cell) - 1,
+            self.max_scale**3 * self.train_cell.get_volume() / len(self.train_cell) + 1,
         )
         ax.plot(
             [
-                self.min_scale**3
-                * self.train_cell.get_volume()
-                / len(self.train_cell),
-                self.max_scale**3
-                * self.train_cell.get_volume()
-                / len(self.train_cell),
+                self.min_scale**3 * self.train_cell.get_volume() / len(self.train_cell),
+                self.max_scale**3 * self.train_cell.get_volume() / len(self.train_cell),
             ],
             [self.E0 + self.Espan, self.E0 + self.Espan],
             "--",
@@ -369,9 +344,7 @@ class fit_task:
             e_ref = self.evaluateG2B(pair, rs)
             abs_de = np.abs(np.array(e_CCS) - np.array(e_ref))
             I = trapz(abs_de, rs)
-            overlap[pair] = I / (
-                rs[-1] - rs[0]
-            )  # Integral divided by interval lenght
+            overlap[pair] = I / (rs[-1] - rs[0])  # Integral divided by interval lenght
             tot_overlap += I / (rs[-1] - rs[0])
         overlap["Total"] = tot_overlap
         return overlap

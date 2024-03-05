@@ -103,9 +103,7 @@ class CCS_regressor:
         gg, aa = self.const()
         hh = np.zeros(gg.shape[0])
         bb = np.zeros(aa.shape[0])
-        self.sol = self.solver(
-            pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb)
-        )
+        self.sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
 
     def const(self):
         aa = np.zeros(0)

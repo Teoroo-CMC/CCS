@@ -124,9 +124,7 @@ def ccs_validate(
                 if include_forces:
                     FDFTB = DFTB_DB.get("key=" + str(key)).forces
                     FREF = [FREF[i] - FDFTB[i] for i in range(len(FREF))]
-                sp_calculator = SinglePointCalculator(
-                    structure, energy=EDFTB + ECCS
-                )
+                sp_calculator = SinglePointCalculator(structure, energy=EDFTB + ECCS)
                 structure.calc = sp_calculator
                 structure.get_potential_energy()
 
@@ -223,9 +221,7 @@ def main():
         default=-1,
         help="Number of structures to include",
     )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     parser.add_argument(
         "-chg",
         "--charge_dict",

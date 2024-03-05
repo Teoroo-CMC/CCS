@@ -220,9 +220,7 @@ class Twobody:
         indices = [0]
         for config in range(self.Nconfs):
             distances = [
-                ii
-                for ii in self.dismat[config, :]
-                if self.Rmin <= ii <= self.Rcut
+                ii for ii in self.dismat[config, :] if self.Rmin <= ii <= self.Rcut
             ]
             uu = 0
             for rr in distances:

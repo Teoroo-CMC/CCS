@@ -31,9 +31,7 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         cell = atoms.get_cell()
         n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
         n_repeat = np.ceil(n_repeat).astype(int)
-        offsets = [
-            *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])
-        ]
+        offsets = [*itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])]
 
     except:
         cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
@@ -58,9 +56,7 @@ def pair_dist(atoms, R_c, ch1, ch2, counter):
         norm_dist = np.linalg.norm(tmp, axis=1)
         dist_mask = norm_dist < R_c
         r_distance.extend(norm_dist[dist_mask].tolist())
-        forces["F" + str(counter) + "_" + str(id)] = np.asarray(
-            tmp[dist_mask]
-        ).tolist()
+        forces["F" + str(counter) + "_" + str(id)] = np.asarray(tmp[dist_mask]).tolist()
 
     if ch1 == ch2:
         r_distance.sort()
@@ -155,9 +151,7 @@ def ccs_fetch(
                 dict_species[elem] += 1
                 if mode == "CCS+Q":
                     struct.charges.append(charge_dict[elem])
-            dict_species = {
-                key: value for key, value in sorted(dict_species.items())
-            }
+            dict_species = {key: value for key, value in sorted(dict_species.items())}
             atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
             if mode == "CCS+Q":
                 lattice = Lattice(struct.get_cell())
@@ -196,16 +190,14 @@ def ccs_fetch(
                 ce[str(x) + "-" + str(y)] = pair_distances
                 for i in range(len(struct)):
                     try:
-                        cf["F" + str(counter) + "_" + str(i)][
-                            str(x) + "-" + str(y)
-                        ] = forces["F" + str(counter) + "_" + str(i)]
+                        cf["F" + str(counter) + "_" + str(i)][str(x) + "-" + str(y)] = (
+                            forces["F" + str(counter) + "_" + str(i)]
+                        )
                     except:
                         pass
                 # FORCES SHOULD BE DOUBLE COUNTED!
                 if x != y:
-                    pair_distances, forces = pair_dist(
-                        struct, R_c, y, x, counter
-                    )
+                    pair_distances, forces = pair_dist(struct, R_c, y, x, counter)
                     for i in range(len(struct)):
                         try:
                             cf["F" + str(counter) + "_" + str(i)][
@@ -267,9 +259,7 @@ def main():
         default=-1,
         help="Number of structures to include",
     )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     parser.add_argument(
         "-chg",
         "--charge_dict",
