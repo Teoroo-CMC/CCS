@@ -1,4 +1,3 @@
-import art
 import os
 import numpy as np
 import ase.db as db
@@ -8,8 +7,8 @@ from ase.calculators.singlepoint import SinglePointCalculator
 from tqdm import tqdm
 from ase.calculators.mixing import LinearCombinationCalculator
 from copy import deepcopy
-
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
+from ccs_fit.scripts.helper import terminal_header
 
 
 def ccs_validate(
@@ -170,17 +169,7 @@ def ccs_validate(
 def main():
     import argparse
 
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print("")
-        print(txt)
-
-        txt = art.text2art("CCS:Validate")
-        print(txt)
-    except:
-        pass
+    terminal_header("CCS:Validate")
 
     parser = argparse.ArgumentParser(description="CCS fetching tool")
     parser.add_argument(

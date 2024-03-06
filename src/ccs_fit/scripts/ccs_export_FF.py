@@ -1,4 +1,3 @@
-import art
 import sys
 import os
 import numpy as np
@@ -6,6 +5,7 @@ import json
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from ccs_fit.ase_calculator.ccs_ase_calculator import spline_table
+from ccs_fit.scripts.helper import terminal_header
 
 
 def Buckingham(r, A, B, C):
@@ -304,17 +304,7 @@ def write_FF(CCS_params_file):
 
 
 def main():
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print("")
-        print(txt)
-
-        txt = art.text2art("CCS:Exporting  FF  params")
-        print(txt)
-    except:
-        print("Generating force field parameters to CCS.")
+    terminal_header("CCS:export FF params")
 
     try:
         CCS_params_file = sys.argv[1]

@@ -1,9 +1,10 @@
-import art
 import sys
 import os
 import numpy as np
 import json
 from ase.units import Bohr, Hartree
+
+from ccs_fit.scripts.helper import terminal_header
 
 
 def _write(elem1, elem2, CCS_params):
@@ -96,17 +97,7 @@ def write_dftb_spline(CCS_params_file):
 
 
 def main():
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-" * c
-    print("")
-    print(txt)
-
-    try:
-        txt = art.text2art("CCS:export sk-table")
-        print(txt)
-    except:
-        print("CCS: export sk-table")
+    terminal_header("CCS:export sk-table")
 
     try:
         CCS_params_file = sys.argv[1]

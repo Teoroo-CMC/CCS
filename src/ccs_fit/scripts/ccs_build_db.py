@@ -1,4 +1,3 @@
-import art
 import ase.db as db
 import os
 import re
@@ -9,6 +8,8 @@ from tqdm import tqdm
 import copy
 import sys
 from ase.units import Bohr, Hartree
+
+from ccs_fit.scripts.helper import terminal_header
 
 
 def ccs_build_db(
@@ -156,17 +157,7 @@ def ccs_build_db(
 def main():
     import argparse
 
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print("")
-        print(txt)
-
-        txt = art.text2art("CCS:Build DB")
-        print(txt)
-    except:
-        pass
+    terminal_header("CCS:Build DB")
 
     parser = argparse.ArgumentParser(description="CCS fetching tool")
     parser.add_argument(

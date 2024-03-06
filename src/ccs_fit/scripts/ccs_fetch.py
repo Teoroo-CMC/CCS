@@ -1,5 +1,4 @@
 import json
-import art
 import itertools as it
 from collections import OrderedDict, defaultdict
 import numpy as np
@@ -9,6 +8,8 @@ from tqdm import tqdm
 import itertools
 import random
 import os
+
+from ccs_fit.scripts.helper import terminal_header
 
 
 def pair_dist(atoms, R_c, ch1, ch2, counter):
@@ -286,17 +287,7 @@ def main():
 
     ccs_fetch(**vars(args))
 
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print("")
-        print(txt)
-
-        txt = art.text2art("CCS:Fetch")
-        print(txt)
-    except:
-        pass
+    terminal_header("CCS:Fetch")
 
     try:
         size = os.get_terminal_size()

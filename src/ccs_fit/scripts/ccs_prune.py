@@ -1,4 +1,3 @@
-import art
 import os
 import numpy as np
 import ase.db as db
@@ -9,6 +8,7 @@ from ase.calculators.mixing import LinearCombinationCalculator
 from tqdm import tqdm
 from ccs_fit.scripts.ccs_fetch import ccs_fetch
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
+from ccs_fit.scripts.helper import terminal_header
 
 
 def ccs_prune(
@@ -155,17 +155,7 @@ def ccs_prune(
 def main():
     import argparse
 
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print("")
-        print(txt)
-
-        txt = art.text2art("CCS:Prune")
-        print(txt)
-    except:
-        pass
+    terminal_header("CCS:Prune")
 
     parser = argparse.ArgumentParser(description="CCS fetching tool")
     parser.add_argument(
