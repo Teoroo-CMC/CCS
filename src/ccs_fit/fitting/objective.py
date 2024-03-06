@@ -103,7 +103,9 @@ class Objective:
             check = 0
             for ci in range(np.shape(self.sto)[1]):
                 if np.linalg.matrix_rank(self.sto[:, 0 : ci + 1]) < (ci + 1):
-                    print("    There is linear dependence in stochiometry matrix!")
+                    print(
+                        "    There is linear dependence in stochiometry matrix!"
+                    )
                     print(
                         "    Removing onebody term: "
                         + self.l_one[ci + n_redundant].name
@@ -165,7 +167,9 @@ class Objective:
             [gg, aa] = self.get_g(n_switch_id)
             hh = np.zeros(gg.shape[0])
             bb = np.zeros(aa.shape[0])
-            sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
+            sol = self.solver(
+                pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb)
+            )
             obj.append(float(self.eval_obj(sol["x"])))
 
         obj = np.asarray(obj)
@@ -207,12 +211,16 @@ class Objective:
         [g_opt, aa] = self.get_g(nswitch_list[opt_sol_index])
         bb = np.zeros(aa.shape[0])
 
-        opt_sol = self.solver(pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb))
+        opt_sol = self.solver(
+            pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb)
+        )
 
         xx = np.array(opt_sol["x"])
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(
+            self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx)
+        )
 
         if self.l_twb[0].Nconfs_forces > 0:
             model_forces = np.ravel(
@@ -260,7 +268,9 @@ class Objective:
         self.mm = self.get_m()
 
         try:
-            self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+            self.model_energies = np.ravel(
+                self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx)
+            )
             error = self.model_energies - self.energy_ref
         except:
             self.model_energies = []
@@ -347,7 +357,9 @@ class Objective:
         # Two-bodies
         ind = 0
         for ii in range(self.np):
-            self.l_twb[ii].curvatures = np.asarray(xx[ind : ind + self.cparams[ii]])
+            self.l_twb[ii].curvatures = np.asarray(
+                xx[ind : ind + self.cparams[ii]]
+            )
             ind = ind + self.cparams[ii]
             # Unfold the spline to an equdistant grid
             # self.l_twb[ii].dissolve_interval()
@@ -393,12 +405,14 @@ class Objective:
                             len(self.l_twb[elem].indices[range_min:range_max]),
                             max(
                                 Rmin,
-                                int((range_center - range_width - Rmin) / res) * res
+                                int((range_center - range_width - Rmin) / res)
+                                * res
                                 + Rmin,
                             ),
                             min(
                                 Rcut,
-                                int((range_center + range_width - Rmin) / res) * res
+                                int((range_center + range_width - Rmin) / res)
+                                * res
                                 + Rmin,
                             ),
                         )
@@ -414,7 +428,9 @@ class Objective:
                             "["
                             + ", ".join(
                                 [
-                                    "{:.2f}".format(self.l_twb[elem].rn[search_index])
+                                    "{:.2f}".format(
+                                        self.l_twb[elem].rn[search_index]
+                                    )
                                     for search_index in search_indices
                                 ]
                             )
@@ -555,7 +571,9 @@ class Objective:
         # (np.square(error/Natoms)).mean()** 0.5, " (eV/atoms)
         # [NOTE: Only elements specified in Onebody are considered in atom count!]")
 
-    def write_error_forces(self, mdl_for, ref_for, fname="CCS_error_forces.out"):
+    def write_error_forces(
+        self, mdl_for, ref_for, fname="CCS_error_forces.out"
+    ):
         """Prints the errors in a file.
 
         Args:
@@ -634,7 +652,9 @@ class Objective:
             json.dump(CCS_params, f, indent=8)
 
     def gen_Buckingham(self):
-        print("Getting to generate a Buckingham potential from the spline data!")
+        print(
+            "Getting to generate a Buckingham potential from the spline data!"
+        )
 
     def unconstrained_fit(self):
         # Solving unconstrained problem
@@ -647,7 +667,9 @@ class Objective:
         xx = xx.reshape(len(xx), 1)
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(
+            self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx)
+        )
         self.write_error(fname="UNC_error.out")
 
         if self.l_twb[0].Nconfs_forces > 0:
@@ -703,7 +725,9 @@ class Objective:
         xx = ridge.coef_
         self.assign_parameter_values(xx)
 
-        self.model_energies = np.ravel(self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx))
+        self.model_energies = np.ravel(
+            self.mm[0 : self.l_twb[0].Nconfs, :].dot(xx)
+        )
         self.write_error(fname="RIDGE_error.out")
 
         if self.l_twb[0].Nconfs_forces > 0:

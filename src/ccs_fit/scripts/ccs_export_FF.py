@@ -57,7 +57,9 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped):
             if cur_r >= Rmin and cur_r < Rcut:
                 index = int(np.floor((cur_r - Rmin) / dx))
                 dr = cur_r - x[index]
-                f0 = a[index] + dr * (b[index] + dr * (c[index] + (d[index] * dr)))
+                f0 = a[index] + dr * (
+                    b[index] + dr * (c[index] + (d[index] * dr))
+                )
                 spl_to_fit.append(f0)
             elif cur_r < Rmin:
                 val = np.exp(-aa * cur_r + bb) + cc
@@ -88,7 +90,9 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped):
             print("Buckingham potential not found within max iteration bound.")
 
         try:
-            popt_LJ = curve_fit(Lennard_Jones, r, spl_to_fit, p0=[1, 1], maxfev=5000)
+            popt_LJ = curve_fit(
+                Lennard_Jones, r, spl_to_fit, p0=[1, 1], maxfev=5000
+            )
             print(
                 "Lennard Jones fit (not optimised) for element pair {}-{};  V(r) = 4*{:.2f}*(({:.2f}/r)^12 - ({:.2f}/r)^6)".format(
                     elem1, elem2, popt_LJ[0], popt_LJ[1], popt_LJ[1]
@@ -107,10 +111,14 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped):
                 label="LJ",
             )
         except:
-            print("Lennard-Jones potential not found within max iteration bound.")
+            print(
+                "Lennard-Jones potential not found within max iteration bound."
+            )
 
         try:
-            popt_Mor = curve_fit(Morse, r, spl_to_fit, p0=[2, 1, 1], maxfev=5000)
+            popt_Mor = curve_fit(
+                Morse, r, spl_to_fit, p0=[2, 1, 1], maxfev=5000
+            )
             print(
                 "Morse fit (not optimised) for element pair {}-{};          V(r) = {:.2f}*((1-np.exp(-{:.2f}*(r-{:.2f})))^2 - 1)".format(
                     elem1, elem2, popt_Mor[0], popt_Mor[1], popt_Mor[2]
@@ -192,7 +200,9 @@ def write_LAMMPS(jsonfile, scale=50, format="lammps", rmin=0.5):
                 r_min -= dr_steps * dr
 
             r = np.arange(r_min, tb.Rcut + dr, dr)
-            tags[pair] = dict({"Rmin": r_min, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
+            tags[pair] = dict(
+                {"Rmin": r_min, "Rcut": tb.Rcut, "dr": dr, "N": len(r)}
+            )
             f.write("\n {}".format(pair))
             f.write("\n N {} R {} {} \n".format(len(r), r_min, tb.Rcut))
             [
@@ -228,10 +238,15 @@ def write_GULP(jsonfile, scale=50, format="GULP"):
             rmin = np.min([0.5, CCS_params["Two_body"][pair]["r_min"]])
             dr = CCS_params["Two_body"][pair]["dr"] / scale
             r = np.arange(rmin, tb.Rcut + dr, dr)
-            tags[pair] = dict({"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
+            tags[pair] = dict(
+                {"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)}
+            )
             f.write("\n spline reverse")
             f.write("\n {} {} 0 {} {}".format(elem1, elem2, rmin, tb.Rcut + dr))
-            [f.write("\n {} {}".format(elem, tb.eval_energy(elem))) for elem in r]
+            [
+                f.write("\n {} {}".format(elem, tb.eval_energy(elem)))
+                for elem in r
+            ]
 
     return tags
 

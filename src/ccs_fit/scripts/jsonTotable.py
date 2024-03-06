@@ -26,7 +26,9 @@ def asecalcTotable(jsonfile, scale=10, table="CCS.table"):
             rmin = CCS_params["Two_body"][pair]["r_min"]
             dr = CCS_params["Two_body"][pair]["dr"] / scale
             r = np.arange(rmin, tb.Rcut + dr, dr)
-            tags[pair] = dict({"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)})
+            tags[pair] = dict(
+                {"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)}
+            )
             f.write("\n {}".format(pair))
             f.write("\n N {} R {} {} \n".format(len(r), rmin, tb.Rcut))
             [

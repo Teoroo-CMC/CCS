@@ -83,7 +83,9 @@ class spline_table:
 
         if r >= self.Rmin and r <= self.rcut:
             dr = r - self.x[index]
-            val = self.b[index] + dr * (2 * self.c[index] + (3 * self.d[index] * dr))
+            val = self.b[index] + dr * (
+                2 * self.c[index] + (3 * self.d[index] * dr)
+            )
             return -val
         elif r < self.Rmin:
             val = -self.aa * np.exp(-self.aa * r + self.bb)
@@ -121,7 +123,12 @@ class CCS(Calculator):
     implemented_properties = {"energy", "forces", "stress"}
 
     def __init__(
-        self, CCS_params=None, charge=None, q=None, charge_scaling=False, **kwargs
+        self,
+        CCS_params=None,
+        charge=None,
+        q=None,
+        charge_scaling=False,
+        **kwargs
     ):
         self.rc = 7.0  # SET THIS MAX OF ANY PAIR
         self.exp = None
@@ -137,7 +144,9 @@ class CCS(Calculator):
 
         Calculator.__init__(self, **kwargs)
 
-    def calculate(self, atoms=None, properties=["energy"], system_changes=all_changes):
+    def calculate(
+        self, atoms=None, properties=["energy"], system_changes=all_changes
+    ):
         Calculator.calculate(self, atoms, properties, system_changes)
         self.species = list(set(self.atoms.get_chemical_symbols()))
         self.pair = dict()
@@ -237,7 +246,9 @@ class CCS(Calculator):
 
         if self.atoms.number_of_lattice_vectors == 3:
             stresses = full_3x3_to_voigt_6_stress(stresses)
-            self.results["stress"] = stresses.sum(axis=0) / self.atoms.get_volume()
+            self.results["stress"] = (
+                stresses.sum(axis=0) / self.atoms.get_volume()
+            )
             self.results["stresses"] = stresses / self.atoms.get_volume()
 
         # natoms = len(self.atoms)
