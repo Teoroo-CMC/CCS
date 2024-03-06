@@ -296,7 +296,6 @@ def write_FF(CCS_params_file):
             elem[0],
             elem[1],
             CCS_params,
-            exp=True,
             f_Buck=f_Buck,
             f_LJ=f_LJ,
             f_Mor=f_Mor,

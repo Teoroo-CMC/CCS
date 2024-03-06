@@ -209,9 +209,6 @@ def main():
         help="Number of structures to include",
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
-    )
-    parser.add_argument(
         "-chg",
         "--charge_dict",
         type=json.loads,
@@ -253,7 +250,6 @@ def main():
         DFTB_DB=vars(args)["CCS_DB"],
         charge_dict=vars(args)["charge_dict"],
         include_forces=vars(args)["include_forces"],
-        verbose=vars(args)["verbose"],
     )
 
 
