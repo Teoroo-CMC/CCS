@@ -26,10 +26,10 @@ jobs:
     # Define job steps
     steps:
     # Set up a Python environment for use in actions
-    - name: Set up Python 3.9
+    - name: Set up Python 3.12
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.12
 
     # This workflow contains a single job called "build"
     - name: Check-out repository
@@ -41,6 +41,19 @@ jobs:
     - name: Install package
       run: poetry install
 
+    - name: Format with black # Automatic PEP8 formatting
+      run: poetry run black .
+      continue-on-error: true
+
+    - name: Check formatting
+      run: poetry run black --check .
+
+    - name: Check with flake8 # Common linting rules and best practices
+      run: poetry run flake8
+
+    - name: LSP check with pyright
+      run: poetry run pyright
+
     - name: Test with pytest
       run: poetry run pytest tests/ --cov=ccs --cov-report=xml
 
@@ -49,9 +62,6 @@ jobs:
       with:
         files: ./coverage.xml   # coverage report
 
-    # Might be nice to add a later stage
-    # - name: Automatic PEP8 formatting with black
-    #   uses: psf/black@stable
 
     - name: Build documentation
       run: poetry run make clean html --directory docs/
@@ -85,10 +95,10 @@ jobs:
 
     # Define job steps
     steps:
-    - name: Set up Python 3.9
+    - name: Set up Python 3.12
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.12
 
     - name: Check-out repository
       uses: actions/checkout@v3
