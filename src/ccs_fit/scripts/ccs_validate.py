@@ -1,3 +1,4 @@
+import art
 import os
 import numpy as np
 import ase.db as db
@@ -175,7 +176,6 @@ def main():
         txt = "-" * c
         print("")
         print(txt)
-        import art
 
         txt = art.text2art("CCS:Validate")
         print(txt)

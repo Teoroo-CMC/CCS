@@ -1,3 +1,4 @@
+import art
 import sys
 import os
 import numpy as np
@@ -310,7 +311,6 @@ def main():
         txt = "-" * c
         print("")
         print(txt)
-        import art
 
         txt = art.text2art("CCS:Exporting  FF  params")
         print(txt)

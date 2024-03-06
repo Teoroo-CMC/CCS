@@ -45,6 +45,20 @@ files = [
 ]
 
 [[package]]
+name = "art"
+version = "6.1"
+description = "ASCII Art Library For Python"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "art-6.1-py3-none-any.whl", hash = "sha256:159819c418001467f8d79616fa0814277deac97c8a363d1eb3e7c0a31526bfc3"},
+    {file = "art-6.1.tar.gz", hash = "sha256:6ab3031e3b7710039e73497b0e750cadfe04d4c1279ce3a123500dbafb9e1b64"},
+]
+
+[package.extras]
+dev = ["bandit (>=1.5.1)", "coverage (>=4.1)", "pydocstyle (>=3.0.0)", "vulture (>=1.0)"]
+
+[[package]]
 name = "ase"
 version = "3.22.1"
 description = "Atomic Simulation Environment"
@@ -3012,4 +3026,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11.6"
-content-hash = "c2312a94e17ba4d3607ebfcb244dc68a2064ad753897e460f3e8eb0e4aefc246"
+content-hash = "f0299b3ef3d0dfc53de71e462e6144a51d1e9f664885b92e783c98618b9b49e6"

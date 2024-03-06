@@ -1,3 +1,4 @@
+import art
 import sys
 import os
 import numpy as np
@@ -102,8 +103,6 @@ def main():
     print(txt)
 
     try:
-        import art
-
         txt = art.text2art("CCS:export sk-table")
         print(txt)
     except:

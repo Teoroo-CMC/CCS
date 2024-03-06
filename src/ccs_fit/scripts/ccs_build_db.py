@@ -1,3 +1,4 @@
+import art
 import ase.db as db
 import os
 import re
@@ -161,7 +162,6 @@ def main():
         txt = "-" * c
         print("")
         print(txt)
-        import art
 
         txt = art.text2art("CCS:Build DB")
         print(txt)

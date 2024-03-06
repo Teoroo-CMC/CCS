@@ -10,6 +10,7 @@ Functionality to fit curvature constraint splines.
 """
 
 
+import art
 import logging
 import argparse
 import os
@@ -40,7 +41,6 @@ def main(cmdlineargs=None):
         txt = "-" * c
         print("")
         print(txt)
-        import art
 
         txt = art.text2art("CCS:Fit")
         print(txt)
