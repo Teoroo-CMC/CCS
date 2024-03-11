@@ -1,6 +1,7 @@
 import json
 import itertools as it
 from collections import OrderedDict, defaultdict
+from ase.db.core import Atoms
 import numpy as np
 import ase.db as db
 from ase.cell import Cell
@@ -12,7 +13,7 @@ import os
 from ccs_fit.scripts.helper import terminal_header
 
 
-def pair_dist(atoms, R_c, ch1, ch2, counter):
+def pair_dist(atoms: Atoms, R_c: float, ch1: str, ch2: str, counter: int):
     """
         This function returns pairwise distances between two types of atoms within a certain cuttoff
 
