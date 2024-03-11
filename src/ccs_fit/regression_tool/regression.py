@@ -25,7 +25,9 @@ class CCS_regressor:
             self.dx = (self.xmax - self.xmin) * self.dx / np.sum(self.dx)
         self.eps = eps
         self.C, self.D, self.B, self.A = self.spline_construction(self.N)
-        print("WARNING: THE CCS_REGRESSOR HAS NOT BEEN TESTED, USE AT YOUR OWN DISCLOSURE")
+        print(
+            "WARNING: THE CCS_REGRESSOR HAS NOT BEEN TESTED, USE AT YOUR OWN DISCLOSURE"
+        )
 
     def merge_intervals(self, x):
         dx = self.dx
@@ -96,28 +98,26 @@ class CCS_regressor:
     def fit(self, x, y):
         self.merge_intervals(x)
         self.mm, self.incices = self.model(x)
-        n_switch = self.N
         pp = matrix(np.transpose(self.mm).dot(self.mm))
         qq = -1 * matrix(np.transpose(self.mm).dot(y))
-        gg, aa = self.const(n_switch)
+        gg, aa = self.const()
         hh = np.zeros(gg.shape[0])
         bb = np.zeros(aa.shape[0])
-        self.sol = self.solver(pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb))
+        self.sol = self.solver(
+            pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb)
+        )
 
-    def const(self, n_switch):
+    def const(self):
         aa = np.zeros(0)
         g_mono = -1 * np.identity(self.N)
         for ii in range(self.N - 1):
-            # g_mono[ii, ii] = - (1/self.dx[ii+1]+1/self.dx[ii])
-            # g_mono[ii, ii+1] = 2/self.dx[ii]
             g_mono[ii, ii] = -(self.dx[ii + 1] + self.dx[ii])
             g_mono[ii, ii + 1] = 2 * self.dx[ii]
-        # g_mono[ii > n_switch] = -g_mono[ii > n_switch]
         gg = block_diag(g_mono, 0)
         return gg, aa
 
     def predict(self, x):
-        mm, indices = self.model(x)
+        mm, _ = self.model(x)
         y = mm.dot(np.array(self.sol["x"]))
         return y
 
@@ -194,7 +194,6 @@ class CCS_regressor:
         uu = np.zeros((self.N, 1)).flatten()
         indices = []
         for i in range(size):
-
             index = bisect.bisect_left(xns, x[i])
             index = max(0, index)
 

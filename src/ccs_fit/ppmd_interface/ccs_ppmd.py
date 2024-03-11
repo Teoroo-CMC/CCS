@@ -35,7 +35,6 @@ IntegratorRange = method.IntegratorRange
 
 
 def steepest_descent(A, constants):
-
     sd_kernel_code = """
     P.i[0] += alpha*F.i[0];
     P.i[1] += alpha*F.i[1];
@@ -43,14 +42,14 @@ def steepest_descent(A, constants):
     """
     sd_kernel = Kernel("SD", sd_kernel_code, constants)
     SD = ParticleLoop(
-        kernel=sd_kernel, dat_dict={"F": A.force(access.READ), "P": A.pos(access.INC)}
+        kernel=sd_kernel,
+        dat_dict={"F": A.force(access.READ), "P": A.pos(access.INC)},
     )
 
     return SD
 
 
 def newtonic(A, constants):
-
     N_kernel_code = """
     double dx = 4.0*abs((P.i[0]- P_old.i[0])/(F_old.i[0]-F.i[0]));
     double dy = 4.0*abs((P.i[1]- P_old.i[1])/(F_old.i[1]-F.i[1]));
@@ -109,7 +108,6 @@ class FIRE:
         self.F5 = self.FIRE_LOOP_5(A)
 
     def FIRE_LOOP_1(self, A):
-
         kernel_code = """
         P_old.i[0]=P.i[0];
         P_old.i[1]=P.i[1];
@@ -140,7 +138,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_2(self, A):
-
         kernel_code = """
         const double norm = sqrt(F_sq[0]);
         F_norm.i[0] = F.i[0]/norm; 
@@ -167,7 +164,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_3(self, A):
-
         kernel_code = """
         const double norm = sqrt(V_sq[0]);
         V.i[0] = V.i[0]*(1.0-a[0]) + a[0]*F_norm.i[0]*norm;
@@ -192,7 +188,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_4(self, A):
-
         kernel_code = """
         V.i[0] += dt[0]*F.i[0]*14.39964547842567;
         V.i[1] += dt[0]*F.i[1]*14.39964547842567;
@@ -222,7 +217,6 @@ class FIRE:
         return pl
 
     def FIRE_LOOP_5(self, A):
-
         kernel_code = """
         const double norm = sqrt(dr_norm[0]);
         if(norm < dr_max){
@@ -288,7 +282,8 @@ class FIRE:
                 self.F4.execute()
                 self.F5.execute()
             MaxF = (
-                np.max(np.linalg.norm(A.force[0 : A.npart], axis=1)) * internal_to_ev()
+                np.max(np.linalg.norm(A.force[0 : A.npart], axis=1))
+                * internal_to_ev()
             )
             if A.domain.comm.rank == 0 and it % 1 == 0:
                 print(
@@ -305,7 +300,9 @@ class FIRE:
                     "    Total time for opimization: ",
                     t2 - t1,
                     " s, Max force:",
-                    np.max(np.linalg.norm(A.force.view * internal_to_ev(), axis=1)),
+                    np.max(
+                        np.linalg.norm(A.force.view * internal_to_ev(), axis=1)
+                    ),
                     "ev/Å",
                 )
                 break
@@ -313,7 +310,6 @@ class FIRE:
 
 class CCS:
     def __init__(self, A, atoms, q=None, CCS_params="CCS_params.json"):
-
         A.Etot = GlobalArray(ncomp=1, dtype=c_double)
 
         with open(CCS_params, "r") as f:
@@ -377,12 +373,20 @@ class CCS:
                 cnt += 1
                 try:
                     try:
-                        tmp_Rcut = CCS_params["Two_body"][Z_i + "-" + Z_j]["r_cut"]
-                        tmp_Rmin = CCS_params["Two_body"][Z_i + "-" + Z_j]["r_min"]
+                        tmp_Rcut = CCS_params["Two_body"][Z_i + "-" + Z_j][
+                            "r_cut"
+                        ]
+                        tmp_Rmin = CCS_params["Two_body"][Z_i + "-" + Z_j][
+                            "r_min"
+                        ]
                         tmp_A = CCS_params["Two_body"][Z_i + "-" + Z_j]["spl_a"]
                     except:
-                        tmp_Rcut = CCS_params["Two_body"][Z_j + "-" + Z_i]["r_cut"]
-                        tmp_Rmin = CCS_params["Two_body"][Z_j + "-" + Z_i]["r_min"]
+                        tmp_Rcut = CCS_params["Two_body"][Z_j + "-" + Z_i][
+                            "r_cut"
+                        ]
+                        tmp_Rmin = CCS_params["Two_body"][Z_j + "-" + Z_i][
+                            "r_min"
+                        ]
                         tmp_A = CCS_params["Two_body"][Z_j + "-" + Z_i]["spl_a"]
                 except:
                     tmp_Rcut = 0.0
@@ -527,7 +531,6 @@ class CCS:
         self.onebody = one_body_E
 
     def eval(self, A, pos=None):
-
         # if pos is None:
         #     pos=copy( A.pos.view)
 
@@ -603,7 +606,10 @@ def optimize(A, atoms, CCS, Type="LBGS", Fmax=0.05):
     )
     atoms.positions = A.pos[0 : A.npart]
     calculator = SinglePointCalculator(
-        atoms, energy=A.Etot[0], free_energy=A.Etot[0], forces=A.force[0 : A.npart]
+        atoms,
+        energy=A.Etot[0],
+        free_energy=A.Etot[0],
+        forces=A.force[0 : A.npart],
     )
 
     atoms.calc = calculator

@@ -21,13 +21,11 @@ from ccs.fitting.objective import Objective
 from ccs.fitting.spline_functions import Twobody
 from ccs.fitting.spline_functions import Onebody
 from ccs.data.conversion import Bohr__AA, eV__Hartree
-from ccs.debugging_tools.timing import timing
 
 logger = logging.getLogger(__name__)
 
 
 def prepare_input(filename):
-
     gen_params = {"interface": None, "ewald_scaling": 1.0}
     struct_data_test = {}
 
@@ -58,7 +56,9 @@ def prepare_input(filename):
 
     try:
         with open(data["Train-set"]) as json_file:
-            struct_data_full = json.load(json_file, object_pairs_hook=OrderedDict)
+            struct_data_full = json.load(
+                json_file, object_pairs_hook=OrderedDict
+            )
             struct_data = struct_data_full["energies"]
             try:
                 struct_data_forces = struct_data_full["forces"]
@@ -74,7 +74,9 @@ def prepare_input(filename):
         data["Test-set"] = data["Train-set"]
     try:
         with open(data["Test-set"]) as json_file:
-            struct_data_test_full = json.load(json_file, object_pairs_hook=OrderedDict)
+            struct_data_test_full = json.load(
+                json_file, object_pairs_hook=OrderedDict
+            )
             struct_data_test = struct_data_test_full["energies"]
             try:
                 struct_data_test_forces = struct_data_test_full["forces"]
@@ -86,13 +88,21 @@ def prepare_input(filename):
     # Make defaults or general setting for Twobody
     if "Twobody" not in data.keys():
         if "DFTB" in data["General"]["interface"]:
-            data["Twobody"] = {"X-X": {"Rcut": 5.0, "Resolution": 0.1, "Swtype": "rep"}}
+            data["Twobody"] = {
+                "X-X": {"Rcut": 5.0, "Resolution": 0.1, "Swtype": "rep"}
+            }
         if "CCS" in data["General"]["interface"]:
-            data["Twobody"] = {"X-X": {"Rcut": 8.0, "Resolution": 0.1, "Swtype": "sw"}}
+            data["Twobody"] = {
+                "X-X": {"Rcut": 8.0, "Resolution": 0.1, "Swtype": "sw"}
+            }
 
     # If onebody is not given it is generated from structures.json
     elements = set()
-    [elements.add(key) for _, vv in struct_data.items() for key in vv["atoms"].keys()]
+    [
+        elements.add(key)
+        for _, vv in struct_data.items()
+        for key in vv["atoms"].keys()
+    ]
 
     try:
         data["Onebody"]
@@ -155,14 +165,12 @@ def prepare_input(filename):
 
 # @timing
 def parse(data, struct_data, struct_data_forces):
-
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
     ewald_energies = []
     counter1 = 0
     ref_forces = []
-    dftb_forces = []
     ewald_forces = []
 
     # ADD ENERGY-DATA
@@ -195,7 +203,9 @@ def parse(data, struct_data, struct_data_forces):
                     try:
                         dftb_energies.append(vv["energy_dftb"])
                     except KeyError:
-                        logger.debug("Structure with no key energy_dftb at %s", snum)
+                        logger.debug(
+                            "Structure with no key energy_dftb at %s", snum
+                        )
                         raise
                 if "Q" in data["General"]["interface"]:
                     try:
@@ -221,7 +231,6 @@ def parse(data, struct_data, struct_data_forces):
 
             if data["General"]["interface"] == "CCS2Q":
                 assert len(ref_energies) == len(ewald_energies)
-                columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(ewald_energies))
                 )
@@ -229,7 +238,6 @@ def parse(data, struct_data, struct_data_forces):
 
             if data["General"]["interface"] == "CCS+fQ":
                 assert len(ref_energies) == len(ewald_energies)
-                columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(ewald_energies))
                 )
@@ -247,7 +255,14 @@ def parse(data, struct_data, struct_data_forces):
                 values["Rmin"]
             except:
                 values["Rmin"] = (
-                    min([item for sublist in list_dist for item in sublist if item > 0])
+                    min(
+                        [
+                            item
+                            for sublist in list_dist
+                            for item in sublist
+                            if item > 0
+                        ]
+                    )
                     - 0.5 * values["Resolution"]
                 )
 
@@ -261,7 +276,7 @@ def parse(data, struct_data, struct_data_forces):
             # ADD FORCE-DATA
 
             list_dist_forces = []
-            for fnum, ff in struct_data_forces.items():
+            for ff in struct_data_forces.values():
                 try:
                     list_dist_forces.append(ff[atmpair])
                 except KeyError:
@@ -282,7 +297,9 @@ def parse(data, struct_data, struct_data_forces):
 
             # APPEND DATA
             if values["Rmin"] < values["Rcut"]:
-                atom_pairs.append(Twobody(atmpair, dist_mat, dist_mat_forces, **values))
+                atom_pairs.append(
+                    Twobody(atmpair, dist_mat, dist_mat_forces, **values)
+                )
 
     # ADD ONEBODY DATA
     atom_onebodies = []
@@ -290,7 +307,6 @@ def parse(data, struct_data, struct_data_forces):
     for i, key in enumerate(data["Onebody"]):
         count = 0
         for _, vv in struct_data.items():
-            # print(vv['atoms'][key] )
             try:
                 sto[count][i] = vv["atoms"][key]
             except KeyError:
@@ -375,13 +391,14 @@ def twp_fit(filename):
     )
 
     # Solve QP problem
-    predicted_energies, mse, xx_unfolded = nn.solution()
+    # predicted_energies, mse, xx_unfolded = nn.solution()
 
     # Perform prediction
     # NEEDS TO BE UPDATED TO HANDLE MERGING AND DISSOLVING INTERVALS!!!
     # if struct_data_test != {}:
-    #     atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies, ewald_forces, _ = parse(
+    #     atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, ewald_energies,
+    #     ewald_forces, _ = parse(
     #         data, struct_data_test, struct_data_test_forces)
-    #     nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces, data['General'],
-    #                         ewald=ewald_energies, ewald_forces=ewald_forces)
+    #     nn_test = Objective(atom_pairs, atom_onebodies, sto, ref_energies, ref_forces,
+    # data['General'], ewald=ewald_energies, ewald_forces=ewald_forces)
     #     predicted_energies, error = nn_test.predict(xx_unfolded)

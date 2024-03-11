@@ -15,6 +15,7 @@ import argparse
 import os
 
 from ccs_fit.fitting.main import twp_fit
+from ccs_fit.scripts.helper import terminal_header
 
 FILENAME = "CCS_input.json"
 
@@ -34,17 +35,7 @@ def main(cmdlineargs=None):
 
     """
 
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-"*c
-        print("")
-        print(txt)
-        import art
-        txt = art.text2art('CCS:Fit')
-        print(txt)
-    except:
-        pass
+    terminal_header("CCS:Fit")
 
     args = parse_cmdline_args(cmdlineargs)
     ccs_fit(args)
@@ -52,7 +43,7 @@ def main(cmdlineargs=None):
     size = os.get_terminal_size()
     try:
         c = size.columns
-        txt = "-"*c
+        txt = "-" * c
         print(txt)
         print("")
     except:
