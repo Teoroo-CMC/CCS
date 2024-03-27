@@ -374,10 +374,10 @@ class Objective:
             if self.l_twb[elem].Swtype == "rep":
                 tmp.append([self.l_twb[elem].N])
             if self.l_twb[elem].Swtype == "att":
-                tmp.append([0])
+                tmp.append([-1])
             if self.l_twb[elem].Swtype == "sw":
                 if self.l_twb[elem].search_mode.lower() == "full":
-                    tmp.append(self.l_twb[elem].indices)
+                    tmp.append([-1,self.l_twb[elem].indices])
                 elif self.l_twb[elem].search_mode.lower() == "range":
                     range_center = self.l_twb[elem].range_center
                     range_width = self.l_twb[elem].range_width
