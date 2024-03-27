@@ -278,7 +278,7 @@ def parse(data, struct_data, struct_data_forces):
                 )
 
         try:
-            Rmax = max([item for sublist in list_dist for item in sublist])
+            Rmax = max([item for sublist in list_dist for item in sublist if item <= values["Rcut"]])
         except:
             Rmax = 0
 
