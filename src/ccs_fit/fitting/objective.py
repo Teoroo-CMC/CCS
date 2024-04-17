@@ -377,7 +377,10 @@ class Objective:
                 tmp.append([-1])
             if self.l_twb[elem].Swtype == "sw":
                 if self.l_twb[elem].search_mode.lower() == "full":
-                    tmp.append([-1,self.l_twb[elem].indices])
+                    tmp2=[]
+                    tmp2.append(-1)
+                    tmp2.extend(self.l_twb[elem].indices)
+                    tmp.append(tmp2)
                 elif self.l_twb[elem].search_mode.lower() == "range":
                     range_center = self.l_twb[elem].range_center
                     range_width = self.l_twb[elem].range_width
