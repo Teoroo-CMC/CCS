@@ -29,7 +29,7 @@ classifiers = ["Development Status :: 4 - Beta"]
 packages = [{ include = "ccs_fit", from = "src" }]
 
 [tool.poetry.dependencies]
-python = ">=3.11.6"
+python = ">=3.10.12"
 cvxopt = ">=1.3.2"
 ase = ">=3.22.1"
 scipy = ">=1.12.0"
