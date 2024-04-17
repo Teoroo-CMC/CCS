@@ -221,7 +221,7 @@ class CCS(Calculator):
 
                 # Stress calculation
                 id2s = [i for i, x in enumerate(dist_mask) if x]
-                if norm_dist != []:
+                if norm_dist.size != 0:
                     for id2 in id2s:
                         cur_f = (
                             self.pair[x + y].eval_force(norm_dist[id2])
