@@ -445,4 +445,4 @@ def twp_fit(filename):
     )
 
     # Solve QP problem
-    # predicted_energies, mse, xx_unfolded = nn.solution()
+    predicted_energies, mse, xx_unfolded = nn.solution()
