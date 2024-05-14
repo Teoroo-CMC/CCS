@@ -37,6 +37,7 @@ def pair_dist(atoms: Atoms, R_c: float, ch1: str, ch2: str, counter: int):
         offsets = [
             *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])
         ]
+        atoms.wrap()
 
     except:
         cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
