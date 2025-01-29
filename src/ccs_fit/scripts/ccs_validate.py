@@ -9,6 +9,7 @@ from ase.calculators.mixing import LinearCombinationCalculator
 from copy import deepcopy
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS
 from ccs_fit.scripts.helper import terminal_header
+from ase.constraints import voigt_6_to_full_3x3_stress
 
 
 def ccs_validate(
@@ -18,9 +19,9 @@ def ccs_validate(
     DFT_DB="DFT.db",
     CCS_DB="CCS_validate.db",
     DFTB_DB=None,
-    charge_dict=None,
-    charge_scaling=False,
     include_forces=False,
+    include_stresses=False,
+    charge_calculator="pymatgen",
 ):
     """
     Function to verify database generation.
@@ -51,23 +52,12 @@ def ccs_validate(
     if mode == "DFTB":
         DFTB_DB = db.connect(DFTB_DB)
 
-    if isinstance(charge_dict, str):
-        charge_dict_orig = json.loads(charge_dict)
-        charge_dict = deepcopy(
-            charge_dict_orig
-        )  # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
-
     if isinstance(CCS_params, str):
         with open(CCS_params, "r") as f:
             CCS_params_orig = json.load(f)
             CCS_params = deepcopy(
                 CCS_params_orig
             )  # Necessary as the dicts act as mutable objects, changes in these functions would change the global dicts, which is not desired
-
-    if charge_dict is None:
-        charge = False
-    else:
-        charge = True
 
     f = open("CCS_validate.dat", "w")
     print(
@@ -85,12 +75,18 @@ def ccs_validate(
             ),
             file=f_force,
         )
+    if include_stresses:
+        f_stress = open("CCS_validate_stresses.dat", "w")
+        print(
+            "{:^13s} {:^13s} {:^13s} {:^13s}".format(
+                "#Reference", "Predicted", "Error", "structure_no"
+            ),
+            file=f_stress,
+        )
 
     CCS_calc = CCS(
         CCS_params=CCS_params,
-        charge=charge,
-        q=charge_dict,
-        charge_scaling=charge_scaling,
+        q_type=charge_calculator
     )
 
     calc = LinearCombinationCalculator([CCS_calc], [1])
@@ -112,11 +108,17 @@ def ccs_validate(
             EDFT = structure.get_potential_energy()
             if include_forces:
                 FREF = structure.get_forces()
+            if include_stresses:
+                SREF = voigt_6_to_full_3x3_stress( structure.get_stress())
             EREF = EDFT
+
             structure.calc = calc
             ECCS = structure.get_potential_energy()
             if include_forces:
                 FCCS = structure.get_forces()
+            if include_stresses:
+                SCCS = voigt_6_to_full_3x3_stress(structure.get_stress())
+
             if mode == "DFTB":
                 key = row.key
                 EDFTB = DFTB_DB.get("key=" + str(key)).energy
@@ -124,6 +126,10 @@ def ccs_validate(
                 if include_forces:
                     FDFTB = DFTB_DB.get("key=" + str(key)).forces
                     FREF = [FREF[i] - FDFTB[i] for i in range(len(FREF))]
+                if include_stresses:
+                    SDFTB = voigt_6_to_full_3x3_stress(DFTB_DB.get("key=" + str(key)).stress)
+                    SREF = [SREF[i] - SDFTB[i] for i in range(len(SREF))]
+                    
                 sp_calculator = SinglePointCalculator(
                     structure, energy=EDFTB + ECCS
                 )
@@ -148,6 +154,21 @@ def ccs_validate(
                             counter,
                         ),
                         file=f_force,
+                    )
+            if include_stresses:
+                #SREF = [item for sublist in SREF for item in sublist] 
+                SREF=[SREF[0,0],SREF[1,1],SREF[2,2],SREF[0,1],SREF[1,2],SREF[0,2]]
+                SCCS=[SCCS[0,0],SCCS[1,1],SCCS[2,2],SCCS[0,1],SCCS[1,2],SCCS[0,2]]
+                #SCCS = [item for sublist in SCCS for item in sublist]
+                for stress_id, stress_ref in enumerate(SREF):
+                    print(
+                        "{:13.8f} {:13.8f} {:13.8f} {:13d}".format(
+                            stress_ref,
+                            SCCS[stress_id],
+                            np.abs(stress_ref - SCCS[stress_id]),
+                            counter,
+                        ),
+                        file=f_stress,
                     )
 
             #     try:
@@ -213,25 +234,28 @@ def main():
         help="Number of structures to include",
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
-    )
-    parser.add_argument(
-        "-chg",
-        "--charge_dict",
-        type=json.loads,
-        metavar="",
-        help='Specify atomic charges in json format, e.g.: \n \'{ "Zn" : 2.0 , "O" : -2.0 }\'  ',
-    )
-    parser.add_argument(
-        "-chg_s", "--charge_scaling", type=bool, metavar="", default=False
-    )
-    parser.add_argument(
         "-f",
         "--include_forces",
         type=bool,
         metavar="",
         default=False,
         help="Validation of the reproduced forces w.r.t. those they were fitted on.",
+    )
+    parser.add_argument(
+        "-s",
+        "--include_stresses",
+        type=bool,
+        metavar="",
+        default=False,
+        help="Validation of the reproduced stresses w.r.t. those they were fitted on.",
+    )
+    parser.add_argument(
+        "-q",
+        "--charge_calculator",
+        type=str,
+        metavar="",
+        default="pymatgen",
+        help="Calculator for Ewald summation. Options: pymatgen or lammps",
     )
 
     args = parser.parse_args()

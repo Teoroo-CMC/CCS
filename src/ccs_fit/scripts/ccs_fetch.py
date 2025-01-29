@@ -1,4 +1,6 @@
+from pathlib import Path
 import json
+import sys
 import itertools as it
 from collections import OrderedDict, defaultdict
 from ase.db.core import Atoms
@@ -9,6 +11,7 @@ from tqdm import tqdm
 import itertools
 import random
 import os
+from ase.constraints import voigt_6_to_full_3x3_stress
 
 from ccs_fit.scripts.helper import terminal_header
 
@@ -81,6 +84,9 @@ def ccs_fetch(
     DFTB_DB=None,
     charge_dict=None,
     include_forces=False,
+    include_stresses=True,
+    write_json=True,
+    q_type="pymatgen",
 ):
     """
     Function to read files and output structures.json
@@ -103,15 +109,32 @@ def ccs_fetch(
     -------
         To be added.
     """
+    file_path = Path(DFT_DB)
+    if not file_path.exists():
+        print(f"Error: The file '{file_path}' does not exist.")
+        sys.exit(1)
+    
     DFT_DB = db.connect(DFT_DB)
 
     if mode == "CCS":
         REF_DB = DFT_DB
 
     if mode == "CCS+Q":
-        from pymatgen.core import Lattice, Structure
-        from pymatgen.analysis import ewald
-
+        if q_type == "pymatgen":
+            from pymatgen.core import Lattice, Structure
+            from pymatgen.analysis import ewald
+        if q_type == "lammps":    
+            from ase.calculators.lammpsrun import LAMMPS
+            # LAMMPS potential parameters
+            lammps_parameters = {
+                "atom_style": "charge",
+                "pair_style": "coul/long 12.0",  # Coulombic interactions with cutoff
+                "pair_coeff": ["* *"],           # Default coefficients for charged particles
+                "kspace_style": "ewald 1.0e-12", # Long-range electrostatics using PPPM
+            }
+            #ES_calc = LAMMPS(parameters=lammps_parameters)
+            ES_calc = LAMMPS()
+            ES_calc.set(**lammps_parameters)
         REF_DB = DFT_DB
 
     if mode == "DFTB":
@@ -130,7 +153,8 @@ def ccs_fetch(
         mask = len(REF_DB) * [True]
 
     counter = -1
-    d = OrderedDict()
+    d  = OrderedDict()
+    ds = OrderedDict()
     cf = OrderedDict()
 
     for row in tqdm(
@@ -141,43 +165,81 @@ def ccs_fetch(
     ):
         counter = counter + 1
         if mask[counter]:
+            EREF=None  
+            FREF=None
+            SREF=None
+          
             struct = row.toatoms()
             ce = OrderedDict()
+            cs = OrderedDict()
+            try:    
+                EREF = row.energy
+            except KeyError:
+                raise KeyError(f"Energy key for configuration {row.id} not found.")
+            ce["energy_dft"]=EREF
             if include_forces:
-                FREF = row.forces
-            EREF = row.energy
-            ce["energy_dft"] = EREF
+                try:
+                    FREF = row.forces
+                except:
+                    pass
+            if include_stresses:
+                try:
+                    SREF= ( voigt_6_to_full_3x3_stress(row.stress)).tolist()
+                except:
+                    pass
             if mode == "DFTB":
                 EDFT = DFT_DB.get("id=" + str(row.id)).energy
-                if include_forces:
+                if include_forces and FREF is not None:
                     FDFT = DFT_DB.get("id=" + str(row.id)).forces
+                if include_stresses and SREF is not None:
+                    SDFT = (   voigt_6_to_full_3x3_stress( DFT_DB.get("id=" + str(row.id)).stress)).tolist()
                 ce["energy_dft"] = EDFT
                 ce["energy_dftb"] = EREF
             dict_species = defaultdict(int)
             struct.charges = []
+            charges=[]
             for elem in struct.get_chemical_symbols():
                 dict_species[elem] += 1
                 if mode == "CCS+Q":
-                    struct.charges.append(charge_dict[elem])
+                    try:
+                        charge_dict[elem]
+                    except KeyError:
+                        raise KeyError(f"Missing charge information for element {elem}.")
+                        sys.exit()
+                    charges.append(charge_dict[elem])
+
             dict_species = {
                 key: value for key, value in sorted(dict_species.items())
             }
             atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
             if mode == "CCS+Q":
-                lattice = Lattice(struct.get_cell())
-                coords = struct.get_scaled_positions()
-                ew_struct = Structure(
-                    lattice,
-                    struct.get_chemical_symbols(),
-                    coords,
-                    site_properties={"charge": struct.charges},
-                )
-                Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
-                ES_energy = Ew.total_energy
-                ES_forces = Ew.forces
-                ce["ewald"] = ES_energy
+                if q_type == "pymatgen":
+                    lattice = Lattice(struct.get_cell())
+                    coords = struct.get_scaled_positions()
+                    ew_struct = Structure(
+                        lattice,
+                        struct.get_chemical_symbols(),
+                        coords,
+                        site_properties={"charge": struct.charges},
+                    )
+                    Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
+                    ES_energy = Ew.total_energy
+                    if include_forces and FREF is not None:
+                        ES_forces = Ew.forces
+                    if include_stresses:
+                        SREF=None
+                        print("Stresses not supported in pymatgen Ewald routine.")
+                if q_type == "lammps":    
+                    ES_struct=struct.copy()
+                    ES_struct.set_initial_charges(charges)
+                    ES_struct.calc=ES_calc
+                    ce["ewald"] = ES_struct.get_potential_energy()
+                    if include_forces and FREF is not None:
+                        ES_forces = ES_struct.get_forces()
+                    if include_stresses and SREF is not None:
+                        ES_stress= ( voigt_6_to_full_3x3_stress(  ES_struct.get_stress()) ).tolist()
 
-            if include_forces:
+            if include_forces and FREF is not None:
                 for i in range(len(struct)):
                     if mode == "CCS":
                         cf["F" + str(counter) + "_" + str(i)] = {
@@ -194,41 +256,76 @@ def ccs_fetch(
                             "force_ewald": list(ES_forces[i, :]),
                         }
 
-            ce["atoms"] = dict_species
+            ce["atoms"]  = dict_species
+
+            if include_stresses and SREF is not None:
+                cs["volume"] = struct.get_volume()
+                if mode == "CCS":
+                    cs["stress_dft"] = SREF
+                if mode == "CCS+Q":
+                    cs["stress_dft"] = SREF
+                    cs["stress_ewald"]=ES_stress
+                if mode == "DFTB":
+                    cs["stress_dftb"]= SREF
+                    cs["stress_dft"] = SDFT
+
             for x, y in atom_pair:
                 pair_distances, forces = pair_dist(struct, R_c, x, y, counter)
                 ce[str(x) + "-" + str(y)] = pair_distances
+                if include_stresses and SREF is not None:
+                    cs[str(x) + "-" + str(y)]=[]
                 for i in range(len(struct)):
-                    try:
-                        cf["F" + str(counter) + "_" + str(i)][
-                            str(x) + "-" + str(y)
-                        ] = forces["F" + str(counter) + "_" + str(i)]
-                    except:
-                        pass
-                # FORCES SHOULD BE DOUBLE COUNTED!
-                if x != y:
-                    pair_distances, forces = pair_dist(
-                        struct, R_c, y, x, counter
-                    )
-                    for i in range(len(struct)):
+                    if include_forces and FREF is not None:
                         try:
                             cf["F" + str(counter) + "_" + str(i)][
                                 str(x) + "-" + str(y)
                             ] = forces["F" + str(counter) + "_" + str(i)]
                         except:
                             pass
+                    if include_stresses and SREF is not None:
+                        try:
+                            cs[str(x) + "-" + str(y)].extend( forces["F" + str(counter) + "_" + str(i)])
+                        except:
+                            pass
+                # FORCES SHOULD BE DOUBLE COUNTED!
+                if x != y:
+                    pair_distances, forces = pair_dist(
+                        struct, R_c, y, x, counter
+                    )
+                    for i in range(len(struct)):
+                        if include_forces and FREF is not None:
+                            try:
+                                cf["F" + str(counter) + "_" + str(i)][
+                                    str(x) + "-" + str(y)
+                                ] = forces["F" + str(counter) + "_" + str(i)]
+                            except:
+                                pass
+                        if include_stresses and SREF is not None:
+                            try:
+                                cs[str(x) + "-" + str(y)].extend( forces["F" + str(counter) + "_" + str(i)])
+                            except:
+                                pass
 
             d["S" + str(counter + 1)] = ce
+            if include_stresses and SREF is not None:
+                ds["S" + str(counter + 1)] = cs
+            
     st = OrderedDict()
     st["energies"] = d
     if include_forces:
         st["forces"] = cf
-    with open("structures.json", "w") as f:
-        json.dump(st, f, indent=8)
-
+    if include_stresses:
+        st["stresses"] = ds
+    if write_json:    
+        with open("structures.json", "w") as f:
+            json.dump(st, f, indent=8)
+    else:
+        return st
 
 def main():
     import argparse
+
+    terminal_header("C3S : Fetch")
 
     parser = argparse.ArgumentParser(description="CCS fetching tool")
     parser.add_argument(
@@ -269,10 +366,7 @@ def main():
         type=int,
         metavar="",
         default=-1,
-        help="Number of structures to include",
-    )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
+        help="Number of structures to include.",
     )
     parser.add_argument(
         "-chg",
@@ -289,16 +383,6 @@ def main():
 
     ccs_fetch(**vars(args))
 
-    terminal_header("CCS:Fetch")
-
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print(txt)
-        print("")
-    except:
-        pass
 
 
 if __name__ == "__main__":

@@ -185,43 +185,123 @@ def _write(elem1, elem2, CCS_params, f_Buck, f_LJ, f_Mor, f_Ped):
         plt.show()
 
 
-def write_LAMMPS(jsonfile, scale=50, format="lammps", rmin=0.5):
+def write_LAMMPS(jsonfile, form="uf3",prefix="CCS",include_head=False):
     json_file = open(jsonfile)
     CCS_params = json.load(json_file)
     tags = {}
-    filename = "CCS." + format
-    with open(filename, "w") as f:
-        for pair in CCS_params["Two_body"].keys():
-            elem1, elem2 = pair.split("-")
-            tb = spline_table(elem1, elem2, CCS_params)
-            r_min = CCS_params["Two_body"][pair]["r_min"]
-            dr = CCS_params["Two_body"][pair]["dr"] / scale
-            if rmin < r_min:
-                dr_steps = int(np.floor((r_min - rmin) / dr))
-                r_min -= dr_steps * dr
+    filename = "CCS." + form
+    if form == 'table':
 
-            r = np.arange(r_min, tb.Rcut + dr, dr)
-            tags[pair] = dict(
-                {"Rmin": r_min, "Rcut": tb.Rcut, "dr": dr, "N": len(r)}
-            )
-            f.write("\n {}".format(pair))
-            f.write("\n N {} R {} {} \n".format(len(r), r_min, tb.Rcut))
-            [
-                f.write(
-                    "\n {} {} {} {}".format(
-                        index + 1,
-                        elem,
-                        tb.eval_energy(elem),
-                        tb.eval_force(elem),
+        import math
+        dr=0.005
+        with open(filename, "w") as f:
+            rmin=np.inf
+            rcut=0.0
+            for pair in CCS_params["Two_body"].keys():
+                if CCS_params["Two_body"][pair]["r_min"] < rmin:
+                    rmin=CCS_params["Two_body"][pair]["r_min"]
+                if CCS_params["Two_body"][pair]["r_cut"] > rcut:
+                    rcut=CCS_params["Two_body"][pair]["r_cut"]
+            if include_head:
+                rmin=0.0
+            rmin=math.floor(rmin / dr) * dr
+            rcut=math.ceil(rcut / dr) * dr
+            for pair in CCS_params["Two_body"].keys():
+                elem1, elem2 = pair.split("-")
+                tb = spline_table(elem1, elem2, CCS_params)
+                r = np.arange(rmin, rcut+dr , dr)
+                f.write("\n {}".format(pair))
+                f.write("\n N {} R {} {} \n".format(len(r), rmin, rcut))
+                [
+                    f.write(
+                        "\n {} {:.12f} {} {}".format(
+                            index + 1,
+                            elem,
+                            tb.eval_energy(elem),
+                            tb.eval_force(elem),
+                        )
                     )
-                )
-                for index, elem in enumerate(r)
-            ]
+                    for index, elem in enumerate(r)
+                ]
 
-    return tags
+        print("# Specifications for lammps input.")
+        element_list={}
+        for i,elem in enumerate( CCS_params["One_body"] ):
+            print(f"group {elem}  type {i+1}")
+            element_list[elem]=i+1
+        if "Charges"  in CCS_params: 
+            print("")
+            for q in  CCS_params["Charges"]:
+                print("set type {} charge {}".format(element_list[q],  CCS_params["Charges"][q]))
+            print("")
+            print("kspace_style ewald 1e-12")
+            print("")
+            print("pair_style   hybrid/overlay coul/long {:.6f} table spline {} ewald".format(rcut,len(r)))
+            print("pair_coeff   *    *    coul/long")
+            for pair in CCS_params["Two_body"].keys():
+                elem1, elem2 = pair.split("-")
+                print("pair_coeff    {} {} table {} {} {:.6f}".format(element_list[elem1],element_list[elem2],filename,pair,rcut  ))
+        else:
+            print("")
+            print("pair_style table spline")
+            for pair in CCS_params["Two_body"].keys():
+                elem1, elem2 = pair.split("-")
+                print("pair_coeff    {} {} {} {} {:.6f}".format(element_list[elem1],element_list[elem2],filename,pair,rcut  ))
 
 
-def write_GULP(jsonfile, scale=50, format="GULP"):
+    if form == 'uf3':
+        from scipy.interpolate import make_interp_spline
+        with open(filename, "w") as f:
+            for pair in CCS_params["Two_body"].keys():
+                f.write("#UF3 POT UNITS: metal DATE: today AUTHOR: Me CITATION: please\n")
+                elem1, elem2 = pair.split("-")
+                tb = spline_table(elem1, elem2, CCS_params)
+                rmin=CCS_params["Two_body"][pair]["r_min"]
+                rmax=CCS_params["Two_body"][pair]["r_cut"]
+                dr=CCS_params["Two_body"][pair]["dr"]
+                r = np.arange(rmin,rmax+dr , dr)
+                c_pts = [0.5*tb.eval_energy(elem) for elem in r] #0.5 to compensate for double counting
+                bsplines=make_interp_spline(r, c_pts, k=3,bc_type=([(1,-0.5*tb.eval_force(r[0]))],[(1,0.0)]))
+                r=bsplines.t
+                coefs=bsplines.c
+                f.write("2B {} {} 0 3 nk\n".format(elem1,elem2))
+                f.write("{:.6f} {} \n".format(r[-1],len(r)))
+                [f.write("{:.6f} ".format(r_val)) for r_val in r]
+                f.write("\n")
+                f.write("{} \n".format(len(coefs)))
+                [f.write(" {:.12e}".format(co)) for co in coefs]
+                f.write("\n#\n")
+        print("# Specifications for lammps input.")
+        element_list={}
+        for i,elem in enumerate( CCS_params["One_body"] ):
+            print(f"group {elem}  type {i+1}")
+            element_list[elem]=i+1
+        reversed_element_list = {v: k for k, v in element_list.items()}
+        if "Charges" in  CCS_params: 
+            print("")
+            for q in  CCS_params["Charges"]:
+                print("set type {} charge {}".format(element_list[q],  CCS_params["Charges"][q]))
+            print("")
+            print("kspace_style ewald 1e-12")
+            print("")
+            print("pair_style   hybrid/overlay coul/long 12.0 uf3 2")
+            print("pair_coeff   * * coul/long")
+            print("pair_coeff   * * uf3 {} ".format(filename),end="")
+            for i in range(len(element_list)):
+                print(" {}".format(reversed_element_list[i+1]),end="")
+            print("")
+        else:
+            print("")
+            print("pair_style uf3 2 ")
+            print("pair_coeff   * * {} ".format(filename),end="")
+            for i in range(len(element_list)):
+                print(" {}".format(reversed_element_list[i+1]),end="")
+            print("")
+
+
+
+
+def write_GULP(jsonfile, form='GULP',include_head=False):
     """
     spline <cubic> <reverse> <intra/inter> <bond/x12/x13/x14/mol/o14/g14> <kcal/kjmol> <type_of_bond>
     atom1 atom2 <shift> <rmin> rmax <1*flag>
@@ -231,19 +311,21 @@ def write_GULP(jsonfile, scale=50, format="GULP"):
     json_file = open(jsonfile)
     CCS_params = json.load(json_file)
     tags = {}
-    filename = "CCS." + format
+    filename = "CCS." + form
     with open(filename, "w") as f:
+        dr=0.005
         for pair in CCS_params["Two_body"].keys():
             elem1, elem2 = pair.split("-")
             tb = spline_table(elem1, elem2, CCS_params)
-            rmin = np.min([0.5, CCS_params["Two_body"][pair]["r_min"]])
-            dr = CCS_params["Two_body"][pair]["dr"] / scale
-            r = np.arange(rmin, tb.Rcut + dr, dr)
+            rmin = CCS_params["Two_body"][pair]["r_min"]
+            if include_head:
+                rmin=0.0
+            r = np.arange(rmin, tb.Rcut + 2*dr, dr)
             tags[pair] = dict(
                 {"Rmin": rmin, "Rcut": tb.Rcut, "dr": dr, "N": len(r)}
             )
             f.write("\n spline reverse")
-            f.write("\n {} {} 0 {} {}".format(elem1, elem2, rmin, tb.Rcut + dr))
+            f.write("\n {} {} 0 {} {}".format(elem1, elem2, rmin, tb.Rcut + 2*dr))
             [
                 f.write("\n {} {}".format(elem, tb.eval_energy(elem)))
                 for elem in r
@@ -252,73 +334,99 @@ def write_GULP(jsonfile, scale=50, format="GULP"):
     return tags
 
 
-def write_FF(CCS_params_file):
-    with open(CCS_params_file, "r") as f:
-        CCS_params = json.load(f)
+def ccs_export_FF(CCS_params=None,form="lammps_table", include_head=False):
 
-    print("Writing LAMMPS and GULP splines.")
-    write_LAMMPS(CCS_params_file)
-    write_GULP(CCS_params_file)
+    if form == "lammps_table":
+        write_LAMMPS(CCS_params,form="table",include_head=include_head)
 
-    f_Buck = open("Buckingham.dat", "w")
-    f_LJ = open("Lennard_Jones.dat", "w")
-    f_Mor = open("Morse.dat", "w")
-    f_Ped = open("Pedone.dat", "w")
+    if form == "lammps_uf3":
+        write_LAMMPS(CCS_params,form="uf3")
 
-    print(
-        "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format(
-            "Element", "Element", "A", "B", "C"
-        ),
-        file=f_Buck,
-    )
-    print(
-        "{:^8s} {:^8s} {:^20s} {:^20s}\n".format(
-            "Element", "Element", "epsilon", "sigma"
-        ),
-        file=f_LJ,
-    )
-    print(
-        "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format(
-            "Element", "Element", "D_e", "a", "r_e"
-        ),
-        file=f_Mor,
-    )
-    print(
-        "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s} {:^20s}\n".format(
-            "Element", "Element", "D_e", "a", "r_e", "C"
-        ),
-        file=f_Ped,
-    )
+    if form == "gulp_table":
+        write_GULP(CCS_params,form="GULP",include_head=include_head)
 
-    for pair in CCS_params["Two_body"]:
-        elem = pair.split("-")
-        _write(
-            elem[0],
-            elem[1],
-            CCS_params,
-            f_Buck=f_Buck,
-            f_LJ=f_LJ,
-            f_Mor=f_Mor,
-            f_Ped=f_Ped,
+    if form == "analytic":
+        with open(CCS_params, "r") as f:
+            CCS_params = json.load(f)
+        f_Buck = open("Buckingham.dat", "w")
+        f_LJ = open("Lennard_Jones.dat", "w")
+        f_Mor = open("Morse.dat", "w")
+        f_Ped = open("Pedone.dat", "w")
+
+        print(
+            "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format(
+                "Element", "Element", "A", "B", "C"
+            ),
+            file=f_Buck,
         )
+        print(
+            "{:^8s} {:^8s} {:^20s} {:^20s}\n".format(
+                "Element", "Element", "epsilon", "sigma"
+            ),
+            file=f_LJ,
+        )
+        print(
+            "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s}\n".format(
+                "Element", "Element", "D_e", "a", "r_e"
+            ),
+            file=f_Mor,
+        )
+        print(
+            "{:^8s} {:^8s} {:^20s} {:^20s} {:^20s} {:^20s}\n".format(
+                "Element", "Element", "D_e", "a", "r_e", "C"
+            ),
+            file=f_Ped,
+        )
+
+        for pair in CCS_params["Two_body"]:
+            elem = pair.split("-")
+            _write(
+                elem[0],
+                elem[1],
+                CCS_params,
+                f_Buck=f_Buck,
+                f_LJ=f_LJ,
+                f_Mor=f_Mor,
+                f_Ped=f_Ped,
+            )
 
 
 def main():
-    terminal_header("CCS:export FF params")
+    import argparse
 
-    try:
-        CCS_params_file = sys.argv[1]
-    except:
-        print("Please provide CCS params-file as first argument.")
-        exit()
+    terminal_header("C3S : export FF params")
 
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-" * c
-    print(txt)
-    print("")
+    parser = argparse.ArgumentParser(description="C3S exporting tool")
+    parser.add_argument(
+        "-f",
+        "--form",
+        type=str,
+        metavar="",
+        default="lammps_table",
+        help="Format. Availble option: lammps_uf3, lammps_table, gulp_table, analytic",
+    )
+    parser.add_argument(
+        "-head",
+        "--include_head",
+        type=bool,
+        metavar="",
+        default=False,
+        help="Include exponential head.",
+    )
+    parser.add_argument(
+        "-p",
+        "--CCS_params",
+        type=str,
+        metavar="",
+        default="CCS_params.json",
+        help="CCS_params.json file",
+    )
 
-    write_FF(CCS_params_file)
+
+    args = parser.parse_args()
+
+    ccs_export_FF(**vars(args))
+
 
 
 if __name__ == "__main__":

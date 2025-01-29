@@ -157,9 +157,9 @@ def ccs_build_db(
 def main():
     import argparse
 
-    terminal_header("CCS:Build DB")
+    terminal_header("C3S : Build DB")
 
-    parser = argparse.ArgumentParser(description="CCS fetching tool")
+    parser = argparse.ArgumentParser(description="C3S fetching tool")
     parser.add_argument(
         "-m",
         "--mode",
@@ -175,6 +175,14 @@ def main():
         metavar="",
         default="DFT.db",
         help="Name of DFT reference data-base",
+    )
+    parser.add_argument(
+        "-l",
+        "--file_list",
+        type=str,
+        metavar="",
+        default="list",
+        help="list of paths for reference data",
     )
     parser.add_argument(
         "-dd",
@@ -200,53 +208,10 @@ def main():
         default=0.0001,
         help="minimum energy difference between steps extracted using option -g",
     )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Verbose output"
-    )
 
     args = parser.parse_args()
 
     ccs_build_db(**vars(args))
-
-    print("    USAGE:  ccs_build_db MODE [...] ")
-    print(" ")
-    print("    The following modes and inputs are supported:")
-    print("")
-    print("        CCS:  file_list(string) DFT.db(string) greedy(bool)")
-    print("        DFTB: file_list(string) DFT.db(string) DFTB.db(string)")
-    print(" ")
-
-    assert sys.argv[1] in ["CCS", "CCS+Q", "DFTB"], "Mode not supported."
-
-    mode = sys.argv[1]
-    file_list = sys.argv[2]
-    DFT_data = sys.argv[3]
-    print("    Mode: ", mode)
-    if mode == "CCS" or mode == "CCS+Q":
-        greedy = bool(sys.argv[4])
-        print("    DFT data base: ", DFT_data)
-        print("    Greedy mode: ", greedy)
-        print("")
-
-        ccs_build_db(mode, DFT_DB=DFT_data, file_list=file_list, greedy=greedy)
-    if mode == "DFTB":
-        DFTB_data = sys.argv[4]
-        print("    DFT data base: ", DFT_data)
-        print("    DFTB data base: ", DFTB_data)
-        print("")
-
-        ccs_build_db(
-            mode, DFT_DB=DFT_data, DFTB_DB=DFTB_data, file_list=file_list
-        )
-
-    try:
-        size = os.get_terminal_size()
-        c = size.columns
-        txt = "-" * c
-        print(txt)
-        print("")
-    except:
-        pass
 
 
 if __name__ == "__main__":

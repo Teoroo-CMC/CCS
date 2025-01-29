@@ -97,19 +97,13 @@ def write_dftb_spline(CCS_params_file):
 
 
 def main():
-    terminal_header("CCS:export sk-table")
+    terminal_header("C3S:export sk-table")
 
     try:
         CCS_params_file = sys.argv[1]
     except:
         print("Please provide CCS params-file as first argument.")
         exit()
-
-    size = os.get_terminal_size()
-    c = size.columns
-    txt = "-" * c
-    print(txt)
-    print("")
 
     write_dftb_spline(CCS_params_file)
 

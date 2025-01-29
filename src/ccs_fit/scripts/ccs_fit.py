@@ -35,19 +35,11 @@ def main(cmdlineargs=None):
 
     """
 
-    terminal_header("CCS:Fit")
+    terminal_header("C3S : Fit")
 
     args = parse_cmdline_args(cmdlineargs)
     ccs_fit(args)
 
-    size = os.get_terminal_size()
-    try:
-        c = size.columns
-        txt = "-" * c
-        print(txt)
-        print("")
-    except:
-        pass
 
 
 def parse_cmdline_args(cmdlineargs=None):
