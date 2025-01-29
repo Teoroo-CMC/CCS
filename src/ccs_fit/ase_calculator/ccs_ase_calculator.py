@@ -12,6 +12,7 @@ import itertools as it
 from collections import defaultdict
 from ase.calculators.calculator import Calculator, all_changes
 from ase.constraints import full_3x3_to_voigt_6_stress
+from ase.calculators.lammpsrun import LAMMPS
 
 try:
     from pymatgen.core import Lattice, Structure
@@ -95,22 +96,45 @@ class spline_table:
             return val
 
 
-def ew(atoms, q):
+def ew(atoms, q,lammps=False):
     #   structure = AseAtomsAdaptor.get_structure(atoms)
-    atoms.charges = []
-    for a in atoms.get_chemical_symbols():
-        atoms.charges.append(q[a])
-    lattice = Lattice(atoms.get_cell())
-    coords = atoms.get_scaled_positions()
-    struct = Structure(
-        lattice,
-        atoms.get_chemical_symbols(),
-        coords,
-        site_properties={"charge": atoms.charges},
-    )
-    Ew = ewald.EwaldSummation(struct, compute_forces=True)
-    return Ew
+    if lammps == False:
+        atoms.charges = []
+        for a in atoms.get_chemical_symbols():
+            atoms.charges.append(q[a])
+        lattice = Lattice(atoms.get_cell())
+        coords = atoms.get_scaled_positions()
+        struct = Structure(
+            lattice,
+            atoms.get_chemical_symbols(),
+            coords,
+            site_properties={"charge": atoms.charges},
+        )
+        Ew = ewald.EwaldSummation(struct, compute_forces=True)
+        return Ew.total_energy,Ew.forces,None
 
+    if lammps == True:
+        Ew={}
+        ES_atoms=atoms.copy()
+        charges = []
+        for a in atoms.get_chemical_symbols():
+            charges.append(q[a])
+        ES_atoms.set_initial_charges(charges)
+
+        # LAMMPS potential parameters
+        lammps_parameters = {
+            "atom_style": "charge",
+            "pair_style": "coul/long 12.0",  # Coulombic interactions with cutoff
+            "pair_coeff": ["* *"],           # Default coefficients for charged particles
+            "kspace_style": "ewald 1.0e-12", # Long-range electrostatics using PPPM
+        }
+        ES_calc = LAMMPS()
+        ES_calc.set(**lammps_parameters)
+        ES_atoms.calc=ES_calc
+        ES_energy=ES_atoms.get_potential_energy()
+        ES_forces=ES_atoms.get_forces()
+        ES_stress=  ES_atoms.get_stress()
+        return ES_energy,ES_forces,ES_stress
 
 class CCS(Calculator):
     """
@@ -125,22 +149,20 @@ class CCS(Calculator):
     def __init__(
         self,
         CCS_params=None,
-        charge=None,
-        q=None,
-        charge_scaling=False,
+        q_type="pymatgen",
         **kwargs
     ):
         self.rc = 7.0  # SET THIS MAX OF ANY PAIR
         self.exp = None
-        self.charge = charge
         self.species = None
         self.pair = None
-        self.q = copy.deepcopy(q)
+        self.q_type=q_type
+        try:
+            self.q = CCS_params["Charges"]
+        except:
+            self.q = None
         self.CCS_params = CCS_params
         self.eps = CCS_params["One_body"]
-        if charge_scaling:
-            for key in self.q:
-                self.q[key] *= self.CCS_params["Charge scaling factor"]
 
         Calculator.__init__(self, **kwargs)
 
@@ -169,7 +191,7 @@ class CCS(Calculator):
 
         energy = 0.0
         forces = np.zeros((natoms, 3))
-        stresses = np.zeros((natoms, 3, 3))
+        stresses = np.zeros((natoms,3,3))
 
         # ONE-BODY ENERGY
         elems = it.combinations_with_replacement(dict_species.keys(), 1)
@@ -229,74 +251,30 @@ class CCS(Calculator):
                             / norm_dist[id2]
                         )
                         cur_dist = dist[id2, :]
-                        cur_stress = 0.5 * np.outer(cur_f, cur_dist)
+                        cur_stress = -0.5 * np.outer(cur_f, cur_dist) # IS SIGN CORRECT! 
                         # print(cur_f, cur_dist, cur_stress)
-                        stresses[id, :, :] += cur_stress
+                        stresses[id] += cur_stress
 
             energy += 0.5 * sum(map(self.pair[x + y].eval_energy, xy_distances))
 
-        if self.charge:
-            ewa = ew(self.atoms, self.q)
-            energy = energy + ewa.total_energy
-            forces = forces + ewa.forces
+        if self.q is not None:
+            if self.q_type == "lammps":
+                ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q,lammps=True)
+            if self.q_type == "pymatgen":
+                ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q)
+            energy = energy + ewa_energy
+            forces = forces + ewa_forces
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy
         self.results["forces"] = forces
 
-        if self.atoms.number_of_lattice_vectors == 3:
+        if self.atoms.cell.rank == 3:
             stresses = full_3x3_to_voigt_6_stress(stresses)
-            self.results["stress"] = (
-                stresses.sum(axis=0) / self.atoms.get_volume()
-            )
-            self.results["stresses"] = stresses / self.atoms.get_volume()
+            if self.q is not None:
+                if ewa_stress is not None:
+                    self.results['stress'] = stresses.sum(axis=0) / self.atoms.get_volume()+ewa_stress
+            else:        
+                self.results['stress'] = stresses.sum(axis=0) / self.atoms.get_volume()
+            #self.results['stresses'] = stresses / self.atoms.get_volume()
 
-        # natoms = len(self.atoms)
-        # if 'numbers' in system_changes:
-        #     self.nl = NeighborList(
-        #         [self.rc / 2] * natoms, bothways=True, self_interaction=False)
-
-        # self.nl.update(self.atoms)
-
-        # positions = self.atoms.positions
-        # cell = self.atoms.cell
-
-        # for at in range(natoms):
-        #     elem1 = self.atoms.get_chemical_symbols()[at]
-        #     if self.eps is not None:
-        #         try:
-        #             energy_eps = energy_eps + self.eps[elem1]
-        #         except:
-        #             pass
-        #     indices, offsets = self.nl.get_neighbors(at)
-        #     f_tot = np.zeros((1, 3))
-        #     s_tot = np.zeros((3, 3))
-
-        #     for i, offset in zip(indices, offsets):
-        #         elem2 = self.atoms.get_chemical_symbols()[i]
-        #         d_vector = positions[i] + np.dot(offset, cell) - positions[at]
-        #         d = np.linalg.norm(d_vector)
-        #         energy += self.pair[elem1+elem2].eval_energy(d)
-        #         # check this
-        #         f = self.pair[elem1+elem2].eval_force(d)*(d_vector/d)
-        #         s_tot += 0.5 * np.outer(f, d_vector)
-        #         f_tot += f
-        #     forces[at] = f_tot
-        #     stresses[at] = s_tot
-        # energy = 0.5*energy  # Only bothways true
-
-        # # IF WE HAVE A LATTICE DEFINE STRESS
-        # if self.atoms.number_of_lattice_vectors == 3:
-        #     stresses = full_3x3_to_voigt_6_stress(stresses)
-        #     self.results['stress'] = (
-        #         stresses.sum(axis=0) / self.atoms.get_volume()
-        #     )
-        #     self.results['stresses'] = stresses / self.atoms.get_volume()
-
-        # energy = energy + energy_eps
-        # if self.charge:
-        #     ewa = ew(self.atoms, self.q)
-        #     energy_ccs = energy
-        #     energy = energy + ewa.total_energy
-        #     forces_ccs = forces
-        #     forces = forces + ewa.forces
