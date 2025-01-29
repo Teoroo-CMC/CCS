@@ -28,15 +28,17 @@ class Twobody:
         name,
         dismat,
         distmat_forces,
+        distmat_stresses,
+        volume_stresses,
         Rcut,
-        range_center=None,
-        range_width=None,
-        search_points=None,
-        Swtype="rep",
+        RangeCenter=None,
+        RangeWidth=None,
+        SearchPoints=None,
+        SwType="rep",
         Rmin=None,
         Resolution=0.1,
-        const_type="mono",
-        search_mode="full",
+        ConstType="mono",
+        SearchMode="full",
     ):
         """
         Constructs a Twobody object.
@@ -69,34 +71,38 @@ class Twobody:
         self.Rcut = self.Rmin + (self.N - 1) * self.res
         self.rn_full = [(i) * self.res + self.Rmin for i in range(self.N)]
         self.rn = self.rn_full
-        if not range_center:
+        if not RangeCenter:
             self.range_center = (Rmin + self.Rcut) / 2
         else:
-            self.range_center = range_center
-        if not range_width:
+            self.range_center = RangeCenter
+        if not RangeWidth:
             self.range_width = self.Rcut - Rmin
         else:
-            self.range_width = range_width
-        if not search_points:
+            self.range_width = RangeWidth
+        if not SearchPoints:
             self.search_points = np.arange(Rmin, self.Rcut, self.res)
         else:
-            self.search_points = search_points
-        self.Swtype = Swtype
-        self.const_type = const_type
-        self.search_mode = search_mode
-        self.range_center = range_center
-        self.range_width = range_width
-        self.search_points = search_points
+            self.search_points = SearchPoints
+        self.swtype = SwType
+        self.const_type = ConstType
+        self.search_mode = SearchMode
+        self.range_center = RangeCenter
+        self.range_width = RangeWidth
+        self.search_points = SearchPoints
         self.dismat = dismat
         self.Nconfs = np.shape(dismat)[0]
         self.distmat_forces = distmat_forces
         self.Nconfs_forces = np.shape(distmat_forces)[0]
+        self.distmat_stresses = distmat_stresses
+        self.Nconfs_stresses = np.shape(distmat_stresses)[0]
+        self.volume_stresses = volume_stresses
         self.C, self.D, self.B, self.A = self.spline_construction()
         self.vv, self.indices = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z, self.indices = self.get_v_forces(
             self.indices
         )
+        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy, self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz,self.indices= self.get_v_stresses(self.indices)
         self.curvatures = None
         self.splcoeffs = None
         self.expcoeffs = None
@@ -115,6 +121,7 @@ class Twobody:
         self.vv, _ = self.get_v()
         self.const = self.get_const()
         self.fvv_x, self.fvv_y, self.fvv_z, _ = self.get_v_forces([])
+        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy,self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz,_ = self.get_v_stresses([])
         if self.N_full > self.N:
             print(
                 f"    Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. "
@@ -282,6 +289,71 @@ class Twobody:
             vv_y[config, :] = uu_y
             vv_z[config, :] = uu_z
         return vv_x, vv_y, vv_z, list(set(indices))
+
+    def get_v_stresses(self, indices):
+        """
+        Constructs the v matrix.
+
+        Returns:
+
+            ndarray: The v matrix for a pair.
+
+        """
+        vv_xx = np.zeros((self.Nconfs_stresses, self.N))
+        vv_xy = np.zeros((self.Nconfs_stresses, self.N))
+        vv_xz = np.zeros((self.Nconfs_stresses, self.N))
+        vv_yx = np.zeros((self.Nconfs_stresses, self.N))
+        vv_yy = np.zeros((self.Nconfs_stresses, self.N))
+        vv_yz = np.zeros((self.Nconfs_stresses, self.N))
+        vv_zx = np.zeros((self.Nconfs_stresses, self.N))
+        vv_zy = np.zeros((self.Nconfs_stresses, self.N))
+        vv_zz = np.zeros((self.Nconfs_stresses, self.N))
+
+        for config in range(self.Nconfs_stresses):
+            uu_xx = 0
+            uu_xy = 0
+            uu_xz = 0
+            uu_yx = 0
+            uu_yy = 0
+            uu_yz = 0
+            uu_zx = 0
+            uu_zy = 0
+            uu_zz = 0
+            for rv in self.distmat_stresses[config, :]:
+                rr = np.linalg.norm(rv)
+                if rr > 0 and rr < self.Rcut:
+                    index = bisect.bisect_left(self.rn, rr)
+                    delta = rr - self.rn[index]
+                    indices.append(index)
+                    # INDEX IS SHIFTED IN A,B,C,D
+                    # THIS IS BECAUSE OF THE A,B,C, and D matrix being (N-1)xN
+                    # NOTE THAT FORCE IS NOT NEGATIVE OF DERIVATIVE SINCE
+                    # WE ARE "MOVING" FROM END OF INTERVAL INWARDS!!!
+                    index = index - 1
+                    bb_ind = self.B[index]
+                    dd_ind = self.D[index] * np.power(delta, 2) / 2.0
+                    c_d = self.C[index] * delta
+                    c_force = bb_ind + c_d + dd_ind
+                    uu_xx = uu_xx + 0.5 * rv[0] * c_force * rv[0] / rr
+                    uu_xy = uu_xy + 0.5 * rv[1] * c_force * rv[0] / rr
+                    uu_xz = uu_xz + 0.5 * rv[2] * c_force * rv[0] / rr
+                    uu_yx = uu_yx + 0.5 * rv[0] * c_force * rv[1] / rr
+                    uu_yy = uu_yy + 0.5 * rv[1] * c_force * rv[1] / rr
+                    uu_yz = uu_yz + 0.5 * rv[2] * c_force * rv[1] / rr
+                    uu_zx = uu_zx + 0.5 * rv[0] * c_force * rv[2] / rr
+                    uu_zy = uu_zy + 0.5 * rv[1] * c_force * rv[2] / rr
+                    uu_zz = uu_zz + 0.5 * rv[2] * c_force * rv[2] / rr
+
+            vv_xx[config, :] = uu_xx / self.volume_stresses[config] 
+            vv_xy[config, :] = uu_xy / self.volume_stresses[config] 
+            vv_xz[config, :] = uu_xz / self.volume_stresses[config] 
+            vv_yx[config, :] = uu_yx / self.volume_stresses[config] 
+            vv_yy[config, :] = uu_yy / self.volume_stresses[config] 
+            vv_yz[config, :] = uu_yz / self.volume_stresses[config] 
+            vv_zx[config, :] = uu_zx / self.volume_stresses[config] 
+            vv_zy[config, :] = uu_zy / self.volume_stresses[config] 
+            vv_zz[config, :] = uu_zz / self.volume_stresses[config] 
+        return vv_xx, vv_xy, vv_xz,vv_yx, vv_yy,vv_yz,vv_zx, vv_zy, vv_zz, list(set(indices))
 
     def get_spline_coeffs(self):
         a_values = np.dot(self.A, self.curvatures)

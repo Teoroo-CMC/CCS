@@ -13,14 +13,13 @@ import json
 import copy
 import logging
 from collections import OrderedDict
-
+from ccs_fit.scripts.ccs_fetch import ccs_fetch
 import numpy as np
 import pandas as pd
 
 from ccs_fit.fitting.objective import Objective
 from ccs_fit.fitting.spline_functions import Twobody
 from ccs_fit.fitting.spline_functions import Onebody
-from ccs_fit.data.conversion import Bohr__AA, eV__Hartree
 from ccs_fit.debugging_tools.timing import timing
 
 logger = logging.getLogger(__name__)
@@ -28,12 +27,14 @@ logger = logging.getLogger(__name__)
 
 def prepare_input(filename):
     gen_params = {
-        "interface": None,
-        "ewald_scaling": 1.0,
-        "merging": "False",
-        "do_unconstrained_fit": "False",
-        "do_ridge_regression": "False",
-        "iterative_fit": "False",
+        "Interface": None,
+        "EwaldScaling": 1.0,
+        "FitForces": "False",
+        "FitStresses": "False",
+        "Merging": "False",
+        "DoUnconstrainedFit": "False",
+        "DoRidgeRegression": "False",
+        "IterativeFit": "False",
     }
     struct_data_test = {}
 
@@ -54,77 +55,66 @@ def prepare_input(filename):
     try:
         gen_data = {
             "General": gen_params,
-            "Train-set": "structures.json",
-            "Test-set": "structures.json",
+            "TrainSet": "DFT.db",
+            "Charges" : None,
+            "EwaldRoutine" : "pymatgen",
         }
         gen_data.update(data)
         data = gen_data
     except:
         raise
 
+    
     try:
-        with open(data["Train-set"]) as json_file:
-            struct_data_full = json.load(
-                json_file, object_pairs_hook=OrderedDict
-            )
-            struct_data = struct_data_full["energies"]
-            try:
-                struct_data_forces = struct_data_full["forces"]
-            except:
-                struct_data_forces = {}
-    except FileNotFoundError:
-        logger.critical(
-            " Reference file with pairwise distances (default: structures.json) missing"
-        )
-        raise
-    except ValueError:
-        logger.critical("Reference file not in json format")
-        raise
+        struct_data_full=ccs_fetch(
+                                   mode=data["General"]["Interface"],
+                                   DFT_DB=data["TrainSet"],
+                                   R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
+                                   Ns="all",
+                                   DFTB_DB=None,
+                                   charge_dict=data["Charges"],
+                                   include_forces=data["General"]["FitForces"] == "True",
+                                   include_stresses=data["General"]["FitStresses"] == "True",
+                                   write_json=False,
+                                   q_type=data["EwaldRoutine"]
+                                  )
+        struct_data = struct_data_full["energies"] 
+        try:
+            struct_data_forces = struct_data_full["forces"] 
+        except: 
+            struct_data_forces = {} 
+        try:
+            struct_data_stresses = struct_data_full["stresses"] 
+        except: 
+            struct_data_stresses = {} 
+    except FileNotFoundError: 
+        logger.critical( 
+            " Reference file with pairwise distances (default: structures.json) missing" 
+        ) 
+        raise 
+    except ValueError: 
+        logger.critical("Reference file not in json format") 
+        raise 
 
-    ##### BLOCK TO IMPLEMENT ITERATIVE FITTING!!!!
-
-    if data["General"]["iterative_fit"] == "True":
-        print("Aye, iterative fitting is ONNN, let's go baby!")
-
-        from ccs_fit.fitting.iterative_fitting import prune_dataset
-
-        prune_dataset()
-
-    #####
-
-    if "Test-set" not in data:
-        data["Test-set"] = data["Train-set"]
-    try:
-        with open(data["Test-set"]) as json_file:
-            struct_data_test_full = json.load(
-                json_file, object_pairs_hook=OrderedDict
-            )
-            struct_data_test = struct_data_test_full["energies"]
-            try:
-                struct_data_test_forces = struct_data_test_full["forces"]
-            except:
-                struct_data_test_forces = {}
-    except FileNotFoundError:
-        logger.info("Could not locate Test-set.")
 
     # Make defaults or general setting for Twobody
     if "Twobody" not in data.keys():
-        if "DFTB" in data["General"]["interface"]:
+        if "DFTB" in data["General"]["Interface"]:
             data["Twobody"] = {
                 "Xx-Xx": {
                     "Rcut": 5.0,
                     "Resolution": 0.1,
-                    "Swtype": "rep",
-                    "const_type": "Mono",
+                    "SwType": "rep",
+                    "ConstType": "Mono",
                 }
             }
-        if "CCS" in data["General"]["interface"]:
+        if "CCS" in data["General"]["Interface"]:
             data["Twobody"] = {
                 "Xx-Xx": {
                     "Rcut": 8.0,
                     "Resolution": 0.1,
-                    "Swtype": "sw",
-                    "const_type": "Mono",
+                    "SwType": "sw",
+                    "ConstType": "Mono",
                 }
             }
 
@@ -193,14 +183,15 @@ def prepare_input(filename):
     return (
         data,
         struct_data,
-        struct_data_test,
+        struct_data,
         struct_data_forces,
-        struct_data_test_forces,
+        struct_data_forces,
+        struct_data_stresses,
+        struct_data_stresses,
     )
 
 
-# @timing
-def parse(data, struct_data, struct_data_forces):
+def parse(data, struct_data, struct_data_forces,struct_data_stresses):
     atom_pairs = []
     ref_energies = []
     dftb_energies = []
@@ -209,6 +200,9 @@ def parse(data, struct_data, struct_data_forces):
     ref_forces = []
     dftb_forces = []
     ewald_forces = []
+    ref_stresses = []
+    dftb_stresses = []
+    ewald_stresses = []
 
     # ADD ENERGY-DATA
     for atmpair, values in data["Twobody"].items():
@@ -236,7 +230,7 @@ def parse(data, struct_data, struct_data_forces):
                 except KeyError:
                     logger.critical(" Check Energy key in structure file")
                     raise
-                if "DFTB" in data["General"]["interface"]:
+                if "DFTB" in data["General"]["Interface"]:
                     try:
                         dftb_energies.append(vv["energy_dftb"])
                     except KeyError:
@@ -244,7 +238,7 @@ def parse(data, struct_data, struct_data_forces):
                             "Structure with no key energy_dftb at %s", snum
                         )
                         raise
-                if "Q" in data["General"]["interface"]:
+                if "Q" in data["General"]["Interface"]:
                     try:
                         ewald_energies.append(vv["ewald"])
                     except KeyError:
@@ -252,14 +246,14 @@ def parse(data, struct_data, struct_data_forces):
                         raise
 
         if counter1 == 1:
-            if "DFTB" in data["General"]["interface"]:
+            if "DFTB" in data["General"]["Interface"]:
                 assert len(ref_energies) == len(dftb_energies)
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(dftb_energies))
                 )
                 ref_energies = energies[0] - energies[1]
 
-            if data["General"]["interface"] == "CCS2Q":
+            if data["General"]["Interface"] == "CCS2Q":
                 assert len(ref_energies) == len(ewald_energies)
                 columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
@@ -267,14 +261,14 @@ def parse(data, struct_data, struct_data_forces):
                 )
                 ref_energies = energies[1]
 
-            if data["General"]["interface"] == "CCS+fQ":
+            if data["General"]["Interface"] == "CCS+fQ":
                 assert len(ref_energies) == len(ewald_energies)
                 columns = ["DFT(eV)", "Ewald(eV)", "delta(eV)"]
                 energies = np.vstack(
                     (np.asarray(ref_energies), np.asarray(ewald_energies))
                 )
                 ref_energies = (
-                    energies[0] - data["General"]["ewald_scaling"] * energies[1]
+                    energies[0] - data["General"]["EwaldScaling"] * energies[1]
                 )
 
         try:
@@ -319,7 +313,7 @@ def parse(data, struct_data, struct_data_forces):
                         list_dist_forces.append([0.0, 0.0, 0.0])
 
                 if counter1 == 1:
-                    if data["General"]["interface"] == "CCS":
+                    if data["General"]["Interface"] == "CCS":
                         try:
                             ref_forces.append(ff["force_dft"])
                         except KeyError:
@@ -327,7 +321,7 @@ def parse(data, struct_data, struct_data_forces):
                                 " Check force key in structure file"
                             )
                             raise
-                    if "DFTB" in data["General"]["interface"]:
+                    if "DFTB" in data["General"]["Interface"]:
                         try:
                             ff_tmp = np.array(ff["force_dft"]) - np.array(
                                 ff["force_dftb"]
@@ -338,7 +332,7 @@ def parse(data, struct_data, struct_data_forces):
                                 " Check force key in structure file"
                             )
                             raise
-                    if data["General"]["interface"] == "CCS+Q":
+                    if data["General"]["Interface"] == "CCS+Q":
                         try:
                             ref_forces.append(ff["force_dft"])
                             ewald_forces.append(ff["force_ewald"])
@@ -347,18 +341,18 @@ def parse(data, struct_data, struct_data_forces):
                                 " Check force key in structure file"
                             )
                             raise
-                    if data["General"]["interface"] == "CCS2Q":
+                    if data["General"]["Interface"] == "CCS2Q":
                         try:
                             ref_forces.append(ff["force_ewald"])
                         except KeyError:
                             logger.critical(
                                 " Check force key in structure file"
                             )
-                    if data["General"]["interface"] == "CCS+fQ":
+                    if data["General"]["Interface"] == "CCS+fQ":
                         try:
                             ff_tmp = np.array(ff["force_dft"]) - data[
                                 "General"
-                            ]["ewald_scaling"] * np.array(ff["force_ewald"])
+                            ]["EwaldScaling"] * np.array(ff["force_ewald"])
                             ref_forces.append(ff_tmp)
                         except KeyError:
                             logger.critical(
@@ -370,10 +364,83 @@ def parse(data, struct_data, struct_data_forces):
             dist_mat_forces = dist_mat_forces.fillna(0.0)
             dist_mat_forces = dist_mat_forces.values
 
+            # ADD STRESS
+            list_dist_stresses = []
+            list_vol_stresses  = []
+            for fnum, ff in struct_data_stresses.items():
+                try:
+                    list_vol_stresses.append(ff["volume"])
+                except KeyError:    
+                    logger.critical(
+                        " Check volume key in structure file"
+                    )
+                    raise
+
+                try:
+                    list_dist_stresses.append(ff[atmpair])
+                except KeyError:
+                    try:
+                        list_dist_stresses.append(ff[atmpair_rev])
+                    except KeyError:
+                        list_dist_stresses.append([0.0, 0.0, 0.0])
+
+                if counter1 == 1:
+                    if data["General"]["Interface"] == "CCS":
+                        try:
+                            ref_stresses.append(ff["stress_dft"])
+                        except KeyError:
+                            logger.critical(
+                                " Check stress key in structure file"
+                            )
+                            raise
+                    if "DFTB" in data["General"]["Interface"]:
+                        try:
+                            ff_tmp = np.array(ff["stress_dft"]) - np.array(
+                                ff["stress_dftb"]
+                            )
+                            ref_stresses.append(ff_tmp)
+                        except KeyError:
+                            logger.critical(
+                                " Check stress key in structure file"
+                            )
+                            raise
+                    if data["General"]["Interface"] == "CCS+Q":
+                        try:
+                            ref_stresses.append(ff["stress_dft"])
+                            ewald_stresses.append(ff["stress_ewald"])
+                        except KeyError:
+                            logger.critical(
+                                " Check stress key in structure file"
+                            )
+                            raise
+                    if data["General"]["Interface"] == "CCS2Q":
+                        try:
+                            ref_stresses.append(ff["stress_ewald"])
+                        except KeyError:
+                            logger.critical(
+                                " Check stress key in structure file"
+                            )
+                    if data["General"]["Interface"] == "CCS+fQ":
+                        try:
+                            ff_tmp = np.array(ff["stress_dft"]) - data[
+                                "General"
+                            ]["EwaldScaling"] * np.array(ff["stress_ewald"])
+                            ref_stresses.append(ff_tmp)
+                        except KeyError:
+                            logger.critical(
+                                " Check stress key in structure file"
+                            )
+                            raise
+
+            dist_mat_stresses = pd.DataFrame(list_dist_stresses)
+            dist_mat_stresses = dist_mat_stresses.fillna(0.0)
+            dist_mat_stresses = dist_mat_stresses.values
+            
+
             # APPEND DATA
             if values["Rmin"] < values["Rcut"]:
                 atom_pairs.append(
-                    Twobody(atmpair, dist_mat, dist_mat_forces, **values)
+                    Twobody(atmpair, dist_mat, dist_mat_forces,dist_mat_stresses,list_vol_stresses, **values)
                 )
 
     # ADD ONEBODY DATA
@@ -392,14 +459,18 @@ def parse(data, struct_data, struct_data_forces):
     with open("CCS_input_interpreted.json", "w") as f:
         json.dump(data, f, indent=8)
 
+    atom_charges=data["Charges"]
     return (
         atom_pairs,
         atom_onebodies,
+        atom_charges,
         sto,
         ref_energies,
         ref_forces,
+        ref_stresses,
         ewald_energies,
         ewald_forces,
+        ewald_stresses,
         data,
     )
 
@@ -419,29 +490,37 @@ def twp_fit(filename):
         struct_data_test,
         struct_data_forces,
         struct_data_test_forces,
+        struct_data_stresses,
+        struct_data_test_stresses,
     ) = prepare_input(filename)
     # Parse the input
     (
         atom_pairs,
         atom_onebodies,
+        atom_charges,
         sto,
         ref_energies,
         ref_forces,
+        ref_stresses,
         ewald_energies,
         ewald_forces,
+        ewald_stresses,
         data,
-    ) = parse(data, struct_data, struct_data_forces)
+    ) = parse(data, struct_data, struct_data_forces,struct_data_stresses)
 
     # set up the QP problem
     nn = Objective(
         atom_pairs,
         atom_onebodies,
+        atom_charges,
         sto,
         ref_energies,
         ref_forces,
+        ref_stresses,
         data["General"],
         energy_ewald=ewald_energies,
         force_ewald=ewald_forces,
+        stress_ewald=ewald_stresses,
     )
 
     # Solve QP problem
