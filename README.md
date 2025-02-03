@@ -128,83 +128,8 @@ conda develop <path-to-CCS-package>
 
 ## Tutorials
 
-We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. A sample `CCS_input.json` for O$_2$ is shown below:
-```
-{
-        "General": {
-                "interface": "CCS"
-        },
-        "Train-set": "structures.json",
-        "Twobody": {
-                "O-O": {
-                        "Rcut": 2.5,
-                        "Resolution": 0.02,
-                        "Swtype": "sw"
-                }
-        },
-        "Onebody": [
-                "O"
-        ]
-}
+We provide tutorials in the [examples](examples/) folder. To run the example, go to one of the folders. Each contain the neccesery input files required for the task at hand. 
 
-```
-The `CCS_input.json` file should provide at a minimum the block "General" specifying an interface. The default is to look for input structures in the file `structure.json` file. The format for `structure.json` is shown below :
-```
-{
-"energies":{
-        "S1": {
-                "Energy": -4.22425752,
-                "Atoms": {
-                        "O": 2
-                },
-                "O-O": [
-                        0.96
-                ]
-        },
-        "S2": {
-                "Energy": -5.29665634,
-                "Atoms": {
-                        "O": 2
-                },
-                "O-O": [
-                        0.98
-                ]
-        },
-        "S3": {
-                "Energy": -6.20910363,
-                "Atoms": {
-                        "O": 2
-                },
-                "O-O": [
-                        1.0
-                ]
-        },
-        "S4": {
-                "Energy": -6.98075271,
-                "Atoms": {
-                        "O": 2
-                },
-                "O-O": [
-                        1.02
-                ]
-        }
-}
-}
-```
-The `structure.json` file contains different configurations labeled ("S1", "S2"...) and corresponding energy, pairwise distances (contained in an array labelled as "O-O" for oxygen). The stoichiometry of each configuration is given under the atoms label ("Atoms") as a key-value pair ("O" : 2 ). 
-
-
-To perform the fit : 
-```
-ccs_fit
-```
-The following output files are obtained:
-```
-CCS_params.json CCS_error.out ccs.log 
-```
-* CCS_params.json  - Contains the spline coefficients, and one-body terms for two body potentials.
-* error.out        - Contains target energies, predicted energies and absolute error for each configuration.
-* ccs.log          - Contains debug information
 ## Authors
 
 * **Akshay Krishna AK** 
