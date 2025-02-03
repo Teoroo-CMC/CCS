@@ -18,4 +18,3 @@ from ccs_fit.scripts.ccs_export_sktable import (
 from ccs_fit.scripts.ccs_fetch import ccs_fetch as ccs_fetch
 from ccs_fit.fitting.main import twp_fit as ccs_fit
 from ccs_fit.scripts.ccs_validate import ccs_validate
-from ccs_fit.scripts.ccs_export_FF import write_FF

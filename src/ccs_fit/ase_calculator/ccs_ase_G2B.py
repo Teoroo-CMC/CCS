@@ -70,22 +70,45 @@ class G2B_pair:
                 val = 0.0
         return float(val)
 
+def ew(atoms, q,lammps=False):
+    #   structure = AseAtomsAdaptor.get_structure(atoms)
+    if lammps == False:
+        atoms.charges = []
+        for a in atoms.get_chemical_symbols():
+            atoms.charges.append(q[a])
+        lattice = Lattice(atoms.get_cell())
+        coords = atoms.get_scaled_positions()
+        struct = Structure(
+            lattice,
+            atoms.get_chemical_symbols(),
+            coords,
+            site_properties={"charge": atoms.charges},
+        )
+        Ew = ewald.EwaldSummation(struct, compute_forces=True)
+        return Ew.total_energy,Ew.forces,None
 
-def ew(atoms, q):
-    atoms.charges = []
-    for a in atoms.get_chemical_symbols():
-        atoms.charges.append(q[a])
-    lattice = Lattice(atoms.get_cell())
-    coords = atoms.get_scaled_positions()
-    struct = Structure(
-        lattice,
-        atoms.get_chemical_symbols(),
-        coords,
-        site_properties={"charge": atoms.charges},
-    )
-    Ew = ewald.EwaldSummation(struct, compute_forces=True)
-    return Ew
+    if lammps == True:
+        Ew={}
+        ES_atoms=atoms.copy()
+        charges = []
+        for a in atoms.get_chemical_symbols():
+            charges.append(q[a])
+        ES_atoms.set_initial_charges(charges)
 
+        # LAMMPS potential parameters
+        lammps_parameters = {
+            "atom_style": "charge",
+            "pair_style": "coul/long 12.0",  # Coulombic interactions with cutoff
+            "pair_coeff": ["* *"],           # Default coefficients for charged particles
+            "kspace_style": "ewald 1.0e-12", # Long-range electrostatics using PPPM
+        }
+        ES_calc = LAMMPS()
+        ES_calc.set(**lammps_parameters)
+        ES_atoms.calc=ES_calc
+        ES_energy=ES_atoms.get_potential_energy()
+        ES_forces=ES_atoms.get_forces()
+        ES_stress=  ES_atoms.get_stress()
+        return ES_energy,ES_forces,ES_stress
 
 class G2B(Calculator):
     """
@@ -114,22 +137,21 @@ class G2B(Calculator):
     def __init__(
         self,
         G2B_params=None,
-        charge=None,
-        q=None,
-        charge_scaling=False,
+        q_type="pymatgen",
         **kwargs
     ):
+        self.eps = G2B_params["One_body"]
         self.rc = 7.0  # SET THIS MAX OF ANY PAIR
-        self.charge = charge
         self.species = None
         self.pair = None
-        self.q = copy.deepcopy(q)
         self.G2B_params = G2B_params
+        self.q_type=q_type
+        try:
+            self.q = G2B_params["Charges"]
+        except:
+            self.q = None
         self.eps = G2B_params["One_body"]
-        if charge_scaling:
-            for key in self.q:
-                self.q[key] *= self.G2B_params["Charge scaling factor"]
-
+        
         Calculator.__init__(self, **kwargs)
 
     def calculate(
@@ -223,18 +245,22 @@ class G2B(Calculator):
 
             energy += 0.5 * sum(map(self.pair[x + y].eval_energy, xy_distances))
 
-        if self.charge:
-            ewa = ew(self.atoms, self.q)
-            energy = energy + ewa.total_energy
-            forces = forces + ewa.forces
+        if self.q is not None:
+            if self.q_type == "lammps":
+                ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q,lammps=True)
+            if self.q_type == "pymatgen":
+                ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q)
+            energy = energy + ewa_energy
+            forces = forces + ewa_forces
 
         self.results["energy"] = energy
         self.results["free_energy"] = energy
         self.results["forces"] = forces
 
-        if self.atoms.number_of_lattice_vectors == 3:
+        if self.atoms.cell.rank == 3:
             stresses = full_3x3_to_voigt_6_stress(stresses)
-            self.results["stress"] = (
-                stresses.sum(axis=0) / self.atoms.get_volume()
-            )
-            self.results["stresses"] = stresses / self.atoms.get_volume()
+            if self.q is not None:
+                if ewa_stress is not None:
+                    self.results['stress'] = stresses.sum(axis=0) / self.atoms.get_volume()+ewa_stress
+            else:        
+                self.results['stress'] = stresses.sum(axis=0) / self.atoms.get_volume()

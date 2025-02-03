@@ -333,6 +333,34 @@ class Objective:
                         bisect.bisect_left(self.l_twb[elem].rn, search_point)
                         for search_point in self.l_twb[elem].search_points
                     ]
+                    search_indices = np.unique(search_indices)
+                    search_indices=search_indices[search_indices<len(self.l_twb[elem].rn)].tolist()
+                    print(
+                        "    Switch points located at {} to for element pair {} based on point search.".format(
+                            "["
+                            + ", ".join(
+                                [
+                                    "{:.2f}".format(
+                                        self.l_twb[elem].rn[search_index]
+                                    )
+                                    for search_index in search_indices
+                                ]
+                            )
+                            + "] Å",
+                            self.l_twb[elem].name,
+                        )
+                    )
+                    tmp.append(
+                        [
+                            self.l_twb[elem].indices[search_index]
+                            for search_index in search_indices
+                        ]
+                    )
+                elif self.l_twb[elem].search_mode.lower() == "sparse":
+                    search_indices = [
+                        bisect.bisect_left(self.l_twb[elem].rn, search_point)
+                        for search_point in np.arange(self.l_twb[elem].Rmin, self.l_twb[elem].Rcut, self.l_twb[elem].search_resolution)
+                    ]
                     search_indices = np.unique(search_indices).tolist()
                     print(
                         "    Switch points located at {} to for element pair {} based on point search.".format(

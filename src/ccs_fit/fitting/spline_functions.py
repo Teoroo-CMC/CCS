@@ -34,6 +34,7 @@ class Twobody:
         RangeCenter=None,
         RangeWidth=None,
         SearchPoints=None,
+        SearchResolution=None,
         SwType="rep",
         Rmin=None,
         Resolution=0.1,
@@ -86,6 +87,7 @@ class Twobody:
         self.swtype = SwType
         self.const_type = ConstType
         self.search_mode = SearchMode
+        self.search_resolution = SearchResolution
         self.range_center = RangeCenter
         self.range_width = RangeWidth
         self.search_points = SearchPoints
@@ -205,9 +207,12 @@ class Twobody:
                 + 0.5 * (dx[ii + 1] ** 2) * cc[ii + 1]
                 - (1 / 6.0) * (dx[ii + 1] ** 3) * dd[ii + 1]
             )
-
-        dd[0] = (cc[0]) / dx[1]
-        dd[0, 0] = -1 / dx[1]
+        try:
+            dd[0] = (cc[0]) / dx[1]
+            dd[0, 0] = -1 / dx[1]
+        except:
+            dd[0] = (cc[0]) / self.res
+            dd[0, 0] = -1 / self.res            
 
         return cc, dd, bb, aa
 

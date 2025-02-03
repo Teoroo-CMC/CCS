@@ -33,7 +33,10 @@ def pair_dist(atoms: Atoms, R_c: float, ch1: str, ch2: str, counter: int):
     -------
         A list of distances
     """
-    try:
+    if atoms.get_pbc().all() == False:
+        cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
+        offsets = [[0, 0, 0]]
+    elif atoms.get_pbc().all() == True:
         cell = atoms.get_cell()
         n_repeat = R_c * np.linalg.norm(np.linalg.inv(cell), axis=0)
         n_repeat = np.ceil(n_repeat).astype(int)
@@ -41,10 +44,11 @@ def pair_dist(atoms: Atoms, R_c: float, ch1: str, ch2: str, counter: int):
             *itertools.product(*[np.arange(-n, n + 1) for n in n_repeat])
         ]
         atoms.wrap()
+    else:
+        print("Error: PBC not set properly. Only non-periodic or 3D periodic systems are supported.")
+        sys.exit(1)
 
-    except:
-        cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
-        offsets = [[0, 0, 0]]
+
 
     mask1 = [atom == ch1 for atom in atoms.get_chemical_symbols()]
     mask2 = [atom == ch2 for atom in atoms.get_chemical_symbols()]
@@ -94,7 +98,7 @@ def ccs_fetch(
     Input
     -----
         mode : string
-            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB,PRUNED_CCS]
+            To what target the spline should be fitted. Options are [CCS,CCS+Q,DFTB]
         DFT_DB : string
             optional: target database
         R_c : float
@@ -109,6 +113,10 @@ def ccs_fetch(
     -------
         To be added.
     """
+
+    if mode not in {"CCS", "CCS+Q", "DFTB"}:
+        raise ValueError(f"Invalid mode: {mode}. Choose from 'CCS', 'CCS+Q', 'DFTB'.")
+
     file_path = Path(DFT_DB)
     if not file_path.exists():
         print(f"Error: The file '{file_path}' does not exist.")
@@ -214,6 +222,7 @@ def ccs_fetch(
             atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
             if mode == "CCS+Q":
                 if q_type == "pymatgen":
+                    struct.charges = charges
                     lattice = Lattice(struct.get_cell())
                     coords = struct.get_scaled_positions()
                     ew_struct = Structure(
@@ -223,7 +232,7 @@ def ccs_fetch(
                         site_properties={"charge": struct.charges},
                     )
                     Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
-                    ES_energy = Ew.total_energy
+                    ce["ewald"] = Ew.total_energy
                     if include_forces and FREF is not None:
                         ES_forces = Ew.forces
                     if include_stresses:

@@ -13,6 +13,8 @@ from collections import defaultdict
 from ase.calculators.calculator import Calculator, all_changes
 from ase.constraints import full_3x3_to_voigt_6_stress
 from ase.calculators.lammpsrun import LAMMPS
+from ase.cell import Cell
+
 
 try:
     from pymatgen.core import Lattice, Structure
@@ -177,12 +179,28 @@ class CCS(Calculator):
             if self.pair[a + b].rcut > self.rc:
                 self.rc = self.pair[a + b].rcut
 
-        if self.atoms.number_of_lattice_vectors == 3:
+        # if self.atoms.get_pbc().all() == True:
+        #     cell = atoms.get_cell()
+        #     self.atoms.wrap()
+        #     n_repeat = self.rc * np.linalg.norm(np.linalg.inv(cell), axis=0)
+        #     n_repeat = np.ceil(n_repeat).astype(int)
+        #     offsets = [*it.product(*[np.arange(-n, n + 1) for n in n_repeat])]
+
+        if self.atoms.get_pbc().all() == False:
+            cell = Cell([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
+            offsets = [[0, 0, 0]]
+        elif self.atoms.get_pbc().all() == True:
             cell = atoms.get_cell()
-            self.atoms.wrap()
             n_repeat = self.rc * np.linalg.norm(np.linalg.inv(cell), axis=0)
             n_repeat = np.ceil(n_repeat).astype(int)
-            offsets = [*it.product(*[np.arange(-n, n + 1) for n in n_repeat])]
+            offsets = [
+                *it.product(*[np.arange(-n, n + 1) for n in n_repeat])
+            ]
+            self.atoms.wrap()
+        else:
+            print("Error: PBC not set properly. Only non-periodic or 3D periodic systems are supported.")
+            sys.exit(1)
+
 
         natoms = len(self.atoms)
         dict_species = defaultdict(int)

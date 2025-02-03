@@ -20,7 +20,6 @@ import pandas as pd
 from ccs_fit.fitting.objective import Objective
 from ccs_fit.fitting.spline_functions import Twobody
 from ccs_fit.fitting.spline_functions import Onebody
-from ccs_fit.debugging_tools.timing import timing
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ def prepare_input(filename):
         "EwaldScaling": 1.0,
         "FitForces": "False",
         "FitStresses": "False",
-        "Merging": "False",
+        "Merging": "True",
         "DoUnconstrainedFit": "False",
         "DoRidgeRegression": "False",
         "IterativeFit": "False",
@@ -63,38 +62,39 @@ def prepare_input(filename):
         data = gen_data
     except:
         raise
-
+    
     
     try:
-        struct_data_full=ccs_fetch(
-                                   mode=data["General"]["Interface"],
-                                   DFT_DB=data["TrainSet"],
-                                   R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
-                                   Ns="all",
-                                   DFTB_DB=None,
-                                   charge_dict=data["Charges"],
-                                   include_forces=data["General"]["FitForces"] == "True",
-                                   include_stresses=data["General"]["FitStresses"] == "True",
-                                   write_json=False,
-                                   q_type=data["EwaldRoutine"]
-                                  )
-        struct_data = struct_data_full["energies"] 
+        if data["TrainSet"].endswith('.json'):
+            with open(data["TrainSet"], 'r') as f:
+                struct_data_full = json.load(f)
+        else:
+            struct_data_full = ccs_fetch(
+                mode=data["General"]["Interface"],
+                DFT_DB=data["TrainSet"],
+                R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
+                Ns="all",
+                DFTB_DB=None,
+                charge_dict=data["Charges"],
+                include_forces=data["General"]["FitForces"] == "True",
+                include_stresses=data["General"]["FitStresses"] == "True",
+                write_json=False,
+                q_type=data["EwaldRoutine"]
+            )
+        struct_data = struct_data_full["energies"]
         try:
-            struct_data_forces = struct_data_full["forces"] 
-        except: 
-            struct_data_forces = {} 
+            struct_data_forces = struct_data_full["forces"]
+        except:
+            struct_data_forces = {}
         try:
-            struct_data_stresses = struct_data_full["stresses"] 
-        except: 
-            struct_data_stresses = {} 
-    except FileNotFoundError: 
-        logger.critical( 
-            " Reference file with pairwise distances (default: structures.json) missing" 
-        ) 
-        raise 
-    except ValueError: 
-        logger.critical("Reference file not in json format") 
-        raise 
+            struct_data_stresses = struct_data_full["stresses"]
+        except:
+            struct_data_stresses = {}
+    except:
+        logger.critical(
+            " Could not parse the training set. Check the training set file and the interface type."
+        )
+        raise
 
 
     # Make defaults or general setting for Twobody
