@@ -11,11 +11,11 @@
 
 import sys
 from ccs_fit.common.exceptions import ScriptError
-import ccs_fit.scripts.ccs_fetch as ccs_fetch
+import ccs_fit.scripts.ccs_export_FF as ccs_export_FF
 
 
 try:
-    ccs_fetch.main()
+    ccs_export_FF.main()
 except ScriptError as exc:
     sys.stderr.write('ScriptError: ' + str(exc) + '\n')
     sys.exit(1)

@@ -97,15 +97,19 @@ def ccs_export_sktable(CCS_params_file):
 
 
 def main():
-    terminal_header("C3S:export sk-table")
-
-    try:
-        CCS_params_file = sys.argv[1]
-    except:
-        print("Please provide CCS params-file as first argument.")
-        exit()
-
-    ccs_export_sktable(CCS_params_file)
+    import argparse
+    terminal_header("C3S : export sk-table")
+    parser = argparse.ArgumentParser(description="CCS exporting of repulsive potentials (sk-format)")
+    parser.add_argument(
+        "-p",
+        "--CCS_params",
+        type=str,
+        metavar="",
+        default="CCS_params.json",
+        help="Parameter file. Default CCS_params.json",
+    )
+    args = parser.parse_args()
+    ccs_export_sktable(args.CCS_params)
 
 
 if __name__ == "__main__":

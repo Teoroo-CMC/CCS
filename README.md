@@ -21,7 +21,7 @@ The `CCS_fit` package is a tool to construct two-body potentials using the idea 
 ### Package Layout
 
 ```
-ccs_fit-x.y.z
+ccs_fit-1.0.0
 ├── CHANGELOG.md
 ├── LICENSE
 ├── MANIFEST.in
@@ -30,7 +30,6 @@ ccs_fit-x.y.z
 │   ├── ccs_build_db
 │   ├── ccs_export_sktable
 |   ├── ccs_export_FF
-│   ├── ccs_fetch
 │   ├── ccs_fit
 │   └── ccs_validate
 ├── docs
@@ -38,13 +37,9 @@ ccs_fit-x.y.z
 │   └── Basic_Tutorial
 │       └── tutorial.ipynb
 │   └── Advanced_Tutorials
-│       ├── CCS
-│       ├── CCS_with_LAMMPS
-│       ├── DFTB_repulsive_fitting
-│       ├── ppmd_interfacing
-│       ├── Preparing_ASE_db_trainingsets
-│       ├── Search_mode
-│       └── Simple_regressor
+│       ├── CCS+Q
+│       └── DFTB_repulsives
+
 ├── logo.png
 ├── poetry.lock
 ├── pyproject.toml
@@ -68,10 +63,9 @@ ccs_fit-x.y.z
 ```
 
 * `ccs_build_db`        - Routine that builds an ASE-database.
-* `ccs_fetch`           - Executable to construct the traning-set (structures.json) from a pre-existing ASE-database.
 * `ccs_fit`             - The primary executable file for the ccs_fit package.
 * `ccs_export_sktable`  - Export the spline in a dftbplus-compatible layout.
-* `ccs_export_FF`       - Fit the spline to lammps or GULP.
+* `ccs_export_FF`       - Export the spline to lammps or GULP.
 * `ccs_validate`        - Validation of the energies and forces of the fit compared to the training set.
 * `main.py`             - A module to parse input files.
 * `objective.py`        - A module which contains the objective function and solver.

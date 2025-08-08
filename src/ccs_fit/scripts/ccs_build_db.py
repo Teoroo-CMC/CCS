@@ -14,7 +14,7 @@ from ccs_fit.scripts.helper import terminal_header
 
 def ccs_build_db(
     mode=None,
-    DFT_DB=None,
+    REF_DB=None,
     DFTB_DB=None,
     file_list=None,
     greedy=False,
@@ -23,15 +23,15 @@ def ccs_build_db(
 ):
     AUtoEvA = Hartree / Bohr
 
-    if os.path.isfile(DFT_DB):
+    if os.path.isfile(REF_DB):
         if overwrite:
-            os.remove(DFT_DB)
+            os.remove(REF_DB)
         else:
             print(
                 "DFT database already exists. Please delete the file or use another file name."
             )
             sys.exit()
-    DFT_DB = db.connect(DFT_DB)
+    REF_DB = db.connect(REF_DB)
 
     if mode == "DFTB":
         if os.path.isfile(DFTB_DB):
@@ -64,7 +64,7 @@ def ccs_build_db(
 
         structure_DFT = read(DFT_FOLDER, index=-1)
         EDFT = structure_DFT.get_potential_energy()
-        DFT_DB.write(structure_DFT, PBE=True, key=counter)
+        REF_DB.write(structure_DFT, PBE=True, key=counter)
 
         # EXTRACT ALL REASONABLE STEPS?
         converged_indices = []
@@ -97,7 +97,7 @@ def ccs_build_db(
                 counter += 1
                 structure_DFT = read(DFT_FOLDER, index=i)
                 EDFT = structure_DFT.get_potential_energy()
-                DFT_DB.write(structure_DFT, PBE=True, key=counter)
+                REF_DB.write(structure_DFT, PBE=True, key=counter)
 
         if mode == "DFTB":
             DFTB_FOLDER = lns[1]
@@ -173,11 +173,11 @@ def main():
     )
     parser.add_argument(
         "-d",
-        "--DFT_DB",
+        "--REF_DB",
         type=str,
         metavar="",
-        default="DFT.db",
-        help="Name of DFT reference data-base",
+        default="REF.db",
+        help="Name of REF reference data-base",
     )
     parser.add_argument(
         "-l",

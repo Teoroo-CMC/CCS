@@ -422,7 +422,7 @@ def main():
         type=bool,
         metavar="",
         default=False,
-        help="Include exponential head.",
+        help="Include exponential head",
     )
     parser.add_argument(
         "-p",
@@ -430,7 +430,7 @@ def main():
         type=str,
         metavar="",
         default="CCS_params.json",
-        help="CCS_params.json file",
+        help="Parameter file. Default CCS_params.json",
     )
 
 

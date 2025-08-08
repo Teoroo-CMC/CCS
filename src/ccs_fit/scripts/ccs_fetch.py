@@ -88,7 +88,7 @@ def ccs_fetch(
     DFTB_DB=None,
     charge_dict=None,
     include_forces=False,
-    include_stresses=True,
+    include_stresses=False,
     write_json=True,
     q_type="pymatgen",
     read_q=False,
@@ -427,10 +427,18 @@ def main():
         "-f", "--include_forces", action="store_true", help="Include forces."
     )
     parser.add_argument(
+        "-s", "--include_stresses", action="store_true", help="Include stresses."
+    )
+    parser.add_argument(
         "-rq", "--read_q", action="store_true", help="Read charges."
     )
     parser.add_argument(
-        "-rs", "--range_separated", action="store_true", help="Range separated charges (only reciprocal charge contribution)."
+        "-rs",
+        "--range_separated",
+        type=str,
+        metavar="",
+        default=None,
+        help="Range separated charges. Available options: stitch, damped.",
     )
 
     args = parser.parse_args()
