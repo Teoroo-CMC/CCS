@@ -152,20 +152,24 @@ class CCS(Calculator):
         self,
         CCS_params=None,
         q_type="pymatgen",
+        range_sep=None,
         **kwargs
     ):
-        self.rc = 7.0  # SET THIS MAX OF ANY PAIR
+        self.rc = 8.0  # SET THIS MAX OF ANY PAIR
         self.exp = None
         self.species = None
         self.pair = None
         self.q_type=q_type
+        self.range_sep=range_sep
         try:
             self.q = CCS_params["Charges"]
         except:
             self.q = None
         self.CCS_params = CCS_params
         self.eps = CCS_params["One_body"]
-
+        if "Range_sep" in CCS_params:
+            if CCS_params["Range_sep"]=="Stitch":
+                self.range_sep="stitch"
         Calculator.__init__(self, **kwargs)
 
     def calculate(
@@ -208,6 +212,7 @@ class CCS(Calculator):
             dict_species[elem] += 1
 
         energy = 0.0
+        E_sr=0.0
         forces = np.zeros((natoms, 3))
         stresses = np.zeros((natoms,3,3))
 
@@ -238,11 +243,12 @@ class CCS(Calculator):
             for p1, id in zip(pos1, index1):
                 dist = p1 - pos2
                 norm_dist = np.linalg.norm(dist, axis=1)
-                dist_mask = (norm_dist < self.rc) & (norm_dist > 0)
+                dist_mask = (norm_dist <= self.pair[x+y].rcut) & (norm_dist > 0)
                 xy_distances.extend(norm_dist[dist_mask].tolist())
                 # Sometimes there are no distances to append
                 # Force calculation
-                try:
+                #try:
+                if len(xy_distances) >0:
                     forces[id, :] += np.sum(
                         (
                             dist[dist_mask].T
@@ -256,8 +262,14 @@ class CCS(Calculator):
                         ).T,
                         axis=0,
                     )
-                except:
-                    pass
+                    if self.range_sep == 'stitch':
+                        sr_F= np.array(norm_dist[dist_mask]**(-2)*self.q[x]*self.q[y]/norm_dist[dist_mask])
+                        sr_F=14.39964547842567*sr_F[:, np.newaxis]*dist[dist_mask]
+                        forces[id, :] -= np.sum(sr_F, axis=0)
+                        
+                    
+                #except:
+                #    pass
 
                 # Stress calculation
                 id2s = [i for i, x in enumerate(dist_mask) if x]
@@ -270,17 +282,19 @@ class CCS(Calculator):
                         )
                         cur_dist = dist[id2, :]
                         cur_stress = -0.5 * np.outer(cur_f, cur_dist) # IS SIGN CORRECT! 
-                        # print(cur_f, cur_dist, cur_stress)
                         stresses[id] += cur_stress
+                        #RANGE SEP
 
             energy += 0.5 * sum(map(self.pair[x + y].eval_energy, xy_distances))
+            if self.range_sep == 'stitch':
+                energy -=0.5*14.39964547842567*np.sum(np.array(xy_distances)**(-1.0)) *self.q[x]*self.q[y]
 
         if self.q is not None:
             if self.q_type == "lammps":
                 ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q,lammps=True)
             if self.q_type == "pymatgen":
                 ewa_energy,ewa_forces,ewa_stress = ew(self.atoms, self.q)
-            energy = energy + ewa_energy
+            energy = energy + ewa_energy 
             forces = forces + ewa_forces
 
         self.results["energy"] = energy

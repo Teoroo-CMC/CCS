@@ -22,6 +22,7 @@ def ccs_validate(
     include_forces=False,
     include_stresses=False,
     charge_calculator="pymatgen",
+    range_sep=None,
 ):
     """
     Function to verify database generation.
@@ -86,7 +87,8 @@ def ccs_validate(
 
     CCS_calc = CCS(
         CCS_params=CCS_params,
-        q_type=charge_calculator
+        q_type=charge_calculator,
+        range_sep=range_sep
     )
 
     calc = LinearCombinationCalculator([CCS_calc], [1])
@@ -257,7 +259,14 @@ def main():
         default="pymatgen",
         help="Calculator for Ewald summation. Options: pymatgen or lammps",
     )
-
+    parser.add_argument(
+        "-rs",
+        "--range_sep",
+        type=str,
+        metavar="",
+        default=None,
+        help="Range separated Coulomb.",
+    )
     args = parser.parse_args()
 
     ccs_validate(**vars(args))

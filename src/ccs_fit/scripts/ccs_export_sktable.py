@@ -87,7 +87,7 @@ def _write(elem1, elem2, CCS_params):
                     )
 
 
-def write_dftb_spline(CCS_params_file):
+def ccs_export_sktable(CCS_params_file):
     with open(CCS_params_file, "r") as f:
         CCS_params = json.load(f)
 
@@ -105,7 +105,7 @@ def main():
         print("Please provide CCS params-file as first argument.")
         exit()
 
-    write_dftb_spline(CCS_params_file)
+    ccs_export_sktable(CCS_params_file)
 
 
 if __name__ == "__main__":

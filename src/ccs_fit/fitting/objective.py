@@ -46,6 +46,7 @@ class Objective:
 
             l_twb (list): list of Twobody class objects
             l_one (list): list of Onebody class objects
+            l_chg (dict): charge dictionary
             sto (ndarray): array containing number of atoms of each type
             energy_ref (ndarray): reference energies
             ge_params (dict) : optionself.sto, s
@@ -238,12 +239,12 @@ class Objective:
     def assign_parameter_values(self, xx):
         # One-body terms
         counter = -1
-        if self.Interface == "CCS+Q":
+        if self.Interface == "CCS+Q" or self.Interface == "CCS+iQ":
             counter = 0
-            self.charge_scaling = xx[-1] ** 0.5
-            print(f"    Charge scaling computed from sqrt {xx[-1]}.")
+            self.charge_scaling = float( xx[-1] ** 0.5 ) 
+            print(f"    Charge scaling factor: {float( xx[-1]**0.5)} ({float(xx[-1])}).")
             if xx[-1] < 0:
-                print(f"Imaginary value for charge scaling: sqrt( {xx[-1]} ).")
+                print(f"Imaginary value for charge scaling: sqrt( {float(xx[-1])} ).")
         for k in range(self.no):
             i = self.no - k - 1
             if self.l_one[i].epsilon_supported:
@@ -361,7 +362,9 @@ class Objective:
                         bisect.bisect_left(self.l_twb[elem].rn, search_point)
                         for search_point in np.arange(self.l_twb[elem].Rmin, self.l_twb[elem].Rcut, self.l_twb[elem].search_resolution)
                     ]
+                    search_indices.append(len(self.l_twb[elem].rn)-1 )
                     search_indices = np.unique(search_indices).tolist()
+                    
                     print(
                         "    Switch points located at {} to for element pair {} based on point search.".format(
                             "["
@@ -370,7 +373,7 @@ class Objective:
                                     "{:.2f}".format(
                                         self.l_twb[elem].rn[search_index]
                                     )
-                                    for search_index in search_indices
+                                    for search_index in search_indices if search_index < len(self.l_twb[elem].rn)
                                 ]
                             )
                             + "] Å",
@@ -380,7 +383,7 @@ class Objective:
                     tmp.append(
                         [
                             self.l_twb[elem].indices[search_index]
-                            for search_index in search_indices
+                            for search_index in search_indices if search_index < len(self.l_twb[elem].indices)
                         ]
                     )
                 else:
@@ -403,15 +406,25 @@ class Objective:
 
         # Add energy data
         tmp = []
+        vv_range_sep_q =np.zeros_like(self.l_twb[0].vv_range_sep_q)
+
         for ii in range(self.np):
+            q1,q2 = self.l_twb[ii].name.split("-")
             tmp.append(self.l_twb[ii].vv)
+            if self.l_chg is not None:
+                vv_range_sep_q += self.l_twb[ii].vv_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
         vv = np.hstack([*tmp])
         mm = np.hstack((vv, self.sto))
+        mm_range_sep_q=vv_range_sep_q
 
         # Add force data
         tmp = []
+        fvv_x_range_sep_q =np.zeros_like(self.l_twb[0].fvv_x_range_sep_q)
         for ii in range(self.np):
+            q1,q2 = self.l_twb[ii].name.split("-")
             tmp.append(self.l_twb[ii].fvv_x)
+            if self.l_chg is not None:
+                fvv_x_range_sep_q += self.l_twb[ii].fvv_x_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
         fvv_x = np.hstack([*tmp])
         fvv_x = np.hstack(
             (
@@ -420,10 +433,15 @@ class Objective:
             )
         )
         mm = np.vstack((mm, fvv_x))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,fvv_x_range_sep_q ))
 
         tmp = []
+        fvv_y_range_sep_q =np.zeros_like(self.l_twb[0].fvv_y_range_sep_q)
         for ii in range(self.np):
+            q1,q2 = self.l_twb[ii].name.split("-")
             tmp.append(self.l_twb[ii].fvv_y)
+            if self.l_chg is not None:
+                fvv_y_range_sep_q += self.l_twb[ii].fvv_y_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
         fvv_y = np.hstack([*tmp])
         fvv_y = np.hstack(
             (
@@ -432,10 +450,15 @@ class Objective:
             )
         )
         mm = np.vstack((mm, fvv_y))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,fvv_y_range_sep_q ))
 
         tmp = []
+        fvv_z_range_sep_q =np.zeros_like(self.l_twb[0].fvv_z_range_sep_q)
         for ii in range(self.np):
+            q1,q2 = self.l_twb[ii].name.split("-")
             tmp.append(self.l_twb[ii].fvv_z)
+            if self.l_chg is not None:
+                fvv_z_range_sep_q += self.l_twb[ii].fvv_z_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
         fvv_z = np.hstack([*tmp])
         fvv_z = np.hstack(
             (
@@ -444,11 +467,17 @@ class Objective:
             )
         )
         mm = np.vstack((mm, fvv_z))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,fvv_z_range_sep_q ))
 
         # Add stress data
         tmp = []
+        svv_xx_range_sep_q=np.zeros_like(self.l_twb[0].svv_xx_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_xx)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_xx_range_sep_q += self.l_twb[ii].svv_xx_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
+
         svv_xx = np.hstack([*tmp])
         svv_xx = np.hstack(
             (
@@ -457,9 +486,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_xx))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_xx_range_sep_q ))
+
         tmp = []
+        svv_yy_range_sep_q=np.zeros_like(self.l_twb[0].svv_yy_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_yy)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_yy_range_sep_q += self.l_twb[ii].svv_yy_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
+
         svv_yy = np.hstack([*tmp])
         svv_yy = np.hstack(
             (
@@ -468,9 +504,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_yy))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_yy_range_sep_q ))
+
         tmp = []
+        svv_zz_range_sep_q=np.zeros_like(self.l_twb[0].svv_zz_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_zz)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_zz_range_sep_q += self.l_twb[ii].svv_zz_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
+                         
         svv_zz = np.hstack([*tmp])
         svv_zz = np.hstack(
             (
@@ -479,9 +522,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_zz))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_zz_range_sep_q ))
+
         tmp = []
+        svv_xy_range_sep_q=np.zeros_like(self.l_twb[0].svv_xy_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_xy)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_xy_range_sep_q += self.l_twb[ii].svv_xy_range_sep_q*self.l_chg[q1]*self.l_chg[q2]
+
         svv_xy = np.hstack([*tmp])
         svv_xy = np.hstack(
             (
@@ -490,9 +540,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_xy))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_xy_range_sep_q ))
+
         tmp = []
+        svv_yz_range_sep_q=np.zeros_like(self.l_twb[0].svv_yz_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_yz)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_yz_range_sep_q += self.l_twb[ii].svv_yz_range_sep_q*self.l_chg[q1]*self.l_chg[q2]            
+
         svv_yz = np.hstack([*tmp])
         svv_yz = np.hstack(
             (
@@ -501,9 +558,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_yz))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_yz_range_sep_q ))
+
         tmp = []
+        svv_xz_range_sep_q=np.zeros_like(self.l_twb[0].svv_xz_range_sep_q)
         for ii in range(self.np):
             tmp.append(self.l_twb[ii].svv_xz)
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                svv_xz_range_sep_q += self.l_twb[ii].svv_xz_range_sep_q*self.l_chg[q1]*self.l_chg[q2] 
+
         svv_xz = np.hstack([*tmp])
         svv_xz = np.hstack(
             (
@@ -512,10 +576,16 @@ class Objective:
             )
         )
         mm = np.vstack((mm, svv_xz))
+        mm_range_sep_q = np.vstack((mm_range_sep_q,svv_xz_range_sep_q ))
 
-        if self.Interface == "CCS+Q":
-            # THIS IS A BIT AKWARD CAN IT BE FIXED?
-            mm = np.hstack((mm, np.atleast_2d(self.ewald).T))
+        if self.Interface == "CCS+Q" or self.Interface == "CCS+iQ":
+            if self.RangeSeparated == None: 
+                mm = np.hstack((mm, np.atleast_2d(self.ewald).T))
+            elif self.RangeSeparated.lower() == "damped":
+                mm = np.hstack((mm, np.atleast_2d(self.ewald).T))   
+            elif self.RangeSeparated.lower() == "stitch":
+                mm = np.hstack((mm, np.atleast_2d(self.ewald).T + mm_range_sep_q))
+
 
         return mm
 
@@ -541,7 +611,8 @@ class Objective:
         gg = block_diag(gg, np.zeros_like(np.eye(self.cols_sto)))
         if self.Interface == "CCS+Q":
             gg = block_diag(gg, -1)
-
+        if self.Interface == "CCS+iQ":
+            gg = block_diag(gg, 0)
         return gg, aa
 
     def write_error(self, fname="CCS_error_energies.out"):
@@ -636,7 +707,11 @@ class Objective:
         if self.charge_scaling != 0.0:
             scaled_chg = {key: value * float( self.charge_scaling) for key, value in self.l_chg.items()}
             CCS_params["Charges"] =  scaled_chg
-
+        if self.RangeSeparated is not None:
+            if self.RangeSeparated.lower() == "stitch":
+                CCS_params["Range_sep"]="Stitch"
+        if self.RangeSeparated is None:
+            CCS_params["Range_sep"]="Off"
         eps_params = OrderedDict()
         for k in range(self.no):
             if self.l_one[k].epsilon_supported:
@@ -650,7 +725,7 @@ class Objective:
         for k in range(self.np):
             two_body_dict = OrderedDict()
             two_body_dict["r_min"] = self.l_twb[k].rn[0]
-            two_body_dict["r_cut"] = self.l_twb[k].Rcut
+            two_body_dict["r_cut"] = self.l_twb[k].Rcut 
             two_body_dict["dr"] = self.l_twb[k].res
             r_values = list(np.array(self.l_twb[k].rn))
             two_body_dict["r"] = list(r_values)
@@ -689,9 +764,28 @@ class Objective:
         with open(fname, "w") as f:
             json.dump(CCS_params, f, indent=8)
 
+    def compute_avg_charge(self):
+        print("--- CHARGES ONLY FIT ---")
+        # Padding A with zeros to match the shape of B
+        A1=self.sto
+        A2=self.ewald.reshape(-1, 1)
+        A1_padded = np.pad(A1, ((0, A2.shape[0] - A1.shape[0]), (0, 0)), mode='constant')
+        A = np.hstack((A1_padded,A2))
+        b=self.ref
+        xx = np.linalg.lstsq(A, b, rcond=None)[0]
+        print(
+            "    MSE of charge-only fitting: ",
+            ((A.dot(xx) - self.ref) ** 2).mean(),  
+        )
+        if xx[-1] > 0.0:
+            print(f"    Charge scaling factor from charge-only fit is: {xx[-1] ** 0.5} ({xx[-1]})")
+        else:
+            print(f"    Charge scaling factor from charge-only fit is sqrt({xx[-1]})")
+            
     def unconstrained_fit(self):
+        print("--- UNCONSTRAINED FIT ---")
         # Solving unconstrained problem
-        xx = np.linalg.lstsq(self.mm, self.ref, rcond=None)
+        xx = np.linalg.lstsq(self.mm_w, self.ref_w, rcond=None)
         xx = xx[0]
         print(
             "    MSE of unconstrained problem is: ",
@@ -714,7 +808,11 @@ class Objective:
             pass
 
         for ii in range(self.np):
-            self.l_twb[ii].get_spline_coeffs()
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=self.charge_scaling*self.charge_scaling*self.l_chg[q1]*self.l_chg[q2])
+            else:
+                self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=0.0) 
             self.l_twb[ii].get_expcoeffs()
 
         self.write_CCS_params(fname="UNC_params.json")
@@ -727,12 +825,12 @@ class Objective:
 
     def ridge_regresssion(self):
         # Solving ridge regression problem
-
+        print("--- RIDGE REGRESSION FIT ---")
         from sklearn import linear_model
 
         for lmb in self.RidgeLambda:
             ridge = linear_model.Ridge(alpha=lmb, fit_intercept=False)
-            ridge.fit(self.mm, self.ref)
+            ridge.fit(self.mm_w, self.ref_w)
             ridge_pred = ridge.predict(self.mm)
             print(
                 "    MSE from ridge regression: ",
@@ -741,13 +839,14 @@ class Objective:
                 lmb,
             )
             xx = ridge.coef_
+            xx = xx.reshape(len(xx), 1) 
             self.assign_parameter_values(xx)
             self.compute_model(xx)
-            self.write_error(fname=f"RIDGE_error_energies_{lmb}.out")
+            self.write_error(fname=f"RIDGE_{lmb}_error_energies.out")
             if self.l_twb[0].Nconfs_forces > 0:
-                self.write_error_forces(self.model_forces, self.force_ref,fname=f"RIDGE_error_forces_{lmb}.out")
+                self.write_error_forces(self.model_forces, self.force_ref,fname=f"RIDGE_{lmb}_error_forces.out")
             if self.l_twb[0].Nconfs_stresses > 0:
-                self.write_error_stresses(self.model_stress, self.stress_ref,fname=f"RIDGE_error_stresses_{lmb}.out")
+                self.write_error_stresses(self.model_stress, self.stress_ref,fname=f"RIDGE_{lmb}_error_stresses.out")
 
             try:
                 if self.Merging == "True":
@@ -756,20 +855,58 @@ class Objective:
                 pass
 
             for ii in range(self.np):
-                self.l_twb[ii].get_spline_coeffs()
+                if self.l_chg is not None:
+                    self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=self.charge_scaling*self.charge_scaling*self.l_chg[q1]*self.l_chg[q2])
+                else:
+                    self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=0.0)
                 self.l_twb[ii].get_expcoeffs()
 
-            self.write_CCS_params(fname=f"RIDGE_params_{lmb}.json")
+            self.write_CCS_params(fname=f"RIDGE_{lmb}_params.json")
 
             try:
                 if self.Merging == "True":
                     self.merge_intervals()
             except:
                 pass
+            
+
+    def check_uniqueness(self,P,G):
+        from scipy.linalg import null_space
+        """
+        Check if the quadratic programming problem has a unique global minimizer.
+        
+        Parameters:
+            P (ndarray): Hessian matrix of the quadratic objective function.
+            G (ndarray): Constraint matrix (each row represents a constraint).
+            
+        Returns:
+            str: Explanation of uniqueness.
+        """
+        # Step 1: Check if P is positive definite
+        eigenvalues = np.linalg.eigvalsh(P)  # More stable for symmetric P
+        if np.all(eigenvalues > 0):
+            return "P is positive definite. The minimizer is unique."
+
+        # Step 2: Check if P is positive semidefinite
+        if np.all(eigenvalues >= 0):
+            # Find the null space of P (directions where P is flat)
+            null_directions = null_space(P).T  # Each row is a null-space vector
+
+            if null_directions.size == 0:
+                return "P is positive semidefinite, but no flat directions exist. The minimizer is unique."
+
+            # Step 3: Check if constraints restrict the null-space directions
+            rank_G_null = np.linalg.matrix_rank(G @ null_directions.T)
+
+            if rank_G_null == null_directions.shape[0]:
+                return "P is positive semidefinite, but constraints eliminate the flat directions. The minimizer is unique."
+            else:
+                return "P is positive semidefinite, but some flat directions remain unrestricted. Multiple minimizers may exist."
+
+        return "P is indefinite. The problem might not have a well-defined minimizer."
 
     def solution(self):
         """Function to solve the objective with constraints."""
-
         # Merging intervals
         try:
             if self.Merging == "True":
@@ -781,13 +918,32 @@ class Objective:
         self.reduce_stoichiometry()
         self.mm = self.get_m()
 
+        # Weighting 
+        self.mm_w = self.mm.copy()
+        self.ref_w = self.ref.copy()
+
+        if self.l_twb[0].Nconfs_stresses > 0:
+            self.mm_w[-self.l_twb[0].Nconfs_stresses:,:]  *= self.StressWeights
+            self.ref_w[-self.l_twb[0].Nconfs_stresses:]   *= self.StressWeights
+            if self.l_twb[0].Nconfs_forces > 0:
+                self.mm_w[-self.l_twb[0].Nconfs_stresses-3*self.l_twb[0].Nconfs_forces:-self.l_twb[0].Nconfs_stresses,:]  *= self.ForceWeights
+                self.ref_w[-self.l_twb[0].Nconfs_stresses-3*self.l_twb[0].Nconfs_forces:-self.l_twb[0].Nconfs_stresses]   *= self.ForceWeights
+        else:
+            if self.l_twb[0].Nconfs_forces > 0:
+                self.mm_w[-3*self.l_twb[0].Nconfs_forces:,:]  *= self.ForceWeights
+                self.ref_w[-3*self.l_twb[0].Nconfs_forces:]   *= self.ForceWeights           
+
+
+        if self.Interface == "CCS+Q" or self.Interface == "CCS+iQ":
+            self.compute_avg_charge()
+
         # Define P and Q matrices
-        pp = matrix(np.transpose(self.mm).dot(self.mm))
+        pp = matrix(np.transpose(self.mm_w).dot(self.mm_w))
         eigvals = np.linalg.eigvals(pp)
-        qq = -1 * matrix(np.transpose(self.mm).dot(self.ref))
-        nswitch_list = self.list_iterator()
+        qq = -1 * matrix(np.transpose(self.mm_w).dot(self.ref_w))
         obj = []
 
+        #print("    Positive definite (unique global minina): ", np.all((eigvals > 0)))
         logger.info("positive definite:%s", np.all((eigvals > 0)))
         logger.info("Condition number (logarithm):%f", np.log( np.linalg.cond(pp)))
 
@@ -799,7 +955,9 @@ class Objective:
         if self.DoRidgeRegression == "True":
             self.ridge_regresssion()
 
+        print("--- CONSTRAINED FIT ---")
         # Search for optimum switch points
+        nswitch_list = self.list_iterator()
         for n_switch_id in tqdm(
             nswitch_list, desc="    Finding optimum switch", colour="#800080"
         ):
@@ -810,26 +968,23 @@ class Objective:
                 pp, qq, matrix(gg), matrix(hh), matrix(aa), matrix(bb)
             )
             obj.append(float(self.eval_obj(sol["x"])))
-
+            
         obj = np.asarray(obj) # List of objective values (MSE)
         mse = np.min(obj)
         opt_sol_index = int(np.ravel(np.argwhere(obj == mse)[0]))
 
-        best_switch_r = np.around(
-            [
-                nswitch_list[opt_sol_index][elem] * self.l_twb[elem].res
-                + self.l_twb[elem].Rmin
-                for elem in range(self.np)
-            ],
-            decimals=2,
-        )
+        best_switch_r = np.around([
+            self.l_twb[elem].rn[idx] if idx < len(self.l_twb[elem].rn) else self.l_twb[elem].Rcut
+            for elem, idx in enumerate(nswitch_list[opt_sol_index])
+        ], decimals=2)
+
         elem_pairs = [self.l_twb[elem].name for elem in range(self.np)]
 
         print(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}."
+            f"    The best switch is {list(nswitch_list[opt_sol_index][:])} with objective: {mse}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}."
         )
         logger.info(
-            f"    The best switch is {nswitch_list[opt_sol_index][:]} with rmse: {mse**0.5}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}."
+            f"    The best switch is {list(nswitch_list[opt_sol_index][:])} with objectiive: {mse}, corresponding to distances of {best_switch_r} Å for element pairs {elem_pairs[:]}."
         )
 
         # Repeat fit using optimum switches (repeating fit rather than saving all results saves memory)
@@ -839,8 +994,13 @@ class Objective:
         opt_sol = self.solver(
             pp, qq, matrix(g_opt), matrix(hh), matrix(aa), matrix(bb)
         )
-
+        print("   ",   self.check_uniqueness(pp,gg))
         xx = np.array(opt_sol["x"])
+        print(
+            "    MSE of constrained problem is: ",
+            ((self.mm.dot(xx.ravel()) - self.ref) ** 2).mean(),
+        )
+
         self.assign_parameter_values(xx)
         self.compute_model(xx)
         self.write_error()
@@ -848,7 +1008,7 @@ class Objective:
             self.write_error_forces(self.model_forces, self.force_ref)
         if self.l_twb[0].Nconfs_stresses > 0:
             self.write_error_stresses(self.model_stress, self.stress_ref)
-
+      
         # Unfold the spline to an equidistant grid
         try:
             if self.Merging == "True":
@@ -858,7 +1018,11 @@ class Objective:
 
         x_unfolded = []
         for ii in range(self.np):
-            self.l_twb[ii].get_spline_coeffs()
+            q1,q2 = self.l_twb[ii].name.split("-")
+            if self.l_chg is not None:
+                self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=self.charge_scaling*self.charge_scaling*self.l_chg[q1]*self.l_chg[q2])
+            else:
+                self.l_twb[ii].get_spline_coeffs(range_sep=self.RangeSeparated,scl=0.0)
             self.l_twb[ii].get_expcoeffs()
             x_unfolded = np.hstack(
                 (x_unfolded, np.array(self.l_twb[ii].curvatures).flatten())
@@ -868,8 +1032,9 @@ class Objective:
                 x_unfolded = np.hstack((x_unfolded, np.array(onb.epsilon)))
             else:
                 x_unfolded = np.hstack((x_unfolded, 0.0))
+
         xx = x_unfolded
- 
+        
         # Write parameters to file
         self.write_CCS_params()
 

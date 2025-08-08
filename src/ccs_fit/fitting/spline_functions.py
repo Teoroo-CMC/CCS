@@ -64,7 +64,7 @@ class Twobody:
         self.name = name
         self.Rmin = Rmin
         self.res = Resolution
-        self.N = int(np.ceil((Rcut - Rmin) / self.res)) + 1
+        self.N = int(np.ceil((Rcut - Rmin) / self.res)) # + 1 
         # TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE
         # FIRST INTERVAL IN MAIN Rmin IS ADJUSTED THIS WAY, WE THEREFORE BUILD "UPWARDS"
         # FROM Rmin.
@@ -99,12 +99,12 @@ class Twobody:
         self.Nconfs_stresses = np.shape(distmat_stresses)[0]
         self.volume_stresses = volume_stresses
         self.C, self.D, self.B, self.A = self.spline_construction()
-        self.vv, self.indices = self.get_v()
+        self.vv, self.indices, self.vv_range_sep_q = self.get_v()
         self.const = self.get_const()
-        self.fvv_x, self.fvv_y, self.fvv_z, self.indices = self.get_v_forces(
+        self.fvv_x, self.fvv_y, self.fvv_z, self.indices, self.fvv_x_range_sep_q,self.fvv_y_range_sep_q,self.fvv_z_range_sep_q = self.get_v_forces(
             self.indices
         )
-        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy, self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz,self.indices= self.get_v_stresses(self.indices)
+        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy, self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz,self.indices, self.svv_xx_range_sep_q, self.svv_xy_range_sep_q, self.svv_xz_range_sep_q, self.svv_yx_range_sep_q, self.svv_yy_range_sep_q, self.svv_yz_range_sep_q, self.svv_zx_range_sep_q, self.svv_zy_range_sep_q, self.svv_zz_range_sep_q = self.get_v_stresses(self.indices)
         self.curvatures = None
         self.splcoeffs = None
         self.expcoeffs = None
@@ -120,10 +120,10 @@ class Twobody:
         self.N = len(self.indices)
         self.rn = [self.rn[i] for i in self.indices]
         self.C, self.D, self.B, self.A = self.spline_construction()
-        self.vv, _ = self.get_v()
+        self.vv, _, self.vv_range_sep_q = self.get_v()
         self.const = self.get_const()
-        self.fvv_x, self.fvv_y, self.fvv_z, _ = self.get_v_forces([])
-        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy,self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz,_ = self.get_v_stresses([])
+        self.fvv_x, self.fvv_y, self.fvv_z, _,self.fvv_x_range_sep_q,self.fvv_y_range_sep_q,self.fvv_z_range_sep_q = self.get_v_forces([])
+        self.svv_xx, self.svv_xy, self.svv_xz, self.svv_yx, self.svv_yy, self.svv_yz, self.svv_zx, self.svv_zy, self.svv_zz, _, self.svv_xx_range_sep_q, self.svv_xy_range_sep_q, self.svv_xz_range_sep_q, self.svv_yx_range_sep_q, self.svv_yy_range_sep_q, self.svv_yz_range_sep_q, self.svv_zx_range_sep_q, self.svv_zy_range_sep_q, self.svv_zz_range_sep_q = self.get_v_stresses([])
         if self.N_full > self.N:
             print(
                 f"    Merging intervals for pair {self.name}; number of intervals reduced from {self.N_full} to {self.N}. "
@@ -190,8 +190,6 @@ class Twobody:
         bb = np.zeros((rows, cols), dtype=float)
         aa = np.zeros((rows, cols), dtype=float)
         dd = np.zeros((rows, cols), dtype=float)
-        # dd[rows-1, -1] = -1 / dx[rows-1]
-        # dd[rows-1, -2] = +1 / dx[rows-1]
 
         for i in range(1, rows):
             ii = rows - i - 1
@@ -228,6 +226,7 @@ class Twobody:
         """
 
         vv = np.zeros((self.Nconfs, self.N))
+        vv_range_sep_q = np.zeros((self.Nconfs, 1))
 
         indices = [0]
         for config in range(self.Nconfs):
@@ -237,7 +236,10 @@ class Twobody:
                 if self.Rmin <= ii <= self.Rcut
             ]
             uu = 0
+            uu_range_sep_q = 0
             for rr in distances:
+                uu_range_sep_q += (1/self.Rcut) +    (self.Rcut -rr)*(1/(self.Rcut**2))    - (1/rr)  
+
                 index = bisect.bisect_left(self.rn, rr)
                 delta = rr - self.rn[index]  # / self.res
                 indices.append(index)
@@ -251,8 +253,9 @@ class Twobody:
                 uu = uu + aa_ind + bb_ind + c_d + dd_ind
 
             vv[config, :] = uu
+            vv_range_sep_q[config,0]= uu_range_sep_q*14.39964547842567 # Including the pymatgen conversion factor
 
-        return vv, list(set(indices))
+        return vv, list(set(indices)), vv_range_sep_q
 
     def get_v_forces(self, indices):
         """
@@ -267,13 +270,26 @@ class Twobody:
         vv_y = np.zeros((self.Nconfs_forces, self.N))
         vv_z = np.zeros((self.Nconfs_forces, self.N))
 
+        vv_x_range_sep_q = np.zeros((self.Nconfs_forces, 1))
+        vv_y_range_sep_q = np.zeros((self.Nconfs_forces, 1))
+        vv_z_range_sep_q = np.zeros((self.Nconfs_forces, 1))
+
         for config in range(self.Nconfs_forces):
             uu_x = 0
             uu_y = 0
             uu_z = 0
+            uu_x_range_sep_q = 0
+            uu_y_range_sep_q = 0
+            uu_z_range_sep_q = 0
+
             for rv in self.distmat_forces[config, :]:
                 rr = np.linalg.norm(rv)
                 if rr > 0 and rr < self.Rcut:
+                    q_force = (1/(self.Rcut**2))   - (1/(rr**2))
+                    uu_x_range_sep_q += q_force * rv[0] / rr
+                    uu_y_range_sep_q += q_force * rv[1] / rr
+                    uu_z_range_sep_q += q_force * rv[2] / rr
+
                     index = bisect.bisect_left(self.rn, rr)
                     delta = rr - self.rn[index]
                     indices.append(index)
@@ -293,7 +309,12 @@ class Twobody:
             vv_x[config, :] = uu_x
             vv_y[config, :] = uu_y
             vv_z[config, :] = uu_z
-        return vv_x, vv_y, vv_z, list(set(indices))
+
+            vv_x_range_sep_q[config, 0] = -uu_x_range_sep_q*14.39964547842567 # Including the pymatgen conversion factor
+            vv_y_range_sep_q[config, 0] = -uu_y_range_sep_q*14.39964547842567 # Including the pymatgen conversion factor
+            vv_z_range_sep_q[config, 0] = -uu_z_range_sep_q*14.39964547842567 # Including the pymatgen conversion factor
+
+        return vv_x, vv_y, vv_z, list(set(indices)), vv_x_range_sep_q,vv_y_range_sep_q,vv_z_range_sep_q
 
     def get_v_stresses(self, indices):
         """
@@ -314,6 +335,16 @@ class Twobody:
         vv_zy = np.zeros((self.Nconfs_stresses, self.N))
         vv_zz = np.zeros((self.Nconfs_stresses, self.N))
 
+        vv_xx_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_xy_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_xz_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_yx_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_yy_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_yz_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_zx_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_zy_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+        vv_zz_range_sep_q = np.zeros((self.Nconfs_stresses, 1))
+
         for config in range(self.Nconfs_stresses):
             uu_xx = 0
             uu_xy = 0
@@ -324,9 +355,31 @@ class Twobody:
             uu_zx = 0
             uu_zy = 0
             uu_zz = 0
+
+            uu_xx_range_sep_q  = 0
+            uu_xy_range_sep_q  = 0
+            uu_xz_range_sep_q  = 0
+            uu_yx_range_sep_q  = 0
+            uu_yy_range_sep_q  = 0
+            uu_yz_range_sep_q  = 0
+            uu_zx_range_sep_q  = 0
+            uu_zy_range_sep_q  = 0
+            uu_zz_range_sep_q  = 0
+
             for rv in self.distmat_stresses[config, :]:
                 rr = np.linalg.norm(rv)
                 if rr > 0 and rr < self.Rcut:
+                    q_force = (1/(self.Rcut**2))   - (1/(rr**2))
+                    uu_xx_range_sep_q +=  0.5 * rv[0] * q_force * rv[0] / rr
+                    uu_xy_range_sep_q +=  0.5 * rv[1] * q_force * rv[0] / rr
+                    uu_xz_range_sep_q +=  0.5 * rv[2] * q_force * rv[0] / rr
+                    uu_yx_range_sep_q +=  0.5 * rv[0] * q_force * rv[1] / rr
+                    uu_yy_range_sep_q +=  0.5 * rv[1] * q_force * rv[1] / rr
+                    uu_yz_range_sep_q +=  0.5 * rv[2] * q_force * rv[1] / rr
+                    uu_zx_range_sep_q +=  0.5 * rv[0] * q_force * rv[2] / rr
+                    uu_zy_range_sep_q +=  0.5 * rv[1] * q_force * rv[2] / rr
+                    uu_zz_range_sep_q +=  0.5 * rv[2] * q_force * rv[2] / rr
+
                     index = bisect.bisect_left(self.rn, rr)
                     delta = rr - self.rn[index]
                     indices.append(index)
@@ -357,15 +410,38 @@ class Twobody:
             vv_yz[config, :] = uu_yz / self.volume_stresses[config] 
             vv_zx[config, :] = uu_zx / self.volume_stresses[config] 
             vv_zy[config, :] = uu_zy / self.volume_stresses[config] 
-            vv_zz[config, :] = uu_zz / self.volume_stresses[config] 
-        return vv_xx, vv_xy, vv_xz,vv_yx, vv_yy,vv_yz,vv_zx, vv_zy, vv_zz, list(set(indices))
+            vv_zz[config, :] = uu_zz / self.volume_stresses[config]
 
-    def get_spline_coeffs(self):
+            vv_xx_range_sep_q[config, 0] = 14.39964547842567*uu_xx_range_sep_q / self.volume_stresses[config] 
+            vv_xy_range_sep_q[config, 0] = 14.39964547842567*uu_xy_range_sep_q / self.volume_stresses[config] 
+            vv_xz_range_sep_q[config, 0] = 14.39964547842567*uu_xz_range_sep_q / self.volume_stresses[config] 
+            vv_yx_range_sep_q[config, 0] = 14.39964547842567*uu_yx_range_sep_q / self.volume_stresses[config] 
+            vv_yy_range_sep_q[config, 0] = 14.39964547842567*uu_yy_range_sep_q / self.volume_stresses[config] 
+            vv_yz_range_sep_q[config, 0] = 14.39964547842567*uu_yz_range_sep_q / self.volume_stresses[config] 
+            vv_zx_range_sep_q[config, 0] = 14.39964547842567*uu_zx_range_sep_q / self.volume_stresses[config] 
+            vv_zy_range_sep_q[config, 0] = 14.39964547842567*uu_zy_range_sep_q / self.volume_stresses[config] 
+            vv_zz_range_sep_q[config, 0] = 14.39964547842567*uu_zz_range_sep_q / self.volume_stresses[config]
+
+
+        return vv_xx, vv_xy, vv_xz,vv_yx, vv_yy,vv_yz,vv_zx, vv_zy, vv_zz, list(set(indices)),vv_xx_range_sep_q, vv_xy_range_sep_q, vv_xz_range_sep_q,vv_yx_range_sep_q, vv_yy_range_sep_q,vv_yz_range_sep_q,vv_zx_range_sep_q, vv_zy_range_sep_q, vv_zz_range_sep_q
+
+    def get_spline_coeffs(self,range_sep=None,scl=0.0):
         a_values = np.dot(self.A, self.curvatures)
         b_values = np.dot(self.B, self.curvatures)
         c_values = np.dot(self.C, self.curvatures)
         d_values = np.dot(self.D, self.curvatures)
         r_values = self.rn
+
+        if range_sep is not None:
+            if range_sep.lower() == "stitch":
+                a_N= scl*(1/self.Rcut)*14.39964547842567
+                b_N=-scl*(1/((self.Rcut)**2))*14.39964547842567
+                b_values += b_N
+                for i,a in enumerate(a_values):
+                    dr = r_values[i + 1] - r_values[i]
+                    a_values[i] += a_N - (self.Rcut-r_values[i+1])*b_N
+
+
 
         spl = []
         for i in range(self.N - 1):
@@ -374,6 +450,7 @@ class Twobody:
             c_r = c_values[i]
             d_r = d_values[i]
             dr = r_values[i + 1] - r_values[i]
+            dr =dr 
             a_l = a_r - b_r * dr + (c_r / 2.0) * dr**2 - (d_r / 6.0) * dr**3
             b_l = b_r - c_r * dr + (3 * d_r / 6.0) * dr**2
             c_l = c_r - d_r * dr
@@ -384,6 +461,12 @@ class Twobody:
         spl = np.array(spl)
 
         self.splcoeffs = spl
+
+
+
+
+
+
 
     def get_expcoeffs(self):
         """Calculates coefficients of exponential function.

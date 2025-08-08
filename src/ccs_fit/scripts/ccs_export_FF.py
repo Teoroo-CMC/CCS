@@ -209,20 +209,26 @@ def write_LAMMPS(jsonfile, form="uf3",prefix="CCS",include_head=False):
             for pair in CCS_params["Two_body"].keys():
                 elem1, elem2 = pair.split("-")
                 tb = spline_table(elem1, elem2, CCS_params)
-                r = np.arange(rmin, rcut+dr , dr)
+                r = np.arange(rmin, rcut+dr , dr) #SHOULD IT BE LIKE THIS ?
+                sr_scl=0.0
+                if "Range_sep" in CCS_params:
+                    if CCS_params["Range_sep"] == "Stitch":
+                        sr_scl=14.39964547842567*CCS_params["Charges"][elem1]*CCS_params["Charges"][elem2]  
                 f.write("\n {}".format(pair))
-                f.write("\n N {} R {} {} \n".format(len(r), rmin, rcut))
-                [
-                    f.write(
-                        "\n {} {:.12f} {} {}".format(
-                            index + 1,
-                            elem,
-                            tb.eval_energy(elem),
-                            tb.eval_force(elem),
-                        )
-                    )
-                    for index, elem in enumerate(r)
-                ]
+                f.write("\n N {} \n".format(len(r)))
+
+
+                for index, elem in enumerate(r):
+                    if elem >= CCS_params["Two_body"][pair]["r_cut"]:
+                        energy = 0.0
+                        force = 0.0
+                    else:
+                        energy = tb.eval_energy(elem) - sr_scl * (1 / elem)
+                        force = tb.eval_force(elem) - sr_scl * (1 / (elem ** 2))
+
+                    f.write("\n {} {:.12f} {} {}".format(index + 1, elem, energy, force))
+
+
 
         print("# Specifications for lammps input.")
         element_list={}
@@ -255,13 +261,18 @@ def write_LAMMPS(jsonfile, form="uf3",prefix="CCS",include_head=False):
             for pair in CCS_params["Two_body"].keys():
                 f.write("#UF3 POT UNITS: metal DATE: today AUTHOR: Me CITATION: please\n")
                 elem1, elem2 = pair.split("-")
+                sr_scl=0.0
+                if "Range_sep" in CCS_params:
+                    if CCS_params["Range_sep"] == "Stitch":
+                        sr_scl=14.39964547842567*CCS_params["Charges"][elem1]*CCS_params["Charges"][elem2]  
                 tb = spline_table(elem1, elem2, CCS_params)
                 rmin=CCS_params["Two_body"][pair]["r_min"]
                 rmax=CCS_params["Two_body"][pair]["r_cut"]
                 dr=CCS_params["Two_body"][pair]["dr"]
                 r = np.arange(rmin,rmax+dr , dr)
-                c_pts = [0.5*tb.eval_energy(elem) for elem in r] #0.5 to compensate for double counting
-                bsplines=make_interp_spline(r, c_pts, k=3,bc_type=([(1,-0.5*tb.eval_force(r[0]))],[(1,0.0)]))
+                c_pts = [0.5*tb.eval_energy(elem)+0.5*sr_scl/elem for elem in r] #0.5 to compensate for double counting
+                c_pts = np.array(c_pts)
+                bsplines=make_interp_spline(r, c_pts, k=3,bc_type=([(1,-0.5*tb.eval_force(r[0]) -0.5*sr_scl/(r[0]**2)  )],[(1,-0.5*tb.eval_force(r[-1]) -0.5*sr_scl/(r[-1]**2))]))
                 r=bsplines.t
                 coefs=bsplines.c
                 f.write("2B {} {} 0 3 nk\n".format(elem1,elem2))

@@ -30,10 +30,15 @@ def prepare_input(filename):
         "EwaldScaling": 1.0,
         "FitForces": "False",
         "FitStresses": "False",
+        "ForceWeights": 1.0,
+        "StressWeights": 1.0,
         "Merging": "True",
         "DoUnconstrainedFit": "False",
         "DoRidgeRegression": "False",
         "IterativeFit": "False",
+        "EwaldRoutine" : "pymatgen",
+        "ReadCharges"   : None,
+        "RangeSeparated"   : None,
     }
     struct_data_test = {}
 
@@ -56,46 +61,15 @@ def prepare_input(filename):
             "General": gen_params,
             "TrainSet": "DFT.db",
             "Charges" : None,
-            "EwaldRoutine" : "pymatgen",
         }
         gen_data.update(data)
         data = gen_data
     except:
         raise
-    
-    
-    try:
-        if data["TrainSet"].endswith('.json'):
-            with open(data["TrainSet"], 'r') as f:
-                struct_data_full = json.load(f)
-        else:
-            struct_data_full = ccs_fetch(
-                mode=data["General"]["Interface"],
-                DFT_DB=data["TrainSet"],
-                R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
-                Ns="all",
-                DFTB_DB=None,
-                charge_dict=data["Charges"],
-                include_forces=data["General"]["FitForces"] == "True",
-                include_stresses=data["General"]["FitStresses"] == "True",
-                write_json=False,
-                q_type=data["EwaldRoutine"]
-            )
-        struct_data = struct_data_full["energies"]
-        try:
-            struct_data_forces = struct_data_full["forces"]
-        except:
-            struct_data_forces = {}
-        try:
-            struct_data_stresses = struct_data_full["stresses"]
-        except:
-            struct_data_stresses = {}
-    except:
-        logger.critical(
-            " Could not parse the training set. Check the training set file and the interface type."
-        )
-        raise
 
+    if data["General"]["RangeSeparated"] not in ['Stitch','stitch','Damped','damped']:
+        data["General"]["RangeSeparated"]=None
+        print("No range separation applied.")
 
     # Make defaults or general setting for Twobody
     if "Twobody" not in data.keys():
@@ -115,10 +89,64 @@ def prepare_input(filename):
                     "Resolution": 0.1,
                     "SwType": "sw",
                     "ConstType": "Mono",
+                    "SearchMode": "Sparse",
+                    "SearchResolution": 0.5,
                 }
             }
 
-    # If onebody is not given it is generated from structures.json
+    
+    try:
+        if data["TrainSet"].endswith('.json'):
+            with open(data["TrainSet"], 'r') as f:
+                struct_data_full = json.load(f)
+        else:
+            if "CCS" in data["General"]["Interface"]:
+                struct_data_full = ccs_fetch(
+                    mode=data["General"]["Interface"],
+                    DFT_DB=data["TrainSet"],
+                    R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
+                    Ns="all",
+                    DFTB_DB=None,
+                    charge_dict=data["Charges"],
+                    include_forces=data["General"]["FitForces"] == "True",
+                    include_stresses=data["General"]["FitStresses"] == "True",
+                    write_json=False,
+                    q_type=data["General"]["EwaldRoutine"],
+                    read_q=data["General"]["ReadCharges"] == "True",
+                    range_separated=data["General"]["RangeSeparated"],
+                )
+            if "DFTB" in data["General"]["Interface"]:  
+                struct_data_full = ccs_fetch(
+                    mode=data["General"]["Interface"],
+                    DFT_DB=data["TrainSet"],
+                    R_c=max(pair_data["Rcut"] for pair_data in data["Twobody"].values()),
+                    Ns="all",
+                    DFTB_DB=data["TrainSetDFTB"],
+                    charge_dict=data["Charges"],
+                    include_forces=data["General"]["FitForces"] == "True",
+                    include_stresses=data["General"]["FitStresses"] == "True",
+                    write_json=False,
+                    q_type=data["General"]["EwaldRoutine"],
+                    read_q=data["General"]["ReadCharges"] == "True",
+                    range_separated=data["General"]["RangeSeparated"], 
+                )
+        struct_data = struct_data_full["energies"]
+        try:
+            struct_data_forces = struct_data_full["forces"]
+        except:
+            struct_data_forces = {}
+        try:
+            struct_data_stresses = struct_data_full["stresses"]
+        except:
+            struct_data_stresses = {}
+    except:
+        logger.critical(
+            " Could not parse the training set. Check the training set file and the interface type."
+        )
+        raise
+
+
+    # If onebody is not given it is generated from training structures.
     elements = set()
     [
         elements.add(key)
@@ -219,8 +247,8 @@ def parse(data, struct_data, struct_data_forces,struct_data_stresses):
                 try:
                     list_dist.append(vv[atmpair_rev])
                 except KeyError:
-                    logger.critical(
-                        "Name mismatch in CCS_input.json and structures.json"
+                    logger.debug(
+                        "Name mismatch in CCS_input.json and structures.json "+atmpair
                     )
                     list_dist.append([0])
 
@@ -289,7 +317,7 @@ def parse(data, struct_data, struct_data_forces,struct_data_stresses):
                             if item > 0
                         ]
                     )
-                    - 0.5 * values["Resolution"]
+                    - 0.5 * values["Resolution"] #DEBUG
                     # TO MAXIMIZE NUMERICAL STABILITY INNERMOST POINT IS PLACED IN THE MIDLE OF THE FIRST INTERVAL
                 )
 
@@ -332,7 +360,7 @@ def parse(data, struct_data, struct_data_forces,struct_data_stresses):
                                 " Check force key in structure file"
                             )
                             raise
-                    if data["General"]["Interface"] == "CCS+Q":
+                    if data["General"]["Interface"] == "CCS+Q" or data["General"]["Interface"] == "CCS+iQ":
                         try:
                             ref_forces.append(ff["force_dft"])
                             ewald_forces.append(ff["force_ewald"])
@@ -404,7 +432,7 @@ def parse(data, struct_data, struct_data_forces,struct_data_stresses):
                                 " Check stress key in structure file"
                             )
                             raise
-                    if data["General"]["Interface"] == "CCS+Q":
+                    if data["General"]["Interface"] == "CCS+Q" or data["General"]["Interface"] == "CCS+iQ":
                         try:
                             ref_stresses.append(ff["stress_dft"])
                             ewald_stresses.append(ff["stress_ewald"])

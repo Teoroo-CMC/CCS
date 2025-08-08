@@ -35,10 +35,13 @@ def ccs_build_db(
 
     if mode == "DFTB":
         if os.path.isfile(DFTB_DB):
-            print(
-                "DFTB database already exists. Please delete the file or use another file name."
-            )
-            exit()
+            if overwrite:
+                os.remove(DFTB_DB)
+            else:
+                print(
+                    "DFTB database already exists. Please delete the file or use another file name."
+                )
+                sys.exit()
         DFTB_DB = db.connect(DFTB_DB)
 
     try:

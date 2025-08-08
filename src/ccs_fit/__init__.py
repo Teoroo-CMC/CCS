@@ -12,9 +12,7 @@ from importlib.metadata import version
 
 from ccs_fit.ase_calculator.ccs_ase_calculator import CCS as CCS_calc
 from ccs_fit.scripts.ccs_build_db import ccs_build_db
-from ccs_fit.scripts.ccs_export_sktable import (
-    write_dftb_spline as ccs_export_sktable,
-)
+from ccs_fit.scripts.ccs_export_sktable import ccs_export_sktable
 from ccs_fit.scripts.ccs_fetch import ccs_fetch as ccs_fetch
 from ccs_fit.fitting.main import twp_fit as ccs_fit
 from ccs_fit.scripts.ccs_validate import ccs_validate

@@ -91,9 +91,11 @@ def ccs_fetch(
     include_stresses=True,
     write_json=True,
     q_type="pymatgen",
+    read_q=False,
+    range_separated=None,
 ):
     """
-    Function to read files and output structures.json
+    Function to read ASE database and calculate pairwise distances between atoms of different species.
 
     Input
     -----
@@ -106,16 +108,16 @@ def ccs_fetch(
 
     Returns
     -------
-        structures.json : JSON file
-            Collection of structures in .json format.
+        structures dictionary : dict
+            Collection of structures with pairwise distances between atoms of different species.
 
     Example
     -------
-        To be added.
+        None available.
     """
 
-    if mode not in {"CCS", "CCS+Q", "DFTB"}:
-        raise ValueError(f"Invalid mode: {mode}. Choose from 'CCS', 'CCS+Q', 'DFTB'.")
+    if mode not in {"CCS", "CCS+Q", "CCS+fQ", "CCS2Q","DFTB","CCS+iQ"}:
+        raise ValueError(f"Invalid mode: {mode}. Choose from 'CCS', 'CCS+Q', 'CCS+fQ', 'CCS2Q' , 'DFTB', 'CCS+iQ'.")
 
     file_path = Path(DFT_DB)
     if not file_path.exists():
@@ -127,10 +129,20 @@ def ccs_fetch(
     if mode == "CCS":
         REF_DB = DFT_DB
 
-    if mode == "CCS+Q":
+    if mode == "CCS+Q" or mode == "CCS+fQ" or mode == "CCS2Q" or mode == "CCS+iQ":
         if q_type == "pymatgen":
             from pymatgen.core import Lattice, Structure
-            from pymatgen.analysis import ewald
+            from pymatgen.analysis.ewald import EwaldSummation
+            from scipy.special import erfcinv
+            class RecipEwaldSummation(EwaldSummation):
+                def _calc_ewald_terms(self):
+                    """Calculate and sets all Ewald terms (point, real and reciprocal), saving separate forces."""
+                    self._recip, self._recip_forces = self._calc_recip()
+                    self._real, self._point, real_point_forces = self._calc_real_and_point()
+                    self._real_point_forces = real_point_forces
+                    if self._compute_forces:
+                        self._forces = self._recip_forces + self._real_point_forces
+
         if q_type == "lammps":    
             from ase.calculators.lammpsrun import LAMMPS
             # LAMMPS potential parameters
@@ -138,9 +150,8 @@ def ccs_fetch(
                 "atom_style": "charge",
                 "pair_style": "coul/long 12.0",  # Coulombic interactions with cutoff
                 "pair_coeff": ["* *"],           # Default coefficients for charged particles
-                "kspace_style": "ewald 1.0e-12", # Long-range electrostatics using PPPM
+                "kspace_style": "ewald 1.0e-12", # Long-range electrostatics 
             }
-            #ES_calc = LAMMPS(parameters=lammps_parameters)
             ES_calc = LAMMPS()
             ES_calc.set(**lammps_parameters)
         REF_DB = DFT_DB
@@ -208,19 +219,22 @@ def ccs_fetch(
             charges=[]
             for elem in struct.get_chemical_symbols():
                 dict_species[elem] += 1
-                if mode == "CCS+Q":
-                    try:
-                        charge_dict[elem]
-                    except KeyError:
-                        raise KeyError(f"Missing charge information for element {elem}.")
-                        sys.exit()
-                    charges.append(charge_dict[elem])
+                if mode == "CCS+Q" or mode == "CCS+fQ" or mode == "CCS2Q" or mode == "CCS+iQ":
+                    if read_q == False:
+                        try:
+                            charge_dict[elem]
+                        except KeyError:
+                            raise KeyError(f"Missing charge information for element {elem}.")
+                            sys.exit()
+                        charges.append(charge_dict[elem])
+            if read_q:
+                charges=row.data['mulliken']
 
             dict_species = {
                 key: value for key, value in sorted(dict_species.items())
             }
             atom_pair = it.combinations_with_replacement(dict_species.keys(), 2)
-            if mode == "CCS+Q":
+            if mode == "CCS+Q" or mode == "CCS+fQ" or mode == "CCS2Q" or mode == "CCS+iQ":
                 if q_type == "pymatgen":
                     struct.charges = charges
                     lattice = Lattice(struct.get_cell())
@@ -231,14 +245,39 @@ def ccs_fetch(
                         coords,
                         site_properties={"charge": struct.charges},
                     )
-                    Ew = ewald.EwaldSummation(ew_struct, compute_forces=True)
-                    ce["ewald"] = Ew.total_energy
+                    if range_separated == None:
+                        Ew = RecipEwaldSummation(ew_struct, compute_forces=True)
+                    elif range_separated.lower() == "damped":
+                        eta_value = erfcinv(1E-7*R_c) / (R_c) ;  eta_value = eta_value**2
+                        Ew =RecipEwaldSummation(ew_struct, compute_forces=True,real_space_cut=R_c,eta=eta_value)
+                    elif range_separated.lower() == "stitch":
+                        Ew = RecipEwaldSummation(ew_struct, compute_forces=True)
+
+                    if range_separated == None:
+                        ce["ewald"] = Ew.total_energy
+                    elif range_separated.lower() == "damped":
+                        ce["ewald"] = Ew.reciprocal_space_energy+Ew.point_energy # Shall point be here!
+                    elif range_separated.lower() == "stitch":
+                        ce["ewald"] = Ew.total_energy
+
+
                     if include_forces and FREF is not None:
-                        ES_forces = Ew.forces
+                        if range_separated == None:
+                            ES_forces = Ew.forces
+                        elif range_separated.lower() == "damped":
+                            ES_forces = Ew._recip_forces
+                        elif range_separated.lower() == "stitch":
+                            ES_forces = Ew.forces
+
                     if include_stresses:
                         SREF=None
                         print("Stresses not supported in pymatgen Ewald routine.")
-                if q_type == "lammps":    
+                if q_type == "lammps":
+                    if range_separated == None:
+                        pass
+                    elif range_separated.lower() == "damped":
+                        print("RangeSeparation Damped is not implemented with lammps")
+
                     ES_struct=struct.copy()
                     ES_struct.set_initial_charges(charges)
                     ES_struct.calc=ES_calc
@@ -259,7 +298,7 @@ def ccs_fetch(
                             "force_dft": list(FDFT[i, :]),
                             "force_dftb": list(FREF[i, :]),
                         }
-                    if mode == "CCS+Q":
+                    if mode == "CCS+Q" or mode == "CCS+fQ" or mode == "CCS2Q" or mode == "CCS+iQ":
                         cf["F" + str(counter) + "_" + str(i)] = {
                             "force_dft": list(FREF[i, :]),
                             "force_ewald": list(ES_forces[i, :]),
@@ -271,7 +310,7 @@ def ccs_fetch(
                 cs["volume"] = struct.get_volume()
                 if mode == "CCS":
                     cs["stress_dft"] = SREF
-                if mode == "CCS+Q":
+                if mode == "CCS+Q" or mode == "CCS+iQ":
                     cs["stress_dft"] = SREF
                     cs["stress_ewald"]=ES_stress
                 if mode == "DFTB":
@@ -343,7 +382,7 @@ def main():
         type=str,
         metavar="",
         default="CCS",
-        help="Mode. Available options: CCS, CCS+Q, DFTB",
+        help="Mode. Available options: CCS, CCS+Q, CCS+fQ, CCS2Q, DFTB, CCS+iQ",
     )
     parser.add_argument(
         "-d",
@@ -386,6 +425,12 @@ def main():
     )
     parser.add_argument(
         "-f", "--include_forces", action="store_true", help="Include forces."
+    )
+    parser.add_argument(
+        "-rq", "--read_q", action="store_true", help="Read charges."
+    )
+    parser.add_argument(
+        "-rs", "--range_separated", action="store_true", help="Range separated charges (only reciprocal charge contribution)."
     )
 
     args = parser.parse_args()
