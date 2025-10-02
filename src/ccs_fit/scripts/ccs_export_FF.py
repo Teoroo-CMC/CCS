@@ -203,7 +203,7 @@ def write_LAMMPS(jsonfile, form="uf3",prefix="CCS",include_head=False):
                 if CCS_params["Two_body"][pair]["r_cut"] > rcut:
                     rcut=CCS_params["Two_body"][pair]["r_cut"]
             if include_head:
-                rmin=0.0
+                rmin=0.005
             rmin=math.floor(rmin / dr) * dr
             rcut=math.ceil(rcut / dr) * dr
             for pair in CCS_params["Two_body"].keys():
