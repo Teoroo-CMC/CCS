@@ -20,7 +20,7 @@ try:
     from pymatgen.core import Lattice, Structure
     from pymatgen.analysis import ewald
 except:
-    pass
+    print("Could not import pymatgen Lattice and Structure.")
 
 
 class spline_table:
